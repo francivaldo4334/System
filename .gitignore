@@ -1,2 +1,4 @@
 system/__pycache__
 db.sqlite3
+schedule/__pycache__
+schedule/migrations/__pycache__
