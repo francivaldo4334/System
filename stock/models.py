@@ -65,10 +65,7 @@ class ProductPriceHistory(TimeStampedModel):
         null=True,
         on_delete=models.SET_NULL,
     )
-
-class ProductPriceCurrentPrice(ProductPriceHistory):
     class Meta:
-        proxy = True
         ordering = ['-created']
 
 
