@@ -44,7 +44,7 @@ class Product(ActivatorModel,
             models.UniqueConstraint(fields=['title'], name='unique_title')
         ]
 
-class ProductPriceHistory(TimeStampedModel):
+class PriceHistory(TimeStampedModel):
     product = models.ForeignKey(
         Product,
         related_name="price_history",

@@ -44,30 +44,8 @@ class Transaction(TimeStampedModel,
         return round(total, 2)
 
 
-class TransactionPositive(Transaction):
-    class Manager(models.Manager):
-        def get_queryset(self):
-            qs = super().get_queryset()
-            return qs.filter(entries__amount__gte=0).distinct()
-
-    objects = Manager()
-
-    class Meta:
-        proxy = True
-
-class TransactionNegative(Transaction):
-    class Manager(models.Manager):
-        def get_queryset(self):
-            qs = super().get_queryset()
-            return qs.filter(entries__amount__lt=0).distinct()
-
-    objects = Manager()
-
-    class Meta:
-        proxy = True
-
 class JournalEntry(models.Model):
-    reason = models.TextField("Motivo", blank=True, null=True)
+    reason = models.TextField(blank=True, null=True)
     transaction = models.ForeignKey(
         Transaction,
         related_name="entries",
