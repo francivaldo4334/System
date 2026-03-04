@@ -3,11 +3,9 @@
 # pyright: reportIncompatibleVariableOverride=false
 from django.core.exceptions import ValidationError
 from django.db import models
-from typing import Optional, cast
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
-import uuid
 
 # Create your models here.
 class Category(TitleDescriptionModel):
@@ -37,8 +35,7 @@ class Product(ActivatorModel,
 
     @property
     def stock_quantity(self):
-        movements = cast(models.QuerySet, getattr(self,'movements'))
-        return movements.aggregate(
+        return self.movements.aggregate( # type: ignore
             total=models.Sum('quantity')
         )['total'] or 0
 
