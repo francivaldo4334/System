@@ -1,44 +1,11 @@
 # pyright: reportIncompatibleVariableOverride=false
-# pyright: reportAssignmentType=false
-# pyright: reportArgumentType=false
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.utils.translation import gettext_lazy as _
+from core.models import ActivatorModel, CreatedByModel, TimeStampedModel
 
 # Create your models here.
-class CreatedByModel(models.Model):
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        editable=False,
-    )
-    class Meta:
-        abstract = True
-
-class TimeStampedModel(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    class Meta:
-        abstract = True
-        ordering = ['-modified', '-created']
-
-class ActivatorModel(models.Model):
-    class StatusChoice(models.IntegerChoices):
-        INACTIVE = 0, 'Inactive'
-        ACTIVE = 1, 'Active'
-
-        
-    status = models.IntegerField(
-        choices=StatusChoice.choices,
-        default=StatusChoice.ACTIVE.value,
-    )
-
-    class Meta:
-        abstract = True
-        ordering = ["status"]
-
 class CashAccount(TimeStampedModel,
                   ActivatorModel,
                   CreatedByModel):
