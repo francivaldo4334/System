@@ -4,3 +4,6 @@ schedule/__pycache__
 schedule/migrations/__pycache__
 sale/__pycache__
 sale/migrations/__pycache__
+core/__pycache__
+stock/__pycache__
+stock/migrations/__pycache__
