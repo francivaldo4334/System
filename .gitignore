@@ -2,3 +2,5 @@ system/__pycache__
 db.sqlite3
 schedule/__pycache__
 schedule/migrations/__pycache__
+sale/__pycache__
+sale/migrations/__pycache__
