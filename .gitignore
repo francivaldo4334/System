@@ -7,3 +7,5 @@ sale/migrations/__pycache__
 core/__pycache__
 stock/__pycache__
 stock/migrations/__pycache__
+product/__pycache__
+product/migrations/__pycache__
