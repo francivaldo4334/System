@@ -34,14 +34,14 @@ class StockMovement(TimeStampedModel):
         super().save(*args, **kwargs)
         if self.pk:
             return
-        source_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.origin)
-        dest_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.destination)
-
-        source_item.quantity -= self.quantity
-        dest_item.quantity += self.quantity
-
-        source_item.save()
-        dest_item.save()
+        if not self.origin.is_virtual:
+            source_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.origin)
+            source_item.quantity -= self.quantity
+            source_item.save()
+        if not self.destination.is_virtual:
+            dest_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.destination)
+            dest_item.quantity += self.quantity
+            dest_item.save()
 
 class MovimentFixed(StockMovement):
     origin_slug = ''
