@@ -1,6 +1,7 @@
 # pyright: reportArgumentType=false
 # pyright: reportAssignmentType=false
 # pyright: reportIncompatibleVariableOverride=false
+# pyright: reportAttributeAccessIssue=false
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
@@ -29,6 +30,17 @@ class StockMovement(TimeStampedModel):
         related_name="incoming_movements",
         on_delete=models.PROTECT,
     )
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        source_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.origin)
+        dest_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.destination)
+
+        source_item.quantity -= self.quantity
+        dest_item.quantity += self.quantity
+
+        source_item.save()
+        dest_item.save()
+
 class MovimentFixed(StockMovement):
     origin_slug = ''
     destination_slug = ''
