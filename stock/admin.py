@@ -1,3 +1,4 @@
+# pyright: reportIncompatibleMethodOverride=false
 from django.contrib import admin
 from stock.models import *
 
@@ -13,3 +14,5 @@ admin.site.register(StockBalance)
 )
 class StockMovimentFixed(admin.ModelAdmin):
     exclude = ['origin', 'destination']
+    def get_readonly_fields(self, request, obj=None):
+        return ('product', 'quantity', 'reason', 'origin', 'destination') if obj else ()
