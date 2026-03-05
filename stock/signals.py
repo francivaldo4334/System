@@ -16,17 +16,17 @@ class TypeStockMovement(Protocol):
 def update_stock_balance(sender, instance: TypeStockMovement, created, **kwargs):
     if created:
         with transaction.atomic():
-            if not instance.origin.is_virtual:
-                source_item, _ = StockBalance.objects.get_or_create(
-                    product=instance.product,
-                    location=instance.origin,
-                )
-                source_item.quantity -= instance.quantity
-                source_item.save()
-            if not instance.destination.is_virtual:
-                dest_item, _ = StockBalance.objects.get_or_create(
-                    product=instance.product,
-                    location=instance.destination,
-                )
-                dest_item.quantity += instance.quantity
-                dest_item.save()
+            source_item, _ = StockBalance.objects.get_or_create(
+                product=instance.product,
+                location=instance.origin,
+            )
+            dest_item, _ = StockBalance.objects.get_or_create(
+                product=instance.product,
+                location=instance.destination,
+            )
+
+            source_item.quantity -= instance.quantity
+            dest_item.quantity += instance.quantity
+
+            source_item.save()
+            dest_item.save()
