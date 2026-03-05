@@ -1,10 +1,22 @@
 # pyright: reportIncompatibleVariableOverride=false
+# pyright: reportAssignmentType=false
+# pyright: reportArgumentType=false
 from django.db import models
 from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+from stdnum import ean
 
 # Create your models here.
+def generate_internal_code(sequential):
+    base = f"20{str(sequential).zfill(10)}"
+    digits = [int(d) for d in base]
+    total = sum(d * (3 if i % 2 else 1) for i, d in enumerate(digits))
+    verifier = (10 - (total % 10)) % 10
+    return f"{base}{verifier}"
+
 class Category(TitleDescriptionModel):
     pass
 
@@ -22,6 +34,12 @@ class Product(ActivatorModel,
     #     choices = UnitTypeChoices.choices,
     #     default=UnitTypeChoices.UNIT.value,
     # )
+    class CodeType(models.IntegerChoices):
+        EAN = 0, 'EAN type'
+        INTERNAL = 1, 'Internal code'
+
+        
+    code_type = models.SmallIntegerField(choices=CodeType.choices, default=CodeType.EAN.value)
     code = models.CharField(max_length=30, unique=True)
     categories = models.ManyToManyField(Category, related_name='products')
 
@@ -34,6 +52,14 @@ class Product(ActivatorModel,
         constraints = [
             models.UniqueConstraint(fields=['title'], name='unique_title')
         ]
+    def clean(self):
+        if self.code_type == self.CodeType.EAN and not ean.is_valid(self.code):
+            raise ValidationError({'code': _('Enter a valid value.')})
+
+        if not self.pk and self.code_type == self.CodeType.INTERNAL.value:
+            last_product = self.__class__.objects.select_for_update().order_by('-id').first() # type: ignore            
+            last_id = last_product.id if last_product else 0
+            self.code = generate_internal_code(last_id + 1)
 
 class PriceHistory(TimeStampedModel):
     product = models.ForeignKey(
