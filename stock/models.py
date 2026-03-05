@@ -2,7 +2,7 @@
 # pyright: reportAssignmentType=false
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAttributeAccessIssue=false
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
 from django.core.validators import MinValueValidator
@@ -31,17 +31,24 @@ class StockMovement(TimeStampedModel):
                                     on_delete=models.PROTECT,
                                     editable=False)
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         if self.pk:
             return
-        if not self.origin.is_virtual:
-            source_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.origin)
-            source_item.quantity -= self.quantity
-            source_item.save()
-        if not self.destination.is_virtual:
-            dest_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.destination)
-            dest_item.quantity += self.quantity
-            dest_item.save()
+        
+        with transaction.atomic(): # type: ignore
+            super().save(*args, **kwargs)
+            if not self.origin.is_virtual:
+                balance, _ = StockBalance.objects.get_or_create(
+                    product=self.product, location=self.origin
+                )
+                balance.quantity = models.F('quantity') - self.quantity
+                balance.save()
+
+            if not self.destination.is_virtual:
+                balance, _ = StockBalance.objects.get_or_create(
+                    product=self.product, location=self.destination
+                )
+                balance.quantity = models.F('quantity') + self.quantity
+                balance.save()
 
 class MovimentFixed(StockMovement):
     origin_slug = ''
