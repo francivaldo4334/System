@@ -15,21 +15,17 @@ class StockLocation(ActivatorModel, TitleDescriptionModel):
 class StockMovement(TimeStampedModel):
     product = models.ForeignKey('product.Product',
                                 related_name="movements",
-                                on_delete=models.PROTECT,
-                                editable=False)
+                                on_delete=models.PROTECT)
     quantity = models.DecimalField(max_digits=10, 
                                    decimal_places=3,
-                                   validators=[MinValueValidator(0.001)],
-                                   editable=False,)
+                                   validators=[MinValueValidator(0.001)])
     reason = models.TextField(blank=True, null=True)
     origin = models.ForeignKey(StockLocation,
                                related_name="outgoing_movements",
-                               on_delete=models.PROTECT,
-                               editable=False)
+                               on_delete=models.PROTECT)
     destination = models.ForeignKey(StockLocation,
                                     related_name="incoming_movements",
-                                    on_delete=models.PROTECT,
-                                    editable=False)
+                                    on_delete=models.PROTECT)
     def save(self, *args, **kwargs):
         if self.pk:
             return
