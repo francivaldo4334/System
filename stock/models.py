@@ -66,9 +66,6 @@ class PriceHistory(TimeStampedModel):
     class Meta:
         ordering = ['-created']
 
-    def __str__(self):
-        return f'{self.price}'
-
 
 class StockLocation(ActivatorModel, TitleDescriptionModel):
     is_virtual = models.BooleanField(default=False)
