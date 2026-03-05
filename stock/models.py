@@ -52,7 +52,7 @@ class PriceHistory(TimeStampedModel):
         on_delete=models.CASCADE,
     )
     cost_price = models.DecimalField(max_digits=20, decimal_places=2)
-    target_margin = models.DecimalField(max_digits=5, decimal_places=2,validators=[MinValueValidator(0), MaxValueValidator(0.99)],)
+    target_margin = models.DecimalField(max_digits=5, decimal_places=2,validators=[MinValueValidator(0), MaxValueValidator(0.99)])
     price = models.GeneratedField(
         expression=models.F('cost_price') / (1 - (models.F('target_margin'))),
         output_field=models.DecimalField(max_digits=20, decimal_places=2),
@@ -69,6 +69,7 @@ class PriceHistory(TimeStampedModel):
 
 class StockLocation(ActivatorModel, TitleDescriptionModel):
     is_virtual = models.BooleanField(default=False)
+    slug = models.SlugField()
 
 class StockMovement(TimeStampedModel):
     product = models.ForeignKey(
@@ -76,7 +77,7 @@ class StockMovement(TimeStampedModel):
         related_name="movements",
         on_delete=models.PROTECT,
     )
-    quantity = models.DecimalField(max_digits=10, decimal_places=3)
+    quantity = models.DecimalField(max_digits=10, decimal_places=3, validators=[MinValueValidator(0.001)])
     reason = models.TextField(blank=True, null=True)
     origin = models.ForeignKey(
         StockLocation,
