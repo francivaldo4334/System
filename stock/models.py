@@ -6,6 +6,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class Category(TitleDescriptionModel):
@@ -51,9 +52,9 @@ class PriceHistory(TimeStampedModel):
         on_delete=models.CASCADE,
     )
     cost_price = models.DecimalField(max_digits=20, decimal_places=2)
-    target_margin = models.DecimalField(max_digits=2, decimal_places=2)
+    target_margin = models.DecimalField(max_digits=5, decimal_places=2,validators=[MinValueValidator(0), MaxValueValidator(0.99)],)
     price = models.GeneratedField(
-        expression=models.F('cost_price') / (1 - (models.F('target_margin') / 100)),
+        expression=models.F('cost_price') / (1 - (models.F('target_margin'))),
         output_field=models.DecimalField(max_digits=20, decimal_places=2),
         db_persist=True,
     )
@@ -64,6 +65,9 @@ class PriceHistory(TimeStampedModel):
     )
     class Meta:
         ordering = ['-created']
+
+    def __str__(self):
+        return f'{self.price}'
 
 
 class StockLocation(ActivatorModel, TitleDescriptionModel):
