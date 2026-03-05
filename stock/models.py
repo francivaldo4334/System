@@ -13,25 +13,27 @@ class StockLocation(ActivatorModel, TitleDescriptionModel):
     slug = models.SlugField()
 
 class StockMovement(TimeStampedModel):
-    product = models.ForeignKey(
-        'product.Product',
-        related_name="movements",
-        on_delete=models.PROTECT,
-    )
-    quantity = models.DecimalField(max_digits=10, decimal_places=3, validators=[MinValueValidator(0.001)])
+    product = models.ForeignKey('product.Product',
+                                related_name="movements",
+                                on_delete=models.PROTECT,
+                                editable=False)
+    quantity = models.DecimalField(max_digits=10, 
+                                   decimal_places=3,
+                                   validators=[MinValueValidator(0.001)],
+                                   editable=False,)
     reason = models.TextField(blank=True, null=True)
-    origin = models.ForeignKey(
-        StockLocation,
-        related_name="outgoing_movements",
-        on_delete=models.PROTECT,
-    )
-    destination = models.ForeignKey(
-        StockLocation,
-        related_name="incoming_movements",
-        on_delete=models.PROTECT,
-    )
+    origin = models.ForeignKey(StockLocation,
+                               related_name="outgoing_movements",
+                               on_delete=models.PROTECT,
+                               editable=False)
+    destination = models.ForeignKey(StockLocation,
+                                    related_name="incoming_movements",
+                                    on_delete=models.PROTECT,
+                                    editable=False)
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        if self.pk:
+            return
         source_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.origin)
         dest_item, _ = StockBalance.objects.get_or_create(product=self.product, location=self.destination)
 
