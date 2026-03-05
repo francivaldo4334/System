@@ -34,12 +34,6 @@ class Product(ActivatorModel,
         last = self.price_history.order_by('-created').first() # type: ignore
         return last.price if last is not None else 0
 
-    @property
-    def stock_quantity(self):
-        return self.movements.aggregate( # type: ignore
-            total=models.Sum('quantity')
-        )['total'] or 0
-
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['title'], name='unique_title')
