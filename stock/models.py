@@ -82,3 +82,11 @@ class StockGain(MovimentFixed):
 
     class Meta:
         proxy = True
+
+class StockBalance(TimeStampedModel):
+    product = models.ForeignKey('product.Product', on_delete=models.CASCADE)
+    location = models.ForeignKey(StockLocation, on_delete=models.CASCADE)
+    quantity = models.DecimalField(max_digits=20, decimal_places=3, default=0)
+
+    class Meta:
+        unique_together = ('product', 'location')

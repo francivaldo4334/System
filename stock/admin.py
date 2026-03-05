@@ -3,6 +3,7 @@ from stock.models import *
 
 # Register your models here.
 admin.site.register(StockLocation)
+admin.site.register(StockBalance)
 @admin.register(
     Purchase,
     Sale,
