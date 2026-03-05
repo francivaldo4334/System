@@ -50,15 +50,12 @@ class PriceHistory(TimeStampedModel):
         related_name="price_history",
         on_delete=models.CASCADE,
     )
-    price = models.DecimalField(
-        max_digits=20,
-        decimal_places=2,
-    )
-    cost_price = models.DecimalField(
-        max_digits=20,
-        decimal_places=2,
-        null=True,
-        blank=True,
+    cost_price = models.DecimalField(max_digits=20, decimal_places=2)
+    target_margin = models.DecimalField(max_digits=2, decimal_places=2)
+    price = models.GeneratedField(
+        expression=models.F('cost_price') / (1 - (models.F('target_margin') / 100)),
+        output_field=models.DecimalField(max_digits=20, decimal_places=2),
+        db_persist=True,
     )
     changed_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -84,13 +81,9 @@ class StockMovement(TimeStampedModel):
         StockLocation,
         related_name="outgoing_movements",
         on_delete=models.PROTECT,
-        null=True, 
-        blank=True,
     )
     destination = models.ForeignKey(
         StockLocation,
         related_name="incoming_movements",
         on_delete=models.PROTECT,
-        null=True, 
-        blank=True,
     )
