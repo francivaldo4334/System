@@ -89,3 +89,56 @@ class StockMovement(TimeStampedModel):
         related_name="incoming_movements",
         on_delete=models.PROTECT,
     )
+class MovimentFixed(StockMovement):
+    origin_slug = ''
+    destination_slug = ''
+
+    class Manager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(
+                origin__slug=self.model.origin_slug,
+                destination__slug=self.model.destination_slug,
+            )
+    objects = Manager()
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.origin = StockLocation.objects.get(slug=self.origin_slug) # type: ignore
+            self.destination = StockLocation.objects.get(slug=self.destination_slug) # type: ignore
+        return super().save(*args, **kwargs)
+    class Meta:
+        proxy = True
+
+class Purchase(MovimentFixed):
+    origin_slug = 'vendors'
+    destination_slug = 'warehouse'
+
+    class Meta:
+        proxy = True
+
+class Sale(MovimentFixed):
+    origin_slug = 'warehouse'
+    destination_slug = 'customers'
+
+    class Meta:
+        proxy = True
+
+class Scrap(MovimentFixed):
+    origin_slug = 'warehouse'
+    destination_slug = 'scrap'
+
+    class Meta:
+        proxy = True
+
+class StockLoss(MovimentFixed):
+    origin_slug = 'warehouse'
+    destination_slug = 'inventory-loss'
+
+    class Meta:
+        proxy = True
+
+class StockGain(MovimentFixed):
+    origin_slug = 'inventory-loss'
+    destination_slug = 'warehouse'
+
+    class Meta:
+        proxy = True
