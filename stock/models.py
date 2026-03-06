@@ -2,7 +2,7 @@
 # pyright: reportAssignmentType=false
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAttributeAccessIssue=false
-from django.core.exceptions import ValidationError
+# pyright: reportGeneralTypeIssues=false
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
@@ -27,26 +27,28 @@ class StockMovement(TimeStampedModel):
     destination = models.ForeignKey(StockLocation,
                                     related_name="incoming_movements",
                                     on_delete=models.PROTECT)
+
     def save(self, *args, **kwargs):
-        if self.pk:
-            return
-        with transaction.atomic(): # type: ignore
+        if self.pk: return
+        with transaction.atomic():
             super().save(*args, **kwargs)
             if not self.origin.is_virtual:
-                balance_orig = StockBalance.objects.select_for_update().get_or_create(
-                    product=self.product, 
+                obj_orig, _ = StockBalance.objects.get_or_create(
+                    product=self.product,
                     location=self.origin
-                )[0]
-                balance_orig.quantity -= self.quantity
-                balance_orig.save()
+                )
+                StockBalance.objects.select_for_update().filter(pk=obj_orig.pk).update(
+                    quantity=models.F('quantity') - self.quantity
+                )
 
             if not self.destination.is_virtual:
-                balance_dest = StockBalance.objects.select_for_update().get_or_create(
+                obj_dest, _ = StockBalance.objects.get_or_create(
                     product=self.product, 
                     location=self.destination
-                )[0]
-                balance_dest.quantity += self.quantity
-                balance_dest.save()
+                )
+                StockBalance.objects.select_for_update().filter(pk=obj_dest.pk).update(
+                    quantity=models.F('quantity') + self.quantity
+                )
 
 class MovimentFixed(StockMovement):
     origin_slug = ''
