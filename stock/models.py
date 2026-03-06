@@ -107,7 +107,14 @@ class StockGain(MovimentFixed):
 class StockBalance(TimeStampedModel):
     product = models.ForeignKey('product.Product', on_delete=models.CASCADE)
     location = models.ForeignKey(StockLocation, on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=20, decimal_places=3, default=0)
+    quantity = models.DecimalField(max_digits=20, decimal_places=3, default=0, validators=[MinValueValidator(0)])
 
     class Meta:
         unique_together = ('product', 'location')
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(quantity__gte=0),
+                name='quantity_gte_0',
+                violation_error_message=_("This specific stock move already exists.")
+            )
+        ]
