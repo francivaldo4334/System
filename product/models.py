@@ -31,9 +31,7 @@ class Product(ActivatorModel,
     categories = models.ManyToManyField(Category, related_name='products')
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['title'], name='unique_title')
-        ]
+        unique_together = ('title', 'unit_type')
 
     @property
     def last_id(self):
