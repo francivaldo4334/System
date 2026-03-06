@@ -13,25 +13,19 @@ from stdnum import ean
 class Category(TitleDescriptionModel):
     pass
 
+class UnitType(ActivatorModel,
+               TitleDescriptionModel):
+    pass
+
 class Product(ActivatorModel,
               TimeStampedModel,
               TitleDescriptionModel):
-    # class UnitTypeChoices(models.TextChoices):
-    #     UNIT = 0, 'Unit'
-    #     KILOGRAM = 1, 'Kilogram'
-    #     GRAM = 2, 'Gram'
-    #     LITER = 3, 'Liter'
-    #     MILLILITER = 4, 'Milliliter'
-
-    # unit_type = models.IntegerField(
-    #     choices = UnitTypeChoices.choices,
-    #     default=UnitTypeChoices.UNIT.value,
-    # )
     class CodeType(models.IntegerChoices):
         EAN = 0, 'EAN type'
         INTERNAL = 1, 'Internal code'
 
         
+    unit_type = models.ForeignKey(UnitType, on_delete=models.CASCADE, default=1)
     code_type = models.SmallIntegerField(choices=CodeType.choices, default=CodeType.EAN.value)
     code = models.CharField(max_length=30, unique=True, validators=[isdigits,ean.is_valid])
     categories = models.ManyToManyField(Category, related_name='products')
