@@ -47,6 +47,15 @@ class Product(ActivatorModel,
     def clean(self):
         if not self.pk and self.code_type == self.CodeType.INTERNAL.value:
             self.code = self.generate_internal_code(self.last_id + 1)
+    
+class UnitConversion(TimeStampedModel):
+    product = models.ForeignKey(Product, models.CASCADE, 'conversions')
+    from_unit = models.ForeignKey(UnitType, models.CASCADE, 'conversions')
+    to_unit = models.ForeignKey(UnitType, models.CASCADE, 'conversions')
+    factor = models.DecimalField(max_digits=10, decimal_places=3)
+
+    class Meta:
+        unique_together = ('product', 'from_unit', 'to_unit')
 
 class PriceHistory(TimeStampedModel):
     product = models.ForeignKey(
