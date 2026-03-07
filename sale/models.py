@@ -1,78 +1,79 @@
 # pyright: reportIncompatibleVariableOverride=false
-from django.core.exceptions import ValidationError
+# pyright: reportAssignmentType=false
+# pyright: reportArgumentType=false
+import uuid
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
-from core.models import ActivatorModel, CreatedByModel, TimeStampedModel
+from core.models import CreatedByModel, TimeStampedModel
 
 # Create your models here.
-class CashAccount(TimeStampedModel,
-                  ActivatorModel,
-                  CreatedByModel):
-    name = models.CharField()
-    slug = models.SlugField()
+class Account(TimeStampedModel):
+    class AccountType(models.IntegerChoices):
+        ASSET = 1, 'Ativo'
+        LIABILITY = 2, 'Passivo'
+        EQUITY = 3, 'Patrimônio'
+        REVENUE = 4, 'Receita'
+        EXPENSE = 5, 'Despesa'
 
-    @property
-    def balance(self):
-        total = JournalEntry.objects.filter( # type: ignore
-                transaction__account=self
-            ).aggregate(total=models.Sum('amount'))['total'] or 0
-        return round(total, 2)
-        
+    name = models.CharField()
+    code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^\d+(\.\d+)*$')])
+    account_type = models.SmallIntegerField(choices=AccountType.choices)
+    is_selectable = models.BooleanField(default=True)
+    parent = models.ForeignKey('self',
+                               models.CASCADE,
+                               'children',
+                               null=True, blank=True)
+
+class AccountSelectable(Account):
+    class Manager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(is_selectable=True)
+
+    objects = Manager()
+
+    class Meta:
+        proxy = True
 
 
 class Transaction(TimeStampedModel,
-                  ActivatorModel,
                   CreatedByModel):
-
-    reason = models.TextField(
-        validators=[MinLengthValidator(3)]
-    )
-
-    account = models.ForeignKey(
-        CashAccount,
-        related_name="transactions",
-        on_delete=models.PROTECT,
-    )
-    slug = models.SlugField()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    reason = models.TextField(validators=[MinLengthValidator(3)])
+    date = models.DateTimeField()
 
     @property
-    def amount(self):
-        total = self.entries.aggregate( # type: ignore
-            total=models.Sum('amount')
-        )['total']
-        return round(total, 2)
+    def balance(self):
+        return self.entries.all( # type: ignore
+        ).aggregate(
+            balance=models.Sum(
+                models.Case(
+                    models.When(entry_type=JournalEntry.Type.DEBIT.value, then='amount'),
+                    models.When(entry_type=JournalEntry.Type.CREDIT.value, then=-models.F('amount')),
+                    default=models.Value(0)
+                )
+            )
+        )['balance'] or 0
 
+    def is_balanced(self):
+        return self.balance == 0
 
 class JournalEntry(models.Model):
-    reason = models.TextField(blank=True, null=True)
-    transaction = models.ForeignKey(
-        Transaction,
-        related_name="entries",
-        on_delete=models.PROTECT,
-    )
-    amount = models.DecimalField(
-        max_digits=20,
-        decimal_places=2,
-    )
+    class Type(models.TextChoices):
+        DEBIT = 'D', 'Débito'
+        CREDIT = 'C', 'Crédito'
 
-
-class JournalEntryPositive(JournalEntry):
-
-    def clean(self):
-        if self.amount and self.amount < 0.01:
-            msg = _("Ensure this value is greater than or equal to %(limit_value)s.") % { 'limit_value': 0.01 }
-            raise ValidationError(msg)
+    entry_type = models.CharField(max_length=1, choices=Type.choices)
+    transaction = models.ForeignKey(Transaction,models.CASCADE,'entries')
+    account = models.ForeignKey(Account,models.PROTECT)
+    amount = models.DecimalField(max_digits=20,
+                                 decimal_places=2,
+                                 validators=[MinValueValidator(0.01)])
 
     class Meta:
-        proxy = True
-
-class JournalEntryNegative(JournalEntryPositive):
-    def clean(self):
-        super().clean()
-
-        if self.amount:
-            self.amount = -abs(self.amount)
-
-    class Meta:
-        proxy = True
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(amount__gt=0),
+                name='amount_must_be_positive'
+            )
+        ]
