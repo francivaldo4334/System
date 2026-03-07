@@ -116,5 +116,5 @@ class UseObserver extends HTMLElement {
     })
   }
 }
-window.customElements.define('use-signal', UseObserver)
+window.customElements.define('use-signal', UseSignal)
 window.customElements.define('use-observer', UseObserver)
