@@ -5,9 +5,8 @@
 # pyright: reportGeneralTypeIssues=false
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
-from core.models import ActivatorModel, TimeStampedModel, TitleDescriptionModel
+from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.conf import settings
 from stdnum.util import isdigits
 from stdnum import ean
 
@@ -55,12 +54,8 @@ class Product(ActivatorModel,
         if not self.pk and self.code_type == self.CodeType.INTERNAL.value:
             self.code = self.generate_internal_code(self.last_id + 1)
     
-class PriceHistory(TimeStampedModel):
-    product = models.ForeignKey(
-        Product,
-        related_name="price_history",
-        on_delete=models.CASCADE,
-    )
+class PriceHistory(TimeStampedModel,CreatedByModel):
+    product = models.ForeignKey(Product, models.CASCADE, "price_history")
     cost_price = models.DecimalField(max_digits=20, decimal_places=2)
     target_margin = models.DecimalField(max_digits=5,
                                         decimal_places=2,
@@ -70,11 +65,6 @@ class PriceHistory(TimeStampedModel):
         expression=models.F('cost_price') / (1 - (models.F('target_margin'))),
         output_field=models.DecimalField(max_digits=20, decimal_places=2),
         db_persist=True,
-    )
-    changed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        null=True,
-        on_delete=models.SET_NULL,
     )
     class Meta:
         ordering = ['-created']
