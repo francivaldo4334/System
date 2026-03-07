@@ -9,21 +9,10 @@ from core.models import CreatedByModel, TimeStampedModel
 
 # Create your models here.
 class Account(TimeStampedModel):
-    class AccountType(models.IntegerChoices):
-        ASSET = 1, 'Ativo'
-        LIABILITY = 2, 'Passivo'
-        EQUITY = 3, 'Patrimônio'
-        REVENUE = 4, 'Receita'
-        EXPENSE = 5, 'Despesa'
-
     name = models.CharField()
     code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^\d+(\.\d+)*$')])
-    account_type = models.SmallIntegerField(choices=AccountType.choices)
     is_selectable = models.BooleanField(default=True)
-    parent = models.ForeignKey('self',
-                               models.CASCADE,
-                               'children',
-                               null=True, blank=True)
+    parent = models.ForeignKey('self',models.CASCADE,'children', null=True, blank=True)
 
 class AccountSelectable(Account):
     class Manager(models.Manager):
@@ -65,7 +54,7 @@ class JournalEntry(models.Model):
 
     entry_type = models.CharField(max_length=1, choices=Type.choices)
     transaction = models.ForeignKey(Transaction,models.CASCADE,'entries')
-    account = models.ForeignKey(Account,models.PROTECT)
+    account = models.ForeignKey(AccountSelectable,models.PROTECT)
     amount = models.DecimalField(max_digits=20,
                                  decimal_places=2,
                                  validators=[MinValueValidator(0.01)])

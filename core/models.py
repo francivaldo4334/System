@@ -8,7 +8,6 @@ class CreatedByModel(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
-        editable=False,
     )
     class Meta:
         abstract = True
