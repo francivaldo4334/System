@@ -35,6 +35,11 @@ class Product(ActivatorModel,
     class Meta:
         unique_together = ('title', 'unit_type')
 
+
+    @property
+    def price(self):
+        return self.price_history.values_list('price', flat=True).first()
+
     @property
     def last_id(self):
         return self.__class__.objects.aggregate( # type: ignore
