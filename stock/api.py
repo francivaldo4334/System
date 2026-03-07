@@ -1,13 +1,19 @@
-from django.urls import path, include
-from rest_framework import routers
-from stock import views
+# pyright: reportAttributeAccessIssue=false
+from rest_framework import viewsets
 
-router = routers.DefaultRouter()
+from stock.models import Category, Product, UnitType
+from stock.serializers import CategorySerializer, ProductSerializer, UnitTypeSerializer
 
-router.register(r'categories', views.CategoryViewSet)
-router.register(r'unittypes', views.UnitTypeViewSet)
-router.register(r'products', views.ProductViewSet)
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
-urlpatterns = [
-    path('', include(router.urls))
-]
+
+class UnitTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = UnitType.objects.all()
+    serializer_class = UnitTypeSerializer
+
+
+class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer

@@ -62,7 +62,10 @@ class PriceHistory(TimeStampedModel):
         on_delete=models.CASCADE,
     )
     cost_price = models.DecimalField(max_digits=20, decimal_places=2)
-    target_margin = models.DecimalField(max_digits=5, decimal_places=2,validators=[MinValueValidator(0), MaxValueValidator(0.99)])
+    target_margin = models.DecimalField(max_digits=5,
+                                        decimal_places=2,
+                                        validators=[MinValueValidator(0), MaxValueValidator(0.99)],
+                                        default=0.3)
     price = models.GeneratedField(
         expression=models.F('cost_price') / (1 - (models.F('target_margin'))),
         output_field=models.DecimalField(max_digits=20, decimal_places=2),

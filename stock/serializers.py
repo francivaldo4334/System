@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from stock.models import Category, Product, UnitType
+from stock.models import Category, Product, StockLocation, UnitType
 from drf_spectacular.utils import extend_schema_field
 
 
@@ -32,4 +32,14 @@ class ProductSerializer(serializers.ModelSerializer):
             'code',
             'categories',
             'price',
+        ]
+
+
+class StockLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockLocation
+        fields = [
+            'title',
+            'description',
+            'slug',
         ]
