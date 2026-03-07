@@ -124,6 +124,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static/'
+STATICFILES_DIRS = [ BASE_DIR / "static" ]
 
 # Django Restframework
 REST_FRAMEWORK = {
