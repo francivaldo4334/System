@@ -39,7 +39,7 @@ class StockLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockLocation
         fields = [
+            'slug',
             'title',
             'description',
-            'slug',
         ]

@@ -1,8 +1,8 @@
 # pyright: reportAttributeAccessIssue=false
 from rest_framework import viewsets
 
-from stock.models import Category, Product, UnitType
-from stock.serializers import CategorySerializer, ProductSerializer, UnitTypeSerializer
+from stock.models import Category, Product, StockLocation, UnitType
+from stock.serializers import CategorySerializer, ProductSerializer, StockLocationSerializer, UnitTypeSerializer
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
@@ -17,3 +17,8 @@ class UnitTypeViewSet(viewsets.ReadOnlyModelViewSet):
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    
+class StockLocationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = StockLocation.objects.all()
+    serializer_class = StockLocationSerializer
