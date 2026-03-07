@@ -14,19 +14,13 @@ class StockLocation(ActivatorModel, TitleDescriptionModel):
     slug = models.SlugField()
 
 class StockMovement(TimeStampedModel):
-    product = models.ForeignKey('product.Product',
-                                related_name="movements",
-                                on_delete=models.PROTECT)
+    product = models.ForeignKey('product.Product',models.PROTECT,'movements')
+    origin = models.ForeignKey(StockLocation,models.PROTECT,'outgoing_movements')
+    destination = models.ForeignKey(StockLocation,models.PROTECT,'incoming_movements')
+    reason = models.TextField(blank=True, null=True)
     quantity = models.DecimalField(max_digits=10, 
                                    decimal_places=3,
                                    validators=[MinValueValidator(0.001)])
-    reason = models.TextField(blank=True, null=True)
-    origin = models.ForeignKey(StockLocation,
-                               related_name="outgoing_movements",
-                               on_delete=models.PROTECT)
-    destination = models.ForeignKey(StockLocation,
-                                    related_name="incoming_movements",
-                                    on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs):
         if self.pk: return
@@ -107,7 +101,7 @@ class StockGain(MovimentFixed):
 class StockBalance(TimeStampedModel):
     product = models.ForeignKey('product.Product', on_delete=models.CASCADE)
     location = models.ForeignKey(StockLocation, on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=20, decimal_places=3, default=0, validators=[MinValueValidator(0)])
+    quantity = models.DecimalField(max_digits=20, decimal_places=3, default=0, validators=[MinValueValidator(0.001)])
 
     class Meta:
         unique_together = ('product', 'location')
