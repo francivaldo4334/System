@@ -28,7 +28,14 @@ class CustomSidebarItem extends HTMLElement {
     const store = this.getAttribute('store')
     this.innerHTML = `
       <form is="ajax-form" endpoint="${endpoint}" store="${store}">
-          <button type="submit">
+          <button
+            type="submit"
+            style="
+              padding: 0.375rem 0.75rem;
+              min-height: 2.25rem;
+              width: 100%;
+            "
+          >
             ${this.innerHTML}
           </button>
       </form>
