@@ -7,7 +7,7 @@ const setState = (key, newValue) => {
   if (state !== newValue) {
     states.set(key, newValue)
     window.dispatchEvent(new CustomEvent('state-update', {
-      detail: { key },
+      detail: { key, value: newValue },
       composed: true,
       bubbles: true,
     }))
@@ -54,5 +54,52 @@ class StateView extends HTMLElement {
   }
 }
 
+class StateIf extends HTMLElement {
+  constructor() {
+    super();
+    this.trigger = this.trigger.bind(this);
+    this.template = "";
+    this.key = "";
+  }
+
+  connectedCallback() {
+    this.key = this.getAttribute("key");
+    this.template = this.innerHTML;
+    this.innerHTML = "";
+
+    const condition = this.getAttribute('check');
+
+    try {
+      this.check = new Function('v', `return ${condition};`);
+    } catch (e) {
+      console.error("Invalid condition expression:", condition);
+      this.check = (v) => false;
+    }
+
+    window.addEventListener('state-update', this.trigger);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('state-update', this.trigger);
+  }
+
+  trigger(event) {
+    if (event.detail && event.detail.key === this.key) {
+      const value = event.detail.value;
+      try {
+        if (this.check(value)) {
+          if (this.innerHTML !== this.template) {
+            this.innerHTML = this.template;
+          }
+        } else {
+          this.innerHTML = ""; // Esconde o conteúdo se a condição falhar
+        }
+      } catch (e) {
+        console.warn("Error evaluating condition with value:", value, e);
+      }
+    }
+  }
+}
 window.customElements.define('s-def', StateDef)
 window.customElements.define('s-view', StateView)
+window.customElements.define('s-if', StateIf)

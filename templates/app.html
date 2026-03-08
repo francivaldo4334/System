@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block style %}
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-    <div is="app-layout">
-        <aside>
-            Menu (Max 240px)
-        </aside>
-        <main>
-            Conteúdo Principal (1fr)
-        </main>
-    </div>
+    <c-layout>
+    <aside slot="sidebar">
+        <nav>
+            <form is="c-form" url="{% url 'schedule_view' %}" key="schedule">
+                <button type="submit">Submit</button>
+            </form>
+            <s-if key="schedule.status" check="v === 200">
+                ok
+            </s-if>
+            <s-view keys='schedule.data'>
+                <div data-bind></div>
+            </s-view>
+        </nav>
+    </aside>
+    <main slot="content">
+        Conteúdo Principal
+    </main>
+    </c-layout>
 {% endblock %}

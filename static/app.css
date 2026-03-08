@@ -1,1 +1,16 @@
+:root {
+  --base-50: #f0ede6;
+  --base-100: #d8d1c5;
+  --base-200: #bdb2a2;
+  --base-300: #a1937d;
+  --base-400: #8c7b60;
+  --base-500: #766445;
+  --base-600: #6c5a3e;
+  --base-700: #5d4d34;
+  --base-800: #50402b;
+  --base-900: #423221;
+}
 
+body {
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+}
