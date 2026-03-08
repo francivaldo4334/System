@@ -10,12 +10,31 @@ const TYPE_HANDLERS = {
     return Boolean(v);
   },
   obj: (v) => {
-    if (typeof v !== 'object') throw TypeError('Value is not a valid object')
-    return v
+    let value = v;
+    if (typeof v !== 'object') {
+      try {
+        const parseJson = JSON.parse(v)
+        value = parseJson;
+      } catch (e) {
+        throw TypeError('Value is not a valid object')
+      }
+    }
+    return value
   },
   list: (v) => {
-    if (!Array.isArray(v)) throw TypeError("Value is not a valid Array")
-    return v
+    let value = v
+    if (!Array.isArray(v)) {
+      try {
+        const parseJson = JSON.parse(v)
+        value = parseJson;
+      } catch (e) {
+        throw TypeError("Value is not a valid array")
+      }
+    }
+    if (!Array.isArray(value)) {
+      throw TypeError("Value is not a valid array")
+    }
+    return value
   }
 }
 class Signal {
@@ -84,27 +103,21 @@ class SignalManager {
 }
 const signalManager = new SignalManager();
 Object.freeze(signalManager)
-function updateSignal(key, value) {
+
+function send(key, value) {
   signalManager.get(key).value = value
 }
 
-class UseSignal extends HTMLElement {
+class StateDef extends HTMLElement {
   constructor() {
     super();
     const key = this.getAttribute('key');
     const type = this.getAttribute('type');
-    const defaultValue = this.getAttribute('default');
-    let value;
-    try {
-      const parseJson = JSON.parse(defaultValue)
-      value = parseJson;
-    } catch (e) {
-      value = defaultValue
-    }
+    const value = this.getAttribute('value');
     signalManager.add(key, { type, value });
   }
 }
-class UseObserver extends HTMLElement {
+class StateView extends HTMLElement {
   constructor() {
     super();
     this._handleUpdate = this._handleUpdate.bind(this);
@@ -131,7 +144,7 @@ class UseObserver extends HTMLElement {
     const keysToUpdate = this.keys;
     keysToUpdate.forEach(key => {
       const value = signalManager.get(key).value;
-      const targets = this.querySelectorAll(`[use-key="${key}"]`);
+      const targets = this.querySelectorAll(`[bind="${key}"]`);
       targets.forEach(el => {
         if (el.textContent !== String(value)) {
           el.textContent = value;
@@ -140,5 +153,5 @@ class UseObserver extends HTMLElement {
     });
   }
 }
-window.customElements.define('use-signal', UseSignal)
-window.customElements.define('use-observer', UseObserver)
+window.customElements.define('s-def', StateDef)
+window.customElements.define('s-view', StateView)
