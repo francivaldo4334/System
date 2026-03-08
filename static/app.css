@@ -1,4 +1,5 @@
 :root {
+
   --base-50: #f0ede6;
   --base-100: #d8d1c5;
   --base-200: #bdb2a2;
@@ -9,6 +10,11 @@
   --base-700: #5d4d34;
   --base-800: #50402b;
   --base-900: #423221;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  --default-font-family: var(--font-sans);
+
+  font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
 }
 
 body {

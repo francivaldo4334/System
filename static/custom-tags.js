@@ -22,5 +22,19 @@ class CustomLayout extends HTMLElement {
     `
   }
 }
+class CustomSidebarItem extends HTMLElement {
+  connectedCallback() {
+    const endpoint = this.getAttribute('endpoint')
+    const store = this.getAttribute('store')
+    this.innerHTML = `
+      <form is="ajax-form" endpoint="${endpoint}" store="${store}">
+          <button type="submit">
+            ${this.innerHTML}
+          </button>
+      </form>
+    `
+  }
+}
 
 window.customElements.define('c-layout', CustomLayout)
+window.customElements.define('c-sidebar-item', CustomSidebarItem)
