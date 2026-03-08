@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'app.css' %}">
+{% endblock %}
+{% block body %}
+    <div is="app-layout">
+        <aside>
+            Menu (Max 240px)
+        </aside>
+        <main>
+            Conteúdo Principal (1fr)
+        </main>
+    </div>
+{% endblock %}

@@ -4,8 +4,9 @@
     <head>
         <meta charset="utf-8" />
         <title>Sistema</title>
+        {% block style %}{% endblock %}
     </head>
-    <body>
+    <body style="margin: 0; padding: 0;">
         {% block body %}{% endblock %}
         <script src="{% static 'state.js' %}"></script>
         <script src="{% static 'custom-tags.js' %}"></script>
