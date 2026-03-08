@@ -1,13 +1,22 @@
 {% extends 'base.html' %}
 {% block body %}
-    <s-def key="lista" value="[1,2,3]">
-    </s-def>
-    <s-view keys="lista">
-        <span bind="lista"></span>
-        <span bind="lista"></span>
-    </s-view>
-    <input oninput="setState('lista', this.value)" />
-    <s-view keys="lista">
-        <span bind="lista"></span>
-    </s-view>
+    <main style="width: 100%;
+                 height: 100vh;
+                 display: flex;
+                 flex-direction: column;
+                 align-items: center;
+                 justify-content: center">
+        <s-def key="username" value="Dev" />
+        <s-view keys="username">
+            <p>
+                Olá, <span data-bind="username"></span>!
+            </p>
+            <input data-bind="username" data-at="value" />
+        </s-view>
+        <input oninput="setState('username', this.value)"
+               placeholder="Digite seu nome..." />
+        <p-json value='{"name":"roberto", "tasks": ["tas1"]}'>
+            <span data-bind="name"></span>
+        </p-json>
+    </main>
 {% endblock %}

@@ -1,13 +1,8 @@
 const states = new Map();
 
-function getState(key) {
-  return states.get(key)
-}
-
-function setState(key, newValue) {
-  if (!states.has(key)) {
-    states.set(key, newValue)
-  }
+const getState = (key) => states.get(key)
+const setState = (key, newValue) => {
+  if (!states.has(key)) states.set(key, newValue)
   const state = states.get(key);
   if (state !== newValue) {
     states.set(key, newValue)
@@ -18,7 +13,6 @@ function setState(key, newValue) {
     }))
   }
 }
-
 class StateDef extends HTMLElement {
   connectedCallback() {
     this.key = this.getAttribute('key')
@@ -50,8 +44,12 @@ class StateView extends HTMLElement {
   }
   render(key) {
     const value = getState(key)
-    this.querySelectorAll(`[bind="${key}"]`).forEach(el => {
-      if (el.textContent != value) el.textContent = value;
+    this.querySelectorAll(`[data-bind="${key}"]`).forEach(el => {
+      const target = el.dataset.at || 'textContent'
+      if (el[target] != value)
+        el[target] = value;
+      else
+        el.setAttribute(target, value)
     })
   }
 }
