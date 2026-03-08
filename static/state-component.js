@@ -109,12 +109,14 @@ function send(key, value) {
 }
 
 class StateDef extends HTMLElement {
-  constructor() {
-    super();
-    const key = this.getAttribute('key');
+  connectedCallback() {
+    this.key = this.getAttribute('key');
     const type = this.getAttribute('type');
     const value = this.getAttribute('value');
-    signalManager.add(key, { type, value });
+    signalManager.add(this.key, { type, value });
+  }
+  disconnectedCallback() {
+    signalManager.remove(this.key)
   }
 }
 class StateView extends HTMLElement {

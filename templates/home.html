@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block body %}
-    <s-def key="lista" type="list" value="[1,2,3]"></s-def>
-        <s-view keys="lista">
-            <span bind="lista"></span>
-            <span bind="lista"></span>
-        </s-view>
-        <input oninput="send('lista', this.value)" />
-        <s-view keys="lista">
-            <span bind="lista"></span>
-        </s-view>
-    {% endblock %}
+    <s-def key="lista" type="str" value="[1,2,3]">
+    </s-def>
+    <s-view keys="lista">
+        <span bind="lista"></span>
+        <span bind="lista"></span>
+    </s-view>
+    <input oninput="send('lista', this.value)" />
+    <s-view keys="lista">
+        <span bind="lista"></span>
+    </s-view>
+{% endblock %}
