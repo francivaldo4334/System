@@ -44,7 +44,7 @@ class StateIf extends HTMLElement {
     debugger
     this.state = this.getAttribute("state");
 
-    const elseElement = this.querySelector(`[slot="else"]`);
+    const elseElement = this.querySelector(`s-else`);
 
     this.templateDefault = elseElement ? elseElement.innerHTML : "";
 

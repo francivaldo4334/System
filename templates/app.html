@@ -11,7 +11,9 @@
                 <button type="submit">
                     <s-if state="schedule.status" when="it === 200">
                         <div data-state="schedule.data" />
-                        <span slot="else">Submit</span>
+                        <s-else>
+                            Submit
+                        </s-else>
                     </s-if>
                 </button>
             </form>
