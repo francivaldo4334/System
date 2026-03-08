@@ -142,7 +142,7 @@ class UseObserver extends HTMLElement {
     const keysToUpdate = this.keys;
     keysToUpdate.forEach(key => {
       const value = signalManager.get(key).value;
-      const targets = this.querySelectorAll(`[slot="${key}"]`);
+      const targets = this.querySelectorAll(`[use-key="${key}"]`);
       targets.forEach(el => {
         if (el.textContent !== String(value)) {
           el.textContent = value;
