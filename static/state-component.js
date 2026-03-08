@@ -9,6 +9,14 @@ const TYPE_HANDLERS = {
     if (typeof v === 'string') return v.toLowerCase() === 'true';
     return Boolean(v);
   },
+  obj: (v) => {
+    if (typeof v !== 'object') throw TypeError('Value is not a valid object')
+    return v
+  },
+  list: (v) => {
+    if (!Array.isArray(v)) throw TypeError("Value is not a valid Array")
+    return v
+  }
 }
 class Signal {
   constructor(
@@ -18,7 +26,7 @@ class Signal {
     if (!TYPE_HANDLERS[type]) throw TypeError(`Invalid type: ${type}`)
     this.key = key;
     this.type = type;
-    this._value = TYPE_HANDLERS[value];
+    this._value = TYPE_HANDLERS[type](value);
   }
   get value() {
     return this._value
@@ -85,7 +93,14 @@ class UseSignal extends HTMLElement {
     super();
     const key = this.getAttribute('key');
     const type = this.getAttribute('type');
-    const value = this.getAttribute('default');
+    const defaultValue = this.getAttribute('default');
+    let value;
+    try {
+      const parseJson = JSON.parse(defaultValue)
+      value = parseJson;
+    } catch (e) {
+      value = defaultValue
+    }
     signalManager.add(key, { type, value });
   }
 }
