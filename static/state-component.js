@@ -3,14 +3,18 @@
 // type: 'str' | 'num' | 'bol'
 class Signal {
   constructor(
-    { type, value }
+    { key, type, value }
   ) {
+    if (typeof key !== 'string') {
+      throw TypeError("'key' must be of the 'string' type")
+    }
     if (typeof type !== 'string') {
       throw TypeError("'type' must be of the 'string' type")
     }
     if (!['str', 'num', 'bol', 'list'].includes(type)) {
       throw TypeError("'type' must be one of the options 'str', 'num', 'bol' or 'list'")
     }
+    this.key = key;
     this.type = type;
     this._value = value;
   }
@@ -51,7 +55,11 @@ class Signal {
     } else {
       throw Error()
     }
-    const signalEvent = new CustomEvent('signal-update', { key: ths.key, value })
+    const signalEvent = new CustomEvent('signal-update', {
+      detail: { key: this.key, value },
+      composed: true,
+      bubbles: true,
+    })
     window.dispatchEvent(signalEvent);
   }
 }
@@ -78,7 +86,7 @@ class SignalManager {
       console.warn(`Signal com chave "${key}" já existe.`);
       return;
     }
-    this.#signals.set(key, new Signal(config));
+    this.#signals.set(key, new Signal({ ...config, key }));
   }
 
   remove(key) {
@@ -94,6 +102,9 @@ class SignalManager {
 }
 const signalManager = new SignalManager();
 Object.freeze(signalManager)
+function updateSignal(key, value) {
+  signalManager.get(key).value = value
+}
 
 class UseSignal extends HTMLElement {
   constructor() {
@@ -104,16 +115,40 @@ class UseSignal extends HTMLElement {
     signalManager.add(key, { type, value });
   }
 }
-
 class UseObserver extends HTMLElement {
   constructor() {
     super();
-    const keys = this.getAttribute('keys')
-    window.addEventListener('signal-update', (event) => {
-      console.log("ok")
-      event.detail.key
-      event.detail.value
-    })
+    this._handleUpdate = this._handleUpdate.bind(this);
+  }
+
+  connectedCallback() {
+    this.keys = this.getAttribute('keys')?.split(',').map(k => k.trim()) || [];
+    window.addEventListener('signal-update', this._handleUpdate);
+    this.render();
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('signal-update', this._handleUpdate);
+  }
+
+  _handleUpdate(event) {
+    const { key } = event.detail;
+    if (this.keys.includes(key)) {
+      this.render();
+    }
+  }
+
+  render() {
+    const keysToUpdate = this.keys;
+    keysToUpdate.forEach(key => {
+      const value = signalManager.get(key).value;
+      const targets = this.querySelectorAll(`[slot="${key}"]`);
+      targets.forEach(el => {
+        if (el.textContent !== String(value)) {
+          el.textContent = value;
+        }
+      });
+    });
   }
 }
 window.customElements.define('use-signal', UseSignal)
