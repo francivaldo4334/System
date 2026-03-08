@@ -13,8 +13,9 @@
             <s-if key="schedule.status" check="v === 200">
                 ok
             </s-if>
-            <s-view keys='schedule.data'>
-                <div data-bind></div>
+            <s-view keys="schedule.data, schedule.status">
+                <div data-bind="schedule.data"></div>
+                <div data-bind="schedule.status"></div>
             </s-view>
         </nav>
     </aside>

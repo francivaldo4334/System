@@ -30,6 +30,7 @@ class StateView extends HTMLElement {
   }
   connectedCallback() {
     this.keys = this.getAttribute('keys')?.split(',').map(k => k.trim()) || [];
+    console.log(this.keys)
     window.addEventListener('state-update', this.update)
     this.keys.forEach(k => this.render(k))
   }
