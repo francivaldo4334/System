@@ -1,48 +1,48 @@
-class CustomForm extends HTMLFormElement {
+class CustomAjaxForm extends HTMLFormElement {
   constructor() {
     super();
     this._onSubmit = this._onSubmit.bind(this)
   }
   connectedCallback() {
-    const key = this.getAttribute('key')
-    if (!key) {
-      throw TypeError("'key' is required.")
+    const store = this.getAttribute('store')
+    if (!store) {
+      throw TypeError("'store' is required.")
     }
-    this.queryKeys = Object.freeze({
-      data: `${key}.data`,
-      isLoading: `${key}.isLoading`,
-      status: `${key}.status`,
-      error: `${key}.error`,
+    this.store = Object.freeze({
+      data: `${store}.data`,
+      isLoading: `${store}.isLoading`,
+      status: `${store}.status`,
+      error: `${store}.error`,
     })
-    setState(this.queryKeys.data, '{}')
-    setState(this.queryKeys.isLoading, 'false')
-    setState(this.queryKeys.error, '')
-    setState(this.queryKeys.status, '')
+    setState(this.store.data, '{}')
+    setState(this.store.isLoading, 'false')
+    setState(this.store.error, '')
+    setState(this.store.status, '')
 
 
-    this.url = this.getAttribute('url')
+    this.endpoint = this.getAttribute('endpoint')
     this.method = (this.getAttribute('method') || 'GET').toLowerCase()
     window.addEventListener('submit', this._onSubmit)
   }
   disconnectedCallback() {
-    Object.values(this.queryKeys).forEach(k => states.delete(k))
+    Object.values(this.store).forEach(k => states.delete(k))
     window.removeEventListener('submit', this._onSubmit)
   }
   _onSubmit(event) {
     event.preventDefault();
-    setState(this.queryKeys.isLoading, 'true')
-    fetch(this.url, { method: this.method })
+    setState(this.store.isLoading, 'true')
+    fetch(this.endpoint, { method: this.method })
       .then(response => {
         const status = response.status;
-        setState(this.queryKeys.status, status)
+        setState(this.store.status, status)
         if (response.ok) {
-          response.text().then(data => setState(this.queryKeys.data, data))
+          response.text().then(data => setState(this.store.data, data))
           return
         }
-        response.text().then(data => setState(this.queryKeys.error, data))
+        response.text().then(data => setState(this.store.error, data))
       })
-      .finally(() => setState(this.queryKeys.isLoading, 'false'))
+      .finally(() => setState(this.store.isLoading, 'false'))
   }
 }
 
-window.customElements.define('c-form', CustomForm, { extends: 'form' })
+window.customElements.define('ajax-form', CustomAjaxForm, { extends: 'form' })

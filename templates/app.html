@@ -7,16 +7,14 @@
     <c-layout>
     <aside slot="sidebar">
         <nav>
-            <form is="c-form" url="{% url 'schedule_view' %}" key="schedule">
-                <button type="submit">Submit</button>
+            <form is="ajax-form" endpoint="{% url 'schedule_view' %}" store="schedule">
+                <button type="submit">
+                    <s-if state="schedule.status" when="it === 200">
+                        <div data-state="schedule.data" />
+                        <span slot="else">Submit</span>
+                    </s-if>
+                </button>
             </form>
-            <s-if key="schedule.status" check="v === 200">
-                ok
-            </s-if>
-            <s-view keys="schedule.data, schedule.status">
-                <div data-bind="schedule.data"></div>
-                <div data-bind="schedule.status"></div>
-            </s-view>
         </nav>
     </aside>
     <main slot="content">

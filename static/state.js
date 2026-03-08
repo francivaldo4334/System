@@ -22,85 +22,75 @@ class StateDef extends HTMLElement {
     states.delete(this.key)
   }
 }
+window.addEventListener('state-update', (event) => {
+  const { key, value } = event.detail
+  document.querySelectorAll(`[data-state="${key}"]`).forEach(el => {
+    const target = el.dataset.at || 'textContent'
+    if (el[target] != value)
+      el[target] = value;
+  })
 
-class StateView extends HTMLElement {
-  constructor() {
-    super();
-    this.update = this.update.bind(this);
-  }
-  connectedCallback() {
-    this.keys = this.getAttribute('keys')?.split(',').map(k => k.trim()) || [];
-    console.log(this.keys)
-    window.addEventListener('state-update', this.update)
-    this.keys.forEach(k => this.render(k))
-  }
-  disconnectedCallback() {
-    window.removeEventListener('state-update', this.update)
-  }
-  update(event) {
-    const { key } = event.detail;
-    if (this.keys.includes(key)) {
-      this.render(key);
-    }
-  }
-  render(key) {
-    const value = getState(key)
-    this.querySelectorAll(`[data-bind="${key}"]`).forEach(el => {
-      const target = el.dataset.at || 'textContent'
-      if (el[target] != value)
-        el[target] = value;
-      else
-        el.setAttribute(target, value)
-    })
-  }
-}
+})
 
 class StateIf extends HTMLElement {
   constructor() {
     super();
     this.trigger = this.trigger.bind(this);
     this.template = "";
-    this.key = "";
+    this.state = "";
   }
 
   connectedCallback() {
-    this.key = this.getAttribute("key");
-    this.template = this.innerHTML;
-    this.innerHTML = "";
+    debugger
+    this.state = this.getAttribute("state");
 
-    const condition = this.getAttribute('check');
+    const elseElement = this.querySelector(`[slot="else"]`);
+
+    this.templateDefault = elseElement ? elseElement.innerHTML : "";
+
+    if (elseElement) elseElement.remove();
+
+    this.template = this.innerHTML;
+    this.innerHTML = ""
+
+    const when = this.getAttribute('when');
 
     try {
-      this.check = new Function('v', `return ${condition};`);
+      this.check = new Function('it', `return ${when};`);
     } catch (e) {
-      console.error("Invalid condition expression:", condition);
+      console.error("Invalid condition expression:", when);
       this.check = (v) => false;
     }
 
     window.addEventListener('state-update', this.trigger);
+
+    const initialState = getState(this.state);
+    this.render(initialState);
   }
 
   disconnectedCallback() {
     window.removeEventListener('state-update', this.trigger);
   }
 
-  trigger(event) {
-    if (event.detail && event.detail.key === this.key) {
-      const value = event.detail.value;
-      try {
-        if (this.check(value)) {
-          if (this.innerHTML !== this.template) {
-            this.innerHTML = this.template;
-          }
-        } else {
-          this.innerHTML = ""; // Esconde o conteúdo se a condição falhar
-        }
-      } catch (e) {
-        console.warn("Error evaluating condition with value:", value, e);
+  render(value) {
+    try {
+      if (this.check(value) && this.innerHTML !== this.template) {
+        this.innerHTML = this.template;
+      } else {
+        this.innerHTML = this.templateDefault || "";
       }
+    } catch (e) {
+      console.warn("Error evaluating condition with value:", value, e);
+    }
+  }
+
+  trigger(event) {
+    const { key, value } = event.detail
+    if (key === this.state) {
+      this.render(value)
     }
   }
 }
+
 window.customElements.define('s-def', StateDef)
-window.customElements.define('s-view', StateView)
 window.customElements.define('s-if', StateIf)
