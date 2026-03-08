@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 {% block body %}
-    <use-signal key="1" type="str" default='ok' />
     <use-observer keys="1">
     <span slot="1"></span>
     <span slot="1"></span>
     <span slot="1"></span>
     </use-observer>
     <input oninput="updateSignal('1', this.value)" />
+    <use-signal key="1" type="str" default='ok' />
+    <use-observer keys="1">
+    <span slot="1"></span>
+    <span slot="1"></span>
+    <span slot="1"></span>
+    </use-observer>
 {% endblock %}
