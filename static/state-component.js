@@ -1,66 +1,40 @@
-//@props
-// key: string
-// type: 'str' | 'num' | 'bol'
+const TYPE_HANDLERS = {
+  str: (v) => String(v),
+  num: (v) => {
+    const n = Number(v)
+    if (isNaN(n)) throw TypeError('Value is not a valid number')
+    return n;
+  },
+  bol: (v) => {
+    if (typeof v === 'string') return v.toLowerCase() === 'true';
+    return Boolean(v);
+  },
+}
 class Signal {
   constructor(
     { key, type, value }
   ) {
-    if (typeof key !== 'string') {
-      throw TypeError("'key' must be of the 'string' type")
-    }
-    if (typeof type !== 'string') {
-      throw TypeError("'type' must be of the 'string' type")
-    }
-    if (!['str', 'num', 'bol', 'list'].includes(type)) {
-      throw TypeError("'type' must be one of the options 'str', 'num', 'bol' or 'list'")
-    }
+    if (typeof key !== 'string') throw TypeError("'key' must be a string");
+    if (!TYPE_HANDLERS[type]) throw TypeError(`Invalid type: ${type}`)
     this.key = key;
     this.type = type;
-    this._value = value;
+    this._value = TYPE_HANDLERS[value];
   }
   get value() {
     return this._value
   }
-  setStr(value) {
-    if (typeof value !== 'string') {
-      throw TypeError('invalid signal type')
+  set value(newValue) {
+    try {
+      const parseValue = TYPE_HANDLERS[this.type](newValue)
+      this._value = parseValue;
+      window.dispatchEvent(new CustomEvent('signal-update', {
+        detail: { key: this.key, value: newValue },
+        composed: true,
+        bubbles: true,
+      }));
+    } catch (e) {
+      console.error(`[Signal ${this.key}] Update failed: ${e.message}`)
     }
-    this._value = value;
-  }
-  setNum(value) {
-    if (typeof value === 'number') {
-      this._value = value;
-      return;
-    }
-    if (typeof value !== 'string') {
-      throw TypeError('invalid signal type')
-    }
-    if (!/^\d+$/.test(value)) {
-      throw TypeError('invalid signal type')
-    }
-    this._value = Number(value)
-  }
-  setBol(value) {
-    this._value = Boolean(value)
-  }
-  set value(value) {
-    if (this.type === 'str') {
-      this.setStr(value)
-    }
-    else if (this.type === 'num') {
-      this.setNum(value)
-    }
-    else if (ths.type === 'bol') {
-      this.setBol(value)
-    } else {
-      throw Error()
-    }
-    const signalEvent = new CustomEvent('signal-update', {
-      detail: { key: this.key, value },
-      composed: true,
-      bubbles: true,
-    })
-    window.dispatchEvent(signalEvent);
   }
 }
 class SignalManager {
