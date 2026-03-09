@@ -20,7 +20,7 @@
   --s3: calc(var(--b-unit) * 16); /* 16px */
   --s4: calc(var(--b-unit) * 24); /* 24px */
 
-  --unit: var(--b-unit);
+  --sdef: var(--s4);
 
   --border: var(--b-unit)  solid var(--c-100);
 
@@ -76,10 +76,10 @@ body {
 .flex-wrap { flex-wrap: wrap; }
 .flex-col { flex-direction: column; }
 /* sec:classes:border */
-[class$="-1"] { --unit: var(--s1) }
-[class$="-2"] { --unit: var(--s2) }
-[class$="-3"] { --unit: var(--s3) }
-[class$="-4"] { --unit: var(--s4) }
+[class$="-1"] { --sdef: var(--s1) }
+[class$="-2"] { --sdef: var(--s2) }
+[class$="-3"] { --sdef: var(--s3) }
+[class$="-4"] { --sdef: var(--s4) }
 
 [class^="border"],[class$="-1"] { --b: calc(var(--b-unit) * 1) }
 [class^="border"],[class$="-2"] { --b: calc(var(--b-unit) * 2) }
@@ -95,9 +95,10 @@ body {
 [class*="border-r"] { border-rigth: var(--_b); }
 [class*="border-l"] { border-left: var(--_b); }
 /* sec:classes:gap */
-[class^="gap"][class*=" gap"] { gap: var(--g, var(--s4, 1rem)) var(--g, var(--s4, 1rem));   }
-[class*="gap-x"] { row-gap: 0; }
-[class*="gap-y"] { column-gap: 0; }
+[class*="gap"]{ --_g: var(--g, var(--sdef, var(--s4)));   }
+[class*="gap-f"] { gap: var(--_g);}
+[class*="gap-y"] { row-gap: var(--_g); }
+[class*="gap-x"] { column-gap: var(--_g); }
 /* sec:classes:padding */
 [class^="p"],[class*=" p"] { padding: var(--p, var(--s4)); }
 [class*="p-t"] { padding-bottom: 0; padding-left: 0; padding-right: 0; }
