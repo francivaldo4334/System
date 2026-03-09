@@ -1,36 +1,28 @@
 /* sec:root */
 :root {
-  --color-white: #ffffff;
-  --color-base-50: #e5e5f7;
-  /* --color-base-50: #f5f3f0; */
-  --color-base-100: #edeae3;
-  --color-base-200: #d1ccbf;
-  --color-base-300: #b5b0a5;
-  --color-base-400: #9a968c;
-  --color-base-500: #7f7c74;
-  --color-base-600: #63615a;
-  --color-base-700: #4b4944;
-  --color-base-800: #34322f;
-  --color-base-900: #1c1b19;
+  --c-white: #ffffff;
+  /* --c-50: #e5e5f7; */
+  --c-50: #f5f3f0;
+  --c-100: #edeae3;
+  --c-200: #d1ccbf;
+  --c-300: #b5b0a5;
+  --c-400: #9a968c;
+  --c-500: #7f7c74;
+  --c-600: #63615a;
+  --c-700: #4b4944;
+  --c-800: #34322f;
+  --c-900: #1c1b19;
 
-  --rounded-box: 0.5rem;
+  --b-unit: 0.0625rem;  
 
+  --s1: calc(var(--b-unit) * 4);  /* 4px */
+  --s2: calc(var(--b-unit) * 8);  /* 8px */
+  --s3: calc(var(--b-unit) * 16); /* 16px */
+  --s4: calc(var(--b-unit) * 24); /* 24px */
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  --default-font-family: var(--font-sans);
+  --unit: var(--b-unit);
 
-  font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
-
-  --grid-cols-1: repeat(1, minmax(0, 1fr));
-  --grid-cols-2: repeat(2, minmax(0, 1fr));
-  --grid-cols-3: repeat(3, minmax(0, 1fr));
-  --grid-cols-4: repeat(4, minmax(0, 1fr));
-  --unit: 0.0625rem;  
-  --s1: calc(var(--unit) * 4);  /* 4px */
-  --s2: calc(var(--unit) * 8);  /* 8px */
-  --s3: calc(var(--unit) * 16); /* 16px */
-  --s4: calc(var(--unit) * 24); /* 24px */
-  --border: var(--unit)  solid var(--color-base-100);
+  --border: var(--b-unit)  solid var(--c-100);
 
   --xs: calc(var(--s4) * 2);
   --sm: calc(var(--xs) * 2);
@@ -59,14 +51,18 @@
   --text-3xl-lh: calc(2.25 / 1.875);
   --text-4xl-lh: calc(2.5 / 2.25);
 
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  --default-font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--text-base-lh);
   font-weight: 400;
+  font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+
 }
 
 /* sec:tags */
 body {
-  background: var(--color-white);
+  background: var(--c-white);
   margin: 0;
   padding: 0;
 }
@@ -80,65 +76,32 @@ body {
 .flex-wrap { flex-wrap: wrap; }
 .flex-col { flex-direction: column; }
 /* sec:classes:border */
-.border {
-  border-width: var(--bw, var(--unit, 1px));
-  border-color: var(--bc, var(--color-base-100, black));
-  border-style: solid;
-}
-.border-r {
-  --w-final: var(--brw, var(--unit, 1px));
-  --c-final: var(--brc, var(--color-base-100, black));
-  border-right-width: var(--w-final);
-  border-right-color: var(--c-final);
-  border-right-style: solid;
-}
-.border-l {
-  --w-final: var(--blw, var(--unit, 1px));
-  --c-final: var(--blc, var(--color-base-100, black));
-  border-left-width: var(--w-final);
-  border-left-color: var(--c-final);
-  border-left-style: solid;
-}
-.border-t {
-  --w-final: var(--btw, var(--unit, 1px));
-  --c-final: var(--btc, var(--color-base-100, black));
-  border-top-width: var(--w-final);
-  border-top-color: var(--c-final);
-  border-top-style: solid;
-}
-.border-b {
-  --w-final: var(--bbw, var(--unit, 1px));
-  --c-final: var(--bbc, var(--color-base-100, black));
-  border-bottom-width: var(--w-final);
-  border-bottom-color: var(--c-final);
-  border-bottom-style: solid;
-}
-.border-x {
-  --w-final: var(--bxw, var(--unit, 1px));
-  --c-final: var(--bxc, var(--color-base-100, black));  
-  border-inline-width: var(--w-final);
-  border-inline-color: var(--c-final);
-  border-inline-style: solid;
-}
-.border-y {
-  --w-final: var(--byw, var(--unit, 1px));
-  --c-final: var(--byc, var(--color-base-100, black));  
-  border-block-width: var(--w-final);
-  border-block-color: var(--c-final);
-  border-block-style: solid;
-}
+[class$="-1"] { --unit: var(--s1) }
+[class$="-2"] { --unit: var(--s2) }
+[class$="-3"] { --unit: var(--s3) }
+[class$="-4"] { --unit: var(--s4) }
+
+[class*="border"] { --_b: var(--b, var(--unit)) solid var(--bc, var(--c-100)); }
+[class*="border-x"] { border-inline: var(--_b);}
+[class*="border-y"] { border-block: var(--_b);}
+[class*="border-f"] { border: var(--_b); }
+
+[class*="border-t"] { border-bottom: 0; border-left: 0; border-right: 0; }
+[class*="border-b"] { border-top: 0; border-left: 0; border-right: 0; }
+[class*="border-r"] { border-bottom: 0; border-left: 0; border-top: 0; }
+[class*="border-l"] { border-top: 0; border-bottom: 0; border-right: 0; }
 /* sec:classes:gap */
-.gap { gap: var(--g, var(--s4, 1rem)); }
-.gap-x { column-gap: var(--g, var(--s4, 1rem)); }
-.gap-y { row-gap: var(--g, var(--s4, 1rem)); }
+[class^="gap"][class*=" gap"] { gap: var(--g, var(--s4, 1rem)) var(--g, var(--s4, 1rem));   }
+[class*="gap-x"] { row-gap: 0; }
+[class*="gap-y"] { column-gap: 0; }
 /* sec:classes:padding */
-.p { padding: var(--p, var(--s4)); }
-.p-x { padding: 0 var(--px, var(--s4)); }
-.p-y { padding: var(--py, var(--s4)) 0; }
-.p-l { padding-left: var(--pl, var(--s4)); }
-.p-r { padding-right: var(--pl, var(--s4)); }
-.p-t { padding-top: var(--pt, var(--s4)); }
-.p-b { padding-bottom: var(--pb, var(--s4)); }
+[class^="p"],[class*=" p"] { padding: var(--p, var(--s4)); }
+[class*="p-t"] { padding-bottom: 0; padding-left: 0; padding-right: 0; }
+[class*="p-b"] { padding-top: 0; padding-left: 0; padding-right: 0; }
+[class*="p-r"] { padding-bottom: 0; padding-left: 0; padding-top: 0; }
+[class*="p-l"] { padding-top: 0; padding-bottom: 0; padding-right: 0; }
+[class*="p-x"] { padding-top: 0; padding-bottom: 0; }
+[class*="p-y"] { padding-left: 0; padding-right: 0; }
 /* sec:classes:margin */
 .m { margin: var(--m, var(--s4)); }
 .m-l { margin-left: var(--ml, var(--s4)); }
@@ -269,41 +232,19 @@ body {
   font-weight: 900;
 }
 /* sec:classes:grid */
-.grid {
-  display: grid;
-}
-.grid-cols-1 {
-  grid-template-columns: var(--grid-cols-1);
-}
-.grid-cols-2 {
-  grid-template-columns: var(--grid-cols-2);
-}
-.grid-cols-3 {
-  grid-template-columns: var(--grid-cols-3);
-}
-.grid-cols-4 {
-  grid-template-columns: var(--grid-cols-4);
-}
-
+.grid { display: grid; }
+.grid-cols { grid-template-columns:repeat(var(--gc, 1), minmax(0, 1fr));  }
 /* sec:classes:bg */
-.bg-base-50 {
-  background: var(--color-base-50);
-}
-.bg-base-100 {
-  background: var(--color-base-100);
-}
-.bg-base-200 {
-  background: var(--color-base-200);
-}
-.bg-base-300 {
-  background: var(--color-base-300);
-}
+.bg-base-50 { background: var(--c-50); }
+.bg-base-100 { background: var(--c-100); }
+.bg-base-200 { background: var(--c-200); }
+.bg-base-300 { background: var(--c-300); }
 .bg-pattern-lines-horizontal {
   opacity: 0.8;
   background-size: 20px 20px;
   background-image:  repeating-linear-gradient(0deg, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
 }
-.bg-pattern-lines-horizontal {
+.bg-pattern-lines-vertical {
   opacity: 0.8;
   background-size: 20px 20px;
   background-image:  repeating-linear-gradient(to right, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
@@ -315,16 +256,16 @@ body {
 }
 .bg-pattern-polka {
   --polka-space: var(--s4);
-  --polka-detal: calc(var(--polka-space) / 2 * -1 + var(--unit) / 2);
+  --polka-detal: calc(var(--polka-space) / 2 * -1 + var(--b-unit) / 2);
   opacity: 0.8;
-  background-image: radial-gradient(var(--color-base-200) var(--unit), #00000000 var(--unit));
+  background-image: radial-gradient(var(--c-200) var(--b-unit), #00000000 var(--b-unit));
   background-size: var(--polka-space) var(--polka-space);
   background-position: var(--polka-detal) var(--polka-detal);
 }
 .bg-pattern-diagonal {
-  --pattern-accent: var(--color-base-800);
-  --pattern-bg: var(--color-base-50);
-  --pattern-thickness: var(--unit);
+  --pattern-accent: var(--c-800);
+  --pattern-bg: var(--c-50);
+  --pattern-thickness: var(--b-unit);
   --pattern-size: var(--s2);
   opacity: 0.3;
   background-size: var(--pattern-size) var(--pattern-size);
