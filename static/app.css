@@ -202,31 +202,31 @@ body {
   --_p: var(--p, var(--s4))
 }
 
-[class*="p-f"] {
+[class^="p-f"] {
   padding: var(--_p);
 }
 
-[class*="p-t"] {
+[class^="p-t"] {
   padding-top: var(--_p);
 }
 
-[class*="p-b"] {
+[class^="p-b"] {
   padding-bottom: var(--_p);
 }
 
-[class*="p-r"] {
+[class^="p-r"] {
   padding-right: var(--_p);
 }
 
-[class*="p-l"] {
+[class^="p-l"] {
   padding-left: var(--_p);
 }
 
-[class*="p-x"] {
+[class^="p-x"] {
   padding-inline: var(--_p);
 }
 
-[class*="p-y"] {
+[class^="p-y"] {
   padding-block: var(--_p);
 }
 
