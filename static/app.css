@@ -99,39 +99,19 @@ body {
 }
 
 /* sec:classes:border */
-[class$="-1"] {
-  --sdef: var(--s1)
+[class^="border"][class$="-1"] {
+  --b: var(--b-unit)
 }
 
-[class$="-2"] {
-  --sdef: var(--s2)
-}
-
-[class$="-3"] {
-  --sdef: var(--s3)
-}
-
-[class$="-4"] {
-  --sdef: var(--s4)
-}
-
-[class^="border"],
-[class$="-1"] {
-  --b: calc(var(--b-unit) * 1)
-}
-
-[class^="border"],
-[class$="-2"] {
+[class^="border"][class$="-2"] {
   --b: calc(var(--b-unit) * 2)
 }
 
-[class^="border"],
-[class$="-3"] {
+[class^="border"][class$="-3"] {
   --b: calc(var(--b-unit) * 3)
 }
 
-[class^="border"],
-[class$="-4"] {
+[class^="border"][class$="-4"] {
   --b: calc(var(--b-unit) * 4)
 }
 
@@ -168,6 +148,23 @@ body {
 }
 
 /* sec:classes:gap */
+
+[class^="gap"][class$="-1"] {
+  --g: var(--s1)
+}
+
+[class^="gap"][class$="-2"] {
+  --g: var(--s2)
+}
+
+[class^="gap"][class$="-3"] {
+  --g: var(--s3)
+}
+
+[class^="gap"][class$="-4"] {
+  --g: var(--s4)
+}
+
 [class*="gap"] {
   --_g: var(--g, var(--sdef, var(--s4)));
 }
@@ -185,43 +182,52 @@ body {
 }
 
 /* sec:classes:padding */
-[class^="p"],
-[class*=" p"] {
-  padding: var(--p, var(--s4));
+[class^="p"][class$="-1"] {
+  --p: var(--s1)
+}
+
+[class^="p"][class$="-2"] {
+  --p: var(--s2)
+}
+
+[class^="p"][class$="-3"] {
+  --p: var(--s3)
+}
+
+[class^="p"][class$="-4"] {
+  --p: var(--s4)
+}
+
+[class*="p"] {
+  --_p: var(--p, var(--s4))
+}
+
+[class*="p-f"] {
+  padding: var(--_p);
 }
 
 [class*="p-t"] {
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
+  padding-top: var(--_p);
 }
 
 [class*="p-b"] {
-  padding-top: 0;
-  padding-left: 0;
-  padding-right: 0;
+  padding-bottom: var(--_p);
 }
 
 [class*="p-r"] {
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-top: 0;
+  padding-right: var(--_p);
 }
 
 [class*="p-l"] {
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-right: 0;
+  padding-left: var(--_p);
 }
 
 [class*="p-x"] {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-inline: var(--_p);
 }
 
 [class*="p-y"] {
-  padding-left: 0;
-  padding-right: 0;
+  border-block: var(--_p);
 }
 
 /* sec:classes:margin */
