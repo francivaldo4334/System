@@ -1,9 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}
+  App UI Styleguide
+{% endblock %}
 {% block style %}
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-hello
+<s-def name="sec" value="min-h-xs border-t-1 border-color-base-200 p-y-4"/>
+<main class="p-4 bg-base-50 bg-lines grid grid-cols-2 md:grid-cols-4">
+  <section data-state="sec" data-at="class">
+    <span>Backgrounds</span>
+  </section>
+  <section data-state="sec" data-at="class"> ok </section>
+</main>
+
 {% endblock %}
 

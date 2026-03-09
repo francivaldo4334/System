@@ -2,7 +2,6 @@ const states = new Map();
 
 const getState = (key) => states.get(key)
 const setState = (key, newValue) => {
-  if (!states.has(key)) states.set(key, newValue)
   const state = states.get(key);
   if (state !== newValue) {
     states.set(key, newValue)
@@ -15,19 +14,30 @@ const setState = (key, newValue) => {
 }
 class StateDef extends HTMLElement {
   connectedCallback() {
-    this.key = this.getAttribute('key')
-    setState(this.key, this.getAttribute('value'))
+    this.name = this.getAttribute('name')
+    setState(this.name, this.getAttribute('value'))
   }
   disconnectedCallback() {
-    states.delete(this.key)
+    states.delete(this.name)
+  }
+  static observedAttributes = ['value']
+  attributeChangedCallback(name, oldValue, newValue){
+    if (oldValue != newValue){
+      const name = this.getAttribute('name')
+      setState(name, newValue)
+    }
   }
 }
 window.addEventListener('state-update', (event) => {
   const { key, value } = event.detail
+  if (!key) return;
   document.querySelectorAll(`[data-state="${key}"]`).forEach(el => {
     const target = el.dataset.at || 'textContent'
-    if (el[target] != value)
+    if (target in el && el[target] !== value) {
       el[target] = value;
+    } else if(el.getAttribute(target) !== String(value)) {
+      el.setAttribute(target, value);
+    }
   })
 
 })
