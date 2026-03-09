@@ -11,7 +11,12 @@
             <c-sidebar-item endpoint="{% url 'schedule_view' %}" store="main"> ok </c-sidebar-item>
         </nav>
     </aside>
-    <main slot="content" data-state="main.data" data-at="innerHTML">
+    <main slot="content"
+          data-state="main.data"
+          data-at="innerHTML"
+          style="background: var(--color-base-100);
+                 border-radius: .5rem;
+                 margin: 1rem">
         {% include 'schedule.html' %}
     </main>
     </c-layout>

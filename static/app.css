@@ -1,15 +1,17 @@
 :root {
+  --color-white: #ffffff;
+  --color-base-50: #f5f3f0;
+  --color-base-100: #edeae3;
+  --color-base-200: #d1ccbf;
+  --color-base-300: #b5b0a5;
+  --color-base-400: #9a968c;
+  --color-base-500: #7f7c74;
+  --color-base-600: #63615a;
+  --color-base-700: #4b4944;
+  --color-base-800: #34322f;
+  --color-base-900: #1c1b19;
+  --color-base-950: #12110f;
 
-  --base-50: #f0ede6;
-  --base-100: #d8d1c5;
-  --base-200: #bdb2a2;
-  --base-300: #a1937d;
-  --base-400: #8c7b60;
-  --base-500: #766445;
-  --base-600: #6c5a3e;
-  --base-700: #5d4d34;
-  --base-800: #50402b;
-  --base-900: #423221;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --default-font-family: var(--font-sans);
