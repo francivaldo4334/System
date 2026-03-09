@@ -1,38 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}
-  App UI Styleguide
-{% endblock %}
+{% block title %}App UI Styleguide{% endblock %}
 {% block style %}
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-<s-def name="sec" value="min-h-xs border-t border-color-base-200 flex flex-col"/>
-<s-def name="spa" value="pb-2 font-medium text-md"/>
-
-<main class="size-screen bg-white bg-pattern-polka overflow-y-auto">
-  <footer class="text-2xl font-semibold p-x p-t w-full" style="--text-2xl-lh: var(--text-2xl);">
-    App UI Styleguide
-  </footer>
-  <section class="p-x m-t bg-lines flex flex-wrap">
-    <section data-state="sec" data-at="class">
-      <span data-state="spa" data-at="class">Sizes</span>
-      <div class="flex flex-wrap gap-f">
-        <div class="bg-base-300 bg-pattern-diagonal w-xs h-xs"> </div>
-        <div class="bg-base-300 bg-pattern-diagonal w-sm h-xs"> </div>
-        <div class="bg-base-300 bg-pattern-diagonal w-md h-xs"> </div>
-        <div class="bg-base-300 bg-pattern-diagonal w-lg h-xs"> </div>
-        <div class="bg-base-300 bg-pattern-diagonal w-xl h-xs"> </div>
-        <div class="bg-base-300 bg-pattern-diagonal w-2xl h-xs"> </div>
-      </div>
-    </section>
-    <div class="p border-y-4">
-      <div class="w-xs h-xs">
-      </div>
-    </div>
-    <!-- <section data-state="sec" data-at="class"> ok </section> -->
-  </section>
-</main>
-
+    <s-def name="sec" value="min-h-xs border-color-base-200 flex flex-col p-b-4 border-t-1" />
+    <s-def name="spa" value="p-b-2 font-semibold text-md" />
+    <main class="size-screen bg-white bg-pattern-polka overflow-y-auto">
+        <footer class="text-2xl font-semibold p-x p-t w-full"
+                style="--text-2xl-lh: var(--text-2xl)">
+            App UI Styleguide
+        </footer>
+        <section class="p-x m-t bg-lines flex flex-wrap">
+            <section data-state="sec" data-at="class">
+                <span data-state="spa" data-at="class">Typography</span>
+                <span class="text-4xl">Typography</span>
+                <span class="text-3xl">Typography</span>
+                <span class="text-2xl">Typography</span>
+                <span class="text-xl">Typography</span>
+                <span class="text-lg">Typography</span>
+                <span class="text-md">Typography</span>
+                <span class="text-sm">Typography</span>
+                <span class="text-xs">Typography</span>
+                <span class="text-2xs">Typography</span>
+            </section>
+            <section data-state="sec" data-at="class">
+                <span data-state="spa" data-at="class">Sizes</span>
+                <div class="flex flex-wrap gap-f">
+                    <div class="bg-base-300 bg-pattern-diagonal w-xs h-xs"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w-sm h-xs"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w-md h-xs"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w-lg h-xs"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w-xl h-xs"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w-2xl h-xs"></div>
+                </div>
+            </section>
+        </section>
+    </main>
 {% endblock %}
-
