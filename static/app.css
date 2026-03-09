@@ -86,15 +86,15 @@ body {
 }
 
 /* sec:classes:flex */
-.flex {
+[class*="flex "] {
   display: flex;
 }
 
-.flex-wrap {
+[class*="flex-wrap"] {
   flex-wrap: wrap;
 }
 
-.flex-col {
+[class*="flex-col"] {
   flex-direction: column;
 }
 
@@ -227,64 +227,56 @@ body {
 }
 
 [class*="p-y"] {
-  border-block: var(--_p);
+  padding-block: var(--_p);
 }
 
 /* sec:classes:margin */
-.m {
-  margin: var(--m, var(--s4));
+[class^="m"][class$="-1"] {
+  --m: var(--s1)
 }
 
-.m-l {
-  margin-left: var(--ml, var(--s4));
+[class^="m"][class$="-2"] {
+  --m: var(--s2)
 }
 
-.m-r {
-  margin-right: var(--ml, var(--s4));
+[class^="m"][class$="-3"] {
+  --m: var(--s3)
 }
 
-.m-t {
-  margin-top: var(--ml, var(--s4));
+[class^="m"][class$="-4"] {
+  --m: var(--s4)
 }
 
-.m-b {
-  margin-bottom: var(--s, var(--s4));
+[class*="m"] {
+  --_m: var(--m, var(--s4))
 }
 
-.m-x {
-  margin: 0 var(--s, var(--s4));
+[class*="m-f"] {
+  padding: var(--_m);
 }
 
-.m-y {
-  margin: var(--s, var(--s4)) 0;
+[class*="m-t"] {
+  margin-top: var(--_m);
 }
 
-.-m {
-  margin: calc(var(--m, var(--s4)) * -1);
+[class*="m-b"] {
+  margin-bottom: var(--_m);
 }
 
-.-m-l {
-  margin-left: calc(var(--ml, var(--s4)) * -1);
+[class*="m-r"] {
+  margin-right: var(--_m);
 }
 
-.-m-r {
-  margin-right: calc(var(--ml, var(--s4)) * -1);
+[class*="m-l"] {
+  margin-left: var(--_m);
 }
 
-.-m-t {
-  margin-top: calc(var(--ml, var(--s4)) * -1);
+[class*="m-x"] {
+  margin-inline: var(--_m);
 }
 
-.-m-b {
-  margin-bottom: calc(var(--s, var(--s4)) * -1);
-}
-
-.-m-x {
-  margin: 0 calc(var(--s, var(--s4)) * -1);
-}
-
-.-m-y {
-  margin: calc(var(--s, var(--s4)) * -1) 0;
+[class*="m-y"] {
+  margin-block: var(--_m);
 }
 
 /* sec:classes:size */
@@ -461,20 +453,24 @@ body {
   maxheight: var(--sm);
 }
 
-.maxh-md {
-  maxheight: var(--md);
+size-screen {
+  width: 100dvw;
+  height: 100dvh;
 }
 
-.maxh-lg {
-  maxheight: var(--lg);
+size-xs {
+  width: var(--xs);
+  height: var(--xs);
 }
 
-.maxh-xl {
-  maxheight: var(--xl);
+size-sm {
+  width: var(--sm);
+  height: var(--sm);
 }
 
-.maxh-2xl {
-  maxheight: var(--2xl);
+size-md {
+  width: var(--md);
+  height: var(--md);
 }
 
 /* sec:classes:text */
