@@ -15,7 +15,6 @@ class CustomLayout extends HTMLElement {
           overflow: hidden;
           font-weight: 400;
           font-style: normal;
-          background: var(--color-white);
         }
       </style>
       <slot name="sidebar"></slot>
