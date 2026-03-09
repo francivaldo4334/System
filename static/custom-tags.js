@@ -1,4 +1,4 @@
-class CustomLayout extends HTMLElement {
+class CustomAppLayout extends HTMLElement {
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: 'open' })
@@ -22,7 +22,7 @@ class CustomLayout extends HTMLElement {
     `
   }
 }
-class CustomSidebarItem extends HTMLElement {
+class CustomAppNavItem extends HTMLElement {
   connectedCallback() {
     const endpoint = this.getAttribute('endpoint')
     const store = this.getAttribute('store')
@@ -43,5 +43,5 @@ class CustomSidebarItem extends HTMLElement {
   }
 }
 
-window.customElements.define('c-layout', CustomLayout)
-window.customElements.define('c-sidebar-item', CustomSidebarItem)
+window.customElements.define('app-layout', CustomAppLayout)
+window.customElements.define('app-nav-item', CustomAppNavItem)

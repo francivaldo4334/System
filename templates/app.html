@@ -4,15 +4,15 @@
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-    <c-layout>
+    <app-layout>
     <aside slot="sidebar" class="border-r-1" style=" padding: 1rem">
         <nav>
-            <c-sidebar-item endpoint="{% url 'schedule_view' %}" store="main"> ok </c-sidebar-item>
-            <c-sidebar-item endpoint="{% url 'schedule_view' %}" store="main"> ok </c-sidebar-item>
+            <app-nav-item endpoint="{% url 'schedule_view' %}" store="main"> ok </app-nav-item>
+            <app-nav-item endpoint="{% url 'schedule_view' %}" store="main"> ok </app-nav-item>
         </nav>
     </aside>
     <main slot="content" data-state="main.data" data-at="innerHTML">
         {% include 'schedule.html' %}
     </main>
-    </c-layout>
+    </app-layout>
 {% endblock %}
