@@ -6,13 +6,13 @@
 {% endblock %}
 {% block body %}
     <s-def name="spa" value="p-b  font-semibold text-md" />
-    <s-def name="sec" value="border-color-base-200 flex flex-col border-t-1" />
+    <s-def name="sec" value="flex flex-col border-t" />
     <main class="w-screen h-screen bg-white bg-pattern-polka overflow-y-auto">
-        <footer class="text-2xl font-semibold p-x w-full"
+        <footer class="text-2xl font-semibold p-x w-full p-t"
                 style="--text-2xl-lh: var(--text-2xl)">
             App UI Styleguide
         </footer>
-        <section class="p-x m-t bg-lines flex flex-wrap">
+        <section class="p-x m-t bg-lines flex flex-wrap gap-f">
             <section data-state="sec" data-at="class">
                 <span data-state="spa" data-at="class">Typography</span>
                 <span class="text-4xl">Typography</span>
@@ -28,12 +28,12 @@
             <section data-state="sec" data-at="class">
                 <span data-state="spa" data-at="class">Sizes</span>
                 <div class="flex flex-wrap gap-f">
-                    <div class="bg-base-300 bg-pattern-diagonal w-xs h-xs"></div>
-                    <div class="bg-base-300 bg-pattern-diagonal w-sm h-xs"></div>
-                    <div class="bg-base-300 bg-pattern-diagonal w-md h-xs"></div>
-                    <div class="bg-base-300 bg-pattern-diagonal w-lg h-xs"></div>
-                    <div class="bg-base-300 bg-pattern-diagonal w-xl h-xs"></div>
-                    <div class="bg-base-300 bg-pattern-diagonal w-2xl h-xs"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w h" style="--w:var(--xs);--h:var(--xs)"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w h" style="--w:var(--sm);--h:var(--xs)"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w h" style="--w:var(--md);--h:var(--xs)"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w h" style="--w:var(--lg);--h:var(--xs)"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w h" style="--w:var(--xl);--h:var(--xs)"></div>
+                    <div class="bg-base-300 bg-pattern-diagonal w h" style="--w:var(--2xl);--h:var(--xs)"></div>
                 </div>
             </section>
         </section>
