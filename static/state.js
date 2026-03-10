@@ -39,7 +39,7 @@ class StateDef extends HTMLElement {
 window.addEventListener('state-update', (event) => {
   const { key, value } = event.detail
   if (!key) return;
-  document.querySelectorAll(`[data-state="${key}"]`).forEach(el => {
+  document.querySelectorAll(`[data-state*="${key}"]`).forEach(el => {
     const target = el.dataset.at || stateAt.get(key) || 'textContent'
     if (target in el && el[target] !== value) {
       el[target] = value;
