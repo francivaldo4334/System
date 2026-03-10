@@ -5,10 +5,10 @@
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-    <app-state name="section-class" value="flex flex-col border-t min-w" at="class"/>
     <app-state name="section-style" value="--minw:var(--md)" at="style"/>
-    <app-state name="section-span-class" value="font-semibold text-md h justify-text p-y" at="class" />
+    <app-state name="section-class" value="flex flex-col border-t min-w" at="class"/>
     <app-state name="section-span-style" value="--h:var(--s7);--py:var(--s1)" at="style" />
+    <app-state name="section-span-class" value="font-semibold text-md h justify-text p-y" at="class" />
 
     <main class="w-screen h-screen bg-white bg-pattern-polka overflow-y-auto">
         <footer class="text-2xl font-semibold p-x w-full p-t"
@@ -38,6 +38,24 @@
                     <div data-state="size-class" style="--w:var(--lg);--h:var(--xs)"></div>
                     <div data-state="size-class" style="--w:var(--xl);--h:var(--xs)"></div>
                     <div data-state="size-class" style="--w:var(--2xl);--h:var(--xs)"></div>
+                </div>
+            </section>
+
+            <section data-state="section-class,section-style">
+                <span data-state="section-span-class,section-span-style">Colors</span>
+                <div class="flex flex-wrap">
+                    <div class="box border-f bg-white" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-50" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-100" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-200" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-300" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-400" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-500" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-600" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-700" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-800" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-base-900" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-black" style="--b:var(--2xs)"></div>
                 </div>
             </section>
         </section>

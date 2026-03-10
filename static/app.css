@@ -166,9 +166,15 @@ body {
   background: var(--c-200);
 }
 
-.bg-base-300 {
-  background: var(--c-300);
-}
+.bg-base-300 { background: var(--c-300); }
+.bg-base-400 { background: var(--c-400); }
+.bg-base-500 { background: var(--c-500); }
+.bg-base-600 { background: var(--c-600); }
+.bg-base-700 { background: var(--c-700); }
+.bg-base-800 { background: var(--c-800); }
+.bg-base-900 { background: var(--c-900); }
+.bg-white { background: #ffffff;}
+.bg-black { background: #000000;}
 
 .bg-pattern-lines-horizontal {
   opacity: 0.8;
@@ -222,6 +228,12 @@ body {
 .h-screen { height: 100dvh;}
 .min-h { min-height: var(--minh);--minh: initial;}
 .max-h { max-height: var(--maxh);--maxh: initial;}
+
+.box { width: var(--b);height: var(--b);--b: initial;}
+.box-full {width:100%; height: 100%;}
+.box-screen { width:100dvw;height: 100dvh;}
+.min-box {min-width: var(--minb); min-height: var(--minb);--minb: initial;}
+.max-box {min-width: var(--maxb); max-height: var(--maxb);--maxb: initial;}
 
 .flex { display: flex; }
 .flex-wrap { flex-wrap: wrap; }
