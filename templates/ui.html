@@ -7,10 +7,10 @@
 {% block body %}
     <app-state name="section-style" value="--minw:var(--md)" at="style"/>
     <app-state name="section-class" value="flex flex-col border-t min-w" at="class"/>
-    <app-state name="section-span-style" value="--h:var(--s7);--py:var(--s1)" at="style" />
-    <app-state name="section-span-class" value="font-semibold text-md h justify-text p-y" at="class" />
+    <app-state name="section-span-style" value="--h:var(--s7);" at="style" />
+    <app-state name="section-span-class" value="font-semibold text-md h justify-text" at="class" />
 
-    <main class="w-screen h-screen bg-white bg-pattern-polka overflow-y-auto">
+    <main class="w-screen h-screen bg-white bg-pattern-polka overflow-y-auto p-f">
         <footer class="text-2xl font-semibold p-x w-full p-t"
                 style="--text-2xl-lh: var(--s9)">
             App UI Styleguide
@@ -43,7 +43,7 @@
 
             <section data-state="section-class,section-style">
                 <span data-state="section-span-class,section-span-style">Colors</span>
-                <app-state name="box-style" at="style" value="--b:calc(var(--2xs) - var(--spx) / 2)"></app-state>
+                <app-state name="box-style" at="style" value="--b:calc(var(--2xs))"></app-state>
                 <div class="flex flex-wrap gap-f" style="--gf:var(--s2)">
                     <div class="box border-f bg-white" data-state="box-style"></div>
                     <div class="box border-f bg-base-50" data-state="box-style"></div>
@@ -56,7 +56,7 @@
                     <div class="box border-f bg-base-700" data-state="box-style"></div>
                     <div class="box border-f bg-base-800" data-state="box-style"></div>
                     <div class="box border-f bg-base-900" data-state="box-style"></div>
-                    <div class="box border-f bg-black" style="--b:var(--2xs)"></div>
+                    <div class="box border-f bg-black" data-state="box-style"></div>
                 </div>
             </section>
         </section>
