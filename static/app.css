@@ -1,6 +1,7 @@
 /* sec:root */
 :root {
   --c-white: #ffffff;
+  --c-black: #ffffff;
   /* --c-50: #e5e5f7; */
   --c-50: #f5f3f0;
   --c-100: #edeae3;
@@ -56,6 +57,12 @@
   --text-2xl-lh: calc(2 / 1.5);
   --text-3xl-lh: calc(2.25 / 1.875);
   --text-4xl-lh: calc(2.5 / 2.25);
+
+
+  --shadow-color: 0deg 0% 0%;
+  /* HSL para facilitar manipulação de opacidade */
+  --shadow-strength: 5%;
+  /* Intensidade base */
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --default-font-family: var(--font-sans);
@@ -212,11 +219,11 @@ main {
 }
 
 .bg-white {
-  background: #ffffff;
+  background: var(--c-white);
 }
 
 .bg-black {
-  background: #000000;
+  background: var(--c-black);
 }
 
 .bg-pattern-lines-horizontal {
@@ -512,6 +519,15 @@ main {
 
 .rounded-3xl {
   border-radius: var(--s7);
+}
+
+.shadow {
+  --_s: var(--s, 0.5);
+  --c1: rgba(50, 50, 93, 0.25);
+  --c2: rgba(0, 0, 0, 0.3);
+  --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-6px * var(--_s)) var(--c1);
+  --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-8px * var(--_s)) var(--c2);
+  box-shadow: var(--sd1), var(--sd2);
 }
 
 /* sec:media */

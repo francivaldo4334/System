@@ -77,6 +77,15 @@
                          class="rounded-3xl box bg-pattern-diagonal border-f"></div>
                 </div>
             </section>
+            <section data-state="section-class,section-style">
+                <span data-state="section-span-class,section-span-style">Shadows</span>
+                <app-state name="shadow-class" at="class" value="box bg-white rounded-sm shadow"></app-state>
+                <div class="flex flex-wrap gap-f">
+                    <div data-state="shadow-class" style="--b:var(--sm);--s:0.5"></div>
+                    <div data-state="shadow-class" style="--b:var(--sm);--s:1"></div>
+                    <div data-state="shadow-class" style="--b:var(--sm);--s:1.5"></div>
+                </div>
+            </section>
         </section>
     </main>
 {% endblock %}
