@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-    <s-def name="spa" value="p-b  font-semibold text-md" />
-    <s-def name="sec" value="flex flex-col border-t min-w" style="--minw:var(--xl)" />
+    <app-state name="spa" value="p-b  font-semibold text-md" />
+    <app-state name="sec" value="flex flex-col border-t min-w" style="--minw:var(--xl)" />
     <main class="w-screen h-screen bg-white bg-pattern-polka overflow-y-auto">
         <footer class="text-2xl font-semibold p-x w-full p-t"
                 style="--text-2xl-lh: var(--text-2xl)">
@@ -27,7 +27,7 @@
             </section>
             <section data-state="sec" data-at="class">
                 <span data-state="spa" data-at="class">Sizes</span>
-                <s-def name="size-class" value="bg-base-300 bg-pattern-diagonal w h"></s-def>
+                <app-state name="size-class" value="bg-base-300 bg-pattern-diagonal w h"></app-state>
                 <div class="flex flex-wrap gap-f" style="--h:var(--xs)">
                     <div data-state="size-class" data-at="class" style="--w:var(--xs)"></div>
                     <div data-state="size-class" data-at="class" style="--w:var(--sm)"></div>

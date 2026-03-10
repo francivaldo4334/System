@@ -102,5 +102,5 @@ class StateIf extends HTMLElement {
   }
 }
 
-window.customElements.define('s-def', StateDef)
-window.customElements.define('s-if', StateIf)
+window.customElements.define('app-state', StateDef)
+window.customElements.define('app-if', StateIf)
