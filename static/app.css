@@ -243,38 +243,161 @@ body {
   row-gap: var(--g, var(--s4));
 }
 
-/* END */
-/* 4. Utilitários de Altura (Suffixes) */
-.h-full {
-  --h: 100%;
+/* SIZES */
+.w-xs {
+  width: var(--xs);
 }
 
-.h-screen {
-  --h: 100dvh;
+.w-sm {
+  width: var(--sm);
+}
+
+.w-md {
+  width: var(--md);
+}
+
+.w-lg {
+  width: var(--lg);
+}
+
+.w-xl {
+  width: var(--xl);
+}
+
+.w-2xl {
+  width: var(--2xl);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.w-min {
+  width: min-content;
+}
+
+.w-max {
+  width: max-content;
+}
+
+.w-fit {
+  width: fit-content;
+}
+
+.w-auto {
+  width: auto;
 }
 
 .h-xs {
-  --h: var(--xs);
+  height: var(--xs);
 }
 
 .h-sm {
-  --h: var(--sm);
+  height: var(--sm);
 }
 
 .h-md {
-  --h: var(--md);
+  height: var(--md);
 }
 
 .h-lg {
-  --h: var(--lg);
+  height: var(--lg);
 }
 
 .h-xl {
-  --h: var(--xl);
+  height: var(--xl);
 }
 
 .h-2xl {
-  --h: var(--2xl);
+  height: var(--2xl);
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100dvh;
+}
+
+.h-min {
+  height: min-content;
+}
+
+.h-max {
+  height: max-content;
+}
+
+.h-fit {
+  height: fit-content;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.size-xs {
+  width: var(--xs);
+  height: var(--xs);
+}
+
+.size-sm {
+  width: var(--sm);
+  height: var(--sm);
+}
+
+.size-md {
+  width: var(--md);
+  height: var(--md);
+}
+
+.size-lg {
+  width: var(--lg);
+  height: var(--lg);
+}
+
+.size-xl {
+  width: var(--xl);
+  height: var(--xl);
+}
+
+.size-2xl {
+  width: var(--2xl);
+  height: var(--2xl);
+}
+
+.size-full {
+  width: 100%;
+  height: 100%;
+}
+
+.size-screen {
+  width: 100dvh;
+  height: 100dvh;
+}
+
+.size-min {
+  width: min-content;
+  height: min-content;
+}
+
+.size-max {
+  width: max-content;
+  height: max-content;
+}
+
+.size-fit {
+  width: fit-content;
+  height: fit-content;
+}
+
+.size-auto {
+  width: auto;
+  height: auto;
 }
 
 /* sec:classes:text */

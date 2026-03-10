@@ -44,7 +44,63 @@
 //     .gap-y { row-gap: var(--g, var(--s4)); }
 //   `;
 // };
+/**
+ * Configuração de Tokens de Design
+ * Você pode ajustar os valores aqui e o CSS será regenerado.
+ */
+/**
+* Configuração de Escala Estática
+* Valores definidos por extenso (sem variáveis CSS no output final)
+*/
+/**
+ * Configuração de Design System Estático
+ */
+// const designSystem = {
+//   // Escalas de tamanho fixas
+//   escalas: {
+//     'xs': 'var(--xs)',
+//     'sm': 'var(--sm)',
+//     'md': 'var(--md)',
+//     'lg': 'var(--lg)',
+//     'xl': 'var(--xl)',
+//     '2xl': 'var(--2xl)',
+//     // Utilitários de preenchimento
+//     'full': '100%',
+//     'screen': '100dvh', // Para altura, vh; para largura, costuma-se usar 100vw
+//     'min': 'min-content',
+//     'max': 'max-content',
+//     'fit': 'fit-content',
+//     'auto': 'auto'
+//   },
+//   // Mapeamento de prefixo para propriedades CSS
+//   utilitarios: {
+//     'w': ['width'],
+//     'h': ['height'],
+//     'size': ['width', 'height']
+//   }
+// };
 
+// const generateClassNames = () => {
+//   let v = ""
+//   Object.entries(designSystem.utilitarios).forEach(([prefixo, propriedades]) => {
+//     Object.entries(designSystem.escalas).forEach(([sufixo, valor]) => {
+
+//       // Ajuste específico: se for w-screen, usa vw. Se for h-screen, usa vh.
+//       let valorFinal = valor;
+//       if (sufixo === 'screen' && prefixo === 'w') valorFinal = '100vw';
+
+//       const corpoRegra = propriedades.map(p => `${p}: ${valorFinal};`).join(' ');
+
+//       // Gera o seletor limpo: .w-md, .size-full, etc.
+//       const seletor = `.${prefixo}-${sufixo}`;
+//       v += `${seletor} { ${corpoRegra} }`
+//     });
+//   });
+
+//   return v
+// };
+
+// generateClassNames();
 
 class CustomAppLayout extends HTMLElement {
   constructor() {
