@@ -46,7 +46,7 @@
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
 
-  --text-2xs-lh: calc(1 / 0.75);
+  --text-2xs-lh: calc(1 / 0.625);
   --text-xs-lh: calc(1 / 0.75);
   --text-sm-lh: calc(1.25 / 0.875);
   --text-md-lh: calc(1.5 / 1);
