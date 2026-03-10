@@ -217,10 +217,14 @@ body {
 .w { width: var(--w);}
 .w-full { width: 100%;}
 .w-screen { width: 100dvw;}
+.min-w { min-width: var(--minw);}
+.man-w { max-width: var(--maxw);}
 
 .h { height: var(--h);}
 .h-full { height: 100%;}
 .h-screen { height: 100dvh;}
+.min-h { min-height: var(--minh);}
+.max-h { max-height: var(--maxh);}
 
 .flex { display: flex; }
 .flex-wrap { flex-wrap: wrap; }
