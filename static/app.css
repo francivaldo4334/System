@@ -192,12 +192,12 @@ body {
 }
 
 .bg-pattern-polka {
-  --pattern-polka-space: var(--s4);
-  --pattern-polka-delta: calc(var(--pattern-polka-space) / 2 * -1 + var(--spx) / 2);
+  --pattern-space: var(--s4);
+  --pattern-delta: calc(var(--pattern-space) / 2 * -1 + var(--spx) / 2);
   opacity: 0.8;
   background-image: radial-gradient(var(--c-200) var(--spx), #00000000 var(--spx));
-  background-size: var(--pattern-polka-space) var(--pattern-polka-space);
-  background-position: var(--pattern-polka-delta) var(--pattern-polka-delta);
+  background-size: var(--pattern-space) var(--pattern-space);
+  background-position: var(--pattern-delta) var(--pattern-delta);
 }
 
 .bg-pattern-diagonal {
