@@ -5,16 +5,16 @@
     <link rel="stylesheet" href="{% static 'app.css' %}">
 {% endblock %}
 {% block body %}
-    <app-state name="spa" value="p-b  font-semibold text-md" />
-    <app-state name="sec" value="flex flex-col border-t min-w" style="--minw:var(--xl)" />
+    <app-state name="section-class" value="flex flex-col border-t min-w" style="--minw:var(--xl)" />
+    <app-state name="section-span-class" value="p-b  font-semibold text-md" />
     <main class="w-screen h-screen bg-white bg-pattern-polka overflow-y-auto">
         <footer class="text-2xl font-semibold p-x w-full p-t"
                 style="--text-2xl-lh: var(--text-2xl)">
             App UI Styleguide
         </footer>
         <section class="p-x m-t bg-lines flex flex-wrap gap-f">
-            <section data-state="sec" data-at="class">
-                <span data-state="spa" data-at="class">Typography</span>
+            <section data-state="section-class" data-at="class">
+                <span data-state="section-span-class" data-at="class">Typography</span>
                 <span class="text-4xl">Typography</span>
                 <span class="text-3xl">Typography</span>
                 <span class="text-2xl">Typography</span>
@@ -25,8 +25,8 @@
                 <span class="text-xs">Typography</span>
                 <span class="text-2xs">Typography</span>
             </section>
-            <section data-state="sec" data-at="class">
-                <span data-state="spa" data-at="class">Sizes</span>
+            <section data-state="section-class" data-at="class">
+                <span data-state="section-span-class" data-at="class">Sizes</span>
                 <app-state name="size-class" value="bg-base-300 bg-pattern-diagonal w h"></app-state>
                 <div class="flex flex-wrap gap-f" style="--h:var(--xs)">
                     <div data-state="size-class" data-at="class" style="--w:var(--xs)"></div>
