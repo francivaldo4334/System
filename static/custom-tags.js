@@ -1,107 +1,3 @@
-// const loadSheet = () => {
-//   const sides = {
-//     f: '',
-//     x: '-inline',
-//     y: '-block',
-//     t: '-top',
-//     b: '-bottom',
-//     l: '-left',
-//     r: '-right',
-//   };
-
-//   const genUtility = (prefix, prop, unitVar) => {
-//     const scales = [1, 2, 3, 4].map(n => {
-//       const val = unitVar === '--s' ? `var(--s${n})` : `calc(var(--b-unit) * ${n})`;
-//       return `[class^="${prefix}-"][class$="-${n}"] { --v-${prefix}: ${val}; }`;
-//     }).join('\n');
-
-//     const rules = Object.entries(sides).map(([s, dir]) => {
-//       const value = prefix === 'border'
-//         ? `var(--v-border, var(--b-unit)) solid var(--bc, var(--c-100))`
-//         : `var(--v-${prefix}, var(--s4))`;
-
-//       return `[class*="${prefix}-${s}"] { ${prop}${dir}: ${value}; }`;
-//     }).join('\n');
-
-//     return `${scales}\n${rules}`;
-//   };
-
-//   return`
-//     .flex { display: flex; }
-//     .flex-wrap { flex-wrap: wrap; }
-//     .flex-col { flex-direction: column; }
-//     .items-center { align-items: center; }
-//     .justify-between { justify-content: space-between; }
-//     ${genUtility('p', 'padding', '--s')}
-//     ${genUtility('m', 'margin', '--s')}
-//     ${genUtility('border', 'border', '--b-unit')}
-//     [class^="gap-"][class$="-1"] { --g: var(--s1); }
-//     [class^="gap-"][class$="-2"] { --g: var(--s2); }
-//     [class^="gap-"][class$="-3"] { --g: var(--s3); }
-//     [class^="gap-"][class$="-4"] { --g: var(--s4); }
-//     .gap-f { gap: var(--g, var(--s4)); }
-//     .gap-x { column-gap: var(--g, var(--s4)); }
-//     .gap-y { row-gap: var(--g, var(--s4)); }
-//   `;
-// };
-/**
- * Configuração de Tokens de Design
- * Você pode ajustar os valores aqui e o CSS será regenerado.
- */
-/**
-* Configuração de Escala Estática
-* Valores definidos por extenso (sem variáveis CSS no output final)
-*/
-/**
- * Configuração de Design System Estático
- */
-// const designSystem = {
-//   // Escalas de tamanho fixas
-//   escalas: {
-//     'xs': 'var(--xs)',
-//     'sm': 'var(--sm)',
-//     'md': 'var(--md)',
-//     'lg': 'var(--lg)',
-//     'xl': 'var(--xl)',
-//     '2xl': 'var(--2xl)',
-//     // Utilitários de preenchimento
-//     'full': '100%',
-//     'screen': '100dvh', // Para altura, vh; para largura, costuma-se usar 100vw
-//     'min': 'min-content',
-//     'max': 'max-content',
-//     'fit': 'fit-content',
-//     'auto': 'auto'
-//   },
-//   // Mapeamento de prefixo para propriedades CSS
-//   utilitarios: {
-//     'w': ['width'],
-//     'h': ['height'],
-//     'size': ['width', 'height']
-//   }
-// };
-
-// const generateClassNames = () => {
-//   let v = ""
-//   Object.entries(designSystem.utilitarios).forEach(([prefixo, propriedades]) => {
-//     Object.entries(designSystem.escalas).forEach(([sufixo, valor]) => {
-
-//       // Ajuste específico: se for w-screen, usa vw. Se for h-screen, usa vh.
-//       let valorFinal = valor;
-//       if (sufixo === 'screen' && prefixo === 'w') valorFinal = '100vw';
-
-//       const corpoRegra = propriedades.map(p => `${p}: ${valorFinal};`).join(' ');
-
-//       // Gera o seletor limpo: .w-md, .size-full, etc.
-//       const seletor = `.${prefixo}-${sufixo}`;
-//       v += `${seletor} { ${corpoRegra} }`
-//     });
-//   });
-
-//   return v
-// };
-
-// generateClassNames();
-
 class CustomAppLayout extends HTMLElement {
   constructor() {
     super();
@@ -146,6 +42,55 @@ class CustomAppNavItem extends HTMLElement {
     `
   }
 }
+class CustomButton extends HTMLButtonElement {
+  baseStyle = {}
+  hoverStyle = {}
+  clickStyle = {}
+  addStyle(style) {
+    Object.entries(style).forEach(([className, styleValue]) => {
+      this.classList.add(className);
+      this.style.setProperty(...styleValue.split(':'))
+    })
+  }
+  removeStyle(style) {
+    Object.entries(style).forEach(([className, styleValue]) => {
+      this.classList.remove(className);
+      this.style.removeProperty(styleValue.split(':')[0])
+    })
+  }
+  connectedCallback() {
+    Object.entries(this.baseStyle).forEach(([className, styleValue]) => {
+      this.classList.add(className);
+      const [name, value] = styleValue.split(':')
+      this.style.setProperty(name, value)
+    })
 
+    this.classList.add(
+      'min-w',
+      'min-h',
+      'm-f',
+      'bg-base-200',
+      'border-f',
+      'rounded-xs',
+
+    )
+    this.style.setProperty('--minw', 'var(--sm)')
+    this.style.setProperty('--minh', 'var(--xs)')
+    this.style.setProperty('--mf', '0')
+
+    //HOVER
+    this.addEventListener('mouseenter', () => {
+      Object.entries(this.hoverStyle).forEach(([className, styleValue]) => {
+        this.classList.add(className);
+        const [name, value] = styleValue.split(':')
+        this.style.setProperty(name, value)
+      })
+    })
+    this.addEventListener('mouseleave', () => {
+
+    })
+  }
+}
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
+window.customElements.define('app-btn', CustomButton, { extends: 'button' })
