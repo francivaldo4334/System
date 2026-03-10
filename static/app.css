@@ -23,8 +23,9 @@
   --s4: calc(var(--spx) * 16);
   --s5: calc(var(--spx) * 20);
   --s6: calc(var(--spx) * 24);
-  --s8: calc(var(--spx) * 28);
-  --s9: calc(var(--spx) * 32);
+  --s7: calc(var(--spx) * 28);
+  --s8: calc(var(--spx) * 32);
+  --s9: calc(var(--spx) * 36);
 
   --2xs: var(--s4);
   --xs: calc(var(--s4) * 2);
@@ -359,38 +360,45 @@ main {
 }
 
 .border-b {
-  border-bottom: var(--bb, var(--spx)) solid var(--c-200);
+  border-bottom: var(--bb, var(--spx)) solid var(--bbc, var(--c-200));
   --bb: initial;
+  --bbc: initial;
 }
 
 .border-r {
-  border-right: var(--br, var(--spx)) solid var(--c-200);
+  border-right: var(--br, var(--spx)) solid var(--brc, var(--c-200));
   --br: initial;
+  --brc: initial;
 }
 
 .border-l {
-  border-left: var(--bl, var(--spx)) solid var(--c-200);
+  border-left: var(--bl, var(--spx)) solid var(--blc, var(--c-200));
   --bl: initial;
+  --blc: initial;
 }
 
 .border-t {
-  border-top: var(--bt, var(--spx)) solid var(--c-200);
+  border-top: var(--bt, var(--spx)) solid var(--btc, var(--c-200));
   --bt: initial;
+  --btc: initial;
 }
 
 .border-f {
-  border: var(--bf, var(--spx)) solid var(--c-200);
+  border: var(--bf, var(--spx)) solid var(--bfc, var(--c-200));
   --bf: initial;
+  --bfc: initial;
 }
 
 .border-x {
-  border-inline: var(--bx, var(--spx)) solid var(--c-200);
+  border-inline: var(--bx, var(--spx)) solid var(--bxc, var(--c-200));
   --bx: initial;
+  --bxc: initial;
 }
 
 .border-y {
-  border-block: var(--by, var(--spx)) solid var(--c-200);
+  border-block: var(--by, var(--spx)) solid var(--byc, var(--c-200));
   --by: initial;
+  --byc: initial;
 }
 
 .p-b {
@@ -476,6 +484,34 @@ main {
 .gap-y {
   row-gap: var(--gy, var(--s4));
   --gy: initial;
+}
+
+.rounded-xs {
+  border-radius: var(--s1);
+}
+
+.rounded-sm {
+  border-radius: var(--s2);
+}
+
+.rounded-md {
+  border-radius: var(--s3);
+}
+
+.rounded-lg {
+  border-radius: var(--s4);
+}
+
+.rounded-xl {
+  border-radius: var(--s5);
+}
+
+.rounded-2xl {
+  border-radius: var(--s6);
+}
+
+.rounded-3xl {
+  border-radius: var(--s7);
 }
 
 /* sec:media */

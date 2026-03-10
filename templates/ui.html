@@ -7,11 +7,11 @@
 {% block body %}
     <app-state name="section-style" value="--minw:var(--lg);--minh:var(--xl);" at="style"></app-state>
     <app-state name="section-class" value="flex flex-col border-t min-w min-h" at="class"></app-state>
-    <app-state name="section-span-style" value="--h:var(--s8);--mt:var(--s1);" at="style"></app-state>
+    <app-state name="section-span-style" value="--h:var(--s7);--mt:var(--s1);" at="style"></app-state>
     <app-state name="section-span-class" value="font-semibold text-md h justify-text m-t" at="class"></app-state>
     <main class="w-full h-screen bg-white bg-pattern-polka overflow-y-auto">
         <footer class="text-2xl font-semibold p-x w-full m-t"
-                style="--text-2xl-lh: var(--s9)">
+                style="--text-2xl-lh: var(--s8)">
             App UI Styleguide
         </footer>
         <section class="p-x m-t bg-lines flex flex-wrap gap-f">
@@ -41,8 +41,8 @@
             </section>
             <section data-state="section-class,section-style">
                 <span data-state="section-span-class,section-span-style">Colors</span>
-                <app-state name="box-style" at="style" value="--b:var(--2xs)"></app-state>
-                <div class="flex flex-wrap gap-f" style="--gf:var(--s2)">
+                <app-state name="box-style" at="style" value="--b:var(--xs)"></app-state>
+                <div class="flex flex-wrap gap-f">
                     <div class="box border-f bg-white" data-state="box-style"></div>
                     <div class="box border-f bg-base-50" data-state="box-style"></div>
                     <div class="box border-f bg-base-100" data-state="box-style"></div>
@@ -55,6 +55,26 @@
                     <div class="box border-f bg-base-800" data-state="box-style"></div>
                     <div class="box border-f bg-base-900" data-state="box-style"></div>
                     <div class="box border-f bg-black" data-state="box-style"></div>
+                </div>
+            </section>
+            <section data-state="section-class,section-style">
+                <span data-state="section-span-class,section-span-style">Radius</span>
+                <app-state name="rounded-style" value="--b:var(--sm);--bf:2px;--bfc:var(--c-400)" at="style"></app-state>
+                <div class="flex flex-wrap gap-f">
+                    <div data-state="rounded-style"
+                         class="rounded-xs box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-style"
+                         class="rounded-sm box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-style"
+                         class="rounded-md box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-style"
+                         class="rounded-lg box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-style"
+                         class="rounded-xl box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-style"
+                         class="rounded-2xl box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-style"
+                         class="rounded-3xl box bg-pattern-diagonal border-f"></div>
                 </div>
             </section>
         </section>
