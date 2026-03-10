@@ -1,7 +1,7 @@
 /* sec:root */
 :root {
   --c-white: #ffffff;
-  --c-black: #ffffff;
+  --c-black: #000000;
   /* --c-50: #e5e5f7; */
   --c-50: #f5f3f0;
   --c-100: #edeae3;
