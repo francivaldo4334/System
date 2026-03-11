@@ -90,8 +90,26 @@ class BaseButttonGhost extends BaseButtton {
   }
 }
 
+class FieldControl extends HTMLElement {
+  connectedCallback() {
+    const content = this.innerHTML;
+    this.innerHTML = `
+      <div class="flex flex-col">
+          <label>Label</label>
+          ${content}
+          <small class="text-color" style="--text-sm-lh:var(--s4);--tc:var(--c-600)">help text</small>
+          <small role="alert"
+                 class="text-color"
+                 style="--tc:var(--c-error);
+                        --text-sm-lh:var(--s4)">error message</small>
+      </div>
+    `
+  }
+}
+
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
 window.customElements.define('app-btn-outlined', BaseButttonOutlined, { extends: 'button' })
 window.customElements.define('app-btn-ghost', BaseButttonGhost, { extends: 'button' })
+window.customElements.define('app-field', FieldControl)
