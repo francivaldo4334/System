@@ -155,6 +155,11 @@ label {
   --_tcs: initial;
   --_tch: initial;
 }
+.font {
+  --_f:var(--f, 400)
+  font-weight: var(--_f);
+  --_f: initial;
+}
 
 .text-2xs {
   font-size: var(--txt-2xs);
