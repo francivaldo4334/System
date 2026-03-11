@@ -138,10 +138,13 @@ label {
   box-sizing: border-box;
 }
 
-.text-color,
-.hover\:text-color:hover {
-  color: var(--tch, var(--tc, var(--c-white)));
+.text-color {
+  color: var(--tc, var(--c-white));
   --tc: initial;
+}
+
+.hover\:text-color:hover {
+  color: var(--tch, var(--c-white));
   --tch: initial;
 }
 
@@ -156,19 +159,27 @@ label {
 }
 
 .font {
-  --_f: var(--f, 400) font-weight: var(--_f);
-  --_f: initial;
+  font-weight: var(--f, 400);
+  --f: initial;
 }
 
 .justify-text {
   text-align: justify;
 }
 
-.bg-color,
-.hover\:bg-color:hover {
-  background: var(--bgch, var(--bgc, var(--c-50)));
-  --bgch: initial;
+.bg-color {
+  background: var(--bgc, var(--c-50));
   --bgc: initial;
+}
+
+.hover\:bg-color:hover {
+  background: var(--bgch, var(--c-50));
+  --bgch: initial;
+}
+
+.active\:bg-color:active {
+  background: var(--bgca, var(--c-50));
+  --bgca: initial;
 }
 
 .bg-pattern-lines-horizontal {
@@ -199,7 +210,8 @@ label {
   background-position: var(--pattern-delta) var(--pattern-delta);
 }
 
-.bg-pattern-diagonal {
+.bg-pattern-diagonal,
+.disabled\:bg-pattern-diagonal:disabled {
   --_pattern-accent: var(--pattern-accent, var(--c-800));
   --_pattern-bg: var(--pattern-bg, var(--c-50));
   --pattern-thickness: var(--spx);
@@ -483,6 +495,23 @@ label {
   box-shadow: var(--sd1), var(--sd2);
 }
 
+.hover-shadow:hover {
+  --_s: var(--s, 0.5);
+  --c1: rgba(50, 50, 93, 0.25);
+  --c2: rgba(0, 0, 0, 0.3);
+  --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-4px * var(--_s)) var(--c1);
+  --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
+  box-shadow: var(--sd1), var(--sd2);
+}
+
+.hover-shadow:disabled {
+  box-shadow: none;
+}
+
+.hover-shadow:active {
+  box-shadow: none;
+}
+
 .shadow-inset {
   --_s: var(--si, 0.5);
   --_c: var(--sic, rgba(0, 0, 0, 0.3));
@@ -491,24 +520,28 @@ label {
   box-shadow: inset var(--sd);
 }
 
-.elevation,
-.rotate {
+.hover-elevation,
+.hover-rotate {
   display: inline-block;
-  transition: transform var(--ebs, 0.3s) cubic-bezier(0.4, 0, 0.2, 1) ease;
+  transform: translateY(var(--ty, 0)) rotate(var(--tr, 0));
+  transition: transform var(--duration, 0.3s) cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  --ebs: initial;
 }
 
-.elevation:hover {
-  transform: translateY(var(--eay, -1px));
-  transition: transform var(--ebs, 0.3s) cubic-bezier(0.4, 0, 0.2, 1);
-  --eay: initial;
+.hover-elevation:hover {
+  --ty: -4px;
 }
 
-.rotate:hover {
-  transform: rotate(var(--rd, -1deg));
-  --rd: initial;
+.hover-rotate:hover {
+  --tr: 5deg;
+}
 
+.hover-rotate:disabled,
+.hover-elevation:disabled,
+.hover-rotate:active,
+.hover-elevation:active {
+  transition: none;
+  transition: none;
 }
 
 /* sec:media */
