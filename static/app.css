@@ -1,6 +1,6 @@
 /* sec:root */
 :root {
-  --c-white: #ffffff;
+  --c-white: #ffff;
   --c-black: #000000;
   /* --c-50: #e5e5f7; */
   --c-50: #f5f3f0;
@@ -92,6 +92,15 @@ main {
 }
 
 /* sec:classes:text */
+.text-black {
+  color: var(--c-black);
+}
+
+.text-white {
+  color: white;
+}
+
+
 .text-2xs {
   font-size: var(--text-2xs);
   line-height: var(--text-2xs-lh);
@@ -528,6 +537,25 @@ main {
   --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-6px * var(--_s)) var(--c1);
   --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-8px * var(--_s)) var(--c2);
   box-shadow: var(--sd1), var(--sd2);
+}
+
+.elevation,
+.rotate {
+  display: inline-block;
+  transition: transform var(--ebs, 0.3s) cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  --ebs: initial;
+}
+
+.elevation:hover {
+  transform: translateY(var(--eay, -1px));
+  --eay: initial;
+}
+
+.rotate:hover {
+  transform: rotate(var(--rd, -1deg));
+  --rd: initial;
+
 }
 
 /* sec:media */

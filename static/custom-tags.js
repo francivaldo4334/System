@@ -43,54 +43,99 @@ class CustomAppNavItem extends HTMLElement {
   }
 }
 class CustomButton extends HTMLButtonElement {
-  baseStyle = {}
-  hoverStyle = {}
-  clickStyle = {}
-  addStyle(style) {
-    Object.entries(style).forEach(([className, styleValue]) => {
-      this.classList.add(className);
-      this.style.setProperty(...styleValue.split(':'))
-    })
+  baseStyle = {};
+  hoverStyle = {};
+  clickStyle = {};
+
+  constructor() {
+    super();
+    this._onPres = this._onPres.bind(this);
+    this._onRelease = this._onRelease.bind(this);
+    this._onHoverIn = this._onHoverIn.bind(this);
+    this._onHoverOut = this._onHoverOut.bind(this);
   }
-  removeStyle(style) {
-    Object.entries(style).forEach(([className, styleValue]) => {
-      this.classList.remove(className);
-      this.style.removeProperty(styleValue.split(':')[0])
-    })
+
+  _getStyleProps(props) {
+    if (!props || typeof props !== 'string') return [];
+    return props.split(';').filter(Boolean).map(it => it.split(':').map(s => s.trim()));
   }
+
+  _applyStyles(styleObj) {
+    Object.entries(styleObj).forEach(([className, styleString]) => {
+      if (className) this.classList.add(className);
+      this._getStyleProps(styleString).forEach(([name, value]) => {
+        if (name && value) this.style.setProperty(name, value);
+      });
+    });
+  }
+
+  _clearStyles(styleObj) {
+    Object.entries(styleObj).forEach(([className, styleString]) => {
+      if (className) this.classList.remove(className);
+      this._getStyleProps(styleString).forEach(([name]) => {
+        this.style.removeProperty(name);
+      });
+    });
+  }
+
+  _onPres() {
+    this._applyStyles(this.clickStyle);
+  }
+
+  _onRelease() {
+    this._clearStyles(this.clickStyle);
+  }
+
+  _onHoverIn() {
+    this._applyStyles(this.hoverStyle);
+  }
+
+  _onHoverOut() {
+    this._clearStyles(this.hoverStyle);
+  }
+
   connectedCallback() {
-    Object.entries(this.baseStyle).forEach(([className, styleValue]) => {
-      this.classList.add(className);
-      const [name, value] = styleValue.split(':')
-      this.style.setProperty(name, value)
-    })
+    this._applyStyles(this.baseStyle);
+    this.addEventListener('mouseenter', this._onHoverIn);
+    this.addEventListener('mouseleave', this._onHoverOut);
+    this.addEventListener('mousedown', this._onPres);
+    this.addEventListener('mouseup', this._onRelease);
+    this.addEventListener('mouseleave', this._onRelease);
+  }
 
-    this.classList.add(
-      'min-w',
-      'min-h',
-      'm-f',
-      'bg-base-200',
-      'border-f',
-      'rounded-xs',
-
-    )
-    this.style.setProperty('--minw', 'var(--sm)')
-    this.style.setProperty('--minh', 'var(--xs)')
-    this.style.setProperty('--mf', '0')
-
-    //HOVER
-    this.addEventListener('mouseenter', () => {
-      Object.entries(this.hoverStyle).forEach(([className, styleValue]) => {
-        this.classList.add(className);
-        const [name, value] = styleValue.split(':')
-        this.style.setProperty(name, value)
-      })
-    })
-    this.addEventListener('mouseleave', () => {
-
-    })
+  disconnectedCallback() {
+    this.removeEventListener('mouseenter', this._onHoverIn);
+    this.removeEventListener('mouseleave', this._onHoverOut);
+    this.removeEventListener('mousedown', this._onPres);
+    this.removeEventListener('mouseup', this._onRelease);
+    this.removeEventListener('mouseleave', this._onRelease);
   }
 }
+
+class BaseButtton extends CustomButton {
+  baseStyle = {
+    'min-w': '--minw:var(--sm)',
+    'min-h': '--minh:var(--xs)',
+    'm-f': '--mf:0',
+    'rounded-xs': '',
+    'bg-base-50': '',
+    'text-md': '',
+    'font-semibold': '',
+    'border-f': '--bfc:var(--c-300)',
+    'elevation': '',
+    'text-black': '',
+  }
+  hoverStyle = {
+    'bg-base-100': '',
+  }
+  clickStyle = {
+    'bg-base-800': '',
+    'elevation-base': '--ebs:0s',
+    'elevation-active': '--eay:0.5px',
+    'text-white': '',
+  }
+}
+
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
-window.customElements.define('app-btn', CustomButton, { extends: 'button' })
+window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
