@@ -27,7 +27,6 @@
   --s6: calc(var(--spx) * 24);
   --s7: calc(var(--spx) * 28);
   --s8: calc(var(--spx) * 32);
-  --s9: calc(var(--spx) * 36);
 
   --2xs: var(--s4);
   --xs: calc(var(--s4) * 2);
@@ -61,9 +60,7 @@
 
 
   --shadow-color: 0deg 0% 0%;
-  /* HSL para facilitar manipulação de opacidade */
   --shadow-strength: 5%;
-  /* Intensidade base */
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --default-font-family: var(--font-sans);
