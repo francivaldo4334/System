@@ -195,7 +195,7 @@ class BaseButttonGhost extends CustomButton {
     'text-black': '',
   }
   hoverStyle = {
-    'bg-base-100': '',
+    'bg-base-50': '',
   }
   clickStyle = {
     'bg-base-800': '',

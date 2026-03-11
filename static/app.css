@@ -319,6 +319,14 @@ h6 {
       var(--_pattern-bg) 50%);
 }
 
+.bg-pattern-paper {
+  background-color: #fff;
+  background-image:
+  linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
+  linear-gradient(#eee .1em, transparent .1em);
+  background-size: 100% 1.2em;
+}
+
 .w {
   width: var(--w);
   --w: initial;
