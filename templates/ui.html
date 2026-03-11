@@ -23,6 +23,7 @@
                 <h4>Typography</h4>
                 <h5>Typography</h5>
                 <h6>Typography</h6>
+                <small>Typography</small>
             </section>
             <section data-state="section-class,section-style">
                 <span data-state="section-span-class,section-span-style">Sizes</span>
@@ -105,7 +106,15 @@
                     </div>
                 </div>
             </section>
-            <div class="box bg-pattern-paper" style="--b:var(--lg)"></div>
+            <section data-state="section-class,section-style">
+                <span data-state="section-span-class,section-span-style">Field Controler</span>
+                <div class="flex flex-col">
+                    <label>Label</label>
+                    <input class="h" style="--h:var(--s8)"/>
+                    <small class="text-color" style="--text-sm-lh:var(--s4);--tc:var(--c-600)">help text</small>
+                    <small role="alert" class="text-color" style="--tc:var(--c-error);--text-sm-lh:var(--s4)">error message</small>
+                </div>
+            </section>
         </section>
     </main>
 {% endblock %}
