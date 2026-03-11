@@ -7,16 +7,14 @@
 {% block body %}
     <app-state name="section-style" value="--minw:var(--lg);--minh:var(--xl);" at="style"></app-state>
     <app-state name="section-class" value="flex flex-col border-t min-w min-h" at="class"></app-state>
-    <app-state name="section-span-style" value="--h:var(--s7);--mt:var(--s1);" at="style"></app-state>
-    <app-state name="section-span-class" value="font-semibold text-md h justify-text m-t" at="class"></app-state>
     <main class="w-full min-h-screen bg-white bg-pattern-polka">
         <footer class="text-2xl font-semibold p-x w-full m-t"
                 style="--text-2xl-lh: var(--s8)">
-            App UI Styleguide
+            <h3>App UI Styleguide</h3>
         </footer>
         <section class="p-x m-t bg-lines flex flex-wrap gap-f">
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Typography</span>
+                <h5>Typography</h5>
                 <h1>Typography</h1>
                 <h2>Typography</h2>
                 <h3>Typography</h3>
@@ -26,7 +24,7 @@
                 <small>Typography</small>
             </section>
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Sizes</span>
+                <h5>Sizes</h5>
                 <app-state name="size-class" value="bg-base-300 bg-pattern-diagonal w h border-f" at="class"></app-state>
                 <div class="flex flex-wrap gap-f">
                     <div data-state="size-class" style="--w:var(--xs);--h:var(--xs)"></div>
@@ -38,25 +36,25 @@
                 </div>
             </section>
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Colors</span>
-                <app-state name="box-style" at="style" value="--b:var(--xs)"></app-state>
+                <h5>Colors</h5>
+                <app-state name="box-class" at="class" value="box border-f bg-color"></app-state>
                 <div class="flex flex-wrap gap-f">
-                    <div class="box border-f bg-white" data-state="box-style"></div>
-                    <div class="box border-f bg-base-50" data-state="box-style"></div>
-                    <div class="box border-f bg-base-100" data-state="box-style"></div>
-                    <div class="box border-f bg-base-200" data-state="box-style"></div>
-                    <div class="box border-f bg-base-300" data-state="box-style"></div>
-                    <div class="box border-f bg-base-400" data-state="box-style"></div>
-                    <div class="box border-f bg-base-500" data-state="box-style"></div>
-                    <div class="box border-f bg-base-600" data-state="box-style"></div>
-                    <div class="box border-f bg-base-700" data-state="box-style"></div>
-                    <div class="box border-f bg-base-800" data-state="box-style"></div>
-                    <div class="box border-f bg-base-900" data-state="box-style"></div>
-                    <div class="box border-f bg-black" data-state="box-style"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-white);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-50);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-100);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-200);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-300);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-400);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-500);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-600);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-700);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-800);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-base-900);--b:var(--xs)"></div>
+                    <div data-state="box-class" style="--bgc:var(--c-black);--b:var(--xs)"></div>
                 </div>
             </section>
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Radius</span>
+                <h5>Radius</h5>
                 <app-state name="rounded-style" value="--b:var(--sm);--bf:2px;--bfc:var(--c-400)" at="style"></app-state>
                 <div class="flex flex-wrap gap-f">
                     <div data-state="rounded-style"
@@ -76,21 +74,20 @@
                 </div>
             </section>
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Shadows</span>
-                <app-state name="shadow-class" at="class" value="box bg-white rounded-sm shadow"></app-state>
-                <app-state name="shadow-inset-class" at="class" value="box bg-white rounded-sm shadow-inset"></app-state>
+                <h5>Shadows</h5>
+                <app-state name="shadow-class" at="class" value="box bg-color rounded-sm shadow"></app-state>
+                <app-state name="shadow-inset-class" at="class" value="box bg-color rounded-sm shadow-inset"></app-state>
                 <div class="flex flex-wrap gap-f">
                     <div data-state="shadow-class" style="--b:var(--sm);--s:0.5"></div>
                     <div data-state="shadow-class" style="--b:var(--sm);--s:1"></div>
                     <div data-state="shadow-class" style="--b:var(--sm);--s:1.5"></div>
-
                     <div data-state="shadow-inset-class" style="--b:var(--sm);--s:0.5"></div>
                     <div data-state="shadow-inset-class" style="--b:var(--sm);--s:1"></div>
                     <div data-state="shadow-inset-class" style="--b:var(--sm);--s:1.5"></div>
                 </div>
             </section>
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Buttons</span>
+                <h5>Buttons</h5>
                 <div class="flex flex-wrap gap-f">
                     <div class="flex flex-col gap-y">
                         <button is="app-btn">Default</button>
@@ -107,12 +104,15 @@
                 </div>
             </section>
             <section data-state="section-class,section-style">
-                <span data-state="section-span-class,section-span-style">Field Controler</span>
+                <h5>Field Controler</h5>
                 <div class="flex flex-col">
                     <label>Label</label>
-                    <input class="h" style="--h:var(--s8)"/>
+                    <input class="h" style="--h:var(--s8)" />
                     <small class="text-color" style="--text-sm-lh:var(--s4);--tc:var(--c-600)">help text</small>
-                    <small role="alert" class="text-color" style="--tc:var(--c-error);--text-sm-lh:var(--s4)">error message</small>
+                    <small role="alert"
+                           class="text-color"
+                           style="--tc:var(--c-error);
+                                  --text-sm-lh:var(--s4)">error message</small>
                 </div>
             </section>
         </section>

@@ -66,7 +66,9 @@
 }
 
 /* sec:tags */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
 }
@@ -79,15 +81,17 @@ body {
   line--l- var(h-md);
   margin: 0;
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  margin: 0;  
+  margin: 0;
   font-weight: 600;
 }
+
 h1 {
   font-size: var(--txt-4xl);
   line-height: var(--lh-4xl);
@@ -117,10 +121,12 @@ h6 {
   font-size: var(--txt-md);
   line-height: var(--lh-md);
 }
+
 small {
   font-size: var(--txt-sm);
   line-height: var(--lh-sm);
 }
+
 label {
   font-size: var(--txt-sm);
   line-height: var(--s4);
@@ -132,166 +138,39 @@ label {
   box-sizing: border-box;
 }
 
-/* sec:classes:text */
-.text-black {
-  color: var(--c-black);
-}
-
-.text-white {
-  color: white;
-}
-
-.text-color {
-  color: var(--tc, var(--c-white));
+.text-color,
+.hover\:text-color:hover {
+  color: var(--tch, var(--tc, var(--c-white)));
   --tc: initial;
+  --tch: initial;
 }
 
-.text {
-  --_tcs: var(--tcs, var(--txt-md));
-  --_tch: var(--tch, var(--lh-md));
-  font-size: var(--_tcs);
-  line-height: var(--_tch);
-  --_tcs: initial;
-  --_tch: initial;
+.text,
+.hover\:text:hover {
+  font-size: var(--tsh, var(--ts, var(--txt-md)));
+  line-height: var(--thh, var(--th, var(--lh-md)));
+  --tcs: initial;
+  --tch: initial;
+  --tcsh: initial;
+  --tchh: initial;
 }
+
 .font {
-  --_f:var(--f, 400)
-  font-weight: var(--_f);
+  --_f: var(--f, 400) font-weight: var(--_f);
   --_f: initial;
-}
-
-.text-2xs {
-  font-size: var(--txt-2xs);
-  line-height: var(--lh-2xs);
-}
-
-.text-xs {
-  font-size: var(--txt-xs);
-  line-height: var(--lh-xs);
-}
-
-.text-sm {
-  font-size: var(--txt-sm);
-  line-height: var(--lh-sm);
-}
-
-.text-base {
-  font-size: var(--txt-md);
-  line-height: var(--lh-md);
-}
-
-.text-lg {
-  font-size: var(--txt-lg);
-  line-height: var(--lh-lg);
-}
-
-.text-xl {
-  font-size: var(--txt-xl);
-  line-height: var(--lh-xl);
-}
-
-.text-2xl {
-  font-size: var(--txt-2xl);
-  line-height: var(--lh-2xl);
-}
-
-.text-3xl {
-  font-size: var(--txt-3xl);
-  line-height: var(--lh-3xl);
-}
-
-.text-4xl {
-  font-size: var(--txt-4xl);
-  line-height: var(--lh-4xl);
-}
-
-.font-thin {
-  font-weight: 100;
-}
-
-.font-extralight {
-  font-weight: 200;
-}
-
-.font-light {
-  font-weight: 300;
-}
-
-.font-normal {
-  font-weight: 400;
-}
-
-.font-medium {
-  font-weight: 500;
-}
-
-.font-semibold {
-  font-weight: 600;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.font-extrabold {
-  font-weight: 800;
-}
-
-.font-black {
-  font-weight: 900;
 }
 
 .justify-text {
   text-align: justify;
 }
 
-/* sec:classes:bg */
-.bg-white {
-  background: var(--c-white);
+.bg-color,
+.hover\:bg-color:hover {
+  background: var(--bgch, var(--bgc, var(--c-50)));
+  --bgch: initial;
+  --bgc: initial;
 }
 
-.bg-black {
-  background: var(--c-black);
-}
-.bg-base-50 {
-  background: var(--c-50);
-}
-
-.bg-base-100 {
-  background: var(--c-100);
-}
-
-.bg-base-200 {
-  background: var(--c-200);
-}
-
-.bg-base-300 {
-  background: var(--c-300);
-}
-
-.bg-base-400 {
-  background: var(--c-400);
-}
-
-.bg-base-500 {
-  background: var(--c-500);
-}
-
-.bg-base-600 {
-  background: var(--c-600);
-}
-
-.bg-base-700 {
-  background: var(--c-700);
-}
-
-.bg-base-800 {
-  background: var(--c-800);
-}
-
-.bg-base-900 {
-  background: var(--c-900);
-}
 .bg-pattern-lines-horizontal {
   opacity: 0.8;
   background-size: 20px 20px;
@@ -337,8 +216,8 @@ label {
 .bg-pattern-paper {
   background-color: #fff;
   background-image:
-  linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
-  linear-gradient(#eee .1em, transparent .1em);
+    linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
+    linear-gradient(#eee .1em, transparent .1em);
   background-size: 100% 1.2em;
 }
 
@@ -603,6 +482,7 @@ label {
   --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
   box-shadow: var(--sd1), var(--sd2);
 }
+
 .shadow-inset {
   --_s: var(--si, 0.5);
   --_c: var(--sic, rgba(0, 0, 0, 0.3));
