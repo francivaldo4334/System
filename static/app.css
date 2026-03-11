@@ -37,25 +37,25 @@
   --3xl: calc(var(--xs) * 13);
   --4xl: calc(var(--xs) * 15);
 
-  --text-2xs: 0.625rem;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-md: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
+  --txt-2xs: 0.625rem;
+  --txt-xs: 0.75rem;
+  --txt-sm: 0.875rem;
+  --txt-md: 1rem;
+  --txt-lg: 1.125rem;
+  --txt-xl: 1.25rem;
+  --txt-2xl: 1.5rem;
+  --txt-3xl: 1.875rem;
+  --txt-4xl: 2.25rem;
 
-  --text-2xs-lh: calc(1 / 0.625);
-  --text-xs-lh: calc(1 / 0.75);
-  --text-sm-lh: calc(1.25 / 0.875);
-  --text-md-lh: calc(1.5 / 1);
-  --text-lg-lh: calc(1.75 / 1.125);
-  --text-xl-lh: calc(1.75 / 1.25);
-  --text-2xl-lh: calc(2 / 1.5);
-  --text-3xl-lh: calc(2.25 / 1.875);
-  --text-4xl-lh: calc(2.5 / 2.25);
+  --lh-2xs: calc(1 / 0.625);
+  --lh-xs: calc(1 / 0.75);
+  --lh-sm: calc(1.25 / 0.875);
+  --lh-md: calc(1.5 / 1);
+  --lh-lg: calc(1.75 / 1.125);
+  --lh-xl: calc(1.75 / 1.25);
+  --lh-2xl: calc(2 / 1.5);
+  --lh-3xl: calc(2.25 / 1.875);
+  --lh-4xl: calc(2.5 / 2.25);
 
 
   --shadow-color: 0deg 0% 0%;
@@ -63,8 +63,8 @@
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --default-font-family: var(--font-sans);
-  font-size: var(--text-md);
-  line-height: var(--text-md-lh);
+  font-size: var(--txt-md);
+  line-height: var(--lh-md);
   font-weight: 400;
   font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
 
@@ -80,8 +80,8 @@ body {
   background: var(--c-white);
   color: var(--c-900);
   font-family: var(--font-sans);
-  font-size: var(--text-md);
-  line-height: var(--lh-md);
+  font-size: var(--txt-md);
+  line--l- var(h-md);
   margin: 0;
 }
 h1,
@@ -94,40 +94,40 @@ h6 {
   font-weight: 600;
 }
 h1 {
-  font-size: var(--text-4xl);
-  line-height: var(--text-4xl-lh);
+  font-size: var(--txt-4xl);
+  line-height: var(--lh-4xl);
 }
 
 h2 {
-  font-size: var(--text-3xl);
-  line-height: var(--text-3xl-lh);
+  font-size: var(--txt-3xl);
+  line-height: var(--lh-3xl);
 }
 
 h3 {
-  font-size: var(--text-2xl);
-  line-height: var(--text-2xl-lh);
+  font-size: var(--txt-2xl);
+  line-height: var(--lh-2xl);
 }
 
 h4 {
-  font-size: var(--text-xl);
-  line-height: var(--text-xl-lh);
+  font-size: var(--txt-xl);
+  line-height: var(--lh-xl);
 }
 
 h5 {
-  font-size: var(--text-lg);
-  line-height: var(--text-lg-lh);
+  font-size: var(--txt-lg);
+  line-height: var(--lh-lg);
 }
 
 h6 {
-  font-size: var(--text-md);
-  line-height: var(--text-md-lh);
+  font-size: var(--txt-md);
+  line-height: var(--lh-md);
 }
 small {
-  font-size: var(--text-sm);
-  line-height: var(--text-sm-lh);
+  font-size: var(--txt-sm);
+  line-height: var(--lh-sm);
 }
 label {
-  font-size: var(--text-sm);
+  font-size: var(--txt-sm);
   line-height: var(--s4);
 }
 
@@ -153,48 +153,48 @@ label {
 
 
 .text-2xs {
-  font-size: var(--text-2xs);
-  line-height: var(--text-2xs-lh);
+  font-size: var(--txt-2xs);
+  line-height: var(--lh-2xs);
 }
 
 .text-xs {
-  font-size: var(--text-xs);
-  line-height: var(--text-xs-lh);
+  font-size: var(--txt-xs);
+  line-height: var(--lh-xs);
 }
 
 .text-sm {
-  font-size: var(--text-sm);
-  line-height: var(--text-sm-lh);
+  font-size: var(--txt-sm);
+  line-height: var(--lh-sm);
 }
 
 .text-base {
-  font-size: var(--text-md);
-  line-height: var(--text-md-lh);
+  font-size: var(--txt-md);
+  line-height: var(--lh-md);
 }
 
 .text-lg {
-  font-size: var(--text-lg);
-  line-height: var(--text-lg-lh);
+  font-size: var(--txt-lg);
+  line-height: var(--lh-lg);
 }
 
 .text-xl {
-  font-size: var(--text-xl);
-  line-height: var(--text-xl-lh);
+  font-size: var(--txt-xl);
+  line-height: var(--lh-xl);
 }
 
 .text-2xl {
-  font-size: var(--text-2xl);
-  line-height: var(--text-2xl-lh);
+  font-size: var(--txt-2xl);
+  line-height: var(--lh-2xl);
 }
 
 .text-3xl {
-  font-size: var(--text-3xl);
-  line-height: var(--text-3xl-lh);
+  font-size: var(--txt-3xl);
+  line-height: var(--lh-3xl);
 }
 
 .text-4xl {
-  font-size: var(--text-4xl);
-  line-height: var(--text-4xl-lh);
+  font-size: var(--txt-4xl);
+  line-height: var(--lh-4xl);
 }
 
 .font-thin {
