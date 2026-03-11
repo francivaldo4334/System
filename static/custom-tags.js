@@ -46,6 +46,9 @@ class CustomButton extends HTMLButtonElement {
   baseStyle = {};
   hoverStyle = {};
   clickStyle = {};
+  disabledStyle = {};
+
+  static observedAttributes = ['disabled'];
 
   constructor() {
     super();
@@ -53,6 +56,17 @@ class CustomButton extends HTMLButtonElement {
     this._onRelease = this._onRelease.bind(this);
     this._onHoverIn = this._onHoverIn.bind(this);
     this._onHoverOut = this._onHoverOut.bind(this);
+  }
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disabled') {
+      if (this.disabled) {
+        this._applyStyles(this.disabledStyle);
+        this._clearStyles(this.hoverStyle);
+        this._clearStyles(this.clickStyle);
+      } else {
+        this._clearStyles(this.disabledStyle);
+      }
+    }
   }
 
   _getStyleProps(props) {
@@ -79,6 +93,7 @@ class CustomButton extends HTMLButtonElement {
   }
 
   _onPres() {
+    if (this.disabled) return;
     this._applyStyles(this.clickStyle);
   }
 
@@ -87,6 +102,7 @@ class CustomButton extends HTMLButtonElement {
   }
 
   _onHoverIn() {
+    if (this.disabled) return;
     this._applyStyles(this.hoverStyle);
   }
 
@@ -122,7 +138,34 @@ class BaseButtton extends CustomButton {
     'text-md': '',
     'font-semibold': '',
     'border-f': '--bfc:var(--c-300)',
+    'text-black': '',
+  }
+  hoverStyle = {
     'elevation': '',
+    'bg-base-100': '',
+    'shadow': '--s:0.2',
+  }
+  clickStyle = {
+    'bg-base-800': '',
+    'elevation-base': '--ebs:0s',
+    'elevation-active': '--eay:0.5px',
+    'text-white': '',
+  }
+  disabledStyle = {
+    'bg-pattern-diagonal': '--pattern-bg:var(--c-200);--pattern-accent:var(--c-300)',
+  }
+}
+
+class BaseButttonOutlined extends CustomButton {
+  baseStyle = {
+    'min-w': '--minw:var(--sm)',
+    'min-h': '--minh:var(--xs)',
+    'm-f': '--mf:0',
+    'rounded-xs': '',
+    'bg-white': '',
+    'text-md': '',
+    'font-semibold': '',
+    'border-f': '--bfc:var(--c-300);--bf:1px;',
     'text-black': '',
   }
   hoverStyle = {
@@ -134,8 +177,12 @@ class BaseButtton extends CustomButton {
     'elevation-active': '--eay:0.5px',
     'text-white': '',
   }
+  disabledStyle = {
+    'bg-pattern-diagonal': '--pattern-bg:var(--c-200);--pattern-accent:var(--c-300)'
+  }
 }
 
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
+window.customElements.define('app-btn-outlined', BaseButttonOutlined, { extends: 'button' })

@@ -101,7 +101,14 @@
             <section data-state="section-class,section-style">
                 <span data-state="section-span-class,section-span-style">Buttons</span>
                 <div class="flex flex-wrap gap-f">
-                    <button is="app-btn">Default</button>
+                    <div class="flex flex-col gap-y">
+                        <button is="app-btn">Default</button>
+                        <button is="app-btn" disabled>Default</button>
+                    </div>
+                    <div class="flex flex-col gap-y">
+                        <button is="app-btn-outlined">Default</button>
+                        <button is="app-btn-outlined" disabled>Default</button>
+                    </div>
                 </div>
             </section>
         </section>

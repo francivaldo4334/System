@@ -225,6 +225,13 @@ h6 {
 }
 
 /* sec:classes:bg */
+.bg-white {
+  background: var(--c-white);
+}
+
+.bg-black {
+  background: var(--c-black);
+}
 .bg-base-50 {
   background: var(--c-50);
 }
@@ -264,15 +271,6 @@ h6 {
 .bg-base-900 {
   background: var(--c-900);
 }
-
-.bg-white {
-  background: var(--c-white);
-}
-
-.bg-black {
-  background: var(--c-black);
-}
-
 .bg-pattern-lines-horizontal {
   opacity: 0.8;
   background-size: 20px 20px;
@@ -302,17 +300,17 @@ h6 {
 }
 
 .bg-pattern-diagonal {
-  --pattern-accent: var(--c-800);
-  --pattern-bg: var(--c-50);
+  --_pattern-accent: var(--pattern-accent, var(--c-800));
+  --_pattern-bg: var(--pattern-bg, var(--c-50));
   --pattern-thickness: var(--spx);
   --pattern-size: var(--s2);
   opacity: 0.3;
   background-size: var(--pattern-size) var(--pattern-size);
   background-image: repeating-linear-gradient(45deg,
-      var(--pattern-accent) 0,
-      var(--pattern-accent) var(--pattern-thickness),
-      var(--pattern-bg) 0,
-      var(--pattern-bg) 50%);
+      var(--_pattern-accent) 0,
+      var(--_pattern-accent) var(--pattern-thickness),
+      var(--_pattern-bg) 0,
+      var(--_pattern-bg) 50%);
 }
 
 .w {
@@ -580,13 +578,14 @@ h6 {
 .elevation,
 .rotate {
   display: inline-block;
-  transition: transform var(--ebs, 0.3s) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--ebs, 0.3s) cubic-bezier(0.4, 0, 0.2, 1) ease;
   will-change: transform;
   --ebs: initial;
 }
 
 .elevation:hover {
   transform: translateY(var(--eay, -1px));
+  transition: transform var(--ebs, 0.3s) cubic-bezier(0.4, 0, 0.2, 1);
   --eay: initial;
 }
 
