@@ -19,6 +19,7 @@ class StateDef extends HTMLElement {
     const name = this.getAttribute('name')
     const at = this.getAttribute("at")
     if (at) stateAt.set(name, at)
+    if (states.has(name)) console.error(`Override state '${name}'.`)
   }
   connectedCallback() {
     this.name = this.getAttribute('name')

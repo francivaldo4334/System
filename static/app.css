@@ -575,6 +575,14 @@ h6 {
   --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
   box-shadow: var(--sd1), var(--sd2);
 }
+.shadow-inset {
+  --_s: var(--s, 0.5);
+  --c1: rgba(50, 50, 93, 0.25);
+  --c2: rgba(0, 0, 0, 0.3);
+  --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-4px * var(--_s)) var(--c1);
+  --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
+  box-shadow: inset var(--sd1), var(--sd2);
+}
 
 .elevation,
 .rotate {
