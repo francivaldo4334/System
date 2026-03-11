@@ -148,6 +148,16 @@ label {
   --tch: initial;
 }
 
+.active-text-color:active {
+  color: var(--tca, var(--c-white));
+  --tca: initial;
+}
+
+.active-text-color:disabled {
+  color: var(--tcd, var(--c-white));
+  --tcd: initial;
+}
+
 .text {
   font-size: var(--ts, var(--txt-md));
   line-height: var(--th, var(--lh-md));

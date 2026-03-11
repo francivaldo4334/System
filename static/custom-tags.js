@@ -57,42 +57,40 @@ class BaseButtton extends CustomButton {
     'shadow-inset': '--si:0.2;--sic:var(--c-blac);--siy:-8px',
     'bg-color': '--bgc:var(--c-100)',
     'text-color': '--tc:var(--c-black)',
-    'hover:bg-color': '--bgch:var(--c-600)',
-    'hover:text-color': '--tch:var(--c-white)',
+    'hover-bg-color': '--bgch:var(--c-200)',
     'hover-shadow': '--s:0.3',
     'hover-elevation': '',
-    'active:bg-color': '--bgca:var(--c-900)',
-    'disabled:bg-pattern-diagonal': '',
+    'active-bg-color': '--bgca:var(--c-900)',
+    'active-text-color': '--tca:var(--c-white)',
+    'disabled-text-color': '--tcd:var(--c-black)',
+    'disabled-bg-pattern-diagonal': '',
+  }
+}
+class BaseButttonOutlined extends BaseButtton {
+  baseStyle = {
+    ...this.baseStyle,
+    'bg-color': '--bgc:transparent',
+    'border-f': '--bf:1px;--bfc:var(--c-300)',
+    'text-color': '--tc:var(--c-black)',
+    'hover-bg-color': '--bgch:var(--c-50)',
+    'hover-shadow': '--s:0.1',
+    'shadow-inset': '--si:0',
+  }
+}
+class BaseButttonGhost extends BaseButtton {
+  baseStyle = {
+    ...this.baseStyle,
+    'bg-color': '--bgc:transparent',
+    'border-f': '--bf:0', // Sem borda
+    'shadow-inset': '--si:0',
+    'text-color': '--tc:var(--c-black)',
+    // Feedback sutil no hover
+    'hover-bg-color': '--bgch:var(--c-100)',
+    'active-bg-color': '--bgca:var(--c-200)',
+    'active-text-color': '--tca:var(--c-black)', // Mantém o texto preto no ghost
   }
 }
 
-class BaseButttonOutlined extends CustomButton {
-  baseStyle = {
-    'min-w': '--minw:var(--sm)',
-    'min-h': '--minh:var(--xs)',
-    'm-f': '--mf:0',
-    'rounded-xs': '',
-    'bg-white': '',
-    'text-md': '',
-    'font-semibold': '',
-    'border-f': '--bfc:var(--c-300);--bf:1px;',
-    'text-black': '',
-  }
-}
-
-class BaseButttonGhost extends CustomButton {
-  baseStyle = {
-    'min-w': '--minw:var(--sm)',
-    'min-h': '--minh:var(--xs)',
-    'm-f': '--mf:0',
-    'rounded-xs': '',
-    'bg-white': '',
-    'text-md': '',
-    'font-semibold': '',
-    'border-f': '--bf:0;',
-    'text-black': '',
-  }
-}
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
