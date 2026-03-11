@@ -84,6 +84,44 @@ main {
   margin: 0;
   padding: 0;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: 0;
+  margin: 0;  
+}
+h1 {
+  font-size: var(--text-4xl);
+  line-height: var(--text-4xl-lh);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl-lh);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl-lh);
+}
+
+h4 {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl-lh);
+}
+
+h5 {
+  font-size: var(--text-lg);
+  line-height: var(--text-lg-lh);
+}
+
+h6 {
+  font-size: var(--text-md);
+  line-height: var(--text-md-lh);
+}
 
 *,
 *::before,
@@ -534,8 +572,8 @@ main {
   --_s: var(--s, 0.5);
   --c1: rgba(50, 50, 93, 0.25);
   --c2: rgba(0, 0, 0, 0.3);
-  --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-6px * var(--_s)) var(--c1);
-  --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-8px * var(--_s)) var(--c2);
+  --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-4px * var(--_s)) var(--c1);
+  --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
   box-shadow: var(--sd1), var(--sd2);
 }
 
