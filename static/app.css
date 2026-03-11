@@ -598,9 +598,10 @@ label {
   box-shadow: var(--sd1), var(--sd2);
 }
 .shadow-inset {
-  --_s: var(--s, 0.5);
-  --c: rgba(0, 0, 0, 0.3);
-  --sd: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c);
+  --_s: var(--si, 0.5);
+  --_c: var(--sic, rgba(0, 0, 0, 0.3));
+  --_y: var(--siy, 8px);
+  --sd: 0 calc(var(--_y) * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--_c);
   box-shadow: inset var(--sd);
 }
 

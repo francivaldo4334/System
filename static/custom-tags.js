@@ -1,20 +1,22 @@
+// const applyStyles = (el, styleMap) => {
+//   Object.entries(styleMap).forEach(([className, styleString]) => {
+//     if (className) el.classList.add(className);
+//     if (styleString) {
+//       styleString.split(';').forEach(prop => {
+//         const [name, value] = prop.split(':').map(s => s?.trim());
+//         if (name && value) el.style.setProperty(name, value);
+//       });
+//     }
+//   });
+// };
 class CustomAppLayout extends HTMLElement {
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     shadow.innerHTML = `
     <style>
-        :host {
-          display: grid;
-          grid-template-columns: minmax(0, 240px) 1fr;
-          width: 100dvw;
-          height: 100dvh;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          font-weight: 400;
-          font-style: normal;
+        ::slotted([slot="sidebar"]) {
+        }
+        ::slotted([slot="content"]) {
         }
       </style>
       <slot name="sidebar"></slot>
@@ -26,17 +28,11 @@ class CustomAppNavItem extends HTMLElement {
   connectedCallback() {
     const endpoint = this.getAttribute('endpoint')
     const store = this.getAttribute('store')
+    const content = this.innerHTML;
     this.innerHTML = `
       <form is="ajax-form" endpoint="${endpoint}" store="${store}">
-          <button
-            type="submit"
-            style="
-              padding: 0.375rem 0.75rem;
-              min-height: 2.25rem;
-              width: 100%;
-            "
-          >
-            ${this.innerHTML}
+          <button type="submit">
+            ${content}
           </button>
       </form>
     `
@@ -134,11 +130,12 @@ class BaseButtton extends CustomButton {
     'min-h': '--minh:var(--xs)',
     'm-f': '--mf:0',
     'rounded-xs': '',
-    'bg-base-50': '',
+    'bg-base-100': '',
     'text-md': '',
     'font-semibold': '',
     'border-f': '--bfc:var(--c-300)',
     'text-black': '',
+    'shadow-inset':'--si:0.2;--sic:var(--c-blac);--siy:-8px',
   }
   hoverStyle = {
     'elevation': '',
@@ -195,7 +192,7 @@ class BaseButttonGhost extends CustomButton {
     'text-black': '',
   }
   hoverStyle = {
-    'bg-base-50': '',
+    'bg-base-100': '',
   }
   clickStyle = {
     'bg-base-800': '',
