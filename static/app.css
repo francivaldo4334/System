@@ -57,10 +57,6 @@
   --lh-3xl: calc(2.25 / 1.875);
   --lh-4xl: calc(2.5 / 2.25);
 
-
-  --shadow-color: 0deg 0% 0%;
-  --shadow-strength: 5%;
-
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Vazirmatn, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --default-font-family: var(--font-sans);
   font-size: var(--txt-md);
@@ -147,7 +143,7 @@ label {
 }
 
 .text-color {
-  color: var(--tc);
+  color: var(--tc, var(--c-white));
   --tc: initial;
 }
 
