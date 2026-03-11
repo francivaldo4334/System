@@ -75,15 +75,18 @@
 }
 
 /* sec:tags */
-body {
-  background: var(--c-white);
-  margin: 0;
-  padding: 0;
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
-main {
+body {
+  background: var(--c-white);
+  color: var(--c-900);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: var(--lh-md);
   margin: 0;
-  padding: 0;
 }
 h1,
 h2,
