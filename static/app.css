@@ -139,6 +139,11 @@ h6 {
   color: white;
 }
 
+.text-color {
+  color: var(--tc);
+  --tc: initial;
+}
+
 
 .text-2xs {
   font-size: var(--text-2xs);

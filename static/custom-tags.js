@@ -182,7 +182,33 @@ class BaseButttonOutlined extends CustomButton {
   }
 }
 
+class BaseButttonGhost extends CustomButton {
+  baseStyle = {
+    'min-w': '--minw:var(--sm)',
+    'min-h': '--minh:var(--xs)',
+    'm-f': '--mf:0',
+    'rounded-xs': '',
+    'bg-white': '',
+    'text-md': '',
+    'font-semibold': '',
+    'border-f': '--bf:0;',
+    'text-black': '',
+  }
+  hoverStyle = {
+    'bg-base-100': '',
+  }
+  clickStyle = {
+    'bg-base-800': '',
+    'elevation-base': '--ebs:0s',
+    'elevation-active': '--eay:0.5px',
+    'text-white': '',
+  }
+  disabledStyle = {
+    'text-color': '--tc:var(--c-400)'
+  }
+}
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
 window.customElements.define('app-btn-outlined', BaseButttonOutlined, { extends: 'button' })
+window.customElements.define('app-btn-ghost', BaseButttonGhost, { extends: 'button' })
