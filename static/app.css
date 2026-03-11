@@ -16,9 +16,9 @@
   --c-900: #1c1b19;
 
   --spx: 0.0625rem;
-  --spx2: var(--spx) * 2;
-  --spx3: var(--spx) * 3;
-  --spx4: var(--spx) * 4;
+  --spx2: calc(var(--spx) * 2);
+  --spx3: calc(var(--spx) * 3);
+  --spx4: calc(var(--spx) * 4);
   --s1: calc(var(--spx) * 4);
   --s2: calc(var(--spx) * 8);
   --s3: calc(var(--spx) * 12);
