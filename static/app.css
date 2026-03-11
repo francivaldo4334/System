@@ -147,6 +147,14 @@ label {
   --tc: initial;
 }
 
+.text {
+  --_tcs: var(--tcs, var(--txt-md));
+  --_tch: var(--tch, var(--lh-md));
+  font-size: var(--_tcs);
+  line-height: var(--_tch);
+  --_tcs: initial;
+  --_tch: initial;
+}
 
 .text-2xs {
   font-size: var(--txt-2xs);
