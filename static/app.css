@@ -17,7 +17,7 @@
   --spx: 0.0625rem;
   --spx2: calc(var(--spx) * 2);
   --spx3: calc(var(--spx) * 3);
-  --spx4: calc(var(--spx) * 4);
+
   --s1: calc(var(--spx) * 4);
   --s2: calc(var(--spx) * 8);
   --s3: calc(var(--spx) * 12);
@@ -27,7 +27,6 @@
   --s7: calc(var(--spx) * 28);
   --s8: calc(var(--spx) * 32);
 
-  --2xs: var(--s4);
   --xs: calc(var(--s4) * 2);
   --sm: calc(var(--xs) * 3);
   --md: calc(var(--xs) * 5);
