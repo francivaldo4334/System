@@ -15,8 +15,8 @@
   --c-900: #1c1b19;
 
   --spx: 0.0625rem;
-  --spx2: calc(var(--spx) * 2);
-  --spx3: calc(var(--spx) * 3);
+  --b1: calc(var(--spx) * 2);
+  --b2: calc(var(--spx) * 3);
 
   --s1: calc(var(--spx) * 4);
   --s2: calc(var(--spx) * 8);
@@ -143,17 +143,21 @@ label {
   --tc: initial;
 }
 
-.hover\:text-color:hover {
+.hover-text-color:hover {
   color: var(--tch, var(--c-white));
   --tch: initial;
 }
 
-.text,
-.hover\:text:hover {
-  font-size: var(--tsh, var(--ts, var(--txt-md)));
-  line-height: var(--thh, var(--th, var(--lh-md)));
+.text {
+  font-size: var(--ts, var(--txt-md));
+  line-height: var(--th, var(--lh-md));
   --tcs: initial;
   --tch: initial;
+}
+
+.hover-text:hover {
+  font-size: var(--tsh, var(--txt-md));
+  line-height: var(--thh, var(--lh-md));
   --tcsh: initial;
   --tchh: initial;
 }
@@ -163,8 +167,9 @@ label {
   --f: initial;
 }
 
-.justify-text {
-  text-align: justify;
+.hover-font:hover {
+  font-weight: var(--fh, 400);
+  --fh: initial;
 }
 
 .bg-color {
@@ -172,12 +177,12 @@ label {
   --bgc: initial;
 }
 
-.hover\:bg-color:hover {
+.hover-bg-color:hover {
   background: var(--bgch, var(--c-50));
   --bgch: initial;
 }
 
-.active\:bg-color:active {
+.active-bg-color:active {
   background: var(--bgca, var(--c-50));
   --bgca: initial;
 }
@@ -211,7 +216,7 @@ label {
 }
 
 .bg-pattern-diagonal,
-.disabled\:bg-pattern-diagonal:disabled {
+.disabled-bg-pattern-diagonal:disabled {
   --_pattern-accent: var(--pattern-accent, var(--c-800));
   --_pattern-bg: var(--pattern-bg, var(--c-50));
   --pattern-thickness: var(--spx);
@@ -227,8 +232,7 @@ label {
 
 .bg-pattern-paper {
   background-color: #fff;
-  background-image:
-    linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
+  background-image: linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
     linear-gradient(#eee .1em, transparent .1em);
   background-size: 100% 1.2em;
 }
@@ -504,10 +508,7 @@ label {
   box-shadow: var(--sd1), var(--sd2);
 }
 
-.hover-shadow:disabled {
-  box-shadow: none;
-}
-
+.hover-shadow:disabled,
 .hover-shadow:active {
   box-shadow: none;
 }
@@ -523,25 +524,17 @@ label {
 .hover-elevation,
 .hover-rotate {
   display: inline-block;
-  transform: translateY(var(--ty, 0)) rotate(var(--tr, 0));
-  transition: transform var(--duration, 0.3s) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--duration, 0.3s) cubic-bezier(0.4, 0, 0.2, 1) ease;
   will-change: transform;
+  --duration: initial;
 }
 
-.hover-elevation:hover {
-  --ty: -4px;
+.hover-elevation:hover:not(:active):not(:disabled) {
+  transform: translateY(-2px);
 }
 
-.hover-rotate:hover {
-  --tr: 5deg;
-}
-
-.hover-rotate:disabled,
-.hover-elevation:disabled,
-.hover-rotate:active,
-.hover-elevation:active {
-  transition: none;
-  transition: none;
+.hover-rotate:hover:not(:active):not(:disabled) {
+  transform: translateY(-4px) rotate(5deg);
 }
 
 /* sec:media */
