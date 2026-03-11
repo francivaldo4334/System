@@ -3,7 +3,6 @@
   --c-white: #ffff;
   --c-black: #000000;
   --c-error: #ff0000;
-  /* --c-50: #e5e5f7; */
   --c-50: #f5f3f0;
   --c-100: #edeae3;
   --c-200: #d1ccbf;
@@ -91,9 +90,8 @@ h3,
 h4,
 h5,
 h6 {
-  padding: 0;
   margin: 0;  
-  font-weight: 400;
+  font-weight: 600;
 }
 h1 {
   font-size: var(--text-4xl);

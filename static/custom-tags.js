@@ -140,7 +140,7 @@ class BaseButtton extends CustomButton {
   hoverStyle = {
     'elevation': '',
     'bg-base-100': '',
-    'shadow': '--s:0.2',
+    'shadow': '--s:1',
   }
   clickStyle = {
     'bg-base-800': '',
