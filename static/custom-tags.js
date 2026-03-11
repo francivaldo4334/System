@@ -81,13 +81,12 @@ class BaseButttonGhost extends BaseButtton {
   baseStyle = {
     ...this.baseStyle,
     'bg-color': '--bgc:transparent',
-    'border-f': '--bf:0', // Sem borda
+    'border-f': '--bf:0',
     'shadow-inset': '--si:0',
     'text-color': '--tc:var(--c-black)',
-    // Feedback sutil no hover
     'hover-bg-color': '--bgch:var(--c-100)',
     'active-bg-color': '--bgca:var(--c-200)',
-    'active-text-color': '--tca:var(--c-black)', // Mantém o texto preto no ghost
+    'active-text-color': '--tca:var(--c-black)',
   }
 }
 
