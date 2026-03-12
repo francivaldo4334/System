@@ -549,6 +549,15 @@ label {
 .hover-rotate:hover:not(:active):not(:disabled) {
   transform: translateY(-4px) rotate(5deg);
 }
+.input-field {
+  padding: var(--s1) var(--s3);
+  min-height: var(--s8);
+  border: var(--spx) solid var(--c-300);
+  border-radius: var(--s1);
+  font-size: var(--txt-md);
+  line-height: var(--lh-md);
+  color: var(--c-black);
+}
 
 /* sec:media */
 @media (width >=40rem) {}

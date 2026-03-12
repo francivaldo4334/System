@@ -125,7 +125,7 @@ class FieldControl extends HTMLElement {
       <div class="flex flex-col">
           <label${id ? ' for="' + id + '"' : ''}><strong>${label}</strong></label>
           ${this._initialContent}
-          <div class="border-t" style="--bt:2px;${isInvalid ? '--btc:var(--c-error)' : isSuccess ? '--btc:var(--c-success)' : 'display:none'}"></div>
+          <div class="border-t m-x" style="--mx:var(--b2);${isInvalid ? '--btc:var(--c-error)' : isSuccess ? '--btc:var(--c-success)' : 'display:none'}"></div>
           <small role="alert"
                  class="text-color"
                  style="--tc:var(--c-error); --text-sm-lh:var(--s4);display: ${error && isInvalid ? 'block' : 'none'}">
@@ -139,10 +139,19 @@ class FieldControl extends HTMLElement {
   }
 }
 
-customElements.define('app-field', FieldControl);
+class TextField extends HTMLInputElement {
+  constructor(){
+    super();
+  }
+  connectedCallback() {
+    this.classList.add('input-field')
+  }
+}
+
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
 window.customElements.define('app-btn-outlined', BaseButttonOutlined, { extends: 'button' })
 window.customElements.define('app-btn-ghost', BaseButttonGhost, { extends: 'button' })
 window.customElements.define('app-field', FieldControl)
+window.customElements.define('app-input-text', TextField, { extends: 'input' })

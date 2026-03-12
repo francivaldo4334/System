@@ -104,16 +104,22 @@
                 </div>
             </section>
             <section data-state="section-class,section-style">
+                <h5>Inputs</h5>
+                <div class="flex flex-col gap-f">
+                    <input is="app-input-text" placeholder="Type something..."/>
+                </div>
+           </section>
+            <section data-state="section-class,section-style">
                 <h5>Field Controler</h5>
                 <div class="flex flex-col gap-f">
                     <app-field label="Label" for="input-id" error="error message" help="help">
-                    <input id="input-id" />
+                    <input id="input-id" is="app-input-text"/>
                     </app-field>
                     <app-field label="Label" for="input-id" error="error message" invalid help="help">
-                    <input id="input-id" />
+                    <input id="input-id" is="app-input-text"/>
                     </app-field>
                     <app-field label="Label" for="input-id" error="error message" success help="help">
-                    <input id="input-id" />
+                    <input id="input-id" is="app-input-text"/>
                     </app-field>
                 </div>
             </section>
