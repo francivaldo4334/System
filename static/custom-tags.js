@@ -148,6 +148,33 @@ class TextField extends HTMLInputElement {
   }
 }
 
+class CurrencyField extends HTMLInputElement {
+  get valueAsDecimal() {
+    const cleanValue = this.value.replace(/\D/g, '');
+    return (parseInt(cleanValue) || 0)/100;
+  }
+  constructor(){
+    super();
+  }
+  connectedCallback() {
+    this.classList.add('input-field')
+    this.inputMode = 'numeric';
+    if(!this.value) this.value = "0,00";
+    this.addEventListener('input', (e) => this.formatCurrency(e))
+    this.addEventListener('keypress', (e) => {
+      if (!/[0-9]/.test(e.key)) {
+        e.preventDefault();
+      }
+    })
+  }
+  formatCurrency(e){
+    let floatValue = this.valueAsDecimal;
+    this.value = floatValue.toLocaleString('pt-BR', {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+    })
+  }
+}
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
@@ -155,3 +182,4 @@ window.customElements.define('app-btn-outlined', BaseButttonOutlined, { extends:
 window.customElements.define('app-btn-ghost', BaseButttonGhost, { extends: 'button' })
 window.customElements.define('app-field', FieldControl)
 window.customElements.define('app-input-text', TextField, { extends: 'input' })
+window.customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
