@@ -91,22 +91,59 @@ class BaseButttonGhost extends BaseButtton {
 }
 
 class FieldControl extends HTMLElement {
+  static observedAttributes = ['invalid', 'success', 'error', 'label', 'help'];
+
+  constructor() {
+    super();
+    this._initialContent = this.innerHTML;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (this.isConnected && oldValue !== newValue) {
+      this.render();
+    }
+  }
+
   connectedCallback() {
-    const content = this.innerHTML;
+    if (!this._initialContent) this._initialContent = this.innerHTML;
+    this.render();
+  }
+
+  render() {
+    const label = this.getAttribute('label') || '';
+    const error = this.getAttribute('error') || '';
+    const help = this.getAttribute('help') || '';
+    const isInvalid = this.hasAttribute('invalid');
+    const isSuccess = this.hasAttribute('success');
+    const id = this.hasAttribute('for');
+
+    let statusColor = 'var(--c-600)'; // Padrão
+    if (isInvalid) statusColor = 'var(--c-error)';
+    if (isSuccess) statusColor = 'var(--c-success)';
+
     this.innerHTML = `
       <div class="flex flex-col">
-          <label>Label</label>
-          ${content}
-          <small class="text-color" style="--text-sm-lh:var(--s4);--tc:var(--c-600)">help text</small>
+          <label${id ? ' for="' + id + '"' : ''}><strong>${label}</strong></label>
+          ${this._initialContent}
           <small role="alert"
                  class="text-color"
-                 style="--tc:var(--c-error);
-                        --text-sm-lh:var(--s4)">error message</small>
+                 style="--tc:var(--c-error); 
+                        --text-sm-lh:var(--s4);
+                        display: ${error && isInvalid ? 'block' : 'none'}">
+            ${error}
+          </small>
+          <small class="text-color" 
+                 style="--text-sm-lh:var(--s4);
+                        --tc:${statusColor};
+                        display: ${error ? 'none' : 'block'}">
+            ${help}
+          </small>
       </div>
-    `
+    `;
   }
 }
 
+customElements.define('app-field', FieldControl);
 window.customElements.define('app-layout', CustomAppLayout)
 window.customElements.define('app-nav-item', CustomAppNavItem)
 window.customElements.define('app-btn', BaseButtton, { extends: 'button' })
