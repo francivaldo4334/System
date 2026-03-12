@@ -108,7 +108,7 @@
                 <div class="flex flex-col gap-f">
                     <app-state name="currency-value" value="0,00"></app-state>
                     <input is="app-input-text" placeholder="Type something..."/>
-                    <input is="app-input-currency" placeholder="Type currency..." oninput="setState('currency-value', this.valueAsDecimal)"/>
+                    <input is="app-input-currency" oninput="setState('currency-value', this.valueAsDecimal)"/>
                     <span  data-state="currency-value">00,00</span>
                 </div>
            </section>
