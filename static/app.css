@@ -558,7 +558,11 @@ label {
   line-height: var(--lh-md);
   color: var(--c-black);
 }
-
+.input-field input {
+  padding: 0;
+  min-height: var(--s8);
+  border: none;
+}
 /* sec:media */
 @media (width >=40rem) {}
 
