@@ -132,7 +132,7 @@ small {
 
 label {
   font-size: var(--txt-sm);
-  line-height: var(--s4);
+  line-height: var(--lh-sm);
 }
 
 *,
