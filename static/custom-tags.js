@@ -159,6 +159,7 @@ class CurrencyField extends HTMLInputElement {
   connectedCallback() {
     this.classList.add('input-field')
     this.inputMode = 'numeric';
+    this.maxLength = 29;
     if(!this.value) this.value = "0,00";
     this.addEventListener('input', (e) => this.formatCurrency(e))
     this.addEventListener('keypress', (e) => {
