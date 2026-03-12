@@ -115,7 +115,7 @@ class FieldControl extends HTMLElement {
     const help = this.getAttribute('help') || '';
     const isInvalid = this.hasAttribute('invalid');
     const isSuccess = this.hasAttribute('success');
-    const id = this.hasAttribute('for');
+    const id = this.getAttribute('for');
 
     let statusColor = 'var(--c-600)'; // Padrão
     if (isInvalid) statusColor = 'var(--c-error)';
@@ -125,11 +125,10 @@ class FieldControl extends HTMLElement {
       <div class="flex flex-col">
           <label${id ? ' for="' + id + '"' : ''}><strong>${label}</strong></label>
           ${this._initialContent}
+          <div class="border-t" style="--bt:2px;${isInvalid ? '--btc:var(--c-error)' : isSuccess ? '--btc:var(--c-success)' : 'display:none'}"></div>
           <small role="alert"
                  class="text-color"
-                 style="--tc:var(--c-error); 
-                        --text-sm-lh:var(--s4);
-                        display: ${error && isInvalid ? 'block' : 'none'}">
+                 style="--tc:var(--c-error); --text-sm-lh:var(--s4);display: ${error && isInvalid ? 'block' : 'none'}">
             ${error}
           </small>
           <small class="text-color" 
