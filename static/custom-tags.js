@@ -131,10 +131,7 @@ class FieldControl extends HTMLElement {
                  style="--tc:var(--c-error); --text-sm-lh:var(--s4);display: ${error && isInvalid ? 'block' : 'none'}">
             ${error}
           </small>
-          <small class="text-color" 
-                 style="--text-sm-lh:var(--s4);
-                        --tc:${statusColor};
-                        display: ${error ? 'none' : 'block'}">
+          <small style="display: ${error ? 'block' : 'none'}">
             ${help}
           </small>
       </div>
