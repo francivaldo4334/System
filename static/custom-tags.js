@@ -151,7 +151,7 @@ class TextField extends HTMLInputElement {
 class CurrencyField extends HTMLInputElement {
   get valueAsDecimal() {
     const cleanValue = this.value.replace(/\D/g, '');
-    const digits = cleanValue.slice(0,-2).replace(/^0+(?=\d)/, '') || '0'
+    const digits = cleanValue.slice(0, -2).replace(/^0+(?=\d)/, '') || '0'
     const decimals = cleanValue.slice(-2).padStart(2, '0')
     return `${digits}.${decimals}`
   }
@@ -178,16 +178,8 @@ class EanCodeField extends HTMLInputElement {
   constructor() {
     super();
   }
-  connectedCallback() {
-    this.classList.add('input-field')
-    this.addEventListener('input', (e) => {
-      if (this._isValidEanCode(e.target.value))
-        this.setCustomValidity(" ")
-      else
-        this.setCustomValidity("")
-    })
-  }
-  _isValidEanCode(code = "") {
+  checkValidity() {
+    const code = this.value;
     const calcCheckDigit = (baseCode = "") => {
       const sum = baseCode
         .split('')
@@ -200,13 +192,18 @@ class EanCodeField extends HTMLInputElement {
       return ((10 - (sum % 10)) % 10).toString();
     }
 
-    if (![14, 13, 12, 8].includes(code.length))
-      return false;
+    const cleanCode = code.replace(/\D/g, '')
 
-    if (calcCheckDigit(code.slice(0, code.length - 1)) !== Number(code.split(code.length - 1))) {
-      return false
-    }
-    return true
+    if (![14, 13, 12, 8].includes(cleanCode.length))
+      return false;
+    const base = cleanCode.slice(0, -1);
+    const actualDigit = cleanCode.slice(-1);
+    const expectedDigit = calcCheckDigit(base);
+
+    return actualDigit === expectedDigit;
+  }
+  connectedCallback() {
+    this.classList.add('input-field')
   }
 }
 window.customElements.define('app-layout', CustomAppLayout)

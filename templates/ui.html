@@ -107,8 +107,10 @@
                 <h5>Inputs</h5>
                 <div class="flex flex-col gap-f">
                     <app-state name="currency-value" value="0,00"></app-state>
+                    <app-state name="code-valid" value="false"></app-state>
                     <input is="app-input-text" placeholder="Type something..."/>
-                    <input is="app-input-ean" placeholder="Type something..."/>
+                    <input is="app-input-ean" placeholder="Type a ean code..." oninput="setState('code-valid', this.validity.valid)"/>
+                    <small><strong>Code: </strong><span  data-state="code-valid">false</span></small>
                     <input is="app-input-currency" oninput="setState('currency-value', this.valueAsDecimal)"/>
                     <small><strong>Decimal Value: </strong><span  data-state="currency-value">00,00</span></small>
                 </div>
