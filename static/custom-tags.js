@@ -86,8 +86,6 @@ class BaseButttonGhost extends BaseButtton {
     'shadow-inset': '--si:0',
     'text-color': '--tc:var(--c-black)',
     'hover-bg-color': '--bgch:var(--c-200)',
-    'active-bg-color': '--bgca:var(--c-200)',
-    'active-text-color': '--tca:var(--c-black)',
   }
 }
 
