@@ -140,7 +140,7 @@ class FieldControl extends HTMLElement {
 }
 
 class TextField extends HTMLInputElement {
-  constructor(){
+  constructor() {
     super();
   }
   connectedCallback() {
@@ -151,29 +151,62 @@ class TextField extends HTMLInputElement {
 class CurrencyField extends HTMLInputElement {
   get valueAsDecimal() {
     const cleanValue = this.value.replace(/\D/g, '');
-    return (parseInt(cleanValue) || 0)/100;
+    const digits = cleanValue.slice(0,-2).replace(/^0+(?=\d)/, '') || '0'
+    const decimals = cleanValue.slice(-2).padStart(2, '0')
+    return `${digits}.${decimals}`
   }
-  constructor(){
+  constructor() {
     super();
   }
   connectedCallback() {
     this.classList.add('input-field')
-    this.inputMode = 'numeric';
+    this.inputMode = 'decimal';
     this.maxLength = 29;
-    if(!this.value) this.value = "0,00";
-    this.addEventListener('input', (e) => this.formatCurrency(e))
-    this.addEventListener('keypress', (e) => {
-      if (!/[0-9]/.test(e.key)) {
-        e.preventDefault();
-      }
-    })
+    if (!this.value || this.value === "") this.formatCurrency();
+    this.addEventListener('input', () => this.formatCurrency())
   }
-  formatCurrency(e){
+  formatCurrency() {
     let floatValue = this.valueAsDecimal;
     this.value = floatValue.toLocaleString('pt-BR', {
       maximumFractionDigits: 2,
       minimumFractionDigits: 2,
     })
+    this.setSelectionRange(this.value.length, this.value.length)
+  }
+}
+class EanCodeField extends HTMLInputElement {
+  constructor() {
+    super();
+  }
+  connectedCallback() {
+    this.classList.add('input-field')
+    this.addEventListener('input', (e) => {
+      if (this._isValidEanCode(e.target.value))
+        this.setCustomValidity(" ")
+      else
+        this.setCustomValidity("")
+    })
+  }
+  _isValidEanCode(code = "") {
+    const calcCheckDigit = (baseCode = "") => {
+      const sum = baseCode
+        .split('')
+        .reverse()
+        .reduce((acc, n, i) => {
+          const weight = i % 2 === 0 ? 3 : 1;
+          return acc + weight * parseInt(n, 10);
+        }, 0);
+
+      return ((10 - (sum % 10)) % 10).toString();
+    }
+
+    if (![14, 13, 12, 8].includes(code.length))
+      return false;
+
+    if (calcCheckDigit(code.slice(0, code.length - 1)) !== Number(code.split(code.length - 1))) {
+      return false
+    }
+    return true
   }
 }
 window.customElements.define('app-layout', CustomAppLayout)
@@ -184,3 +217,4 @@ window.customElements.define('app-btn-ghost', BaseButttonGhost, { extends: 'butt
 window.customElements.define('app-field', FieldControl)
 window.customElements.define('app-input-text', TextField, { extends: 'input' })
 window.customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
+window.customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
