@@ -43,6 +43,9 @@ class CustomButton extends HTMLButtonElement {
 
   connectedCallback() {
     const isIconOnly = this.hasAttribute("isicononly")
+    if (isIconOnly){
+      this.baseStyle['min-w'] = '--minw:var(--xs)'
+    }
     applyStyles(this, this.baseStyle);
   }
 }
