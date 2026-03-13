@@ -73,7 +73,7 @@ class BaseButttonOutlined extends BaseButtton {
     'bg-color': '--bgc:transparent',
     'border-f': '--bf:1px;--bfc:var(--c-300)',
     'text-color': '--tc:var(--c-black)',
-    'hover-bg-color': '--bgch:var(--c-50)',
+    'hover-bg-color': '--bgch:var(--c-200)',
     'hover-shadow': '--s:0.1',
     'shadow-inset': '--si:0',
   }
@@ -85,7 +85,7 @@ class BaseButttonGhost extends BaseButtton {
     'border-f': '--bf:0',
     'shadow-inset': '--si:0',
     'text-color': '--tc:var(--c-black)',
-    'hover-bg-color': '--bgch:var(--c-100)',
+    'hover-bg-color': '--bgch:var(--c-200)',
     'active-bg-color': '--bgca:var(--c-200)',
     'active-text-color': '--tca:var(--c-black)',
   }
