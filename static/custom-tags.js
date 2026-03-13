@@ -42,6 +42,7 @@ class CustomButton extends HTMLButtonElement {
   baseStyle = {};
 
   connectedCallback() {
+    const isIconOnly = this.hasAttribute("isicononly")
     applyStyles(this, this.baseStyle);
   }
 }
