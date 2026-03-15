@@ -149,6 +149,7 @@
                            oninput="setState('code-valid', this.checkValidty())" />
                     <small><strong>Code:</strong><span data-state="code-valid">false</span></small>
                     <input is="app-input-currency"
+                           class="input"
                            oninput="setState('currency-value', this.valueAsDecimal)" />
                     <small><strong>Decimal Value:</strong><span data-state="currency-value">00,00</span></small>
                 </div>
@@ -157,13 +158,13 @@
                 <h5>Field Controler</h5>
                 <div class="flex flex-col gap-f">
                     <app-field label="Label" for="input-id" error="error message" help="help">
-                    <input id="input-id" is="app-input-text" />
+                    <input id="input-id" class="input" />
                     </app-field>
                     <app-field label="Label" for="input-id" error="error message" invalid help="help">
-                    <input id="input-id" is="app-input-text" />
+                    <input id="input-id" class="input" />
                     </app-field>
                     <app-field label="Label" for="input-id" error="error message" success help="help">
-                    <input id="input-id" is="app-input-text" />
+                    <input id="input-id" class="input" />
                     </app-field>
                 </div>
             </section>

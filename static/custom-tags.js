@@ -123,10 +123,7 @@ class AppSelect extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
       <style>
-        .container { 
-          anchor-name: --select-anchor; 
-          position: relative;
-        }
+        .container {  anchor-name: --select-anchor;  position: relative; }
         [popover] {
           margin: 0;
           padding: 0;
@@ -139,26 +136,24 @@ class AppSelect extends HTMLElement {
           min-width: anchor-size(width);
           position-try-options: flip-block;
         }
-        button {
-          all: unset;
-          display: block;
-          width: 100%;
-          cursor: pointer;
-        }
-        [popover]:-internal-popover-in-top-layer::backdrop {
-          display: none;
+        button { all: unset; display: block; width: 100%; cursor: pointer; }
+        [popover]:-internal-popover-in-top-layer::backdrop { display: none; }
+        ::slotted([slot="trigger"]) {
+          position: relative;
         }
         ::slotted([slot="trigger"])::after {
-          content: "---";
-          width: var(--s4);
-          height: var(--s4);
-          margin: auto;
-          flex-shrink: 0;
+          content: "***";
           background-color: currentColor;
           -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXVwLWRvd24taWNvbiBsdWNpZGUtY2hldnJvbnMtdXAtZG93biI+PHBhdGggZD0ibTcgMTUgNSA1IDUtNSIvPjxwYXRoIGQ9Im03IDkgNS01IDUgNSIvPjwvc3ZnPg==") no-repeat center;
           mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXVwLWRvd24taWNvbiBsdWNpZGUtY2hldnJvbnMtdXAtZG93biI+PHBhdGggZD0ibTcgMTUgNSA1IDUtNSIvPjxwYXRoIGQ9Im03IDkgNS01IDUgNSIvPjwvc3ZnPg==") no-repeat center;
           mask-size: contain;
           transition: transform 0.2s ease;
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: var(--s2) 0;
+          margin-right: var(--s1);
         }
       </style>
       <div class="container">
@@ -177,13 +172,13 @@ class AppSelect extends HTMLElement {
     const popover = this.shadowRoot.querySelector('[popover]');
     const optionsSlot = this.shadowRoot.querySelector('slot[name="content"]');
     optionsSlot.addEventListener('click', (e) => {
-      const item = e.target.closest('[data-value]');
+      const item = e.target.closest('[value]');
       const allItems = optionsSlot.assignedElements({ flatten: true });
-      allItems.forEach(el => el.removeAttribute('aria-selected'));
-      item.setAttribute('aria-selected', 'true');
+      allItems.forEach(el => el.removeAttribute('selected'));
+      item.setAttribute('selected', 'true');
       if (item) {
         const trigger = this.querySelector('[slot="trigger"]');
-        const label = trigger?.querySelector('[data-label]')
+        const label = trigger?.querySelector('[label]')
         if (label) label.innerText = item.innerText;
         popover.hidePopover();
         this.dispatchEvent(new CustomEvent('change', {
@@ -201,10 +196,10 @@ class AppSelect extends HTMLElement {
 class SelectTrigerField extends HTMLElement {
   connectedCallback() {
     applyStyles(this, {
-      'input-field': '',
-      'icon-chevron': '',
+      'input': '',
+      'btn': '',
+      'btn-outlined': '',
       'grid-cols': '--gc: 1fr auto',
-      'hover-bg-color': '--bgc:var(--c-200)',
     })
   }
 }
@@ -220,12 +215,10 @@ class SelectOptionField extends HTMLElement {
   connectedCallback() {
     if (!this.hasAttribute('role')) this.setAttribute('role', 'option');
     applyStyles(this, {
-      'rounded-xs': 'display:block;',
-      'p-x': '--px:12px;',
-      'p-y': '--py:6px;',
-      'hover-bg-color': '--bgc:var(--c-300)',
-      'active-bg-color': '--bgca:var(--c-900)',
-      'active-text-color': '--tca:var(--c-white)',
+      'rounded': '--r:var(--s1);display:block;',
+      'btn': '',
+      'btn-ghost': '',
+      'input': '',
     })
   }
 }

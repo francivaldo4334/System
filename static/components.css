@@ -57,6 +57,16 @@
   width: var(--xs);
 }
 
+.select {
+  padding: var(--s1) var(--s3);
+  min-height: var(--s8);
+  border: var(--spx) solid var(--c-300);
+  border-radius: var(--s1);
+  font-size: var(--txt-md);
+  line-height: var(--lh-md);
+  color: var(--c-black);
+}
+
 .container {
   padding: var(--s2);
   background-color: var(--c-white);
