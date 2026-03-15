@@ -116,11 +116,10 @@ class EanCodeField extends HTMLInputElement {
 class AppSelect extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: 'open', delegatesFocus: true });
   }
 
   connectedCallback() {
-
     this.shadowRoot.innerHTML = `
       <style>
         .container {  anchor-name: --select-anchor;  position: relative; }
@@ -137,6 +136,10 @@ class AppSelect extends HTMLElement {
           position-try-options: flip-block;
         }
         button { all: unset; display: block; width: 100%; cursor: pointer; }
+        button:focus-visible {
+          outline: var(--spx) solid var(--c-blue);
+          border-radius: var(--s1);
+        }
         [popover]:-internal-popover-in-top-layer::backdrop { display: none; }
         ::slotted([slot="trigger"]) {
           position: relative;

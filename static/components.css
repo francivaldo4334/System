@@ -159,3 +159,8 @@ app-select [value][selected]::before {
   width: var(--s4);
   margin-right: var(--s1);
 }
+
+*:focus-visible {
+  --fv: var(--spx) solid var(--c-blue);
+  outline: var(--fv);
+}
