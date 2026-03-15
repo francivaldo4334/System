@@ -1,0 +1,72 @@
+.input {
+  padding: var(--s1) var(--s3);
+  min-height: var(--s8);
+  border: var(--spx) solid var(--c-300);
+  border-radius: var(--s1);
+  font-size: var(--txt-md);
+  line-height: var(--lh-md);
+  color: var(--c-black);
+}
+
+.input input {
+  padding: 0;
+  min-height: var(--s8);
+  border: none;
+}
+
+.btn {
+  min-width: var(--sm);
+  min-height: var(--xs);
+  margin: 0;
+  border-radius: var(--s1);
+  font-weight: 600;
+  border: var(--spx) solid var(--c-300);
+  background-color: var(--c-100);
+  color: var(--c-black);
+
+  &:hover {
+    background-color: var(--c-200);
+  }
+
+  &:active {
+    background-color: var(--c-900);
+    color: var(--c-white)
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    color: var(--c-black)
+  }
+}
+
+
+
+.btn-sguare {
+  min-width: var(--xs);
+}
+
+.btn-outlined {
+  border: var(--spx) solid var(--c-300);
+  background-color: transparent;
+  color: var(--c-balck);
+
+  &:hover {
+    background-color: var(--c-200);
+  }
+}
+
+.btn-ghost {
+  background-color: transparent;
+  border: none;
+  color: var(--c-black);
+
+  &:hover {
+    background-color: var(--c-200);
+  }
+}
+
+.container {
+  padding: var(--s2);
+  background-color: var(--c-white);
+  border-radius: var(--s2);
+}

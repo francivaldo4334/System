@@ -200,56 +200,6 @@ label {
   --bgca: initial;
 }
 
-.bg-pattern-lines-horizontal {
-  opacity: 0.8;
-  background-size: 20px 20px;
-  background-image: repeating-linear-gradient(0deg, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
-}
-
-.bg-pattern-lines-vertical {
-  opacity: 0.8;
-  background-size: 20px 20px;
-  background-image: repeating-linear-gradient(to right, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
-}
-
-.bg-pattern-boxes {
-  opacity: 0.8;
-  --pattern-space: var(--s4);
-  background-image: linear-gradient(var(--c-200) 1px, transparent 1px), linear-gradient(to right, var(--c-200) 1px, #00000000 1px);
-  background-size: var(--pattern-space) var(--pattern-space);
-}
-
-.bg-pattern-polka {
-  --pattern-space: var(--s4);
-  --pattern-delta: calc(var(--pattern-space) / 2 * -1 + var(--spx) / 2);
-  opacity: 0.8;
-  background-image: radial-gradient(var(--c-200) var(--spx), #00000000 var(--spx));
-  background-size: var(--pattern-space) var(--pattern-space);
-  background-position: var(--pattern-delta) var(--pattern-delta);
-}
-
-.bg-pattern-diagonal,
-.disabled-bg-pattern-diagonal:disabled {
-  --_pattern-accent: var(--pattern-accent, var(--c-800));
-  --_pattern-bg: var(--pattern-bg, var(--c-50));
-  --pattern-thickness: var(--spx);
-  --pattern-size: var(--s2);
-  opacity: 0.3;
-  background-size: var(--pattern-size) var(--pattern-size);
-  background-image: repeating-linear-gradient(45deg,
-      var(--_pattern-accent) 0,
-      var(--_pattern-accent) var(--pattern-thickness),
-      var(--_pattern-bg) 0,
-      var(--_pattern-bg) 50%);
-}
-
-.bg-pattern-paper {
-  background-color: #fff;
-  background-image: linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
-    linear-gradient(#eee .1em, transparent .1em);
-  background-size: 100% 1.2em;
-}
-
 .w {
   width: var(--w);
   --w: initial;
@@ -475,32 +425,9 @@ label {
   --gy: initial;
 }
 
-.rounded-xs {
-  border-radius: var(--s1);
-}
-
-.rounded-sm {
-  border-radius: var(--s2);
-}
-
-.rounded-md {
-  border-radius: var(--s3);
-}
-
-.rounded-lg {
-  border-radius: var(--s4);
-}
-
-.rounded-xl {
-  border-radius: var(--s5);
-}
-
-.rounded-2xl {
-  border-radius: var(--s6);
-}
-
-.rounded-3xl {
-  border-radius: var(--s7);
+.rounded {
+  border-radius: var(--r, var(--s1));
+  --r: initial;
 }
 
 .shadow {
@@ -549,20 +476,63 @@ label {
 .hover-rotate:hover:not(:active):not(:disabled) {
   transform: translateY(-4px) rotate(5deg);
 }
-.input-field {
-  padding: var(--s1) var(--s3);
-  min-height: var(--s8);
-  border: var(--spx) solid var(--c-300);
-  border-radius: var(--s1);
-  font-size: var(--txt-md);
-  line-height: var(--lh-md);
-  color: var(--c-black);
+
+.grid-cols {
+  display: grid;
+  grid-template-columns: var(--gc);
+  --gc: initial;
 }
-.input-field input {
-  padding: 0;
-  min-height: var(--s8);
-  border: none;
+
+.bg-pattern-lines-horizontal {
+  opacity: 0.8;
+  background-size: 20px 20px;
+  background-image: repeating-linear-gradient(0deg, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
 }
+
+.bg-pattern-lines-vertical {
+  opacity: 0.8;
+  background-size: 20px 20px;
+  background-image: repeating-linear-gradient(to right, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
+}
+
+.bg-pattern-boxes {
+  opacity: 0.8;
+  --pattern-space: var(--s4);
+  background-image: linear-gradient(var(--c-200) 1px, transparent 1px), linear-gradient(to right, var(--c-200) 1px, #00000000 1px);
+  background-size: var(--pattern-space) var(--pattern-space);
+}
+
+.bg-pattern-polka {
+  --pattern-space: var(--s4);
+  --pattern-delta: calc(var(--pattern-space) / 2 * -1 + var(--spx) / 2);
+  opacity: 0.8;
+  background-image: radial-gradient(var(--c-200) var(--spx), #00000000 var(--spx));
+  background-size: var(--pattern-space) var(--pattern-space);
+  background-position: var(--pattern-delta) var(--pattern-delta);
+}
+
+.bg-pattern-diagonal,
+.disabled-bg-pattern-diagonal:disabled {
+  --_pattern-accent: var(--pattern-accent, var(--c-800));
+  --_pattern-bg: var(--pattern-bg, var(--c-50));
+  --pattern-thickness: var(--spx);
+  --pattern-size: var(--s2);
+  opacity: 0.3;
+  background-size: var(--pattern-size) var(--pattern-size);
+  background-image: repeating-linear-gradient(45deg,
+      var(--_pattern-accent) 0,
+      var(--_pattern-accent) var(--pattern-thickness),
+      var(--_pattern-bg) 0,
+      var(--_pattern-bg) 50%);
+}
+
+.bg-pattern-paper {
+  background-color: #fff;
+  background-image: linear-gradient(90deg, transparent 79px, #000000 79px, #000000 81px, transparent 81px),
+    linear-gradient(#eee .1em, transparent .1em);
+  background-size: 100% 1.2em;
+}
+
 /* sec:media */
 @media (width >=40rem) {}
 

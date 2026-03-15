@@ -3,6 +3,7 @@
 {% block title %}App UI Styleguide{% endblock %}
 {% block style %}
     <link rel="stylesheet" href="{% static 'app.css' %}">
+    <link rel="stylesheet" href="{% static 'components.css' %}">
 {% endblock %}
 {% block body %}
     <app-state name="section-style" value="--minw:var(--lg);--minh:var(--xl);" at="style"></app-state>
@@ -55,22 +56,43 @@
             </section>
             <section data-state="section-class,section-style">
                 <h5>Radius</h5>
-                <app-state name="rounded-style" value="--b:var(--sm);--bf:2px;--bfc:var(--c-400)" at="style"></app-state>
+                <app-state name="rounded-class" value="rounded box bg-pattern-diagonal border-f" at="class"></app-state>
                 <div class="flex flex-wrap gap-f">
-                    <div data-state="rounded-style"
-                         class="rounded-xs box bg-pattern-diagonal border-f"></div>
-                    <div data-state="rounded-style"
-                         class="rounded-sm box bg-pattern-diagonal border-f"></div>
-                    <div data-state="rounded-style"
-                         class="rounded-md box bg-pattern-diagonal border-f"></div>
-                    <div data-state="rounded-style"
-                         class="rounded-lg box bg-pattern-diagonal border-f"></div>
-                    <div data-state="rounded-style"
-                         class="rounded-xl box bg-pattern-diagonal border-f"></div>
-                    <div data-state="rounded-style"
-                         class="rounded-2xl box bg-pattern-diagonal border-f"></div>
-                    <div data-state="rounded-style"
-                         class="rounded-3xl box bg-pattern-diagonal border-f"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s1)"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s2)"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s3)"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s4)"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s5)"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s6)"></div>
+                    <div data-state="rounded-class"
+                         style="--b:var(--sm);
+                                --bf:2px;
+                                --bfc:var(--c-400);
+                                --r:var(--s7)"></div>
                 </div>
             </section>
             <section data-state="section-class,section-style">
@@ -93,12 +115,10 @@
                         <button is="app-btn" isicononly>X</button>
                         <button is="app-btn" disabled isicononly>x</button>
                     </div>
-
                     <div class="flex flex-col gap-y">
                         <button is="app-btn-outlined" isicononly>X</button>
                         <button is="app-btn-outlined" disabled isicononly>x</button>
                     </div>
-
                     <div class="flex flex-col gap-y">
                         <button is="app-btn-ghost" isicononly>X</button>
                         <button is="app-btn-ghost" disabled isicononly>x</button>
@@ -122,25 +142,41 @@
                 <div class="flex flex-col gap-f">
                     <app-state name="currency-value" value="0,00"></app-state>
                     <app-state name="code-valid" value="false"></app-state>
-                    <input is="app-input-text" placeholder="Type something..."/>
-                    <input is="app-input-ean" placeholder="Type a ean code..." oninput="setState('code-valid', this.validity.valid)"/>
-                    <small><strong>Code: </strong><span  data-state="code-valid">false</span></small>
-                    <input is="app-input-currency" oninput="setState('currency-value', this.valueAsDecimal)"/>
-                    <small><strong>Decimal Value: </strong><span  data-state="currency-value">00,00</span></small>
+                    <input is="app-input-text" placeholder="Type something..." />
+                    <input is="app-input-ean"
+                           placeholder="Type a ean code..."
+                           oninput="setState('code-valid', this.validity.valid)" />
+                    <small><strong>Code:</strong><span data-state="code-valid">false</span></small>
+                    <input is="app-input-currency"
+                           oninput="setState('currency-value', this.valueAsDecimal)" />
+                    <small><strong>Decimal Value:</strong><span data-state="currency-value">00,00</span></small>
                 </div>
-           </section>
+            </section>
             <section data-state="section-class,section-style">
                 <h5>Field Controler</h5>
                 <div class="flex flex-col gap-f">
                     <app-field label="Label" for="input-id" error="error message" help="help">
-                    <input id="input-id" is="app-input-text"/>
+                    <input id="input-id" is="app-input-text" />
                     </app-field>
                     <app-field label="Label" for="input-id" error="error message" invalid help="help">
-                    <input id="input-id" is="app-input-text"/>
+                    <input id="input-id" is="app-input-text" />
                     </app-field>
                     <app-field label="Label" for="input-id" error="error message" success help="help">
-                    <input id="input-id" is="app-input-text"/>
+                    <input id="input-id" is="app-input-text" />
                     </app-field>
+                </div>
+            </section>
+            <section data-state="section-class,section-style">
+                <h5>Selects</h5>
+                <div class="flex flex-col gap-f">
+                    <app-select>
+                    <app-select-trigger slot="trigger">
+                    <span data-label>hellow</span>
+                    </app-select-trigger>
+                    <app-select-content slot="content">
+                    <app-select-option data-value="1">Item 1</app-select-option>
+                    </app-select-content>
+                    </app-select>
                 </div>
             </section>
         </section>
