@@ -162,7 +162,7 @@ class AppSelect extends HTMLElement {
     const optionsSlot = this.shadowRoot.querySelector('slot[name="content"]');
     optionsSlot.addEventListener('click', (e) => {
       const item = e.target.closest('[value]');
-      const allItems = optionsSlot.assignedElements({ flatten: true });
+      const allItems = this.querySelectorAll('[value]');
       allItems.forEach(el => el.removeAttribute('selected'));
       item.setAttribute('selected', 'true');
       if (item) {
