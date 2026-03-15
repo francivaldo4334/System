@@ -169,6 +169,10 @@ label {
   --tch: initial;
 }
 
+.text-start {
+  text-align: start;
+}
+
 .hover-text:hover {
   font-size: var(--tsh, var(--txt-md));
   line-height: var(--thh, var(--lh-md));
@@ -290,6 +294,11 @@ label {
 .items-center {
   align-items: center;
 }
+
+.items-end {
+  align-items: end;
+}
+
 
 .justify-between {
   justify-content: space-between;

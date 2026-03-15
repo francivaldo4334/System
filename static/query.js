@@ -45,4 +45,4 @@ class CustomAjaxForm extends HTMLFormElement {
   }
 }
 
-window.customElements.define('ajax-form', CustomAjaxForm, { extends: 'form' })
+window.customElements.define('app-ajax-form', CustomAjaxForm, { extends: 'form' })

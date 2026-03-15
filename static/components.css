@@ -23,6 +23,7 @@
   border: var(--spx) solid var(--c-300);
   background-color: var(--c-100);
   color: var(--c-black);
+  padding: var(--s1) var(--s4);
 
   &:hover {
     background-color: var(--c-200);
@@ -158,4 +159,14 @@ app-select [value][selected]::before {
 *:focus-visible {
   --fv: var(--spx) solid var(--c-blue);
   outline: var(--fv);
+}
+
+.active {
+  background-color: var(--c-900);
+  color: var(--c-white);
+
+  &:hover {
+    background-color: var(--c-900);
+    color: var(--c-white);
+  }
 }

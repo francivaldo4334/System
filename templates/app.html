@@ -2,17 +2,33 @@
 {% load static %}
 {% block style %}
     <link rel="stylesheet" href="{% static 'app.css' %}">
+    <link rel="stylesheet" href="{% static 'components.css' %}">
 {% endblock %}
 {% block body %}
-    <div class="grid grid-cols" style="--gc: calc(var(--lg) + var(--s4)) auto">
-        <aside>
-            <nav>
-                <!-- <app-nav-item endpoint="{% url 'schedule_view' %}" store="main"> ok </app-nav-item> -->
-                <!-- <app-nav-item endpoint="{% url 'schedule_view' %}" store="main"> ok </app-nav-item> -->
+    <div class="grid grid-cols h-screen" style="--gc: 15rem auto">
+        <aside class="border-r p-f flex flex-col gap-y">
+            <span class="flex items-end m-x" style="--mx:auto">
+                <h1>P</h1>
+                <h2>onto</h2>
+                <h1>Á</h1>
+                <h2>gio</h2>
+            </span>
+            <nav class="flex flex-col gap-y" style="--gy:var(--s1)">
+                <h4>Agenda</h4>
+                <div class="border-b"></div>
+                <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}" default>
+                Eventos
+                </app-nav-option>
             </nav>
         </aside>
         <main>
             {% include 'schedule.html' %}
         </main>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'state.js' %}"></script>
+    <script src="{% static 'query.js' %}"></script>
+    <script src="{% static 'custom-tags.js' %}"></script>
+    <script src="{% static 'components.js' %}"></script>
 {% endblock %}
