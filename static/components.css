@@ -35,34 +35,26 @@
 
   &:disabled {
     opacity: 0.3;
-    color: var(--c-black)
+    color: var(--c-black);
+    cursor: not-allowed;
   }
-}
-
-
-
-.btn-square {
-  min-width: var(--xs);
 }
 
 .btn-outlined {
   border: var(--spx) solid var(--c-300);
   background-color: transparent;
   color: var(--c-balck);
-
-  &:hover {
-    background-color: var(--c-200);
-  }
 }
 
 .btn-ghost {
   background-color: transparent;
   border: none;
   color: var(--c-black);
+}
 
-  &:hover {
-    background-color: var(--c-200);
-  }
+.btn-square {
+  min-width: var(--xs);
+  width: var(--xs);
 }
 
 .container {

@@ -117,23 +117,23 @@
                     </div>
                     <div class="flex flex-col gap-y">
                         <button class="btn btn-outlined btn-square">X</button>
-                        <button class="btn btn-outlined" disabled>x</button>
+                        <button class="btn btn-outlined btn-square" disabled>x</button>
                     </div>
                     <div class="flex flex-col gap-y">
-                        <button is="app btn-square-btn-ghost">X</button>
-                        <button is="app btn-square-btn-ghost" disabled>x</button>
+                        <button class="btn btn-ghost btn-square">X</button>
+                        <button class="btn btn-ghost btn-square" disabled>x</button>
                     </div>
                     <div class="flex flex-col gap-y">
-                        <button class="btn btn-square">Default</button>
+                        <button class="btn">Default</button>
                         <button class="btn" disabled>Default</button>
                     </div>
                     <div class="flex flex-col gap-y">
-                        <button is="app-btn-outlined">Default</button>
-                        <button is="app-btn-outlined" disabled>Default</button>
+                        <button class="btn btn-outlined">Default</button>
+                        <button class="btn btn-outlined" disabled>Default</button>
                     </div>
                     <div class="flex flex-col gap-y">
-                        <button is="app-btn-ghost">Default</button>
-                        <button is="app-btn-ghost" disabled>Default</button>
+                        <button class="btn btn-ghost">Default</button>
+                        <button class="btn btn-ghost" disabled>Default</button>
                     </div>
                 </div>
             </section>
@@ -142,10 +142,11 @@
                 <div class="flex flex-col gap-f">
                     <app-state name="currency-value" value="0,00"></app-state>
                     <app-state name="code-valid" value="false"></app-state>
-                    <input is="app-input-text" placeholder="Type something..." />
+                    <input class="input" placeholder="Type something..." />
                     <input is="app-input-ean"
+                           class="input"
                            placeholder="Type a ean code..."
-                           oninput="setState('code-valid', this.validity.valid)" />
+                           oninput="setState('code-valid', this.checkValidty())" />
                     <small><strong>Code:</strong><span data-state="code-valid">false</span></small>
                     <input is="app-input-currency"
                            oninput="setState('currency-value', this.valueAsDecimal)" />

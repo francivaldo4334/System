@@ -36,6 +36,7 @@ class FieldControl extends HTMLElement {
     const isSuccess = this.hasAttribute('success');
     const id = this.getAttribute('for');
 
+    let statusColor;
     if (isInvalid) statusColor = 'var(--c-error)';
     if (isSuccess) statusColor = 'var(--c-success)';
 
@@ -87,6 +88,7 @@ class EanCodeField extends HTMLInputElement {
     super();
   }
   checkValidity() {
+    debugger
     const code = this.value;
     const calcCheckDigit = (baseCode = "") => {
       const sum = baseCode
