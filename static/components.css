@@ -87,19 +87,11 @@ app-select [slot="trigger"] {
   }
 }
 
-app-select [slot="trigger"]::after {
-  content: "***";
-  background-color: currentColor;
-  -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXVwLWRvd24taWNvbiBsdWNpZGUtY2hldnJvbnMtdXAtZG93biI+PHBhdGggZD0ibTcgMTUgNSA1IDUtNSIvPjxwYXRoIGQ9Im03IDkgNS01IDUgNSIvPjwvc3ZnPg==") no-repeat center;
-  mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXVwLWRvd24taWNvbiBsdWNpZGUtY2hldnJvbnMtdXAtZG93biI+PHBhdGggZD0ibTcgMTUgNSA1IDUtNSIvPjxwYXRoIGQ9Im03IDkgNS01IDUgNSIvPjwvc3ZnPg==") no-repeat center;
-  mask-size: contain;
-  transition: transform 0.2s ease;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: var(--s2) 0;
-  margin-right: var(--s1);
+app-select [slot="trigger"] {
+  background-image: linear-gradient(45deg, #0000 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, #0000 50%);
+  background-position: calc(100% - 20px) calc(1px + 50%), calc(100% - 16.1px) calc(1px + 50%);
+  background-repeat: no-repeat;
+  background-size: 4px 4px, 4px 4px;
 }
 
 app-select [slot="content"] {
@@ -128,6 +120,8 @@ app-select [value] {
   border: none;
   display: grid;
   grid-template-columns: auto 1fr;
+  padding-left: var(--s6);
+  position: relative;
 
   &:hover {
     background-color: var(--c-200);
@@ -145,19 +139,20 @@ app-select [value] {
   }
 }
 
-app-select [value][selected] {
-  padding-left: var(--s1);
-}
-
 app-select [value][selected]::before {
-  content: "***";
-  background-color: currentColor;
-  -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWljb24gbHVjaWRlLWNoZWNrIj48cGF0aCBkPSJNMjAgNiA5IDE3bC01LTUiLz48L3N2Zz4=") no-repeat center;
-  mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWljb24gbHVjaWRlLWNoZWNrIj48cGF0aCBkPSJNMjAgNiA5IDE3bC01LTUiLz48L3N2Zz4=") no-repeat center;
-  mask-size: contain;
-  transition: transform 0.2s ease;
-  width: var(--s4);
-  margin-right: var(--s1);
+  content: "\2713";
+  color: currentColor;
+  font-size: var(--s4);
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  vertical-align: middle;
+  margin: auto;
+  position: absolute;
+  left: var(--s2);
+  top: 50%;
+  transform: translateY(-50%);
+  padding-block: auto;
 }
 
 *:focus-visible {
