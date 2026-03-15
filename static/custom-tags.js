@@ -141,20 +141,6 @@ class AppSelect extends HTMLElement {
         ::slotted([slot="trigger"]) {
           position: relative;
         }
-        ::slotted([slot="trigger"])::after {
-          content: "***";
-          background-color: currentColor;
-          -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXVwLWRvd24taWNvbiBsdWNpZGUtY2hldnJvbnMtdXAtZG93biI+PHBhdGggZD0ibTcgMTUgNSA1IDUtNSIvPjxwYXRoIGQ9Im03IDkgNS01IDUgNSIvPjwvc3ZnPg==") no-repeat center;
-          mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXVwLWRvd24taWNvbiBsdWNpZGUtY2hldnJvbnMtdXAtZG93biI+PHBhdGggZD0ibTcgMTUgNSA1IDUtNSIvPjxwYXRoIGQ9Im03IDkgNS01IDUgNSIvPjwvc3ZnPg==") no-repeat center;
-          mask-size: contain;
-          transition: transform 0.2s ease;
-          position: absolute;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          margin: var(--s2) 0;
-          margin-right: var(--s1);
-        }
       </style>
       <div class="container">
         <button popovertarget="options-menu" popovertargetaction="toggle">
@@ -193,40 +179,7 @@ class AppSelect extends HTMLElement {
     });
   }
 }
-class SelectTrigerField extends HTMLElement {
-  connectedCallback() {
-    applyStyles(this, {
-      'input': '',
-      'btn': '',
-      'btn-outlined': '',
-      'grid-cols': '--gc: 1fr auto',
-    })
-  }
-}
-class SelectContentField extends HTMLElement {
-  connectedCallback() {
-    applyStyles(this, {
-      'shadow': '',
-      'container': 'display: block;',
-    })
-  }
-}
-class SelectOptionField extends HTMLElement {
-  connectedCallback() {
-    if (!this.hasAttribute('role')) this.setAttribute('role', 'option');
-    applyStyles(this, {
-      'rounded': '--r:var(--s1);display:block;',
-      'btn': '',
-      'btn-ghost': '',
-      'input': '',
-    })
-  }
-}
-
 window.customElements.define('app-field', FieldControl)
 window.customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 window.customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
-window.customElements.define('app-select-trigger', SelectTrigerField)
-window.customElements.define('app-select-content', SelectContentField)
-window.customElements.define('app-select-option', SelectOptionField)
-window.customElements.define('app-select', AppSelect);
+window.customElements.define('app-select', AppSelect)
