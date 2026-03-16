@@ -12,33 +12,50 @@
                 <h2>{% trans 'Ágio' %}</h2>
             </span>
             <nav class="flex flex-col gap-y" style="--gy:var(--s1)">
-                <app-nav-option 
-                    store="nav-menu"
-                    endpoint="{% url 'schedule_view' %}"
-                > Vendas </app-nav-option>
-                <h5 class='border-t'>Agenda</h5>
+                <h5 class='border-t'>{% trans 'Agenda' %}</h5>
                 <app-nav-option 
                     store="nav-menu"
                     endpoint="{% url 'schedule_view' %}"
                     default
-                > Agendamentos </app-nav-option>
-                <app-nav-option 
-                    store="nav-menu"
-                    endpoint="{% url 'redoc' %}"
-                > Tarefas </app-nav-option>
-                <h5 class='border-t'>Financeiro</h5>
+                > {% trans 'Calendário' %} </app-nav-option>
                 <app-nav-option 
                     store="nav-menu"
                     endpoint="{% url 'schedule_view' %}"
-                > Agendamentos </app-nav-option>
+                > {% trans 'Agendamentos' %} </app-nav-option>
                 <app-nav-option 
                     store="nav-menu"
                     endpoint="{% url 'redoc' %}"
-                > Tarefas </app-nav-option>
-                <!-- <app-nav-option --> 
-                    <!-- store="nav-menu" -->
-                    <!-- endpoint="{% url 'schedule_view' %}" -->
-                <!-- > Eventos </app-nav-option> -->
+                > {% trans 'Tarefas' %} </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > {% trans 'Eventos' %} </app-nav-option>
+
+                <h5 class='border-t'>{% trans 'Caixa' %}</h5>
+
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > {% trans 'Vendas' %} </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > {% trans 'Sessões' %} </app-nav-option>
+
+                <h5 class='border-t'>{% trans 'Estoque' %}</h5>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > {% trans 'Produtos' %} </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > {% trans 'Lotes' %} </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > {% trans 'Quatidades' %} </app-nav-option>
+
             </nav>
         </aside>
         <main>
