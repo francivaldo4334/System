@@ -1,29 +1,25 @@
-.input {
-  padding: var(--s1) var(--s3);
+.input, .btn, app-select [slot="trigger"], app-select [value] {
+  min-width: var(--sm);
   min-height: var(--s8);
-  border: var(--spx) solid var(--c-300);
+  padding: 0 var(--s3);
   border-radius: var(--s1);
+  border: var(--spx) solid var(--c-300);
+  color: var(--c-black);
   font-size: var(--txt-md);
   line-height: var(--lh-md);
-  color: var(--c-black);
-}
-
-.input input {
-  padding: 0;
-  min-height: var(--s8);
-  border: none;
-}
-
-.btn {
-  min-width: var(--sm);
-  min-height: var(--xs);
+  align-content: center;
   margin: 0;
-  border-radius: var(--s1);
+  & input {
+    padding: 0;
+    margin: 0;
+    min-height: var(--s8);
+    border: none;
+    width: 100%;
+  }
+}
+
+.btn, app-select [slot="trigger"],app-select [value] {
   font-weight: 600;
-  border: var(--spx) solid var(--c-300);
-  background-color: var(--c-100);
-  color: var(--c-black);
-  padding: var(--s1) var(--s4);
 
   &:hover {
     background-color: var(--c-200);
@@ -40,7 +36,12 @@
     cursor: not-allowed;
   }
 }
-
+.btn {
+  background-color: var(--c-100);
+}
+app-select [slot="trigger"] {
+  background-color: transparent;
+}
 .btn-outlined {
   border: var(--spx) solid var(--c-300);
   background-color: transparent;
@@ -56,37 +57,7 @@
 .btn-square {
   min-width: var(--xs);
   width: var(--xs);
-  padding: var(--s2);
-}
-
-app-select [slot="trigger"] {
-  border: var(--spx) solid var(--c-300);
-  padding: var(--s1) var(--s3);
-  min-height: var(--s8);
-  border-radius: var(--s1);
-  font-size: var(--txt-md);
-  line-height: var(--lh-md);
-  color: var(--c-black);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  background-color: transparent;
-  font-weight: 600;
-  color: var(--c-black);
-
-  &:hover {
-    background-color: var(--c-200);
-  }
-
-  &:active {
-    background-color: var(--c-900);
-    color: var(--c-white)
-  }
-
-  &:disabled {
-    opacity: 0.3;
-    color: var(--c-black);
-    cursor: not-allowed;
-  }
+  padding: 0;
 }
 
 app-select [slot="trigger"] {
@@ -110,53 +81,20 @@ app-select [slot="content"] {
 }
 
 app-select [value] {
-  padding: var(--s1) var(--s3);
-  border-radius: var(--s1);
-  min-width: var(--sm);
-  min-height: var(--xs);
-  margin: 0;
-  border-radius: var(--s1);
   font-weight: 600;
-  color: var(--c-black);
   background-color: transparent;
   border: none;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  padding-left: var(--s6);
-  position: relative;
-
-  &:hover {
-    background-color: var(--c-200);
-  }
-
-  &:active {
-    background-color: var(--c-900);
-    color: var(--c-white)
-  }
-
-  &:disabled {
-    opacity: 0.3;
-    color: var(--c-black);
-    cursor: not-allowed;
-  }
+  display: block;
 }
 
-app-select [value][selected]::before {
+app-select [value]::before {
   content: "\2713";
   color: currentColor;
-  font-size: var(--s4);
-  font-weight: 900;
-  line-height: 1;
-  margin: 0;
-  vertical-align: middle;
-  margin: auto;
-  position: absolute;
-  left: var(--s2);
-  top: 50%;
-  transform: translateY(-50%);
-  padding-block: auto;
+  visibility: hidden;
 }
-
+app-select [value][selected]::before {
+    visibility: visible;
+}
 *:focus-visible {
   --fv: var(--spx) solid var(--c-blue);
   outline: var(--fv);

@@ -139,9 +139,9 @@
             </section>
             <section data-state="section-class,section-style">
                 <h5>Inputs</h5>
+                <app-state name="currency-value" value="0,00"></app-state>
+                <app-state name="code-valid" value="false"></app-state>
                 <div class="flex flex-col gap-f">
-                    <app-state name="currency-value" value="0,00"></app-state>
-                    <app-state name="code-valid" value="false"></app-state>
                     <input class="input" placeholder="Type something..." />
                     <input is="app-input-ean"
                            class="input"
@@ -152,6 +152,7 @@
                            class="input"
                            oninput="setState('currency-value', this.valueAsDecimal)" />
                     <small><strong>Decimal Value:</strong><span data-state="currency-value">00,00</span></small>
+                    <div class='input'> <input/> </div>
                 </div>
             </section>
             <section data-state="section-class,section-style">
