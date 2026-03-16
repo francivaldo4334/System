@@ -41,3 +41,8 @@ class TitleDescriptionModel(models.Model):
     class Meta:
         abstract = True
 
+class Client(TimeStampedModel):
+    uuid = models.UUIDField(primary_key=True)
+    first_name = models.CharField()
+    last_name = models.CharField()
+
