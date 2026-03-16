@@ -1,7 +1,7 @@
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAssignmentType=false
 from django.db import models
-from core.models import ActivatorModel, CreatedByModel, TimeStampedModel
+from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
 from django.conf import settings
 from dateutil.rrule import rrulestr
 from schedule.flows import FlowStateCancelled, FlowStateCompleted, FlowStateCreated, FlowState, FlowStateInProgress, FlowStateMigrated, NotStateError
@@ -58,14 +58,15 @@ class FlowStateModel(models.Model):
 class Appointment(Slot):
     client = models.ForeignKey('core.Client', models.CASCADE)
 
-class Event(Slot):
-    ...
-
-class Task(FlowStateModel):
+class Event(Slot, FlowStateModel, TitleDescriptionModel):
     pass
 
-class TaskGroup(Slot):
-    ...
+class TaskGroup(Slot, TitleDescriptionModel):
+    pass
+
+class Task(models.Model):
+    task_group = models.ForeignKey(TaskGroup, models.CASCADE)
+    checked = models.BooleanField()
     
 
 
