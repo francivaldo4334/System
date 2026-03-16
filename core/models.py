@@ -1,5 +1,6 @@
 # pyright: reportArgumentType=false
 # pyright: reportAssignmentType=false
+# pyright: reportIncompatibleVariableOverride=false
 from django.db import models
 from django.conf import settings
 
@@ -33,11 +34,16 @@ class ActivatorModel(models.Model):
     class Meta:
         abstract = True
         ordering = ["status"]
-
-class TitleDescriptionModel(models.Model):
+class TitleModel(models.Model):
     title = models.CharField(max_length=255)
+    class Meta:
+        abstract = True
+class DescriptionModel(models.Model):
     description = models.TextField(blank=True, null=True)
+    class Meta:
+        abstract = True
 
+class TitleDescriptionModel(TitleModel, DescriptionModel):
     class Meta:
         abstract = True
 

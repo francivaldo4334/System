@@ -1,7 +1,7 @@
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAssignmentType=false
 from django.db import models
-from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
+from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
 from django.conf import settings
 from dateutil.rrule import rrulestr
 from schedule.flows import FlowStateCancelled, FlowStateCompleted, FlowStateCreated, FlowState, FlowStateInProgress, FlowStateMigrated, NotStateError
@@ -24,6 +24,7 @@ class Availability(TimeStampedModel, ActivatorModel):
 
 class Slot(TimeStampedModel, CreatedByModel):
     availability = models.ForeignKey(Availability, models.CASCADE)
+    rrule_params = models.CharField(validators=[is_valid_rrule], blank=True, null=True)
     start_at = models.DateTimeField()
     duration = models.DurationField()
     class Meta:
@@ -64,7 +65,7 @@ class Event(Slot, FlowStateModel, TitleDescriptionModel):
 class TaskGroup(Slot, TitleDescriptionModel):
     pass
 
-class Task(models.Model):
+class Task(TitleModel):
     task_group = models.ForeignKey(TaskGroup, models.CASCADE)
     checked = models.BooleanField()
     
