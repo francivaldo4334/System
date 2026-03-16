@@ -26,6 +26,16 @@ class Slot(TimeStampedModel, CreatedByModel):
     duration = models.DurationField()
     class Meta:
         abstract = True
+
+
+class Appointment(Slot):
+    ...
+
+class Event(Slot):
+    ...
+
+class Task(Slot):
+    ...
     
 
 
