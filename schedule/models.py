@@ -20,10 +20,16 @@ class Availability(TimeStampedModel, ActivatorModel):
     finish_at = models.DateTimeField()
 
 
-class Appointment(
-    TimeStampedModel,
-    CreatedByModel,
-):
+class Slot(TimeStampedModel, CreatedByModel):
     availability = models.ForeignKey(Availability, models.CASCADE)
     start_at = models.DateTimeField()
     duration = models.DurationField()
+    class Meta:
+        abstract = True
+    
+
+
+# class Appointment(
+#     TimeStampedModel,
+#     CreatedByModel,
+# ):
