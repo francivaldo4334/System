@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% block style %}
     <link rel="stylesheet" href="{% static 'app.css' %}">
     <link rel="stylesheet" href="{% static 'components.css' %}">
@@ -8,18 +9,27 @@
     <div class="grid grid-cols h-screen" style="--gc: 15rem auto">
         <aside class="border-r p-f flex flex-col gap-y">
             <span class="flex items-end m-x" style="--mx:auto">
-                <h1>P</h1>
-                <h2>onto</h2>
-                <h1>Á</h1>
-                <h2>gio</h2>
+                <h2>{% trans 'Ágio' %}</h2>
             </span>
             <nav class="flex flex-col gap-y" style="--gy:var(--s1)">
-                <h4>Agenda</h4>
-                <div class="border-b"></div>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'schedule_view' %}"
+                > Vendas </app-nav-option>
+                <h5 class='border-t'>Agenda</h5>
                 <app-nav-option 
                     store="nav-menu"
                     endpoint="{% url 'schedule_view' %}"
                     default
+                > Agendamentos </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > Tarefas </app-nav-option>
+                <h5 class='border-t'>Financeiro</h5>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'schedule_view' %}"
                 > Agendamentos </app-nav-option>
                 <app-nav-option 
                     store="nav-menu"
