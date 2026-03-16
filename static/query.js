@@ -1,32 +1,34 @@
 class CustomAjaxForm extends HTMLFormElement {
   constructor() {
     super();
-    this._onSubmit = this._onSubmit.bind(this)
+    this._onSubmit = this._onSubmit.bind(this);
   }
+
   connectedCallback() {
-    const store = this.getAttribute('store')
-    if (!store) {
-      throw TypeError("'store' is required.")
-    }
+    const store = this.getAttribute('store');
+    if (!store) throw TypeError("'store' is required.");
+
     this.store = Object.freeze({
       data: `${store}.data`,
       isLoading: `${store}.isLoading`,
       status: `${store}.status`,
       error: `${store}.error`,
-    })
-    setState(this.store.data, '{}')
-    setState(this.store.isLoading, 'false')
-    setState(this.store.error, '')
-    setState(this.store.status, '')
+    });
 
+    setState(this.store.data, '{}');
+    setState(this.store.isLoading, 'false');
+    setState(this.store.error, '');
+    setState(this.store.status, '');
 
-    this.endpoint = this.getAttribute('endpoint')
-    this.method = (this.getAttribute('method') || 'GET').toLowerCase()
-    window.addEventListener('submit', this._onSubmit)
+    this.endpoint = this.getAttribute('endpoint');
+    this.method = (this.getAttribute('method') || 'GET').toUpperCase();
+
+    this.addEventListener('submit', this._onSubmit);
   }
+
   disconnectedCallback() {
-    Object.values(this.store).forEach(k => states.delete(k))
-    window.removeEventListener('submit', this._onSubmit)
+    Object.values(this.store).forEach(k => typeof states !== 'undefined' && states.delete(k));
+    this.removeEventListener('submit', this._onSubmit);
   }
   _onSubmit(event) {
     event.preventDefault();

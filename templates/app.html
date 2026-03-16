@@ -16,9 +16,19 @@
             <nav class="flex flex-col gap-y" style="--gy:var(--s1)">
                 <h4>Agenda</h4>
                 <div class="border-b"></div>
-                <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}" default>
-                Eventos
-                </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'schedule_view' %}"
+                    default
+                > Agendamentos </app-nav-option>
+                <app-nav-option 
+                    store="nav-menu"
+                    endpoint="{% url 'redoc' %}"
+                > Tarefas </app-nav-option>
+                <!-- <app-nav-option --> 
+                    <!-- store="nav-menu" -->
+                    <!-- endpoint="{% url 'schedule_view' %}" -->
+                <!-- > Eventos </app-nav-option> -->
             </nav>
         </aside>
         <main>
