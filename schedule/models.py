@@ -24,7 +24,6 @@ class Availability(TimeStampedModel, ActivatorModel):
 
 class Slot(TimeStampedModel, CreatedByModel):
     availability = models.ForeignKey(Availability, models.CASCADE)
-    rrule_params = models.CharField(validators=[is_valid_rrule], blank=True, null=True)
     start_at = models.DateTimeField()
     duration = models.DurationField()
     class Meta:
