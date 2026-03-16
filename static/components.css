@@ -1,25 +1,36 @@
-.input, .btn, app-select [slot="trigger"], app-select [value] {
-  min-width: var(--sm);
+.input, 
+.btn, 
+app-select [slot="trigger"], 
+app-select [value] {
+  display: flex;
+  align-items: center; 
   min-height: var(--s8);
   padding: 0 var(--s3);
+  margin: 0;
   border-radius: var(--s1);
   border: var(--spx) solid var(--c-300);
   color: var(--c-black);
   font-size: var(--txt-md);
   line-height: var(--lh-md);
-  align-content: center;
-  margin: 0;
-  & input {
-    padding: 0;
-    margin: 0;
-    min-height: var(--s8);
-    border: none;
-    width: 100%;
-  }
+  box-sizing: border-box;
 }
 
-.btn, app-select [slot="trigger"],app-select [value] {
+.input input {
+  padding: 0;
+  margin: 0;
+  min-height: var(--s8);
+  border: none;
+  width: 100%;
+  background: transparent;
+  outline: none;
+}
+
+.btn, 
+app-select [slot="trigger"], 
+app-select [value] {
   font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
 
   &:hover {
     background-color: var(--c-200);
@@ -27,7 +38,7 @@
 
   &:active {
     background-color: var(--c-900);
-    color: var(--c-white)
+    color: var(--c-white);
   }
 
   &:disabled {
@@ -36,33 +47,35 @@
     cursor: not-allowed;
   }
 }
+
 .btn {
   background-color: var(--c-100);
 }
-app-select [slot="trigger"] {
-  background-color: transparent;
-}
+
 .btn-outlined {
-  border: var(--spx) solid var(--c-300);
   background-color: transparent;
-  color: var(--c-balck);
+  border: var(--spx) solid var(--c-300);
+  color: var(--c-black);
 }
 
 .btn-ghost {
   background-color: transparent;
-  border: none;
-  color: var(--c-black);
+  border: transparent;
 }
 
 .btn-square {
   min-width: var(--xs);
   width: var(--xs);
   padding: 0;
+  justify-content: center;
 }
 
 app-select [slot="trigger"] {
-  background-image: linear-gradient(45deg, #0000 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, #0000 50%);
-  background-position: calc(100% - 20px) calc(1px + 50%), calc(100% - 16.1px) calc(1px + 50%);
+  background-color: transparent;
+  background-image: 
+    linear-gradient(45deg, #0000 50%, currentColor 50%), 
+    linear-gradient(135deg, currentColor 50%, #0000 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 16px) 50%;
   background-repeat: no-repeat;
   background-size: 4px 4px, 4px 4px;
 }
@@ -75,37 +88,33 @@ app-select [slot="content"] {
   --_s: var(--s, 0.5);
   --c1: rgba(50, 50, 93, 0.25);
   --c2: rgba(0, 0, 0, 0.3);
-  --sd1: 0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-4px * var(--_s)) var(--c1);
-  --sd2: 0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
-  box-shadow: var(--sd1), var(--sd2);
+  box-shadow: 
+    0 calc(12px * var(--_s)) calc(24px * var(--_s)) calc(-4px * var(--_s)) var(--c1),
+    0 calc(8px * var(--_s)) calc(16px * var(--_s)) calc(-6px * var(--_s)) var(--c2);
 }
 
 app-select [value] {
-  font-weight: 600;
   background-color: transparent;
   border: none;
-  display: block;
-}
+  display: flex;
+  gap: var(--s1);
 
-app-select [value]::before {
-  content: "\2713";
-  color: currentColor;
-  visibility: hidden;
-}
-app-select [value][selected]::before {
+  &::before {
+    content: "\2713";
+    color: currentColor;
+    visibility: hidden;
+  }
+
+  &[selected]::before {
     visibility: visible;
-}
-*:focus-visible {
-  --fv: var(--spx) solid var(--c-blue);
-  outline: var(--fv);
+  }
 }
 
 .active {
-  background-color: var(--c-900);
-  color: var(--c-white);
+  background-color: var(--c-900) !important;
+  color: var(--c-white) !important;
 
   &:hover {
     background-color: var(--c-900);
-    color: var(--c-white);
   }
 }

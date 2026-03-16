@@ -542,6 +542,11 @@ label {
     linear-gradient(#eee .1em, transparent .1em);
   background-size: 100% 1.2em;
 }
+*:focus-visible {
+  outline: var(--spx) solid var(--c-blue);
+  outline-offset: 2px;
+}
+
 
 /* sec:media */
 @media (width >=40rem) {}
