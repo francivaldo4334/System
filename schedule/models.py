@@ -1,5 +1,6 @@
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAssignmentType=false
+# pyright: reportArgumentType=false
 from django.db import models
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
 from dateutil.rrule import rrulestr
@@ -15,10 +16,8 @@ def is_valid_rrule(value):
     except Exception:
         return False
 
-class Resource(TimeStampedModel, ActivatorModel, TitleModel):
-    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
+class Resource(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
+    pass
 
 class Service(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
     resoures = models.ManyToManyField(Resource, through='ServiceRequirementRelation')
@@ -29,7 +28,6 @@ class ServiceRequirementRelation(models.Model):
     quantity = models.PositiveIntegerField()
     
 # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
-
 class Availability(TimeStampedModel, ActivatorModel):
     resource = models.ForeignKey(Resource, models.CASCADE)
     rrule_params = models.CharField(validators=[is_valid_rrule])
@@ -41,7 +39,7 @@ class Availability(TimeStampedModel, ActivatorModel):
 
 
 class AssignmentSlot(TimeStampedModel, CreatedByModel): #TODO: precisa de um state
-    resources = models.ManyToManyField(Resource)
+    service = models.ForeignKey(Service, models.CASCADE)
     date = models.DateField()
     start_slot = models.PositiveSmallIntegerField()
     finish_slot = models.PositiveSmallIntegerField()
