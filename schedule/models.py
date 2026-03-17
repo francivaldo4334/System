@@ -47,7 +47,7 @@ class ServiceResourceRelation(models.Model):
 def is_valid_rrule(value):
     try:
         rrulestr(value)
-        return True,
+        return True
     except Exception:
         return False
 
