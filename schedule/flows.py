@@ -1,6 +1,6 @@
 class FlowState:
-    def __init__(self, model) -> None:
-        self.model = model
+    def __init__(self, instance) -> None:
+        self.instance = instance
 
 class AssignmentSlotStateCreated(FlowState):
     pass
