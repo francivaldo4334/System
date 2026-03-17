@@ -2,19 +2,19 @@ class FlowState:
     def __init__(self, model) -> None:
         self.model = model
 
-class FlowStateCreated(FlowState):
+class AssignmentSlotStateCreated(FlowState):
     pass
 
-class FlowStateInProgress(FlowState):
+class AssignmentSlotStateInProgress(FlowState):
     pass
 
-class FlowStateCompleted(FlowState):
+class AssignmentSlotStateCompleted(FlowState):
     pass
 
-class FlowStateMigrated(FlowState):
+class AssignmentSlotStateMigrated(FlowState):
     pass
 
-class FlowStateCancelled(FlowState):
+class AssignmentSlotStateCancelled(FlowState):
     pass
 
 class NotStateError(Exception):
