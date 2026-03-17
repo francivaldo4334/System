@@ -76,7 +76,7 @@ class ResourceOccupation(models.Model):
 class AssignmentSlot(TimeStampedModel, CreatedByModel): #TODO: precisa de um state
 
     class Status(models.TextChoices):
-        CREATED = 'CR', 'CREATED'
+        CREATED = 'CR', 'Created'
         IN_PROGRESS = 'NP', "In Progress"
         COMPLETED = 'CP', 'Completed'
         MIGRATED = 'MG', 'Migrated'
