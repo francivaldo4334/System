@@ -1,6 +1,7 @@
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAssignmentType=false
 # pyright: reportArgumentType=false
+from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
@@ -44,17 +45,18 @@ class ServiceResourceRelation(models.Model):
     resource_type = models.ForeignKey(ResourceNotSelectable, models.CASCADE)
     quantity = models.PositiveIntegerField()
     
-def is_valid_rrule(value):
+def validate_rrule(value):
+    if not value:
+        return
     try:
         rrulestr(value)
-        return True
-    except Exception:
-        return False
+    except Exception as e:
+        raise ValidationError("Invalid RRule.")
 
 class Availability(TimeStampedModel, ActivatorModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
-    rrule_params = models.CharField(validators=[is_valid_rrule])
+    rrule_params = models.CharField(validators=[validate_rrule])
     # os campos 'valid_' e '_slot' são usados para consultas no banco
     valid_from = models.DateField()
     valid_until = models.DateField(null=True, blank=True)
@@ -65,7 +67,7 @@ class Availability(TimeStampedModel, ActivatorModel):
 class ResourceOccupation(models.Model):
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     date = models.DateField()
-    bitmap = models.CharField(max_lenght=288, validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)])
+    bitmap = models.CharField(max_length=288, validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)])
 
     class Meta:
         unique_together = ['resource', 'date']
@@ -80,7 +82,7 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel): #TODO: precisa de um sta
         MIGRATED = 'MG', 'Migrated'
         CANCELLED = 'CL', 'Cancelled'
 
-    status = models.CharField(max_lenght=2,
+    status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.CREATED.value)
 
