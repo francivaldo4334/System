@@ -5,9 +5,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
-from dateutil.rrule import rrulestr
+from dateutil.rrule import rrulestr, rruleset
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateCompleted, AssignmentSlotStateCreated, FlowState, AssignmentSlotStateInProgress, AssignmentSlotStateMigrated, NotStateError
 
 # Create your models here.
@@ -44,24 +45,38 @@ class ServiceResourceRelation(models.Model):
     service = models.ForeignKey(Service, models.CASCADE)
     resource_type = models.ForeignKey(ResourceNotSelectable, models.CASCADE)
     quantity = models.PositiveIntegerField()
+
+
     
-def validate_rrule(value):
+def rrule_validator(value):
     if not value:
         return
+    if "DTSTART" not in value.upper():
+        raise ValidationError(_("Enter a valid value."))
+    if "UNTIL" not in value.upper():
+        raise ValidationError(_("Enter a valid value."))
     try:
         rrulestr(value)
     except Exception as e:
-        raise ValidationError("Invalid RRule.")
+        raise ValidationError(_("Enter a valid value."))
 
 class Availability(TimeStampedModel, ActivatorModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
-    rrule_params = models.CharField(validators=[validate_rrule])
-    # os campos 'valid_' e '_slot' são usados para consultas no banco
+    rrule_params = models.CharField(validators=[rrule_validator])
     valid_from = models.DateField()
     valid_until = models.DateField(null=True, blank=True)
     start_slot = models.PositiveSmallIntegerField()
-    finish_slot = models.PositiveSmallIntegerField()
+    duration_slot = models.PositiveSmallIntegerField()
+
+    def save(self, *args, **kwargs):
+        rule:rruleset = rrulestr(self.rrule_params)
+        dtstart = getattr(rule,'_dtstart')
+
+        self.valid_from = dtstart.date()
+        self.valid_until = getattr(rule, '_rrule')[0]._until.date()
+        self.start_slot = (dtstart.hour * 60 + dtstart.minute) // 5
+        return super().save(*args, **kwargs)
 
 
 class ResourceOccupation(models.Model):
