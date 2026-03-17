@@ -83,7 +83,9 @@ class Availability(TimeStampedModel, ActivatorModel):
 class ResourceOccupation(models.Model):
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     date = models.DateField()
-    bitmap = models.CharField(max_length=288, validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)])
+    bitmap = models.CharField(max_length=288,
+                              validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)],
+                              default='0'*288)
 
     class Meta:
         unique_together = ['resource', 'date']
