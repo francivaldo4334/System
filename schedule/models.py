@@ -64,17 +64,18 @@ class Availability(TimeStampedModel, ActivatorModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     rrule_params = models.CharField(validators=[rrule_validator])
-    valid_from = models.DateField()
-    valid_until = models.DateField(null=True, blank=True)
-    start_slot = models.PositiveSmallIntegerField()
+    valid_from = models.DateField(editable=False)
+    valid_until = models.DateField(editable=False)
+    start_slot = models.PositiveSmallIntegerField(editable=False)
     duration_slot = models.PositiveSmallIntegerField()
 
     def save(self, *args, **kwargs):
         rule:rruleset = rrulestr(self.rrule_params)
         dtstart = getattr(rule,'_dtstart')
+        until = getattr(rule, '_until')
 
         self.valid_from = dtstart.date()
-        self.valid_until = getattr(rule, '_rrule')[0]._until.date()
+        self.valid_until = until.date()
         self.start_slot = (dtstart.hour * 60 + dtstart.minute) // 5
         return super().save(*args, **kwargs)
 
