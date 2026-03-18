@@ -12,7 +12,7 @@ from dateutil.rrule import rrulestr, rruleset
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateCompleted, AssignmentSlotStateCreated, FlowState, AssignmentSlotStateInProgress, AssignmentSlotStateMigrated, NotStateError
+from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateCompleted, AssignmentSlotStateCreated, AssignmentSlotState, AssignmentSlotStateInProgress, AssignmentSlotStateMigrated, NotStateError
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -118,8 +118,7 @@ class ResourceOccupation(models.Model):
         unique_together = ['resource', 'date']
 
 
-class AssignmentSlot(TimeStampedModel, CreatedByModel)
-
+class AssignmentSlot(TimeStampedModel, CreatedByModel):
     class Status(models.TextChoices):
         CREATED = 'CR', 'Created'
         IN_PROGRESS = 'NP', "In Progress"
@@ -138,7 +137,7 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel)
     duration_slot = models.PositiveSmallIntegerField()
 
     @property
-    def state(self) -> FlowState:
+    def state(self) -> AssignmentSlotState:
         states = {
             self.Status.CREATED.value: AssignmentSlotStateCreated,
             self.Status.IN_PROGRESS.value: AssignmentSlotStateInProgress,
@@ -152,7 +151,7 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel)
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            return self.state.save()
+            return self.state.occupy()
         super().save(*args, **kwargs)
 
             # if self._state.adding and self.status == self.Status.CREATED.value:

@@ -1,20 +1,25 @@
-class FlowState:
+class AssignmentSlotState:
     def __init__(self, instance) -> None:
-        self.instance = instance
+        from typing import cast
+        from schedule.models import AssignmentSlot
+        self.instance = cast(AssignmentSlot, instance)
 
-class AssignmentSlotStateCreated(FlowState):
+    def occupy(self):
+        raise NotImplementedError()
+
+class AssignmentSlotStateCreated(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateInProgress(FlowState):
+class AssignmentSlotStateInProgress(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateCompleted(FlowState):
+class AssignmentSlotStateCompleted(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateMigrated(FlowState):
+class AssignmentSlotStateMigrated(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateCancelled(FlowState):
+class AssignmentSlotStateCancelled(AssignmentSlotState):
     pass
 
 class NotStateError(Exception):
