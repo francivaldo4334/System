@@ -12,7 +12,7 @@ from dateutil.rrule import rrulestr, rruleset
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateCompleted, AssignmentSlotStateCreated, AssignmentSlotState, AssignmentSlotStateInProgress, AssignmentSlotStateMigrated, NotStateError
+from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateCompleted, AssignmentSlotStateConfirmed, AssignmentSlotStateCreated, AssignmentSlotState, AssignmentSlotStateInProgress, AssignmentSlotStateMigrated, NotStateError
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -121,6 +121,7 @@ class ResourceOccupation(models.Model):
 class AssignmentSlot(TimeStampedModel, CreatedByModel):
     class Status(models.TextChoices):
         CREATED = 'CR', 'Created'
+        CONFIRMED = 'CF', 'Confirmed'
         IN_PROGRESS = 'NP', "In Progress"
         COMPLETED = 'CP', 'Completed'
         MIGRATED = 'MG', 'Migrated'
@@ -140,6 +141,7 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel):
     def state(self) -> AssignmentSlotState:
         states = {
             self.Status.CREATED.value: AssignmentSlotStateCreated,
+            self.Status.CONFIRMED.value: AssignmentSlotStateConfirmed,
             self.Status.IN_PROGRESS.value: AssignmentSlotStateInProgress,
             self.Status.COMPLETED.value: AssignmentSlotStateCompleted,
             self.Status.MIGRATED.value: AssignmentSlotStateMigrated,
@@ -148,10 +150,3 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel):
         state_class = states.get(str(self.status))
         if not state_class: raise NotStateError()
         return state_class(self)
-
-    def save(self, *args, disable_sate_flow=False, **kwargs):
-        # if self._state.adding and not disable_sate_flow:
-        if not disable_sate_flow:
-            self.status = self.Status.CREATED.value
-            return self.state.occupy()
-        super().save(*args, **kwargs)
