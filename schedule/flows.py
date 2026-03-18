@@ -11,19 +11,19 @@ class AssignmentSlotState:
         self.instance = cast(AssignmentSlot, instance)
 
     def confirm(self):
-        raise NotImplementedError()
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
     def start(self):
-        raise NotImplementedError()
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
     def finish(self):
-        raise NotImplementedError()
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
     def migrate(self, star_slot, duration_slot):
-        raise NotImplementedError()
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
     def cancel(self):
-        raise NotImplementedError()
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
     
 class AssignmentSlotStateCreated(AssignmentSlotState):
     class ResourceNotAllowed(Exception):
