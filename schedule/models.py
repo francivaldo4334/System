@@ -89,12 +89,12 @@ class ResourceOccupation(models.Model):
     bitmap = models.CharField(max_length=288,
                               validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)],
                               default='0'*288)
-    class Queryset(models.QuerySet):
-        def available(self,start_slot:int, duration_slot:int):
+    class QuerySet(models.QuerySet):
+        def available(self,start_slot, duration_slot):
             return self.filter(
                 bitmap__regex=f'^.{{{start_slot}}}0{{{duration_slot}}}'
             )
-        def occupy(self, start_slot:int, duration_slot:int):
+        def occupy(self, start_slot, duration_slot):
             return self.update(
                 bitmap=Concat(
                     Substr('bitmap',1,start_slot),
@@ -103,7 +103,7 @@ class ResourceOccupation(models.Model):
                     output_field=models.CharField()
                 )
             )
-        def vacate(self, start_slot:int, duration_slot:int):
+        def vacate(self, start_slot, duration_slot):
             return self.update(
                 bitmap=Concat(
                     Substr('bitmap',1,start_slot),
@@ -112,7 +112,7 @@ class ResourceOccupation(models.Model):
                     output_field=models.CharField()
                 )
             )
-    objects = Queryset.as_manager()
+    objects = QuerySet.as_manager()
 
     class Meta:
         unique_together = ['resource', 'date']

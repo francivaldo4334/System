@@ -1,10 +1,12 @@
 # pyright: reportGeneralTypeIssues=false
+from collections import Counter
 from django.db import transaction
+from django.db.models import QuerySet
+from typing import List, cast
 
 
 class AssignmentSlotState:
     def __init__(self, instance) -> None:
-        from typing import cast
         from schedule.models import AssignmentSlot
         self.instance = cast(AssignmentSlot, instance)
 
@@ -15,12 +17,52 @@ class AssignmentSlotState:
         raise NotImplementedError()
 
 class AssignmentSlotStateCreated(AssignmentSlotState):
+    class ResourceNotAllowed(Exception):
+        pass
+    class ReourceQuantityNotEguals(Exception):
+        pass
+    class ResourceOcuppied(Exception):
+        pass
+
     def occupy(self):
-        from schedule.models import ResourceOccupation
+        from schedule.models import ResourceOccupation, Resource, Service, ServiceResourceRelation
+
         with transaction.atomic():
             self.instance.save()
-
-            pass
+            # 1. Validação
+            # 1.1 Carrega variaveis para validação
+            service = cast(Service,self.instance.service)
+            service_required_resource_qs = cast(QuerySet, service.required_resources)
+            service_required_resource_ids = list(service_required_resource_qs.values_list('id', flat=True))
+            service_resource_relation_qs = cast(QuerySet, getattr(ServiceResourceRelation, 'objects'))
+            service_resource_relation_resource_type_id_and_quantity = \
+                service_resource_relation_qs.filter(service=service).values_list('resource_type_id', 'quantity')
+            service_required_resource_quantity_map = dict(service_resource_relation_resource_type_id_and_quantity)
+            instance_resource_qs = cast(QuerySet, self.instance.resources)
+            instance_resource_paret_id_and_id = list(instance_resource_qs.values('parent_id', 'id'))
+            instance_resource_ids = [it['id'] for it in instance_resource_paret_id_and_id]
+            resource_occupation_qs = cast(ResourceOccupation.QuerySet, ResourceOccupation.objects)
+            instance_resource_parent_id_quantity_map = Counter([it['parent_id'] for it in instance_resource_paret_id_and_id])
+            # 1.2 validar resources requiridos de acordo com o tipo de resource do serviço
+            for id, qty in instance_resource_parent_id_quantity_map.items():
+                if id not in service_required_resource_ids:
+                    raise self.ResourceNotAllowed()
+                if qty != \
+                   service_required_resource_quantity_map[id]:
+                    raise self.ReourceQuantityNotEguals()
+            # 2. Obter a ocupações dos resource usados
+            for resource_id in instance_resource_ids:
+                occupation, _ = resource_occupation_qs.get_or_create(
+                    resource_id=resource_id,
+                    date=self.instance.date,
+                )
+            # 2.1 Verifica se todas as ocupações usadas tem disponibilidade
+                occ_qs = resource_occupation_qs.filter(pk=getattr(occupation, 'pk')).select_for_update()
+                if not occ_qs.available(self.instance.start_slot,
+                                                       self.instance.duration_slot).exists():
+                    raise self.ResourceOcuppied()
+            # 2.2 Atualiza a ocupação do resource usado
+                occ_qs.occupy(self.instance.start_slot, self.instance.duration_slot)
 
 class AssignmentSlotStateInProgress(AssignmentSlotState):
     pass
