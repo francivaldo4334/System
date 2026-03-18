@@ -18,12 +18,21 @@ from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateComp
 class Resource(TimeStampedModel, ActivatorModel):
     name = models.CharField()
     parent = models.ForeignKey('ResourceNotSelectable',models.CASCADE,'children', null=True, blank=True)
-    code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^\d+(\.\d+)*$')])
+    code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
     is_selectable = models.BooleanField()
 
     content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = GenericForeignKey()
+
+    def clean(self):
+        print(self.code, "h")
+        if self.parent and not str(self.code).startswith(getattr(self.parent,'code')):
+            print(self.code, 'H')
+            raise ValidationError({'code': _('Enter a valid value.')})
+        if not self.is_selectable and not str(self.code).endswith('.'):
+            print(self.code, "J")
+            raise ValidationError({'code': _('Enter a valid value.')})
 
 class ResourceNotSelectable(Resource):
     class Manager(models.Manager):
