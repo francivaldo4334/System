@@ -1,9 +1,12 @@
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAssignmentType=false
 # pyright: reportArgumentType=false
+# pyright: reportCallIssue=false
+# pyright: reportGeneralTypeIssues=false
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
-from django.db import models
+from django.db import models, transaction
+from django.db.models.functions import Concat, Substr
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
 from dateutil.rrule import rrulestr, rruleset
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -39,7 +42,7 @@ class ResourceSelectable(Resource):
         proxy = True
 
 class Service(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
-    required_resource = models.ManyToManyField(ResourceNotSelectable, through='ServiceResourceRelation')
+    required_resources = models.ManyToManyField(ResourceNotSelectable, through='ServiceResourceRelation')
 
 class ServiceResourceRelation(models.Model):
     service = models.ForeignKey(Service, models.CASCADE)
@@ -86,12 +89,36 @@ class ResourceOccupation(models.Model):
     bitmap = models.CharField(max_length=288,
                               validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)],
                               default='0'*288)
+    class Queryset(models.QuerySet):
+        def available(self,start_slot:int, duration_slot:int):
+            return self.filter(
+                bitmap__regex=f'^.{{{start_slot}}}0{{{duration_slot}}}'
+            )
+        def occupy(self, start_slot:int, duration_slot:int):
+            return self.update(
+                bitmap=Concat(
+                    Substr('bitmap',1,start_slot),
+                    models.Value('1' * duration_slot),
+                    Substr('bitmap',start_slot + duration_slot + 1),
+                    output_field=models.CharField()
+                )
+            )
+        def vacate(self, start_slot:int, duration_slot:int):
+            return self.update(
+                bitmap=Concat(
+                    Substr('bitmap',1,start_slot),
+                    models.Value('0' * duration_slot),
+                    Substr('bitmap',start_slot + duration_slot + 1),
+                    output_field=models.CharField()
+                )
+            )
+    objects = Queryset.as_manager()
 
     class Meta:
         unique_together = ['resource', 'date']
 
 
-class AssignmentSlot(TimeStampedModel, CreatedByModel): #TODO: precisa de um state
+class AssignmentSlot(TimeStampedModel, CreatedByModel)
 
     class Status(models.TextChoices):
         CREATED = 'CR', 'Created'
@@ -108,7 +135,8 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel): #TODO: precisa de um sta
     resources = models.ManyToManyField(ResourceSelectable)
     date = models.DateField()
     start_slot = models.PositiveSmallIntegerField()
-    finish_slot = models.PositiveSmallIntegerField()
+    duration_slot = models.PositiveSmallIntegerField()
+
     @property
     def state(self) -> FlowState:
         states = {
@@ -121,3 +149,27 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel): #TODO: precisa de um sta
         state_class = states.get(str(self.status))
         if not state_class: raise NotStateError()
         return state_class(self)
+
+    def save(self, *args, **kwargs):
+        with transaction.atomic():
+            super().save(*args, **kwargs)
+
+            if self._state.adding and self.status == self.Status.CREATED.value:
+                
+                service_resource_relation = ServiceResourceRelation.objects.filter(
+                    service=self.service
+                )
+                required_type_ids = service_resource_relation.values_list('resource_type_id', flat=True)
+
+                resource_quantity = service_resource_relation.aggregate(
+                    total=models.Sum('quantity')
+                )['total'] or 0
+
+                occupation_qs = ResourceOccupation.objects.select_for_update().filter(
+                     resource__parent_id__in=required_type_ids,
+                     resource__in=self.resources.all(),
+                     date=self.date,   
+                ).available(self.start_slot, self.duration_slot))
+
+                if occupation_qs.count() != resource_quantity:
+                    raise ValidationError()
