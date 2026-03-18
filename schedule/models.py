@@ -154,23 +154,3 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel):
             self.status = self.Status.CREATED.value
             return self.state.occupy()
         super().save(*args, **kwargs)
-
-            # if self._state.adding and self.status == self.Status.CREATED.value:
-                
-            #     service_resource_relation = ServiceResourceRelation.objects.filter(
-            #         service=self.service
-            #     )
-            #     required_type_ids = service_resource_relation.values_list('resource_type_id', flat=True)
-
-            #     resource_quantity = service_resource_relation.aggregate(
-            #         total=models.Sum('quantity')
-            #     )['total'] or 0
-
-            #     occupation_qs = ResourceOccupation.objects.select_for_update().filter(
-            #          resource__parent_id__in=required_type_ids,
-            #          resource__in=self.resources.all(),
-            #          date=self.date,   
-            #     ).available(self.start_slot, self.duration_slot))
-
-            #     if occupation_qs.count() != resource_quantity:
-            #         raise ValidationError()
