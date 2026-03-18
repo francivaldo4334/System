@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/**
+  * A catch-all path to Django template files, JavaScript, and Python files
+  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
+  *
+  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
+  * the scope of this path.
+  */
+
+/* --c-white: #ffff; */
+/* --c-black: #000000; */
+/* --c-error: #dc2626; */
+/* --c-blue: #2fa6ff; */
+/* --c-success: #16a34a; */
+/* --c-error-light: #fee2e2; */
+/* --c-success-light: #dcfce7; */
+/* --c-50: #f5f3f0; */
+/* --c-100: #edeae3; */
+/* --c-200: #d1ccbf; */
+/* --c-300: #b5b0a5; */
+/* --c-400: #9a968c; */
+/* --c-500: #7f7c74; */
+/* --c-600: #63615a; */
+/* --c-700: #4b4944; */
+/* --c-800: #34322f; */
+/* --c-900: #1c1b19; */
+@layer components {
+  /* Utilitários Baseados no seu Código */
+
+  .bg-pattern-lines-horizontal {
+    opacity: 0.8;
+    background-size: 20px 20px;
+    background-image: repeating-linear-gradient(0deg, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
+  }
+
+  .bg-pattern-lines-vertical {
+    opacity: 0.8;
+    background-size: 20px 20px;
+    background-image: repeating-linear-gradient(to right, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7);
+  }
+
+  .bg-pattern-boxes {
+    opacity: 0.8;
+    /* Certifique-se de que --s4 e --c-200 estejam definidos no :root */
+    --pattern-space: var(--s4, 20px);
+    background-image: linear-gradient(var(--c-200, #cbd5e1) 1px, transparent 1px),
+      linear-gradient(to right, var(--c-200, #cbd5e1) 1px, transparent 1px);
+    background-size: var(--pattern-space) var(--pattern-space);
+  }
+
+  .bg-pattern-polka {
+    --pattern-space: var(--s4, 20px);
+    --spx: 1px;
+    /* Espessura do ponto */
+    --pattern-delta: calc(var(--pattern-space) / 2 * -1 + var(--spx) / 2);
+    opacity: 0.8;
+    background-image: radial-gradient(var(--c-200, #cbd5e1) var(--spx), transparent var(--spx));
+    background-size: var(--pattern-space) var(--pattern-space);
+    background-position: var(--pattern-delta) var(--pattern-delta);
+  }
+
+  .bg-pattern-diagonal {
+    --_pattern-accent: var(--pattern-accent, var(--c-800, #1e293b));
+    --_pattern-bg: var(--pattern-bg, var(--c-50, #f8fafc));
+    --pattern-thickness: var(--spx, 1px);
+    --pattern-size: var(--s2, 10px);
+    opacity: 0.3;
+    background-size: var(--pattern-size) var(--pattern-size);
+    background-image: repeating-linear-gradient(45deg,
+        var(--_pattern-accent) 0,
+        var(--_pattern-accent) var(--pattern-thickness),
+        var(--_pattern-bg) 0,
+        var(--_pattern-bg) 50%);
+  }
+
+  .bg-pattern-paper {
+    background-color: #fff;
+    background-image: linear-gradient(90deg, transparent 79px, #ab3d3d 79px, #ab3d3d 81px, transparent 81px),
+      linear-gradient(#eee .1em, transparent .1em);
+    background-size: 100% 1.2em;
+  }
+}
+
+@source "../../../**/*.{html,py,js}";
