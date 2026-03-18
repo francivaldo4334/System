@@ -40,8 +40,6 @@ class AssignmentSlotStateCreated(AssignmentSlotState):
             # 1. Validação
             # 1.1 Carrega variaveis para validação
             service = cast(Service,self.instance.service)
-            service_required_resource_qs = cast(QuerySet, service.required_resources)
-            service_required_resource_ids = list(service_required_resource_qs.values_list('id', flat=True))
             service_resource_relation_qs = cast(QuerySet, getattr(ServiceResourceRelation, 'objects'))
             service_resource_relation_resource_type_id_and_quantity = \
                 service_resource_relation_qs.filter(service=service).values_list('resource_type_id', 'quantity')
@@ -52,11 +50,12 @@ class AssignmentSlotStateCreated(AssignmentSlotState):
             resource_occupation_qs = cast(ResourceOccupation.QuerySet, ResourceOccupation.objects)
             instance_resource_parent_id_quantity_map = Counter([it['parent_id'] for it in instance_resource_paret_id_and_id])
             # 1.2 validar resources requiridos de acordo com o tipo de resource do serviço
-            for id, qty in instance_resource_parent_id_quantity_map.items():
-                if id not in service_required_resource_ids:
+            print(instance_resource_parent_id_quantity_map, service_required_resource_quantity_map)
+            for id, qty in service_required_resource_quantity_map.items():
+                if id not in instance_resource_parent_id_quantity_map.keys():
                     raise self.ResourceNotAllowed()
                 if qty != \
-                   service_required_resource_quantity_map[id]:
+                   instance_resource_parent_id_quantity_map[id]:
                     raise self.ReourceQuantityNotEguals()
             # 2. Obter a ocupações dos resource usados
             for resource_id in instance_resource_ids:
