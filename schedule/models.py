@@ -149,8 +149,9 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel):
         if not state_class: raise NotStateError()
         return state_class(self)
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
+    def save(self, *args, disable_sate_flow=False, **kwargs):
+        # if self._state.adding and not disable_sate_flow:
+        if not disable_sate_flow:
             self.status = self.Status.CREATED.value
             return self.state.occupy()
         super().save(*args, **kwargs)

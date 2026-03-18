@@ -28,7 +28,7 @@ class AssignmentSlotStateCreated(AssignmentSlotState):
         from schedule.models import ResourceOccupation, Resource, Service, ServiceResourceRelation
 
         with transaction.atomic():
-            self.instance.save()
+            self.instance.save(disable_sate_flow=True)
             # 1. Validação
             # 1.1 Carrega variaveis para validação
             service = cast(Service,self.instance.service)
