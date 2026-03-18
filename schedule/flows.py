@@ -7,6 +7,9 @@ class AssignmentSlotState:
     def occupy(self):
         raise NotImplementedError()
 
+    def vacate(self):
+        raise NotImplementedError()
+
 class AssignmentSlotStateCreated(AssignmentSlotState):
     pass
 

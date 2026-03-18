@@ -151,6 +151,7 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel):
 
     def save(self, *args, **kwargs):
         if self._state.adding:
+            self.status = self.Status.CREATED.value
             return self.state.occupy()
         super().save(*args, **kwargs)
 
