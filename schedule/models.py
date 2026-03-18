@@ -5,7 +5,7 @@
 # pyright: reportGeneralTypeIssues=false
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
-from django.db import models, transaction
+from django.db import models
 from django.db.models.functions import Concat, Substr
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
 from dateutil.rrule import rrulestr, rruleset

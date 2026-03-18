@@ -1,3 +1,7 @@
+# pyright: reportGeneralTypeIssues=false
+from django.db import transaction
+
+
 class AssignmentSlotState:
     def __init__(self, instance) -> None:
         from typing import cast
@@ -11,7 +15,12 @@ class AssignmentSlotState:
         raise NotImplementedError()
 
 class AssignmentSlotStateCreated(AssignmentSlotState):
-    pass
+    def occupy(self):
+        from schedule.models import ResourceOccupation
+        with transaction.atomic():
+            self.instance.save()
+
+            pass
 
 class AssignmentSlotStateInProgress(AssignmentSlotState):
     pass
