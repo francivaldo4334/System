@@ -1,3 +1,4 @@
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -6,8 +7,9 @@
             {% block title %}Sistema{% endblock %}
         </title>
         {% block style %}{% endblock %}
+        {% tailwind_css %}
     </head>
-    <body style="margin: 0; padding: 0;">
+    <body>
         {% block body %}{% endblock %}
         {% block scripts %}{% endblock %}
     </body>
