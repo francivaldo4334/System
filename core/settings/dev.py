@@ -6,6 +6,7 @@ DEBUG = True
 
 INSTALLED_APPS += [
     'drf_spectacular',
+    'django_browser_reload',
 ]
 
 ALLOWED_HOSTS = ['*']
@@ -19,3 +20,6 @@ DATABASES = {
     }
 }
 REST_FRAMEWORK['DEFAULT_SCHEMA_CLASS'] = 'drf_spectacular.openapi.AutoSchema'
+MIDDLEWARE += [
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
+]
