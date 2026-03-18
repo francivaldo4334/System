@@ -7,33 +7,49 @@
 {% endblock %}
 {% block body %}
     <div class="grid grid-cols-[15rem_auto] h-screen">
-        <aside class="border-r p-4 flex flex-col gap-y-4">
-            <span class="flex items-end mx-auto">
-                <h2>{% trans 'Ágio' %}</h2>
-            </span>
-            <nav class="flex flex-col gap-y-4">
-                <h5 class='border-t'>{% trans 'Agenda' %}</h5>
-                <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}" default> {% trans 'Calendário' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}"> {% trans 'Horários' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}"> {% trans 'Agendamentos' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Tarefas' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Eventos' %} </app-nav-option>
-                <h5 class='border-t'>{% trans 'Caixa' %}</h5>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Vendas' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Sessões' %} </app-nav-option>
-                <h5 class='border-t'>{% trans 'Estoque' %}</h5>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Produtos' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Lotes' %} </app-nav-option>
-                <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Quatidades' %} </app-nav-option>
-            </nav>
+        <aside class="p-4">
+            <ul class="menu">
+                <li>
+                    <h2>Agenda</h2>
+                    <ul>
+                        <li>
+                            <form>
+                                <button>Calendário</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </aside>
-        <main>
-            {% include 'schedule.html' %}
-        </main>
+        <section>
+        </section>
     </div>
+    <!-- <aside class="border-r p-4 flex flex-col gap-y-4"> -->
+    <!-- <span class="flex items-end mx-auto"> -->
+    <!-- <h2>{% trans 'Ágio' %}</h2> -->
+    <!-- </span> -->
+    <!-- <nav class="flex flex-col gap-y-4"> -->
+    <!-- <h5 class='border-t'>{% trans 'Agenda' %}</h5> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}" default> {% trans 'Calendário' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}"> {% trans 'Horários' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'schedule_view' %}"> {% trans 'Agendamentos' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Tarefas' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Eventos' %} </app-nav-option> -->
+    <!-- <h5 class='border-t'>{% trans 'Caixa' %}</h5> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Vendas' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Sessões' %} </app-nav-option> -->
+    <!-- <h5 class='border-t'>{% trans 'Estoque' %}</h5> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Produtos' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Lotes' %} </app-nav-option> -->
+    <!-- <app-nav-option store="nav-menu" endpoint="{% url 'redoc' %}"> {% trans 'Quatidades' %} </app-nav-option> -->
+    <!-- </nav> -->
+    <!-- </aside> -->
+    <!-- <main> -->
+    <!-- {% include 'schedule.html' %} -->
+    <!-- </main> -->
+    <!-- </div> -->
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'state.js' %}"></script>
-    <script src="{% static 'query.js' %}"></script>
     <script src="{% static 'components.js' %}"></script>
 {% endblock %}
