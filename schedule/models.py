@@ -26,12 +26,11 @@ class Resource(TimeStampedModel, ActivatorModel):
     content_object = GenericForeignKey()
 
     def clean(self):
-        print(self.code, "h")
         if self.parent and not str(self.code).startswith(getattr(self.parent,'code')):
-            print(self.code, 'H')
             raise ValidationError({'code': _('Enter a valid value.')})
         if not self.is_selectable and not str(self.code).endswith('.'):
-            print(self.code, "J")
+            raise ValidationError({'code': _('Enter a valid value.')})
+        if self.is_selectable and str(self.code).endswith('.'):
             raise ValidationError({'code': _('Enter a valid value.')})
 
 class ResourceNotSelectable(Resource):
