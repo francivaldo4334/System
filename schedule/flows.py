@@ -10,14 +10,21 @@ class AssignmentSlotState:
         from schedule.models import AssignmentSlot
         self.instance = cast(AssignmentSlot, instance)
 
-    def occupy(self):
+    def confirm(self):
         raise NotImplementedError()
 
-    def vacate(self):
+    def start(self):
         raise NotImplementedError()
 
-class AssignmentSlotStateConfirmed(AssignmentSlotState):
-    pass
+    def finish(self):
+        raise NotImplementedError()
+
+    def migrate(self, star_slot, duration_slot):
+        raise NotImplementedError()
+
+    def cancel(self):
+        raise NotImplementedError()
+    
 class AssignmentSlotStateCreated(AssignmentSlotState):
     class ResourceNotAllowed(Exception):
         pass
@@ -26,11 +33,10 @@ class AssignmentSlotStateCreated(AssignmentSlotState):
     class ResourceOcuppied(Exception):
         pass
 
-    def occupy(self):
+    def confirm(self):
         from schedule.models import ResourceOccupation, Resource, Service, ServiceResourceRelation
 
         with transaction.atomic():
-            self.instance.save()
             # 1. Validação
             # 1.1 Carrega variaveis para validação
             service = cast(Service,self.instance.service)
@@ -65,6 +71,11 @@ class AssignmentSlotStateCreated(AssignmentSlotState):
                     raise self.ResourceOcuppied()
             # 2.2 Atualiza a ocupação do resource usado
                 occ_qs.occupy(self.instance.start_slot, self.instance.duration_slot)
+            self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
+            self.instance.save()
+            
+class AssignmentSlotStateConfirmed(AssignmentSlotState):
+    pass
 
 class AssignmentSlotStateInProgress(AssignmentSlotState):
     pass
