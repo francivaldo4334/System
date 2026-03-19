@@ -1,30 +1,3 @@
-// class AppNavItem extends HTMLElement {
-//   connectedCallback() {
-//     const store = this.getAttribute('store')
-//     const endpoint = this.getAttribute('endpoint')
-//     const content = this.innerHTML;
-//     const active = this.hasAttribute('default')
-//     this.innerHTML = `
-//       <form is="app-ajax-form"
-//             store="${store}"
-//             endpoint="${endpoint}">
-//           <button class="btn btn-ghost w-full text-start flex items-center gap-x ${active ? 'active' : ''} "
-//             type = "submit"
-//             style = "--gx:var(--s2)" > ${content}</button >
-//       </form >
-//   `
-//     this.querySelector('button').addEventListener('click', (e) => {
-//       if (e.target.classList.contains('active'))
-//         return e.preventDefault();
-//       const btns = document.querySelectorAll('form[is="app-ajax-form"] button')
-//       btns.forEach(btn => {
-//         btn.classList.remove('active')
-//       })
-//       e.target.classList.add('active')
-//     })
-//   }
-// }
-
 class FieldControl extends HTMLElement {
   static observedAttributes = ['invalid', 'success', 'error', 'label', 'help'];
   constructor() {
@@ -97,7 +70,6 @@ class EanCodeField extends HTMLInputElement {
     super();
   }
   checkValidity() {
-    debugger
     const code = this.value;
     const calcCheckDigit = (baseCode = "") => {
       const sum = baseCode
@@ -134,13 +106,13 @@ class CustomAjaxForm extends HTMLFormElement {
 
     this.store = Object.freeze({
       data: `${store}.data`,
-      isLoading: `${store}.isLoading`,
+      loading: `${store}.loading`,
       status: `${store}.status`,
       error: `${store}.error`,
     });
 
     setState(this.store.data, '{}');
-    setState(this.store.isLoading, 'false');
+    setState(this.store.loading, 'false');
     setState(this.store.error, '');
     setState(this.store.status, '');
 
@@ -156,7 +128,7 @@ class CustomAjaxForm extends HTMLFormElement {
   }
   _onSubmit(event) {
     event.preventDefault();
-    setState(this.store.isLoading, 'true')
+    setState(this.store.loading, 'true')
     fetch(this.endpoint, { method: this.method })
       .then(response => {
         const status = response.status;
@@ -167,7 +139,44 @@ class CustomAjaxForm extends HTMLFormElement {
         }
         response.text().then(data => setState(this.store.error, data))
       })
-      .finally(() => setState(this.store.isLoading, 'false'))
+      .finally(() => setState(this.store.loading, 'false'))
+  }
+}
+class AppIf extends HTMLElement {
+  static observedAttributes = ['then', 'value'];
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host([result="false"]) slot:not([name="else"]) { display: none; }
+        :host([result="true"]) slot[name="else"] { display: none; }
+        :host(:not([result])) slot { display: none; }
+      </style>
+      <slot></slot> <slot name="else"></slot>
+    `;
+  }
+
+  attributeChangedCallback() {
+    this.update();
+  }
+
+  get predicate() {
+    const fnStr = this.getAttribute('then');
+    if (!fnStr) return () => true;
+    try {
+      return new Function('it', `return (${fnStr})(it)`);
+    } catch (e) {
+      console.error("Invalid predicate in app-if", e);
+      return () => false;
+    }
+  }
+
+  update() {
+    const value = this.getAttribute('value');
+    const isTrue = !!this.predicate(value);
+    this.setAttribute('result', isTrue ? 'true' : 'false');
   }
 }
 
@@ -175,3 +184,4 @@ window.customElements.define('app-field', FieldControl)
 window.customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 window.customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 window.customElements.define('app-ajax-form', CustomAjaxForm, { extends: 'form' })
+window.customElements.define('app-if', AppIf);

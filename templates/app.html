@@ -7,16 +7,13 @@
 {% endblock %}
 {% block body %}
     <div class="grid grid-cols-[15rem_auto] h-screen">
-        <aside class="p-4">
-            <ul class="menu">
+        <aside class="p-2">
+            <app-state name="currentUrl" at="value"></app-state>
+            <ul class="menu w-full">
                 <li>
-                    <h2>Agenda</h2>
+                    <h2 class="menu-title">{% trans 'Schedule' %}</h2>
                     <ul>
-                        <li>
-                            <form>
-                                <button>Calendário</button>
-                            </form>
-                        </li>
+                        <li></li>
                     </ul>
                 </li>
             </ul>
