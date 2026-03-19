@@ -111,8 +111,8 @@ class CustomAjaxForm extends HTMLFormElement {
       error: `${store}.error`,
     });
 
-    setState(this.store.data, '{}');
-    setState(this.store.loading, 'false');
+    setState(this.store.data, '');
+    setState(this.store.loading, '');
     setState(this.store.error, '');
     setState(this.store.status, '');
 
@@ -132,12 +132,16 @@ class CustomAjaxForm extends HTMLFormElement {
     fetch(this.endpoint, { method: this.method })
       .then(response => {
         const status = response.status;
-        setState(this.store.status, status)
-        if (response.ok) {
-          response.text().then(data => setState(this.store.data, data))
-          return
-        }
-        response.text().then(data => setState(this.store.error, data))
+        response.text().then(data => {
+          if (response.ok) {
+            setState(this.store.data, data)
+          }
+          else {
+            setState(this.store.error, data)
+          }
+        }).finally(()=>{
+          setState(this.store.status, status)
+        })
       })
       .finally(() => setState(this.store.loading, 'false'))
   }

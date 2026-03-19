@@ -1,31 +1,59 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% partialdef menu-option %}
+<li class="relative">
+    <form is="app-ajax-form" 
+          store='{{store}}' 
+          endpoint="{% url url %}"
+          data-state="{{store}}_form_class"
+          data-at="class"
+        >
+        {% trans title %}
+        <app-state name="{{store}}_form_class"></app-state>
+        <app-if data-state="{{store}}.status" data-at="value" then="it => {
+            const v = it === '200';
+            if (v) {
+                setState('menu-opt-s', '{{url}}');
+                setState('{{store}}.status', '');
+                setState('menu-page', getState('{{store}}.data'));
+            }
+        }">
+        </app-if>
+        <app-if data-state="menu-opt-s" data-at="value" then="it => {
+            if (it === '{{url}}') {
+                setState('{{store}}_form_class', 'menu-active')
+                return false;
+            };
+            setState('{{store}}_form_class', '');
+            return true;
+        }">
+            <button type="submit" class="absolute inset-0 opacity-0"></button>
+        </app-if>
+
+    </form>
+</li>
+{% endpartialdef %}
 {% block body %}
     <div class="grid grid-cols-[15rem_auto] h-screen">
         <aside class="p-2">
-            <app-state name='menu_url'></app-state>
+            <app-state name='menu-opt-s' value="schedule_view"></app-state>
+            <app-state name='menu-page'></app-state>
             <ul class="menu w-full">
                 <li>
                     <h2 class="menu-title">{% trans 'Schedule' %}</h2>
                     <ul>
-                        <li>
-                            <form is="app-ajax-form"
-                                  class="relative"
-                                  store='menu_1'
-                                  endpoint="{% url 'schedule_view' %}">
-                                {% trans 'Calendar' %}
-                                <app-if data-state="menu_1.loading" data-at='value' then="it => { const status = getState('menu_1.status'); const isLoading = it === 'true'; if (status === '200' && !isLoading) { setState('menu_url', '{% url 'schedule_view' %}'); setState('menu_1.status', ''); }; return isLoading; }">
-                                <span class="loading loading-xs"></span>
-                                <button slot="else" class='absolute inset-0'></button>
-                                </app-if>
-                            </form>
-                        </li>
+                    {% with store="menu-opt-1" url='schedule_view' title='Calendar'%}
+                        {% partial menu-option %}
+                    {% endwith %}
+                    {% with store="menu-opt-2" url='app' title='Events'%}
+                        {% partial menu-option %}
+                    {% endwith %}
                     </ul>
                 </li>
             </ul>
         </aside>
-        <section data-state='menu_url'>
+        <section data-state='menu-page'>
         </section>
     </div>
 {% endblock %}
