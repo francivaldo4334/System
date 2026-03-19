@@ -178,9 +178,9 @@ class CustomAjaxForm extends HTMLFormElement {
     this.addEventListener('submit', this);
   }
   clean(){
-    setState(`${this.store}.loading`, false);
-    setState(`${this.store}.data`, undefined);
-    setState(`${this.store}.status`, undefined);
+    states.set(`${this.store}.loading`, false);
+    states.set(`${this.store}.status`, undefined);
+    states.set(`${this.store}.data`, undefined);
   }
   async handleEvent(e){
     e.preventDefault();

@@ -4,27 +4,28 @@
 {% partialdef menu-option %}
 <li class="relative">
     <form is="app-ajax-form" 
-          store='{{store}}' 
-          action="{% url url %}"
+          store='{{url_name}}' 
+          action="{% url url_name %}"
           data-state="menu-selected"
-          data-then="it => it === '{{url}}' ? 'menu-active' : ''"
+          data-then="it => it === '{{url_name}}' ? 'menu-active' : ''"
           data-at="class"
         >
         {% trans title %}
         <div
-            data-state="{{store}}.status"
+            data-state="{{url_name}}.status"
             data-at="value"
             data-then="it => {
                 if (it !== 200) return;
-                const data = getState('{{store}}.data');
+                const data = getState('{{url_name}}.data');
+                debugger;
                 setState('menu-page', data);
-                setState('menu-selected', '{{url}}');
+                setState('menu-selected', '{{url_name}}');
                 this.closest('form')?.clean();
             }"
         />
         <button
             data-state="menu-selected"
-            data-then="it => it === '{{url}}'"
+            data-then="it => it === '{{url_name}}'"
             data-at="disabled"
             type="submit"
             class="absolute inset-0 opacity-0"
@@ -42,15 +43,15 @@
                 <li>
                     <h2 class="menu-title">{% trans 'Schedule' %}</h2>
                     <ul>
-                    {% with store="nav_cal" url='schedule_view' title=_('Calendar') %}
+                    {% with url_name='schedule_view' title=_('Calendar') %}
                         {% partial menu-option %}
                     {% endwith %}
 
-                    {% with store="nav_ev" url='app' title=_('Events') %}
+                    {% with url_name='app' title=_('Events') %}
                         {% partial menu-option %}
                     {% endwith %}
 
-                    {% with store="nav_set" url='app' title=_('Settings') %}
+                    {% with url_name='app' title=_('Settings') %}
                         {% partial menu-option %}
                     {% endwith %}
                     </ul>
