@@ -5,13 +5,13 @@
 <li class="relative">
     <form is="app-ajax-form" 
           store='{{store}}' 
-          endpoint="{% url url %}"
+          action="{% url url %}"
           data-state="menu-selected"
           data-then="it => it === '{{url}}' ? 'menu-active' : ''"
           data-at="class"
         >
         {% trans title %}
-        <app-if
+        <div
             data-state="{{store}}.status"
             data-at="value"
             data-then="it => {
@@ -19,16 +19,16 @@
                 const data = getState('{{store}}.data');
                 setState('menu-page', data);
                 setState('menu-selected', '{{url}}');
-                setState('{{store}}.status', '');
+                this.closest('form')?.clean();
             }"
-        ></app-if>
-        <app-if
+        />
+        <button
             data-state="menu-selected"
-            data-then="it => it !== '{{url}}'"
-            data-at="value"
-        >
-            <button type="submit" class="absolute inset-0 opacity-0"></button>
-        </app-if>
+            data-then="it => it === '{{url}}'"
+            data-at="disabled"
+            type="submit"
+            class="absolute inset-0 opacity-0"
+        ></button>
 
     </form>
 </li>
