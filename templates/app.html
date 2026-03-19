@@ -17,7 +17,6 @@
             data-then="it => {
                 if (it !== 200) return;
                 const data = getState('{{url_name}}.data');
-                debugger;
                 setState('menu-page', data);
                 setState('menu-selected', '{{url_name}}');
                 this.closest('form')?.clean();
@@ -48,10 +47,6 @@
                     {% endwith %}
 
                     {% with url_name='app' title=_('Events') %}
-                        {% partial menu-option %}
-                    {% endwith %}
-
-                    {% with url_name='app' title=_('Settings') %}
                         {% partial menu-option %}
                     {% endwith %}
                     </ul>
