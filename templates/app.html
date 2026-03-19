@@ -34,10 +34,10 @@
 </li>
 {% endpartialdef %}
 {% block body %}
+    <app-state name='menu-selected' value="schedule_view"></app-state>
+    <app-state name='menu-page'></app-state>
     <div class="grid grid-cols-[15rem_auto] h-screen">
         <aside class="p-2">
-            <app-state name='menu-selected' value="schedule_view"></app-state>
-            <app-state name='menu-page'></app-state>
             <ul class="menu w-full">
                 <li>
                     <h2 class="menu-title">{% trans 'Schedule' %}</h2>
