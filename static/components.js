@@ -1,45 +1,3 @@
-class FieldControl extends HTMLElement {
-  static observedAttributes = ['invalid', 'success', 'error', 'label', 'help'];
-  constructor() {
-    super();
-    this._initialContent = this.innerHTML;
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (this.isConnected && oldValue !== newValue) {
-      this.render();
-    }
-  }
-
-  connectedCallback() {
-    if (!this._initialContent) this._initialContent = this.innerHTML;
-    this.render();
-  }
-
-  render() {
-    const label = this.getAttribute('label') || '';
-    const error = this.getAttribute('error') || '';
-    const help = this.getAttribute('help') || '';
-    const isInvalid = this.hasAttribute('invalid');
-    const isSuccess = this.hasAttribute('success');
-    const id = this.getAttribute('for');
-    this.innerHTML = `
-      <div class="flex flex-col">
-          <label${id ? ' for="' + id + '"' : ''}><strong>${label}</strong></label>
-          ${this._initialContent}
-          <div class="border-t m-x" style="--mx:var(--b2);${isInvalid ? '--btc:var(--c-error)' : isSuccess ? '--btc:var(--c-success)' : 'display:none'}"></div>
-          <small role="alert"
-                 class="text-color"
-                 style="--tc:var(--c-error); --text-sm-lh:var(--s4);display: ${error && isInvalid ? 'block' : 'none'}">
-            ${error}
-          </small>
-          <small style="display: ${error ? 'block' : 'none'}">
-            ${help}
-          </small>
-      </div>
-    `;
-  }
-}
 class CurrencyField extends HTMLInputElement {
   get valueAsDecimal() {
     const cleanValue = this.value.replace(/\D/g, '');
@@ -94,83 +52,6 @@ class EanCodeField extends HTMLInputElement {
     return actualDigit === expectedDigit;
   }
 }
-// class CustomAjaxForm extends HTMLFormElement {
-//   constructor() {
-//     super();
-//     this._onSubmit = this._onSubmit.bind(this);
-//   }
-
-//   connectedCallback() {
-//     const store = this.getAttribute('store');
-//     if (!store) throw TypeError("'store' is required.");
-
-//     this.store = Object.freeze({
-//       data: `${store}.data`,
-//       loading: `${store}.loading`,
-//       status: `${store}.status`,
-//       error: `${store}.error`,
-//     });
-
-//     setState(this.store.data, '');
-//     setState(this.store.loading, '');
-//     setState(this.store.error, '');
-//     setState(this.store.status, '');
-
-//     this.endpoint = this.getAttribute('endpoint');
-//     this.method = (this.getAttribute('method') || 'GET').toUpperCase();
-
-//     this.addEventListener('submit', this._onSubmit);
-//   }
-
-//   disconnectedCallback() {
-//     Object.values(this.store).forEach(k => typeof states !== 'undefined' && states.delete(k));
-//     this.removeEventListener('submit', this._onSubmit);
-//   }
-//   _onSubmit(event) {
-//     event.preventDefault();
-//     setState(this.store.loading, 'true')
-//     fetch(this.endpoint, { method: this.method })
-//       .then(response => {
-//         const status = response.status;
-//         response.text().then(data => {
-//           if (response.ok) {
-//             setState(this.store.data, data)
-//           }
-//           else {
-//             setState(this.store.error, data)
-//           }
-//         }).finally(()=>{
-//           setState(this.store.status, status)
-//         })
-//       })
-//       .finally(() => setState(this.store.loading, 'false'))
-//   }
-// }
-// class AppIf extends HTMLElement {
-//   static observedAttributes = ['value'];
-
-//   constructor() {
-//     super();
-//     this.attachShadow({ mode: 'open' });
-//     this.shadowRoot.innerHTML = `
-//       <style>
-//         :host([result="false"]) slot:not([name="else"]) { display: none; }
-//         :host([result="true"]) slot[name="else"] { display: none; }
-//         :host(:not([result])) slot { display: none; }
-//       </style>
-//       <slot></slot> <slot name="else"></slot>
-//     `;
-//   }
-
-//   attributeChangedCallback() {
-//     this.update();
-//   }
-//   update() {
-//     const value = this.getAttribute('value');
-//     const isTrue = value === 'true';
-//     this.setAttribute('result', isTrue ? 'true' : 'false');
-//   }
-// }
 class CustomAjaxForm extends HTMLFormElement {
   connectedCallback(){
     this.store = this.getAttribute('store');
@@ -197,8 +78,6 @@ class CustomAjaxForm extends HTMLFormElement {
     }
   }
 }
-window.customElements.define('app-field', FieldControl)
 window.customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 window.customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 window.customElements.define('app-ajax-form', CustomAjaxForm, { extends: 'form' })
-// window.customElements.define('app-if', AppIf);
