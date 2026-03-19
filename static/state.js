@@ -37,18 +37,45 @@ class StateDef extends HTMLElement {
     }
   }
 }
+// window.addEventListener('state-update', (event) => {
+//   const { key, value } = event.detail
+//   if (!key) return;
+//   document.querySelectorAll(`[data-state*="${key}"]`).forEach(el => {
+//     const target = el.dataset.at || stateAt.get(key) || 'textContent'
+//     if (target in el && el[target] !== value) {
+//       el[target] = value;
+//     } else if (el.getAttribute(target) !== String(value)) {
+//       el.setAttribute(target, value);
+//     }
+//   })
+// })
+
 window.addEventListener('state-update', (event) => {
-  const { key, value } = event.detail
+  const { key, value } = event.detail;
   if (!key) return;
   document.querySelectorAll(`[data-state*="${key}"]`).forEach(el => {
-    const target = el.dataset.at || stateAt.get(key) || 'textContent'
-    if (target in el && el[target] !== value) {
-      el[target] = value;
-    } else if (el.getAttribute(target) !== String(value)) {
-      el.setAttribute(target, value);
+    let displayValue = value;
+    const transformExpr = el.dataset.then;
+    if (transformExpr) {
+      try {
+        const transformFn = new Function('it', `return (${transformExpr})(it)`);
+        displayValue = transformFn.call(el, value);
+      } catch (e) {
+        console.error(`Erro no data-then do elemento:`, el, e);
+      }
     }
-  })
+    const target = el.dataset.at || stateAt.get(key) || 'textContent';
 
-})
-
+    if (target in el) {
+      if (el[target] !== displayValue) {
+        el[target] = displayValue;
+      }
+    } else {
+      const stringValue = String(displayValue);
+      if (el.getAttribute(target) !== stringValue) {
+        el.setAttribute(target, stringValue);
+      }
+    }
+  });
+});
 window.customElements.define('app-state', StateDef)

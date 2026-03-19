@@ -6,31 +6,26 @@
     <form is="app-ajax-form" 
           store='{{store}}' 
           endpoint="{% url url %}"
-          data-state="{{store}}_form_class"
+          data-state="menu-selected"
+          data-then="it => it === '{{url}}' ? 'menu-active' : ''"
           data-at="class"
         >
         {% trans title %}
-        <app-state name="{{store}}_form_class"></app-state>
         <app-if
             data-state="{{store}}.status"
             data-at="value"
-            then="it => {
-                if (it !== '200') return;
+            data-then="it => {
+                if (it !== 200) return;
                 const data = getState('{{store}}.data');
                 setState('menu-page', data);
                 setState('menu-selected', '{{url}}');
                 setState('{{store}}.status', '');
             }"
-        >
-        </app-if>
+        ></app-if>
         <app-if
             data-state="menu-selected"
+            data-then="it => it !== '{{url}}'"
             data-at="value"
-            then="it => {
-                const v = it === '{{url}}';
-                setState('{{store}}_form_class', v ? 'menu-active' : '');
-                return !v;
-            }"
         >
             <button type="submit" class="absolute inset-0 opacity-0"></button>
         </app-if>
@@ -47,10 +42,15 @@
                 <li>
                     <h2 class="menu-title">{% trans 'Schedule' %}</h2>
                     <ul>
-                    {% with store="menu-opt-1" url='schedule_view' title='Calendar'%}
+                    {% with store="nav_cal" url='schedule_view' title=_('Calendar') %}
                         {% partial menu-option %}
                     {% endwith %}
-                    {% with store="menu-opt-2" url='app' title='Events'%}
+
+                    {% with store="nav_ev" url='app' title=_('Events') %}
+                        {% partial menu-option %}
+                    {% endwith %}
+
+                    {% with store="nav_set" url='app' title=_('Settings') %}
                         {% partial menu-option %}
                     {% endwith %}
                     </ul>

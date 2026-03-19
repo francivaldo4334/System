@@ -147,7 +147,7 @@ class CustomAjaxForm extends HTMLFormElement {
   }
 }
 class AppIf extends HTMLElement {
-  static observedAttributes = ['then', 'value'];
+  static observedAttributes = ['value'];
 
   constructor() {
     super();
@@ -165,21 +165,9 @@ class AppIf extends HTMLElement {
   attributeChangedCallback() {
     this.update();
   }
-
-  get predicate() {
-    const fnStr = this.getAttribute('then');
-    if (!fnStr) return () => true;
-    try {
-      return new Function('it', `return (${fnStr})(it)`);
-    } catch (e) {
-      console.error("Invalid predicate in app-if", e);
-      return () => false;
-    }
-  }
-
   update() {
     const value = this.getAttribute('value');
-    const isTrue = !!this.predicate(value);
+    const isTrue = value === 'true';
     this.setAttribute('result', isTrue ? 'true' : 'false');
   }
 }
