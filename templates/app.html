@@ -7,21 +7,16 @@
           store='{{url_name}}' 
           action="{% url url_name %}"
           data-state="menu-selected"
-          data-then="it => it === '{{url_name}}' ? 'menu-active' : ''"
+          data-then="it => it === '{{url_name}}' ? 
+            'is-drawer-close:tooltip is-drawer-close:tooltip-right menu-active' :
+            'is-drawer-close:tooltip is-drawer-close:tooltip-right'"
           data-at="class"
+          data-tip="{% trans title %}"
         >
-        {% trans title %}
-        <div
-            data-state="{{url_name}}.status"
-            data-at="value"
-            data-then="it => {
-                if (it !== 200) return;
-                const data = getState('{{url_name}}.data');
-                setState('menu-page', data);
-                setState('menu-selected', '{{url_name}}');
-                this.closest('form')?.clean();
-            }"
-        />
+        <span class="*:my-1.5 *:inline-block *:size-4">
+            {% include 'icons/panel-left-open.svg' %}
+        </span>
+        <span class="is-drawer-close:hidden"> {% trans title %} </span>
         <button
             data-state="menu-selected"
             data-then="it => it === '{{url_name}}'"
@@ -29,35 +24,68 @@
             type="submit"
             class="absolute inset-0 opacity-0"
         ></button>
-
     </form>
+    <div
+        data-state="{{url_name}}.status"
+        data-at="value"
+        data-then="it => {
+            if (it !== 200) return;
+            const data = getState('{{url_name}}.data');
+            setState('menu-page', data);
+            setState('menu-selected', '{{url_name}}');
+            this.closest('form')?.clean();
+        }"
+    />
 </li>
 {% endpartialdef %}
 {% block body %}
-    <app-state name='menu-selected' value="schedule_view"></app-state>
-    <app-state name='menu-page'></app-state>
-    <div class="grid grid-cols-[15rem_auto] h-screen">
-        <aside class="border-r">
-            <h1 class="text-xl font-bold p-4 border-b"> Ágio </h1>
-            <ul class="menu w-full pr-4">
-                <li>
-                    <h2 class="menu-title">{% trans 'Schedule' %}</h2>
-                    <ul>
-                    {% with url_name='schedule_view' title=_('Calendar') %}
-                        {% partial menu-option %}
-                    {% endwith %}
+    <!-- <app-state name='menu-selected' value="schedule_view"></app-state> -->
+    <!-- <app-state name='menu-page'></app-state> -->
+    <!-- <div class="grid grid-cols-[15rem_auto] h-screen"> -->
+        <!-- <aside class="border-r"> -->
+            <!-- <h1 class="text-xl font-bold p-4 border-b"> Ágio </h1> -->
+            <!-- <ul class="menu w-full pr-4"> -->
+                <!-- <li> -->
+                    <!-- <h2 class="menu-title">{% trans 'Schedule' %}</h2> -->
+                    <!-- <ul> -->
+                    <!-- {% with url_name='schedule_view' title=_('Calendar') %} -->
+                        <!-- {% partial menu-option %} -->
+                    <!-- {% endwith %} -->
 
-                    <li><a>Disponibilidades</a></li>
-                    <li><a>Agendamentos</a></li>
-                    <li><a>Recursos</a></li>
-                    <li><a>Serviços</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
-        <section data-state='menu-page'>
-        </section>
+                    <!-- <li><a>Disponibilidades</a></li> -->
+                    <!-- <li><a>Agendamentos</a></li> -->
+                    <!-- <li><a>Recursos</a></li> -->
+                    <!-- <li><a>Serviços</a></li> -->
+                    <!-- </ul> -->
+                <!-- </li> -->
+            <!-- </ul> -->
+        <!-- </aside> -->
+        <!-- <section data-state='menu-page'> -->
+        <!-- </section> -->
+    <!-- </div> -->
+<div class="drawer lg:drawer-open">
+  <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content">
+    <nav class="navbar w-full bg-base-300">
+      <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
+        {% include 'icons/panel-left-open.svg' %}
+      </label>
+      <div class="px-4">Navbar Title</div>
+    </nav>
+    <div class="p-4">Page Content</div>
+  </div>
+
+  <div class="drawer-side is-drawer-close:overflow-visible">
+    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+      <ul class="menu w-full grow">
+        {% with url_name='schedule_view' title=_('Calendar') %}
+            {% partial menu-option %}
+        {% endwith %}
+      </ul>
     </div>
+  </div>
+</div>
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'state.js' %}"></script>
