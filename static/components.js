@@ -53,18 +53,18 @@ class EanCodeField extends HTMLInputElement {
   }
 }
 class CustomAjaxForm extends HTMLFormElement {
-  connectedCallback(){
+  connectedCallback() {
     this.store = this.getAttribute('store');
     if (!this.store) throw "'store' required."
     this.clean()
     this.addEventListener('submit', this);
   }
-  clean(){
+  clean() {
     states.set(`${this.store}.loading`, false);
     states.set(`${this.store}.status`, undefined);
     states.set(`${this.store}.data`, undefined);
   }
-  async handleEvent(e){
+  async handleEvent(e) {
     e.preventDefault();
     setState(`${this.store}.loading`, true);
     try {
@@ -79,6 +79,35 @@ class CustomAjaxForm extends HTMLFormElement {
     }
   }
 }
+class AppScope extends HTMLScriptElement {
+  constructor() {
+    super();
+    this._cleanUpFn = null;
+  }
+
+  connectedCallback() {
+    if (!this.textContent.trim() || this._cleanUpFn) return;
+    const code = this.getAttribute('cleanup');
+
+    try {
+      this._cleanUpFn = new Function(`${code}`);;
+
+    } catch (e) {
+      console.error("Erro na execução do escopo AppScope:", e);
+    }
+  }
+
+  disconnectedCallback() {
+    if (this._cleanUpFn) {
+      this._cleanUpFn();
+      this._cleanUpFn = null;
+      console.log("AppScope: Recursos limpos com sucesso.");
+    }
+    this.textContent = "";
+  }
+}
+
 window.customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 window.customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 window.customElements.define('app-ajax-form', CustomAjaxForm, { extends: 'form' })
+window.customElements.define('app-scope', AppScope, { extends: 'script' })
