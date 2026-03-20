@@ -47,15 +47,7 @@
 <div class="drawer lg:drawer-open">
   <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
-    <nav class="navbar w-full bg-base-300 border-b border-base-content/10">
-      <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
-        {% include 'icons/panel-left-open.svg' %}
-      </label>
-      <div class="px-4">Navbar Title</div>
-    </nav>
-    <div data-state="menu-page" data-at='innerHTML'>
       {% include 'schedule.html' %}
-    </div>
   </div>
 
   <div class="drawer-side is-drawer-close:overflow-visible">
