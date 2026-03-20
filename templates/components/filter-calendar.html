@@ -16,7 +16,7 @@
     <div class="grid grid-cols-7 text-center text-[10px] font-bold opacity-50 uppercase"
          id="calendar-weekdays"></div>
     <div id="calendar-grid"
-         class="grid grid-cols-7 gap-1"
+         class="grid grid-cols-7"
          data-state="f-calendar"
          data-at="innerHTML"
          data-then="CalendarApp.renderGrid"></div>
@@ -26,7 +26,6 @@
 <script is="app-scope" cleanup="delete window.CalendarApp">
   window.CalendarApp = {
     locale: '{{ LANG_CODE|default:"en" }}',
-
     formatHeader(iso, lang) {
       return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(new Date(iso));
     },
