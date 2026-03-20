@@ -46,14 +46,14 @@
 <app-state name="menu-page"></app-state>
 <div class="drawer lg:drawer-open">
   <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content  border-l border-base-content/10">
+  <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
     <nav class="navbar w-full bg-base-300">
       <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
         {% include 'icons/panel-left-open.svg' %}
       </label>
       <div class="px-4">Navbar Title</div>
     </nav>
-    <div class="p-4" data-state="menu-page" data-at='innerHTML'>
+    <div class="p-4 bg-pattern-polka" data-state="menu-page" data-at='innerHTML'>
       {% include 'schedule.html' %}
     </div>
   </div>
