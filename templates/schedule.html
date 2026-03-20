@@ -4,26 +4,99 @@
 <fieldset class="p-4 border-r border-base-content/10">
   <!-- CALENDAR -->
   <app-state name="f-calendar" value="{% now 'c'%}"></app-state>
-  <div class="w-full grid grid-cols-7">
-    <div class="col-span-7 flex gap-2">
-      <span
-        class="text-sm flex-1"
-        data-state="f-calendar"
-        data-then="iso => {
-          const d = new Date(iso);
-          const f = new Intl.DateTimeFormat('{{LANG_CODE}}', {
-              month: 'long',
-              year: 'numeric'
-          });
-          return f.format(d);
-        }"
-      ></span>
-      <button class="btn btn-flat btn-xs"> Today </button>
-      <button class="btn btn-ghost btn-xs btn-square"> {% include 'icons/chevron-left.svg' %} </button>
-      <button class="btn btn-ghost btn-xs btn-square"> {% include 'icons/chevron-right.svg' %} </button>
-      
+  <section>
+      <div class="col-span-7 flex gap-2">
+        <span
+          class="text-sm flex-1"
+          data-state="f-calendar"
+          data-then="iso => {
+            const d = new Date(iso);
+            const f = new Intl.DateTimeFormat('{{LANG_CODE}}', {
+                month: 'long',
+                year: 'numeric'
+            });
+            return f.format(d);
+          }"
+        ></span>
+        <button
+        class="btn btn-flat btn-xs"
+        onclick="setState('f-calendar', new Date().toISOString())"
+        > Today </button>
+        <button
+          class="btn btn-ghost btn-xs btn-square"
+          onclick="(el => {
+            const f_c = getState('f-calendar');
+            const d = new Date(f_c);
+            d.setMonth(d.getMonth() - 1);
+            setState('f-calendar',d.toISOString())
+          })(this)"
+        > {% include 'icons/chevron-left.svg' %} </button>
+        <button
+          class="btn btn-ghost btn-xs btn-square"
+          onclick="(el => {
+            const f_c = getState('f-calendar');
+            const d = new Date(f_c);
+            d.setMonth(d.getMonth() + 1);
+            setState('f-calendar',d.toISOString());
+          })(this)"
+        > {% include 'icons/chevron-right.svg' %} </button>
     </div>
-  </div>
+    <template id="tmp-calendar-day">
+      <button
+        class="btn btn-ghost btn-sm btn-square"
+        onclick="(el => {
+          const f_c = getState('f-calendar');
+          const d = new Date(f_c);
+          d.setDate(el.textContent);
+          setState('f-calendar', d.toISOString());
+        })(this)"
+      >1</button>
+    </template>
+
+    <div
+      class="w-full grid grid-cols-7"
+      data-state="f-calendar"
+      data-then="iso => {
+        const d = new Date(iso);
+        const year = d.getFullYear();
+        const month = d.getMonth();
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const items = [
+          ...Array(firstDay).fill(null),
+          ...Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1))
+        ];
+
+        const tmp = document.getElementById('tmp-calendar-day');
+        const container = document.createElement('div');
+
+        items.forEach(day => {
+          if (day === null) {
+            container.insertAdjacentHTML('beforeend', '<div></div>');
+          } else {
+            const clone = tmp.content.cloneNode(true);
+            const btn = clone.querySelector('button');
+            btn.textContent = day.getDate();
+
+            if (day.toDateString() === new Date().toDateString()) {
+              btn.classList.add('btn-outline');
+            }
+            if (day.toDateString() === d.toDateString()) {
+              btn.classList.add('btn-primary');
+              btn.classList.add('btn-active');
+            }
+
+            container.appendChild(clone);
+          }
+        });
+
+        return container.innerHTML;
+      }"
+      data-at="innerHTML"
+    ></div>
+  </section>
 </fieldset>
 <main>
 </main>
