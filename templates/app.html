@@ -6,15 +6,17 @@
     <form is="app-ajax-form" 
           store='{{url_name}}' 
           action="{% url url_name %}"
+          class="is-drawer-close:tooltip is-drawer-close:tooltip-right "
           data-state="menu-selected"
-          data-then="it => it === '{{url_name}}' ? 
-            'is-drawer-close:tooltip is-drawer-close:tooltip-right menu-active' :
-            'is-drawer-close:tooltip is-drawer-close:tooltip-right'"
-          data-at="class"
+          data-then="it => {
+          debugger
+            this.classList.toggle('menu-active',it === '{{url_name}}')
+          }"
+          data-at="void"
           data-tip="{% trans title %}"
         >
         <span class="*:m-1.5 *:inline-block">
-            {% include 'icons/panel-left-open.svg' %}
+            {% include icon_svg %}
         </span>
         <span class="is-drawer-close:hidden"> {% trans title %} </span>
         <button
@@ -30,6 +32,7 @@
         data-state="{{url_name}}.status"
         data-at="value"
         data-then="it => {
+            debugger
             if (it !== 200) return;
             const data = getState('{{url_name}}.data');
             setState('menu-page', data);
@@ -40,6 +43,8 @@
 </li>
 {% endpartialdef %}
 {% block body %}
+<app-state name="menu-selected" value="schedule_view"></app-state>
+<app-state name="menu-page"></app-state>
 <div class="drawer lg:drawer-open">
   <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
@@ -62,7 +67,7 @@
             <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Ágio' %}</span>
           </span>
         </li>
-        {% with url_name='schedule_view' title=_('Calendar') %}
+        {% with url_name='schedule_view' title=_('Calendar') icon_svg='icons/calendar.svg'%}
             {% partial menu-option %}
         {% endwith %}
       </ul>

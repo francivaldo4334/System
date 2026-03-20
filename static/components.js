@@ -56,6 +56,7 @@ class CustomAjaxForm extends HTMLFormElement {
   connectedCallback(){
     this.store = this.getAttribute('store');
     if (!this.store) throw "'store' required."
+    this.clean()
     this.addEventListener('submit', this);
   }
   clean(){
