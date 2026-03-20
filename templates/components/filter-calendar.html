@@ -7,10 +7,10 @@
         data-then="iso => CalendarApp.formatHeader(iso, '{{LANG_CODE}}')">
     </h2>
     <div class="flex gap-1">
-      <button class="btn btn-ghost btn-xs btn-square" onclick="CalendarApp.changeMonth(-1)">
+      <button class="btn btn-ghost btn-sm btn-square" onclick="CalendarApp.changeMonth(-1)">
         {% include 'icons/chevron-left.svg' %}
       </button>
-      <button class="btn btn-ghost btn-xs btn-square" onclick="CalendarApp.changeMonth(1)">
+      <button class="btn btn-ghost btn-sm btn-square" onclick="CalendarApp.changeMonth(1)">
         {% include 'icons/chevron-right.svg' %}
       </button>
     </div>
@@ -76,8 +76,8 @@
         const isSelected = d.getDate() === day;
         
         const classes = [
-          'btn btn-sm btn-square',
-          isToday ? 'btn-outline' : 'btn-ghost font-normal',
+          'btn btn-sm btn-square font-normal',
+          isToday ? 'btn-outline' : 'btn-ghost',
           isSelected ? 'btn-primary btn-active' : ''
         ].join(' ');
 
