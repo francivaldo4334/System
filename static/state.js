@@ -29,13 +29,15 @@ class StateDef extends HTMLElement {
   connectedCallback() {
     this.name = this.getAttribute('name');
     const at = this.getAttribute("at");
-    const initialValue = this.getAttribute('value');
     if (!this.name) return;
     if (at) stateAt.set(this.name, at);
     if (!states.has(this.name)) {
       states.set(this.name, undefined);
     }
-    setState(this.name, initialValue);
+    if (this.hasAttribute('value')) {
+      const initialValue = this.getAttribute('value');
+      setState(this.name, initialValue);
+    }
   }
 
   disconnectedCallback() {

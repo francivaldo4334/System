@@ -54,7 +54,9 @@
       </label>
       <div class="px-4">Navbar Title</div>
     </nav>
-    <div class="p-4">Page Content</div>
+    <div class="p-4" data-state="menu-page" data-at='innerHTML'>
+      {% include 'schedule.html' %}
+    </div>
   </div>
 
   <div class="drawer-side is-drawer-close:overflow-visible border-r border-base-content/10">
