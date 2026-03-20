@@ -1,4 +1,5 @@
 {% load i18n %}
+{% get_current_language as LANG_CODE %}
 <app-state name="f-calendar" value="{% now 'c' %}"></app-state>
 <section class="flex flex-col gap-2" id="calendar-container">
   <header class="flex items-center justify-between gap-2">
