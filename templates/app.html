@@ -13,7 +13,7 @@
           data-at="class"
           data-tip="{% trans title %}"
         >
-        <span class="*:my-1.5 *:inline-block *:size-4">
+        <span class="*:m-1.5 *:inline-block">
             {% include 'icons/panel-left-open.svg' %}
         </span>
         <span class="is-drawer-close:hidden"> {% trans title %} </span>
@@ -26,6 +26,7 @@
         ></button>
     </form>
     <div
+        class="hidden"
         data-state="{{url_name}}.status"
         data-at="value"
         data-then="it => {
@@ -51,10 +52,16 @@
     <div class="p-4">Page Content</div>
   </div>
 
-  <div class="drawer-side is-drawer-close:overflow-visible">
-    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+  <div class="drawer-side is-drawer-close:overflow-visible border-r border-base-content/10">
+    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"> </label>
+    <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
       <ul class="menu w-full grow">
+        <li class='border-b mb-3 border-base-content/10'>
+          <span class="menu-title flex gap-3">
+            {% include 'icons/logo.svg' %}
+            <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Ágio' %}</span>
+          </span>
+        </li>
         {% with url_name='schedule_view' title=_('Calendar') %}
             {% partial menu-option %}
         {% endwith %}
