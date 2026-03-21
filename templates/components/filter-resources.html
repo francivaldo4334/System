@@ -9,16 +9,25 @@
      data-at="innerHTML">
     <span class="loading"></span>
 </div>
-<div data-state="f-resources"
-     data-then="it => it ? JSON.stringify(Array.from(it)) : ''"></div>
 <script is="app-scope" onclearup="delete window.FResources">
     window.FResources = {
+        toggleCheck(el){
+            const set = new Set(getState('f-resources'))
+            const checked = el.checked
+            const value = Number(el.value)
+            if (checked){
+                set.add(value)
+            } else {
+                set.delete(value)
+            }
+            setState('f-resources', set)
+        },
         getTemplate(it){
             if (it.is_selectable){
                 this.fResources.add(it.id);
                 return `
                     <label class="label w-full">
-                        <input type="checkbox" name="resource" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" checked />
+                        <input type="checkbox" name="resource" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" checked onchange="FResources.toggleCheck(this)" />
                         <span class="label-text text-sm">${this.escapeHtml(it.name)}</span>
                     </label>
                 `;
