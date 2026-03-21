@@ -7,10 +7,10 @@ from drf_spectacular.views import (
     SpectacularRedocView,
 )
 
-urlpatterns = api_urls + ssr_urls + [
+urlpatterns = api_urls  + [
     path("__reload__/", include("django_browser_reload.urls")),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
-
+urlpatterns += ssr_urls
