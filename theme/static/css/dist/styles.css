@@ -1829,6 +1829,24 @@
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
   @layer daisyui.l1 {
+    .\!btn-outline:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
+      --btn-shadow: "" !important;
+      --btn-bg: #0000 !important;
+      --btn-fg: var(--btn-color) !important;
+      --btn-border: var(--btn-color) !important;
+      --btn-noise: none !important;
+    }
+    @media (hover: none) {
+      .\!btn-outline:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
+        --btn-shadow: "" !important;
+        --btn-bg: #0000 !important;
+        --btn-fg: var(--btn-color) !important;
+        --btn-border: var(--btn-color) !important;
+        --btn-noise: none !important;
+      }
+    }
+  }
+  @layer daisyui.l1 {
     .btn-outline:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
       --btn-shadow: "";
       --btn-bg: #0000;

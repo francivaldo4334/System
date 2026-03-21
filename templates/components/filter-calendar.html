@@ -15,9 +15,9 @@
          id="calendar-weekdays"></div>
     <div id="calendar-grid"
          class="grid grid-cols-7"
-         data-state="f-calendar"
-         data-at="innerHTML"
-         data-then="CalendarApp.renderGrid"></div>
+         data-state="f-calendar-range"
+         data-then="CalendarApp.renderGrid"
+         data-at="innerHTML"></div>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
             onclick="setState('f-calendar', new Date().toISOString())">{% trans "Today" %}</button>
 </section>
@@ -81,7 +81,8 @@
       container.innerHTML = daysHtml;
     },
 
-    renderGrid(iso) {
+    renderGrid() {
+      const iso = getState("f-calendar")
       const date = new Date(iso);
       const today = new Date();
       const year = date.getFullYear();
@@ -105,30 +106,14 @@
 
       return [...emptyCells, ...dayButtons].join('');
     },
-
-    handlerRangeBtn(el) {
-      const day = Number(el.textContent);
-      const now = this._getCurrentDate();
-      const currentDate = new Date(now.getFullYear(), now.getMonth(), day);
-      const range = this._getDateRange();
-      
-      const inRange = this._isInRange(currentDate, ...range);
-      
-      if (inRange) {
-        el.classList.add('btn-soft', 'btn-primary');
-      } else {
-        el.classList.remove('btn-soft', 'btn-primary');
-      }
-    },
-
     _buildDayButton(day, isToday, isSelected, inRange) {
       const baseClass = 'btn btn-sm btn-square font-normal transition-colors';
-      const todayClass = isToday ? 'btn-outline' : 'btn-ghost';
-      const activeClass = isSelected ? 'btn-primary btn-active' : '';
       const rangeClass = inRange ? 'btn-soft btn-primary' : '';
+      const todayClass = isToday ? '!btn-outline' : 'btn-ghost';
+      const activeClass = isSelected ? 'btn-primary btn-active' : '';
 
       return `
-        <button class="${baseClass} ${todayClass} ${activeClass} ${rangeClass}" onclick="CalendarApp.selectDay(${day});" data-state="f-calendar-range" data-then="() => CalendarApp.handlerRangeBtn(this)" data-at="void">
+        <button class="${baseClass} ${todayClass} ${activeClass} ${rangeClass}" onclick="CalendarApp.selectDay(${day});">
           ${day}
         </button>`.trim();
     }

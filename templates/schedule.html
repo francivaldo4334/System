@@ -11,9 +11,9 @@
 {% block content %}
     <!-- filter states -->
     <!-- types m: Month | w: Week | d: Day -->
-    <app-state name="f-calendar-view" value="m" at="checked"></app-state>
-    <app-state name="f-calendar" value="{% now 'c' %}"></app-state>
     <app-state name="f-calendar-range"></app-state>
+    <app-state name="f-calendar" value="{% now 'c' %}"></app-state>
+    <app-state name="f-calendar-view" value="w" at="checked"></app-state>
     <app-state name="f-search" value=""></app-state>
     <app-state name="f-services"></app-state>
     <app-state name="f-resources"></app-state>
@@ -59,7 +59,6 @@
         }
         </script>
     </div>
-    <div data-state="f-calendar-range" data-at='textContent'></div>
     <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
         <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
             {% include 'components/filter-calendar.html' %}
