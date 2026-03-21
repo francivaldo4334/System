@@ -1,4 +1,16 @@
 <label class="input">
     {% include 'icons/search.svg' %}
-    <input type="search" placeholder="{% trans 'Search...' %}" />
+    <input type="search"
+           placeholder="{% trans 'Search...' %}"
+           oninput="FSearch.onInput(this.value)" />
 </label>
+<script is="app-scope" onclearup="delete FSearch">
+window.FSearch = {
+    onInput(value) {
+        clearTimeout(this.id)
+        this.id = setTimeout(()=>{
+            setState('f-search', value);
+        },300)
+    }    
+}
+</script>

@@ -9,6 +9,12 @@
 </fieldset>
 {% endpartialdef %}
 {% block content %}
+    <!-- filter states -->
+    <app-state name="f-calendar" value="{% now 'c' %}"></app-state>
+    <app-state name="f-search" value=""></app-state>
+    <app-state name="f-services"></app-state>
+    <app-state name="f-resources"></app-state>
+    <app-state name="f-assignment-status" at="checked"></app-state>
     <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
         <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
             {% include 'components/filter-calendar.html' %}
