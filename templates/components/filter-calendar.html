@@ -30,6 +30,12 @@
       const iso = getState('f-calendar');
       return iso ? new Date(iso) : new Date();
     },
+    _getDateRange(){
+      const isoStart = getState("f-calendar-start");
+      const isoEnd = getState("f-calendar-end");
+      if (!isoEnd || !isoStart) return [undefined, undefined]
+      return [new Date(isoStart), new Date(isoEnd)]
+    },
 
     formatHeader(iso, lang) {
       const date = new Date(iso);
@@ -78,6 +84,7 @@
       const firstDayIndex = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+
       // Gerar células vazias
       const emptyCells = Array(firstDayIndex).fill('<div class="p-2"></div>');
 
@@ -99,6 +106,15 @@
              d1.getMonth() === d2.getMonth() &&
              d1.getFullYear() === d2.getFullYear();
     },
+    handlerRangeBtn(el){
+      const now = this._getCurrentDate()
+      const [init, end] = this._getDateRange()
+      if (!init || !end || !now) return;
+      const date = new Date(now.getFullYear(), now.getMonth(), Number(el.textContent))
+      console.log(date.getDate())
+      if (date > init && date < end) {
+      }
+    },
 
     _buildDayButton(day, isToday, isSelected) {
       const config = {
@@ -110,7 +126,7 @@
       const classes = Object.values(config).join(' ');
       
       return `
-        <button class="${classes}" onclick="CalendarApp.selectDay(${day})" aria-pressed="${isSelected}">
+        <button class="${classes}" onclick="CalendarApp.selectDay(${day})" aria-pressed="${isSelected}" data-state="f-calendar-start,f-calendar-end" data-then="()=>CalendarApp.handlerRangeBtn(this)" data-at="void">
           ${day}
         </button>`.trim();
     }
