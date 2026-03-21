@@ -940,9 +940,6 @@
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
-  .bottom-0 {
-    bottom: calc(var(--spacing) * 0);
-  }
   .bottom-2 {
     bottom: calc(var(--spacing) * 2);
   }
@@ -1386,6 +1383,14 @@
     .checkbox-primary {
       color: var(--color-primary-content);
       --input-color: var(--color-primary);
+    }
+  }
+  .text-base-content\/50 {
+    color: var(--color-base-content);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-base-content\/50 {
+      color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
     }
   }
   .text-base-content\/70 {

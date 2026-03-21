@@ -13,12 +13,10 @@
         getTemplate(it){
             if (it.is_selectable){
                 return `
-                    <div class="form-control">
-                        <label class="label cursor-pointer justify-start gap-3 py-1">
-                            <input type="checkbox" name="resource" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" />
-                            <span class="label-text text-sm">${this.escapeHtml(it.name)}</span>
-                        </label>
-                    </div>
+                    <label class="label w-full">
+                        <input type="checkbox" name="resource" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" />
+                        <span class="label-text text-sm">${this.escapeHtml(it.name)}</span>
+                    </label>
                 `;
             }
 

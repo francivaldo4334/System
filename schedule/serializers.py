@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Resource
+from schedule.models import Resource, Service
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
@@ -9,6 +9,7 @@ class ResourcesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = [
+            'id',
             'name',
             'code',
             'is_selectable',
@@ -19,3 +20,11 @@ class ResourcesSerializer(serializers.ModelSerializer):
     def get_children(self, obj):
         serializer = ResourcesSerializer(obj.children.all(), many=True)
         return serializer.data
+
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = [
+            'id',
+            'title',
+        ]

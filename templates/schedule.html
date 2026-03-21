@@ -5,7 +5,7 @@
 {% endblock %}
 {% partialdef fieldset_filter %}
 <fieldset class="fieldset border-t border-base-content/10">
-    <legend class="fieldset-legend">{{ title }}</legend>
+    <legend class="fieldset-legend text-base-content/50">{{ title }}</legend>
     {% include content %}
 </fieldset>
 {% endpartialdef %}
@@ -16,7 +16,7 @@
             {% with content='components/filter-resources.html' title=_('Resources') %}
                 {% partial fieldset_filter %}
             {% endwith %}
-            {% with content='components/filter-resources.html' title=_('Services') %}
+            {% with content='components/filter-services.html' title=_('Services') %}
                 {% partial fieldset_filter %}
             {% endwith %}
         </aside>
