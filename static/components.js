@@ -127,11 +127,8 @@ class AppTimeline extends HTMLElement {
           :host {
               display: grid;
               grid-auto-rows: ${unit};
-              gap: 2px;
               position: relative;
-              border-radius: 8px;
           }
-          ::slotted(app-slot) { grid-column: 1; }
           </style>
           <slot></slot>
         `;

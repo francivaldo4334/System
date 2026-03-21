@@ -1251,6 +1251,9 @@
   .\!end {
     inset-inline-end: var(--spacing) !important;
   }
+  .end {
+    inset-inline-end: var(--spacing);
+  }
   @layer daisyui.l1.l2 {
     .toast-top {
       top: calc(0.25rem * 4);
@@ -1559,6 +1562,12 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
+  .inline-block {
+    display: inline-block;
+  }
   @layer daisyui.l1.l2 {
     .btn-square {
       padding-inline: calc(0.25rem * 0);
@@ -1631,6 +1640,10 @@
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
   }
   .border-t {
     border-top-style: var(--tw-border-style);
@@ -1707,6 +1720,12 @@
   }
   .bg-gray-50 {
     background-color: var(--color-gray-50);
+  }
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .bg-success {
+    background-color: var(--color-success);
   }
   @layer daisyui.l1.l2 {
     .checkbox-xs {
