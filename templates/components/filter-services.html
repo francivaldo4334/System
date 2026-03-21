@@ -1,21 +1,27 @@
+<app-state name="f-services"></app-state>
 <form is="app-ajax"
-      store="f-services"
+      store="q-f-services"
       action="{% url 'services-list' %}"
       autofetch>
 </form>
-<div data-state="f-services.data"
+<div data-state="q-f-services.data"
      data-then="it => FServices.render(this, JSON.parse(it))"
      data-at="innerHTML"></div>
 <script is="app-scope" onclearup="delete window.FServices">
 window.FServices = {
     render(el, data){
       if (!data?.results) return;
-      const htmlContent = data.results.map(it => `
-        <label class="label w-full">
-          <input type="checkbox" name="service" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" />
-          <span class="label-text text-sm">${this.escapeHtml(it.title)}</span>
-        </label>
-      `).join('')
+      const set = new Set([]);
+      const htmlContent = data.results.map(it => {
+        set.add(it.id)
+        return `
+          <label class="label w-full">
+            <input type="checkbox" name="service" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" checked />
+            <span class="label-text text-sm">${this.escapeHtml(it.title)}</span>
+          </label>
+        `
+      }).join('');
+      setState('f-services', set)
       return htmlContent;
     },
     escapeHtml(str){
