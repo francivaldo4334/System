@@ -1,0 +1,26 @@
+<app-state name="f-assignment-status" at="checked"></app-state>
+{% partialdef assignment_status %}
+<input class="btn"
+       type="radio"
+       name="frameworks"
+       aria-label="{{ label }}"
+       value="{{ value }}"
+       data-state="f-assignment-status"
+       data-then="it => it === this.value"
+       onclick="setState('f-assignment-status', this.value)" />
+{% endpartialdef %}
+<form class="filter">
+    {% with value='1' label='1' %}
+        {% partial assignment_status %}
+    {% endwith %}
+    {% with value='2' label='2' %}
+        {% partial assignment_status %}
+    {% endwith %}
+    {% with value='3' label='3' %}
+        {% partial assignment_status %}
+    {% endwith %}
+    <input class="btn btn-square text-xs"
+           type="reset"
+           value="&#10007;"
+           onclick="setState('f-assignment-status', '')" />
+</form>
