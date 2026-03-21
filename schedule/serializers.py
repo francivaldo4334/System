@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Resource, Service
+from schedule.models import AssignmentSlot, Resource, Service
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
@@ -27,4 +27,23 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
+        ]
+
+
+class AssignmentSlotSerializer(serializers.ModelSerializer):
+    service_title = serializers.CharField(
+        source="service.title",
+        allow_null=True,
+    )
+    class Meta:
+        model = AssignmentSlot
+        fields = [
+            'id',
+            'status',
+            'service_id',
+            'service_title',
+            'resources',
+            'date',
+            'start_slot',
+            'duration_slot',
         ]
