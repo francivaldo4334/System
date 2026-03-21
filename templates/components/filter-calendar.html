@@ -24,57 +24,97 @@
 <script is="app-scope" oncleanup="delete window.CalendarApp">
   window.CalendarApp = {
     locale: '{{ LANG_CODE|default:"en" }}',
+
+    // --- Helpers de Estado e Data ---
+    _getCurrentDate() {
+      const iso = getState('f-calendar');
+      return iso ? new Date(iso) : new Date();
+    },
+
     formatHeader(iso, lang) {
-      return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(new Date(iso));
+      const date = new Date(iso);
+      return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(date);
     },
+
+    // --- Ações ---
     changeMonth(step) {
-      const current = new Date(getState('f-calendar'));
-      current.setMonth(current.getMonth() + step);
-      setState('f-calendar', current.toISOString());
+      const date = this._getCurrentDate();
+      // Ajuste crítico: setar dia 1 evita pular meses se hoje for dia 31
+      date.setDate(1); 
+      date.setMonth(date.getMonth() + step);
+      setState('f-calendar', date.toISOString());
     },
+
     selectDay(day) {
-      const d = new Date(getState('f-calendar'));
-      d.setDate(day);
-      setState('f-calendar', d.toISOString());
+      const date = this._getCurrentDate();
+      date.setDate(day);
+      setState('f-calendar', date.toISOString());
     },
+
+    // --- Renderização ---
     initWeekDays() {
       const container = document.getElementById('calendar-weekdays');
       if (!container) return;
+
+      const formatter = new Intl.DateTimeFormat(this.locale, { weekday: 'short' });
       
-      const baseDate = new Date(2024, 0, 7);
-      let html = '';
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(baseDate);
-        d.setDate(baseDate.getDate() + i);
-        const name = new Intl.DateTimeFormat(this.locale, { weekday: 'short' }).format(d);
-        html += `<span>${name.replace('.', '')}</span>`;
-      }
-      container.innerHTML = html;
+      // Cria os nomes dos dias (baseado em um domingo fixo: 2024-01-07)
+      const daysHtml = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(2024, 0, 7 + i);
+        const name = formatter.format(d).replace('.', '');
+        return `<span>${name}</span>`;
+      }).join('');
+
+      container.innerHTML = daysHtml;
     },
+
     renderGrid(iso) {
-      const d = new Date(iso);
+      const date = new Date(iso);
       const today = new Date();
-      const year = d.getFullYear(), month = d.getMonth();
       
+      const year = date.getFullYear();
+      const month = date.getMonth();
+
       const firstDayIndex = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-      
-      let html = '';
-      for (let x = 0; x < firstDayIndex; x++) html += `<div class="p-2"></div>`;
-      for (let day = 1; day <= daysInMonth; day++) {
-        const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
-        const isSelected = d.getDate() === day;
-        
-        const classes = [
-          'btn btn-sm btn-square font-normal',
-          isToday ? 'btn-outline' : 'btn-ghost',
-          isSelected ? 'btn-primary btn-active' : ''
-        ].join(' ');
 
-        html += `<button class="${classes}" onclick="CalendarApp.selectDay(${day})">${day}</button>`;
-      }
-      return html;
+      // Gerar células vazias
+      const emptyCells = Array(firstDayIndex).fill('<div class="p-2"></div>');
+
+      // Gerar botões dos dias
+      const dayButtons = Array.from({ length: daysInMonth }, (_, i) => {
+        const day = i + 1;
+        const isToday = this._isSameDay(today, new Date(year, month, day));
+        const isSelected = date.getDate() === day;
+
+        return this._buildDayButton(day, isToday, isSelected);
+      });
+
+      return [...emptyCells, ...dayButtons].join('');
+    },
+
+    // --- Sub-componentes (Privados por convenção) ---
+    _isSameDay(d1, d2) {
+      return d1.getDate() === d2.getDate() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getFullYear() === d2.getFullYear();
+    },
+
+    _buildDayButton(day, isToday, isSelected) {
+      const config = {
+        base: 'btn btn-sm btn-square font-normal transition-colors',
+        state: isToday ? 'btn-outline' : 'btn-ghost',
+        active: isSelected ? 'btn-primary btn-active' : ''
+      };
+
+      const classes = Object.values(config).join(' ');
+      
+      return `
+        <button class="${classes}" onclick="CalendarApp.selectDay(${day})" aria-pressed="${isSelected}">
+          ${day}
+        </button>`.trim();
     }
   };
+
   window.CalendarApp.initWeekDays();
 </script>
