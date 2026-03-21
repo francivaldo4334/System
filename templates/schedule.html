@@ -20,6 +20,23 @@
             {% endwith %}
         </aside>
         <main class="bg-base-200/30">
+            <div class="w-full flex justify-between px-4 py-2 border-b border-base-content/10">
+                <div>
+                    <div class="tabs tabs-sm">
+                        <input type="radio" name="my_tabs_1" class="tab" aria-label="Tab 1" />
+                        <input type="radio"
+                               name="my_tabs_1"
+                               class="tab"
+                               aria-label="Tab 2"
+                               checked="checked" />
+                        <input type="radio" name="my_tabs_1" class="tab" aria-label="Tab 3" />
+                    </div>
+                </div>
+                <button class="btn btn-primary">
+                    {% trans 'Add' %}
+                    {% include 'icons/plus.svg' %}
+                </button>
+            </div>
         </main>
     </div>
 {% endblock %}

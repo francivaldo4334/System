@@ -272,6 +272,94 @@
     }
   }
   @layer daisyui.l1.l2.l3 {
+    .tab {
+      position: relative;
+      display: inline-flex;
+      cursor: pointer;
+      appearance: none;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      webkit-user-select: none;
+      user-select: none;
+      --tab-p: 0.75rem;
+      --tab-bg: var(--color-base-100);
+      --tab-border-color: var(--color-base-300);
+      --tab-radius-ss: 0;
+      --tab-radius-se: 0;
+      --tab-radius-es: 0;
+      --tab-radius-ee: 0;
+      --tab-order: 0;
+      --tab-radius-min: calc(0.75rem - var(--border));
+      --tab-radius-limit: min(var(--radius-field), var(--tab-radius-min));
+      --tab-radius-grad: #0000 calc(69% - var(--border)),
+      var(--tab-border-color) calc(69% - var(--border) + 0.25px),
+      var(--tab-border-color) 69%,
+      var(--tab-bg) calc(69% + 0.25px);
+      border-color: #0000;
+      order: var(--tab-order);
+      height: var(--tab-height);
+      font-size: 0.875rem;
+      padding-inline: var(--tab-p);
+    }
+    @media (hover: hover) {
+      .tab:hover {
+        color: var(--color-base-content);
+      }
+    }
+    .tab:is(input[type="radio"]) {
+      min-width: fit-content;
+    }
+    .tab:is(input[type="radio"]):after {
+      --tw-content: attr(aria-label);
+      content: var(--tw-content);
+    }
+    .tab:is(label) {
+      position: relative;
+    }
+    .tab:is(label) input {
+      position: absolute;
+      inset: calc(0.25rem * 0);
+      cursor: pointer;
+      appearance: none;
+      opacity: 0%;
+    }
+    .tab:checked + .tab-content, .tab:is(label:has(:checked)) + .tab-content, .tab:is(.tab-active, [aria-selected="true"], [aria-current="true"], [aria-current="page"]) + .tab-content {
+      display: block;
+    }
+    .tab:not( :checked, label:has(:checked), :hover, .tab-active, [aria-selected="true"], [aria-current="true"], [aria-current="page"] ) {
+      color: var(--color-base-content);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .tab:not( :checked, label:has(:checked), :hover, .tab-active, [aria-selected="true"], [aria-current="true"], [aria-current="page"] ) {
+        color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+      }
+    }
+    .tab:not(input):empty {
+      flex-grow: 1;
+      cursor: default;
+    }
+    .tab:focus {
+      --tw-outline-style: none;
+      outline-style: none;
+    }
+    @media (forced-colors: active) {
+      .tab:focus {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+      }
+    }
+    .tab:focus-visible, .tab:is(label:has(:checked:focus-visible)) {
+      outline: 2px solid currentColor;
+      outline-offset: -5px;
+    }
+    .tab[disabled] {
+      pointer-events: none;
+      opacity: 40%;
+    }
+  }
+  @layer daisyui.l1.l2.l3 {
     .menu {
       display: flex;
       width: fit-content;
@@ -887,6 +975,74 @@
     }
   }
   @layer daisyui.l1.l2.l3 {
+    .radio {
+      position: relative;
+      display: inline-block;
+      flex-shrink: 0;
+      cursor: pointer;
+      appearance: none;
+      border-radius: calc(infinity * 1px);
+      padding: calc(0.25rem * 1);
+      vertical-align: middle;
+      border: var(--border) solid var(--input-color, currentColor);
+      box-shadow: 0 1px oklch(0% 0 0 / calc(var(--depth) * 0.1)) inset;
+      --size: calc(var(--size-selector, 0.25rem) * 6);
+      width: var(--size);
+      height: var(--size);
+      color: var(--input-color, currentColor);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .radio {
+        border: var(--border) solid var(--input-color, color-mix(in srgb, currentColor 20%, #0000));
+      }
+    }
+    .radio:before {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: calc(infinity * 1px);
+      --tw-content: "";
+      content: var(--tw-content);
+      background-size: auto, calc(var(--noise) * 100%);
+      background-image: none, var(--fx-noise);
+    }
+    .radio:focus-visible {
+      outline: 2px solid currentColor;
+    }
+    .radio:checked, .radio[aria-checked="true"] {
+      border-color: currentcolor;
+      background-color: var(--color-base-100);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .radio:checked, .radio[aria-checked="true"] {
+        animation: radio 0.2s ease-out;
+      }
+    }
+    .radio:checked:before, .radio[aria-checked="true"]:before {
+      background-color: currentcolor;
+      box-shadow: 0 -1px oklch(0% 0 0 / calc(var(--depth) * 0.1)) inset, 0 8px 0 -4px oklch(100% 0 0 / calc(var(--depth) * 0.1)) inset, 0 1px oklch(0% 0 0 / calc(var(--depth) * 0.1));
+    }
+    @media (forced-colors: active) {
+      .radio:checked:before, .radio[aria-checked="true"]:before {
+        outline-style: var(--tw-outline-style);
+        outline-width: 1px;
+        outline-offset: calc(1px * -1);
+      }
+    }
+    @media print {
+      .radio:checked:before, .radio[aria-checked="true"]:before {
+        outline: 0.25rem solid;
+        outline-offset: -1rem;
+      }
+    }
+  }
+  @layer daisyui.l1.l2 {
+    .radio:disabled {
+      cursor: not-allowed;
+      opacity: 20%;
+    }
+  }
+  @layer daisyui.l1.l2.l3 {
     .navbar {
       display: flex;
       width: 100%;
@@ -953,6 +1109,44 @@
       .btn-active {
         --btn-bg: color-mix(in oklab, var(--btn-color, var(--color-base-200)), #000 7%);
       }
+    }
+  }
+  @layer daisyui.l1.l2 {
+    .tabs-box {
+      background-color: var(--color-base-200);
+      padding: calc(0.25rem * 1);
+      --tabs-box-radius: calc(3 * var(--radius-field));
+      border-radius: calc( min(var(--tab-height) / 2, var(--radius-field)) + min(0.25rem, var(--tabs-box-radius)) );
+      box-shadow: 0 -0.5px oklch(100% 0 0 / calc(var(--depth) * 0.1)) inset, 0 0.5px oklch(0% 0 0 / calc(var(--depth) * 0.05)) inset;
+    }
+    .tabs-box > .tab {
+      border-radius: var(--radius-field);
+      border-style: none;
+    }
+    .tabs-box > .tab:focus-visible, .tabs-box > .tab:is(label:has(:checked:focus-visible)) {
+      outline-offset: 2px;
+    }
+    .tabs-box > .tab:focus-visible {
+      z-index: 1;
+    }
+    .tabs-box > :is(.tab-active, [aria-selected="true"], [aria-current="true"], [aria-current="page"]):not( .tab-disabled, [disabled] ), .tabs-box > :is(input:checked), .tabs-box > :is(label:has(:checked)) {
+      background-color: var(--tab-bg, var(--color-base-100));
+      box-shadow: 0 1px oklch(100% 0 0 / calc(var(--depth) * 0.1)) inset, 0 1px 1px -1px var(--color-neutral), 0 1px 6px -4px var(--color-neutral);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .tabs-box > :is(.tab-active, [aria-selected="true"], [aria-current="true"], [aria-current="page"]):not( .tab-disabled, [disabled] ), .tabs-box > :is(input:checked), .tabs-box > :is(label:has(:checked)) {
+        box-shadow: 0 1px oklch(100% 0 0 / calc(var(--depth) * 0.1)) inset, 0 1px 1px -1px color-mix(in oklab, var(--color-neutral) calc(var(--depth) * 50%), #0000), 0 1px 6px -4px color-mix(in oklab, var(--color-neutral) calc(var(--depth) * 100%), #0000);
+      }
+    }
+    @media (forced-colors: active) {
+      .tabs-box > :is(.tab-active, [aria-selected="true"], [aria-current="true"], [aria-current="page"]):not( .tab-disabled, [disabled] ), .tabs-box > :is(input:checked), .tabs-box > :is(label:has(:checked)) {
+        border: 1px solid;
+      }
+    }
+    .tabs-box > .tab-content {
+      margin-top: calc(0.25rem * 1);
+      height: calc(100% - var(--tab-height) + var(--border) - 0.5rem);
+      border-radius: calc( min(var(--tab-height) / 2, var(--radius-field)) + min(0.25rem, var(--tabs-box-radius)) - var(--border) );
     }
   }
   @layer daisyui.l1.l2.l3 {
@@ -1088,6 +1282,17 @@
       .status {
         box-shadow: 0 2px 3px -1px color-mix(in oklab, currentColor calc(var(--depth) * 100%), #0000);
       }
+    }
+  }
+  @layer daisyui.l1.l2.l3 {
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      --tabs-height: auto;
+      --tabs-direction: row;
+      --tab-height: calc(var(--size-field, 0.25rem) * 10);
+      height: var(--tabs-height);
+      flex-direction: var(--tabs-direction);
     }
   }
   .alert {
@@ -1345,6 +1550,16 @@
   .text-xs {
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  @layer daisyui.l1.l2 {
+    .tabs-sm {
+      --tab-height: calc(var(--size-field, 0.25rem) * 8);
+    }
+    .tabs-sm > .tab {
+      font-size: 0.875rem;
+      --tab-p: 0.5rem;
+      --tab-radius-min: calc(0.5rem - var(--border));
+    }
   }
   .leading-normal {
     --tw-leading: var(--leading-normal);
