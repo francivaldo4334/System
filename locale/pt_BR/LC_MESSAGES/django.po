@@ -32,8 +32,8 @@ msgid "Agio"
 msgstr "Ágio"
 
 #: templates/app.html:45
-msgid "Calendar"
-msgstr "Calendário"
+msgid "Agenda"
+msgstr "Agenda"
 
 #: templates/components/filter-calendar.html:23
 msgid "Today"
