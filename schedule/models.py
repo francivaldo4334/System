@@ -139,7 +139,7 @@ class AssignmentSlot(TimeStampedModel, CreatedByModel):
                               choices=Status.choices,
                               default=Status.CREATED.value)
 
-    service = models.ForeignKey(Service, models.CASCADE)
+    service = models.ForeignKey(Service, models.CASCADE, null=True, blank=True)
     resources = models.ManyToManyField(ResourceSelectable)
     date = models.DateField()
     start_slot = models.PositiveSmallIntegerField()
