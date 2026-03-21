@@ -79,7 +79,11 @@ window.addEventListener('state-update', ({ detail }) => {
   const { key, value } = detail;
   if (!key) return;
 
-  const targets = document.querySelectorAll(`[data-state*="${key}"]`);
+  const targets = Array.from(document.querySelectorAll('[data-state]'))
+    .filter(el => {
+      const states = el.dataset.state.split(',');
+      return states.includes(key);
+    }); 4
   targets.forEach(el => updateElement(el, key, value));
 });
 window.customElements.define('app-state', StateDef)

@@ -1,17 +1,21 @@
+<app-state name="f-resources"></app-state>
 <form is="app-ajax"
-      store="f-resources"
+      store="q-f-resources"
       action="{% url 'resources-list' %}"
       autofetch>
 </form>
-<div data-state="f-resources.data"
+<div data-state="q-f-resources.data"
      data-then="it => FResources.render(this, JSON.parse(it))"
      data-at="innerHTML">
     <span class="loading"></span>
 </div>
+<div data-state="f-resources"
+     data-then="it => it ? JSON.stringify(Array.from(it)) : ''"></div>
 <script is="app-scope" onclearup="delete window.FResources">
     window.FResources = {
         getTemplate(it){
             if (it.is_selectable){
+                this.fResources.add(it.id);
                 return `
                     <label class="label w-full">
                         <input type="checkbox" name="resource" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" />
@@ -36,8 +40,10 @@
             return this.getTemplate(it).replace('%', it.children.map(i => this.buildHTML(i)).join(''))
         },
         render(el, data) {
+            this.fResources = new Set([]);
             if (!data?.results) return;
             const htmlContent = data.results.map(it => this.buildHTML(it)).join("")
+            setState('f-resources', this.fResources);
             return htmlContent;
         },
 
