@@ -937,17 +937,8 @@
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
-  .right-2 {
-    right: calc(var(--spacing) * 2);
-  }
-  .right-4 {
-    right: calc(var(--spacing) * 4);
-  }
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);
-  }
-  .bottom-2 {
-    bottom: calc(var(--spacing) * 2);
   }
   @layer daisyui.l1.l2 {
     .btn-active {
@@ -1090,18 +1081,6 @@
   }
   .h-14 {
     height: calc(var(--spacing) * 14);
-  }
-  .h-\[calc\(6\*2\.5rem\)\] {
-    height: calc(6 * 2.5rem);
-  }
-  .h-\[calc\(6\*2rem\)\] {
-    height: calc(6 * 2rem);
-  }
-  .h-\[calc\(6\*3rem\)\] {
-    height: calc(6 * 3rem);
-  }
-  .h-\[calc\(7\*2rem\)\] {
-    height: calc(7 * 2rem);
   }
   .h-\[calc\(8\*2rem\)\] {
     height: calc(8 * 2rem);
