@@ -87,16 +87,6 @@
       linear-gradient(#eee .1em, transparent .1em);
     background-size: 100% 1.2em;
   }
-
-  .appointment {}
-
-  .appointment-in-progress {}
-
-  .appointment-migrated {}
-
-  .appointment-completed {}
-
-  .appointment-cancelled {}
 }
 
 @source "../../../**/*.{html,py,js}";
