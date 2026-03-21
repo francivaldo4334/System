@@ -3,70 +3,53 @@
 {% load i18n %}
 {% partialdef menu-option %}
 <li class="relative">
-    <form is="app-ajax-form" 
-          store='{{url_name}}' 
+    <form is="app-ajax"
+          store='{{ url_name }}'
           action="{% url url_name %}"
           class="is-drawer-close:tooltip is-drawer-close:tooltip-right "
           data-state="menu-selected"
-          data-then="it => {
-            this.classList.toggle('menu-active',it === '{{url_name}}')
-          }"
+          data-then="it => { this.classList.toggle('menu-active',it === '{{ url_name }}') }"
           data-at="void"
-          data-tip="{% trans title %}"
-        >
-        <span class="*:m-1.5 *:inline-block">
-            {% include icon_svg %}
-        </span>
-        <span class="is-drawer-close:hidden"> {% trans title %} </span>
-        <button
-            data-state="menu-selected"
-            data-then="it => it === '{{url_name}}'"
-            data-at="disabled"
-            type="submit"
-            class="absolute inset-0 opacity-0"
-        ></button>
+          data-tip="{% trans title %}">
+        <span class="*:m-1.5 *:inline-block">{% include icon_svg %}</span>
+        <span class="is-drawer-close:hidden">{% trans title %}</span>
+        <button data-state="menu-selected"
+                data-then="it => it === '{{ url_name }}'"
+                data-at="disabled"
+                type="submit"
+                class="absolute inset-0 opacity-0"></button>
     </form>
-    <div
-        class="hidden"
-        data-state="{{url_name}}.status"
-        data-at="value"
-        data-then="it => {
-            debugger
-            if (it !== 200) return;
-            const data = getState('{{url_name}}.data');
-            setState('menu-page', data);
-            setState('menu-selected', '{{url_name}}');
-            this.closest('form')?.clean();
-        }"
-    />
-</li>
+    <div class="hidden"
+         data-state="{{ url_name }}.status"
+         data-at="value"
+         data-then="it => { debugger if (it !== 200) return; const data = getState('{{ url_name }}.data'); setState('menu-page', data); setState('menu-selected', '{{ url_name }}'); this.closest('form')?.clean(); }" />
+    </li>
 {% endpartialdef %}
 {% block body %}
-<app-state name="menu-selected" value="schedule_view"></app-state>
-<app-state name="menu-page"></app-state>
-<div class="drawer lg:drawer-open">
-  <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
-    {% include 'schedule.html' %}
-  </div>
-
-  <div class="drawer-side is-drawer-close:overflow-visible">
-    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"> </label>
-    <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
-      <ul class="menu w-full grow">
-        <li class='border-b mb-2 border-base-content/10 h-14 pb-0'>
-          <span class="menu-title flex gap-3">
-            {% include 'icons/logo.svg' %}
-            <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Agio' %}</span>
-          </span>
-        </li>
-        {% with url_name='schedule_view' title=_('Calendar') icon_svg='icons/calendar.svg'%}
-            {% partial menu-option %}
-        {% endwith %}
-      </ul>
+    <app-state name="menu-selected" value="schedule_view"></app-state>
+    <app-state name="menu-page"></app-state>
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
+            {% include 'schedule.html' %}
+        </div>
+        <div class="drawer-side is-drawer-close:overflow-visible">
+            <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+            <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
+                <ul class="menu w-full grow">
+                    <li class='border-b mb-2 border-base-content/10 h-14 pb-0'>
+                        <span class="menu-title flex gap-3">
+                            {% include 'icons/logo.svg' %}
+                            <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Agio' %}</span>
+                        </span>
+                    </li>
+                    {% with url_name='schedule_view' title=_('Calendar') icon_svg='icons/calendar.svg' %}
+                        {% partial menu-option %}
+                    {% endwith %}
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'state.js' %}"></script>

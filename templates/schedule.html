@@ -1,14 +1,19 @@
 {% extends 'navbar.html' %}
 {% load i18n %}
-{% block navbar_title%}
-  {% trans 'RSA Agenda' %}
+{% block navbar_title %}
+    {% trans 'RSA Agenda' %}
 {% endblock %}
 {% block content %}
-<div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
-  <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">    
-  {% include 'components/filter-calendar.html' %}
-  </aside>
-  <main class="bg-base-200/30">
-  </main>
-</div>
+    <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
+        <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
+            {% include 'components/filter-calendar.html' %}
+            <form is="app-ajax"
+                  store="f-resources"
+                  action="{% url 'resources-list' %}"
+                  autofetch>
+            </form>
+        </aside>
+        <main class="bg-base-200/30">
+        </main>
+    </div>
 {% endblock %}
