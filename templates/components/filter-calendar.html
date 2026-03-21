@@ -24,17 +24,19 @@
 <script is="app-scope" oncleanup="delete window.CalendarApp">
   window.CalendarApp = {
     locale: '{{ LANG_CODE|default:"en" }}',
-
-    // --- Helpers de Estado e Data ---
     _getCurrentDate() {
       const iso = getState('f-calendar');
       return iso ? new Date(iso) : new Date();
     },
-    _getDateRange(){
-      const isoStart = getState("f-calendar-start");
-      const isoEnd = getState("f-calendar-end");
-      if (!isoEnd || !isoStart) return [undefined, undefined]
-      return [new Date(isoStart), new Date(isoEnd)]
+
+    _getDateRange() {
+      const [isoStart, isoEnd] = getState("f-calendar-range") || [];
+      if (!isoStart || !isoEnd) return [null, null];
+      return [new Date(isoStart), new Date(isoEnd)];
+    },
+
+    _normalize(date) {
+      return new Date(date).setHours(0, 0, 0, 0);
     },
 
     formatHeader(iso, lang) {
@@ -42,10 +44,8 @@
       return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(date);
     },
 
-    // --- Ações ---
     changeMonth(step) {
       const date = this._getCurrentDate();
-      // Ajuste crítico: setar dia 1 evita pular meses se hoje for dia 31
       date.setDate(1); 
       date.setMonth(date.getMonth() + step);
       setState('f-calendar', date.toISOString());
@@ -57,76 +57,78 @@
       setState('f-calendar', date.toISOString());
     },
 
-    // --- Renderização ---
+    _isInRange(currentDate, init, end) {
+      if (!init || !end || !currentDate) return false;
+      const d = this._normalize(currentDate);
+      const start = this._normalize(init);
+      const finish = this._normalize(end);
+      return d >= start && d <= finish;
+    },
+
+    _isSameDay(d1, d2) {
+      return this._normalize(d1) === this._normalize(d2);
+    },
+
     initWeekDays() {
       const container = document.getElementById('calendar-weekdays');
       if (!container) return;
-
       const formatter = new Intl.DateTimeFormat(this.locale, { weekday: 'short' });
-      
-      // Cria os nomes dos dias (baseado em um domingo fixo: 2024-01-07)
       const daysHtml = Array.from({ length: 7 }, (_, i) => {
         const d = new Date(2024, 0, 7 + i);
         const name = formatter.format(d).replace('.', '');
         return `<span>${name}</span>`;
       }).join('');
-
       container.innerHTML = daysHtml;
     },
 
     renderGrid(iso) {
       const date = new Date(iso);
       const today = new Date();
-      
       const year = date.getFullYear();
       const month = date.getMonth();
 
       const firstDayIndex = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const range = this._getDateRange();
 
-
-      // Gerar células vazias
       const emptyCells = Array(firstDayIndex).fill('<div class="p-2"></div>');
 
-      // Gerar botões dos dias
       const dayButtons = Array.from({ length: daysInMonth }, (_, i) => {
         const day = i + 1;
-        const isToday = this._isSameDay(today, new Date(year, month, day));
+        const currentDate = new Date(year, month, day);
+        const isToday = this._isSameDay(today, currentDate);
         const isSelected = date.getDate() === day;
+        const inRange = this._isInRange(currentDate, ...range);
 
-        return this._buildDayButton(day, isToday, isSelected);
+        return this._buildDayButton(day, isToday, isSelected, inRange);
       });
 
       return [...emptyCells, ...dayButtons].join('');
     },
 
-    // --- Sub-componentes (Privados por convenção) ---
-    _isSameDay(d1, d2) {
-      return d1.getDate() === d2.getDate() &&
-             d1.getMonth() === d2.getMonth() &&
-             d1.getFullYear() === d2.getFullYear();
-    },
-    handlerRangeBtn(el){
-      const now = this._getCurrentDate()
-      const [init, end] = this._getDateRange()
-      if (!init || !end || !now) return;
-      const date = new Date(now.getFullYear(), now.getMonth(), Number(el.textContent))
-      console.log(date.getDate())
-      if (date > init && date < end) {
+    handlerRangeBtn(el) {
+      const day = Number(el.textContent);
+      const now = this._getCurrentDate();
+      const currentDate = new Date(now.getFullYear(), now.getMonth(), day);
+      const range = this._getDateRange();
+      
+      const inRange = this._isInRange(currentDate, ...range);
+      
+      if (inRange) {
+        el.classList.add('btn-soft', 'btn-primary');
+      } else {
+        el.classList.remove('btn-soft', 'btn-primary');
       }
     },
 
-    _buildDayButton(day, isToday, isSelected) {
-      const config = {
-        base: 'btn btn-sm btn-square font-normal transition-colors',
-        state: isToday ? 'btn-outline' : 'btn-ghost',
-        active: isSelected ? 'btn-primary btn-active' : ''
-      };
+    _buildDayButton(day, isToday, isSelected, inRange) {
+      const baseClass = 'btn btn-sm btn-square font-normal transition-colors';
+      const todayClass = isToday ? 'btn-outline' : 'btn-ghost';
+      const activeClass = isSelected ? 'btn-primary btn-active' : '';
+      const rangeClass = inRange ? 'btn-soft btn-primary' : '';
 
-      const classes = Object.values(config).join(' ');
-      
       return `
-        <button class="${classes}" onclick="CalendarApp.selectDay(${day})" aria-pressed="${isSelected}" data-state="f-calendar-start,f-calendar-end" data-then="()=>CalendarApp.handlerRangeBtn(this)" data-at="void">
+        <button class="${baseClass} ${todayClass} ${activeClass} ${rangeClass}" onclick="CalendarApp.selectDay(${day});" data-state="f-calendar-range" data-then="() => CalendarApp.handlerRangeBtn(this)" data-at="void">
           ${day}
         </button>`.trim();
     }

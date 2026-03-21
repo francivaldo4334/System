@@ -13,8 +13,7 @@
     <!-- types m: Month | w: Week | d: Day -->
     <app-state name="f-calendar-view" value="m" at="checked"></app-state>
     <app-state name="f-calendar" value="{% now 'c' %}"></app-state>
-    <app-state name="f-calendar-start" value="{% now 'c' %}"></app-state>
-    <app-state name="f-calendar-end" value="{% now 'c' %}"></app-state>
+    <app-state name="f-calendar-range"></app-state>
     <app-state name="f-search" value=""></app-state>
     <app-state name="f-services"></app-state>
     <app-state name="f-resources"></app-state>
@@ -50,12 +49,17 @@
                     dateStart = new Date(date);
                     dateEnd = new Date(date);
                 }
-                if (states.has('f-calendar-start')) setState('f-calendar-start', dateStart.toISOString())
-                if (states.has('f-calendar-end')) setState('f-calendar-end', dateEnd.toISOString())
+                if (states.has('f-calendar-range')) {
+                    setState('f-calendar-range', [
+                        dateStart.toISOString(),
+                        dateEnd.toISOString()
+                    ])
+                }
             }
         }
         </script>
     </div>
+    <div data-state="f-calendar-range" data-at='textContent'></div>
     <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
         <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
             {% include 'components/filter-calendar.html' %}
