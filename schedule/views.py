@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
+from schedule.filters import AssignmentSlotFilterSet
 from schedule.models import AssignmentSlot, Resource, Service
 from schedule.serializers import AssignmentSlotSerializer, ResourcesSerializer, ServiceSerializer
 
@@ -19,3 +20,4 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
 class AssignmentSlotViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AssignmentSlot.objects.all()
     serializer_class = AssignmentSlotSerializer
+    filterset_class = AssignmentSlotFilterSet

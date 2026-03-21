@@ -1,6 +1,7 @@
 from .base import INSTALLED_APPS
 INSTALLED_APPS += [
     'rest_framework',
+    'django_filters',
     'schedule',
     'sale',
     'stock',
@@ -11,5 +12,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 30,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
