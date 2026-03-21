@@ -24,6 +24,8 @@ const setState = (key, newValue) => {
 class StateDef extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({ mode: 'open' })
+    this.style.display = 'none'
   }
 
   connectedCallback() {
