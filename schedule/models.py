@@ -128,12 +128,12 @@ class ResourceOccupation(models.Model):
 
 class AssignmentSlot(TimeStampedModel, CreatedByModel):
     class Status(models.TextChoices):
-        CREATED = 'CR', 'Created'
-        CONFIRMED = 'CF', 'Confirmed'
-        IN_PROGRESS = 'NP', "In Progress"
-        COMPLETED = 'CP', 'Completed'
-        MIGRATED = 'MG', 'Migrated'
-        CANCELLED = 'CL', 'Cancelled'
+        CREATED = 'CR', _('Created')
+        CONFIRMED = 'CF', _('Confirmed')
+        IN_PROGRESS = 'NP', _('In Progress')
+        COMPLETED = 'CP', _('Completed')
+        MIGRATED = 'MG', _('Migrated')
+        CANCELLED = 'CL', _('Cancelled')
 
     status = models.CharField(max_length=2,
                               choices=Status.choices,

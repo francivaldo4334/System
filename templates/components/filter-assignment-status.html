@@ -9,17 +9,23 @@
        onclick="setState('f-assignment-status', this.value)" />
 {% endpartialdef %}
 <form class="filter">
-    {% with value='1' label='1' %}
+    {% with value='CF' label=_('Confirmed') %}
         {% partial assignment_status %}
     {% endwith %}
-    {% with value='2' label='2' %}
+    {% with value='NP' label=_('In Progress') %}
         {% partial assignment_status %}
     {% endwith %}
-    {% with value='3' label='3' %}
+    {% with value='CP' label=_('Completed') %}
+        {% partial assignment_status %}
+    {% endwith %}
+    {% with value='MG' label=_('Migrated') %}
+        {% partial assignment_status %}
+    {% endwith %}
+    {% with value='CL' label=_('Cancelled') %}
         {% partial assignment_status %}
     {% endwith %}
     <input class="btn btn-square text-xs"
            type="reset"
-           value="&#10007;"
+           value="&#x2715;"
            onclick="setState('f-assignment-status', '')" />
 </form>
