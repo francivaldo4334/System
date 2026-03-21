@@ -6,9 +6,22 @@
 </form>
 <div data-state="q-f-services.data"
      data-then="it => FServices.render(this, JSON.parse(it))"
-     data-at="innerHTML"></div>
+     data-at="innerHTML">
+    <span class="loading"></span>
+</div>
 <script is="app-scope" onclearup="delete window.FServices">
 window.FServices = {
+    toggleCheck(el){
+      const set = new Set(getState('f-services'));
+      const value = Number(el.value);
+      const checked = el.checked;
+      if (checked){
+        set.add(value)
+      } else {
+        set.delete(value)
+      }
+      setState('f-services', set)
+    },
     render(el, data){
       if (!data?.results) return;
       const set = new Set([]);
@@ -16,7 +29,7 @@ window.FServices = {
         set.add(it.id)
         return `
           <label class="label w-full">
-            <input type="checkbox" name="service" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" checked />
+            <input type="checkbox" name="service" value="${it.id}" class="checkbox checkbox-xs checkbox-primary" checked onclick="FServices.toggleCheck(this)" />
             <span class="label-text text-sm">${this.escapeHtml(it.title)}</span>
           </label>
         `
