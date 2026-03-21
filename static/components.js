@@ -94,7 +94,7 @@ class AppScope extends HTMLScriptElement {
 
   connectedCallback() {
     if (!this.textContent.trim() || this._cleanUpFn) return;
-    const code = this.getAttribute('cleanup');
+    const code = this.getAttribute('oncleanup');
 
     try {
       this._cleanUpFn = new Function(`${code}`);;
@@ -113,73 +113,8 @@ class AppScope extends HTMLScriptElement {
     this.textContent = "";
   }
 }
-class AppUseJson extends HTMLElement {
-  constructor() {
-    super();
-    this._proxy = null;
-  }
-
-  static get observedAttributes() {
-    return ['value'];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      this.render();
-    }
-  }
-
-  connectedCallback() {
-    this.render();
-  }
-  setContent(el, value) {
-    const at = this.getAttribute('at') || 'textContent';
-    const safeAt = ['textContent', 'value', 'innerText'].includes(at) ? at : 'textContent';
-    el[safeAt] = value;
-  }
-
-  render() {
-    const valueAttr = this.getAttribute('value');
-    const thenAttr = this.getAttribute('then');
-    const targetAttr = this.getAttribute('target');
-    const isList = this.hasAttribute('list');
-
-    if (!valueAttr || !thenAttr) return;
-
-    try {
-      const obj = JSON.parse(valueAttr);
-      if (!this._proxy) this._proxy = new Function('it', `return (${thenAttr})(it)`);
-
-      if (isList && Array.isArray(obj)) {
-        const template = this.querySelector(targetAttr);
-        if (!template) return;
-        this.querySelectorAll('[data-is-clone]').forEach(el => el.remove());
-        template.style.display = 'none';
-        const fragment = document.createDocumentFragment();
-        obj.forEach((itemData) => {
-          const clone = template.cloneNode(true);
-          clone.style.display = '';
-          clone.setAttribute('data-is-clone', 'true');
-          const result = this._proxy(itemData);
-          this.setContent(clone, result);
-          fragment.appendChild(clone);
-        });
-        this.appendChild(fragment);
-
-      } else {
-        // Lógica para valor único
-        const targetEl = targetAttr ? this.querySelector(targetAttr) : this;
-        const result = this._proxy(obj);
-        this.setContent(targetEl, result);
-      }
-    } catch (e) {
-      console.error('AppUseJson Error:', e);
-    }
-  }
-}
 
 customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 customElements.define('app-ajax', CustomAjaxForm, { extends: 'form' })
 customElements.define('app-scope', AppScope, { extends: 'script' })
-customElements.define('app-json', AppUseJson);

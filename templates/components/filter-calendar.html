@@ -23,7 +23,7 @@
     <button class="btn btn-neutral btn-xs absolute bottom-0 right-0"
             onclick="setState('f-calendar', new Date().toISOString())">{% trans "Today" %}</button>
 </section>
-<script is="app-scope" cleanup="delete window.CalendarApp">
+<script is="app-scope" oncleanup="delete window.CalendarApp">
   window.CalendarApp = {
     locale: '{{ LANG_CODE|default:"en" }}',
     formatHeader(iso, lang) {
