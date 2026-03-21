@@ -986,6 +986,67 @@
     }
   }
   @layer daisyui.l1.l2.l3 {
+    .timeline {
+      position: relative;
+      display: flex;
+    }
+    .timeline > li {
+      position: relative;
+      display: grid;
+      flex-shrink: 0;
+      align-items: center;
+      grid-template-rows: var(--timeline-row-start, minmax(0, 1fr)) auto var( --timeline-row-end, minmax(0, 1fr) );
+      grid-template-columns: var(--timeline-col-start, minmax(0, 1fr)) auto var( --timeline-col-end, minmax(0, 1fr) );
+    }
+    .timeline > li > hr {
+      border: none;
+      width: 100%;
+    }
+    .timeline > li > hr:first-child {
+      grid-column-start: 1;
+      grid-row-start: 2;
+    }
+    .timeline > li > hr:last-child {
+      grid-column-start: 3;
+      grid-column-end: none;
+      grid-row-start: 2;
+      grid-row-end: auto;
+    }
+    @media print {
+      .timeline > li > hr {
+        border: 0.1px solid var(--color-base-300);
+      }
+    }
+    .timeline :where(hr) {
+      height: calc(0.25rem * 1);
+      background-color: var(--color-base-300);
+    }
+    .timeline:has(.timeline-middle hr):first-child {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+      border-start-end-radius: var(--radius-selector);
+      border-end-end-radius: var(--radius-selector);
+    }
+    .timeline:has(.timeline-middle hr):last-child {
+      border-start-start-radius: var(--radius-selector);
+      border-end-start-radius: var(--radius-selector);
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+    .timeline:not(:has(.timeline-middle)) :first-child hr:last-child {
+      border-start-start-radius: var(--radius-selector);
+      border-end-start-radius: var(--radius-selector);
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+    .timeline:not(:has(.timeline-middle)) :last-child hr:first-child {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+      border-start-end-radius: var(--radius-selector);
+      border-end-end-radius: var(--radius-selector);
+    }
+  }
+  @layer daisyui.l1.l2.l3 {
     .checkbox {
       border: var(--border) solid var(--input-color, var(--color-base-content));
       position: relative;
@@ -1189,9 +1250,6 @@
   }
   .\!end {
     inset-inline-end: var(--spacing) !important;
-  }
-  .end {
-    inset-inline-end: var(--spacing);
   }
   @layer daisyui.l1.l2 {
     .toast-top {
@@ -1843,24 +1901,6 @@
         --btn-fg: var(--btn-color) !important;
         --btn-border: var(--btn-color) !important;
         --btn-noise: none !important;
-      }
-    }
-  }
-  @layer daisyui.l1 {
-    .btn-outline:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
-      --btn-shadow: "";
-      --btn-bg: #0000;
-      --btn-fg: var(--btn-color);
-      --btn-border: var(--btn-color);
-      --btn-noise: none;
-    }
-    @media (hover: none) {
-      .btn-outline:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
-        --btn-shadow: "";
-        --btn-bg: #0000;
-        --btn-fg: var(--btn-color);
-        --btn-border: var(--btn-color);
-        --btn-noise: none;
       }
     }
   }

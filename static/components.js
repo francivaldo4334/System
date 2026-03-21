@@ -114,6 +114,45 @@ class AppScope extends HTMLScriptElement {
   }
 }
 
+class AppTimeline extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    const unit = this.getAttribute('slotunit') || '10px';
+    this.shadowRoot.innerHTML = `
+          <style>
+          :host {
+              display: grid;
+              grid-auto-rows: ${unit};
+              gap: 2px;
+              position: relative;
+              border-radius: 8px;
+          }
+          ::slotted(app-slot) { grid-column: 1; }
+          </style>
+          <slot></slot>
+        `;
+  }
+}
+class AppSlot extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    const start = parseInt(this.getAttribute('start')) || 1;
+    const duration = parseInt(this.getAttribute('duration')) || 1;
+    this.style.gridRowStart = start;
+    this.style.gridRowEnd = start + duration;
+    this.shadowRoot.innerHTML = `<slot></slot>`;
+  }
+}
+customElements.define('app-timeline', AppTimeline)
+customElements.define('app-slot', AppSlot)
 customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 customElements.define('app-ajax', CustomAjaxForm, { extends: 'form' })
