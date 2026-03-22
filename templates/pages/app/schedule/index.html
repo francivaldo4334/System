@@ -7,9 +7,11 @@
 {% endpartialdef %}
 {% partialdef status %}
 <label class="label flex justify-between items-center">
-    <input type="checkbox" class="checkbox checkbox-sm" checked />
+    <input type="radio" class="radio radio-primary" name="status" />
     <span class="w-full">{{ label }}</span>
-    {% include icon_path %}
+    {% if icon_path %}
+        {% include icon_path %}
+    {% endif %}
 </label>
 {% endpartialdef %}
 {% partialdef main %}
@@ -26,6 +28,9 @@
         {% include 'components/schedule/filter.calendar/index.html' %}
         <fieldset class="fieldset mt-auto">
             <legend class="fieldset-legend">{% trans 'Status' %}</legend>
+            {% with  label=_('All') %}
+                {% partial status %}
+            {% endwith %}
             {% with  label=_('Created') icon_path="icons/status-created.svg" %}
                 {% partial status %}
             {% endwith %}

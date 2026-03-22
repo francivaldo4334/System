@@ -1835,6 +1835,14 @@
       --size: calc(var(--size-selector, 0.25rem) * 5);
     }
   }
+  @layer daisyui.l1.l2 {
+    .radio-sm {
+      padding: 0.1875rem;
+    }
+    .radio-sm:is([type="radio"]) {
+      --size: calc(var(--size-selector, 0.25rem) * 5);
+    }
+  }
   .p-1 {
     padding: calc(var(--spacing) * 1);
   }
@@ -2029,6 +2037,11 @@
     .btn-primary {
       --btn-color: var(--color-primary);
       --btn-fg: var(--color-primary-content);
+    }
+  }
+  @layer daisyui.l1.l2 {
+    .radio-primary {
+      --input-color: var(--color-primary);
     }
   }
   :is(.\*\:m-1\.5 > *) {
