@@ -13,8 +13,8 @@ class AppView(TemplateView):
               'icon_template_name': 'icons/calendar.svg'
           }
       ],
-      'default_app_template_name': 'schedule.html',  
+      'default_app_template_name': 'pages/app/schedule/index.html#main',  
     }
 
 class AppScheduleView(AppView):
-    template_name = 'schedule.html'
+    template_name = 'pages/app/schedule/index.html'

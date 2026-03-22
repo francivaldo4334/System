@@ -4,5 +4,5 @@ from app.views import AppScheduleView, AppView
 
 urlpatterns = [
     path('', AppView.as_view(), name="app"),
-    path('', AppScheduleView.as_view(), name='app-schedule'),
+    path('schedule', AppScheduleView.as_view(), name='app-schedule'),
 ]

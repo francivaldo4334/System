@@ -34,7 +34,19 @@
         <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]"
              data-state="sidebar.store.data"
              data-at="innerHTML">
-            {% block content %}{% endblock %}
+            <nav class="navbar w-full bg-base-300 border-b border-base-content/10">
+                <label for="my-drawer-4"
+                       aria-label="open sidebar"
+                       class="btn btn-square btn-ghost">{% include 'icons/panel-left-open.svg' %}</label>
+                <div class="px-4">
+                    {% block navbar_title %}Topbar{% endblock %}
+                </div>
+            </nav>
+            <div data-state="menu-page" data-at='innerHTML'>
+                {% block main %}
+                    {% include default_app_template_name %}
+                {% endblock %}
+            </div>
         </div>
         <div class="drawer-side is-drawer-close:overflow-visible">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -46,7 +58,11 @@
                             <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Agio' %}</span>
                         </span>
                     </li>
-                    {% block options %}{% endblock %}
+                    {% for option in app_template_name_options %}
+                        {% with url_name=option.url_name title=option.title icon_path=option.icon_template_name %}
+                            {% include 'pages/app/layout.html#menu-option' %}
+                        {% endwith %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>

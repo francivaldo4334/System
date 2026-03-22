@@ -1,7 +1,10 @@
 {% extends 'pages/app/layout.html' %}
+{% partialdef main %}
+helo
+{% endpartialdef %}
 {% block navbar_title %}
     {% trans 'SRA Agenda' %}
 {% endblock %}
 {% block main %}
-    {% include default_app_template_name %}
+    {% partial main %}
 {% endblock %}
