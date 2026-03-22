@@ -18,3 +18,4 @@
         {% partial tab %}
     {% endwith %}
 </div>
+<script>document.querySelector('input[name="filter-calendar-mode"][value="{{request.GET.mode|default:"w"|escapejs}}"]').checked=true</script>
