@@ -1,9 +1,11 @@
 {% extends 'pages/app/layout.html' %}
 {% block options %}
-    {% with url_name='schedule_view' title=_('Agenda') icon_path='icons/calendar.svg' %}
-        {% include 'pages/app/layout.html#menu-option' %}
-    {% endwith %}
+    {% for option in app_template_name_options %}
+        {% with url_name=option.url_name title=option.title icon_path=option.icon_template_name %}
+            {% include 'pages/app/layout.html#menu-option' %}
+        {% endwith %}
+    {% endfor %}
 {% endblock %}
 {% block content %}
-    {% include 'schedule.html' %}
+    {% include default_app_template_name %}
 {% endblock %}
