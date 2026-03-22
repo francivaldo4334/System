@@ -1,0 +1,11 @@
+<select class="select">
+    <option selected disabled>
+    {%trans 'Service'%}
+    </option>
+    {% for opt in services %}<option value="{{ opt.id }}">{{ opt.title }}</option>
+    {% empty %}
+        <option disabled>
+            {% trans 'No items.'%}
+        </option>
+    {% endfor %}
+</select>

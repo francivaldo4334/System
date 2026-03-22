@@ -25,3 +25,10 @@ class AppView(TemplateView):
 
 class AppScheduleView(AppView):
     template_name = 'pages/app/schedule/index.html'
+    def get_context_data(self, **kwargs):
+        from schedule.models import Service, ResourceSelectable
+        kwargs.update({
+              'services': Service.objects.all(), # type: ignore
+              'resources': ResourceSelectable.objects.all(),
+          })
+        return super().get_context_data(**kwargs)
