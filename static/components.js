@@ -110,26 +110,16 @@ class AppQuery extends HTMLFormElement {
     this.removeEventListener('submit', this._fetch)
   }
 }
+
 class AppScope extends HTMLScriptElement {
-  constructor() {
-    super();
-    this._cleanUpFn = null;
-  }
-
-  connectedCallback() {
-    if (!this.textContent.trim() || this._cleanUpFn) return;
-    const code = this.getAttribute('oncleanup');
-    try {
-      this._cleanUpFn = new Function(`${code}`);;
-    } catch (e) {
-      console.error("Erro na execução do escopo AppScope:", e);
-    }
-  }
-
   disconnectedCallback() {
-    if (this._cleanUpFn) {
-      this._cleanUpFn();
-      this._cleanUpFn = null;
+    const cleanupCode = this.getAttribute('onclearup');
+    if (cleanupCode) {
+      try {
+        new Function(cleanupCode).call(globalThis);
+      } catch (e) {
+        console.error("Erro ao executar cleanup do AppScope:", e);
+      }
     }
   }
 }
