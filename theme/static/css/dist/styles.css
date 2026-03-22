@@ -19,9 +19,13 @@
     --text-2xl--line-height: calc(2 / 1.5);
     --text-5xl: 3rem;
     --text-5xl--line-height: 1;
+    --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --tracking-normal: 0em;
     --leading-normal: 1.5;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -1490,6 +1494,54 @@
     margin-inline: auto;
   }
   @layer daisyui.l1.l2.l3 {
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(0.25rem * 1.5);
+      white-space: nowrap;
+      color: currentcolor;
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .label {
+        color: color-mix(in oklab, currentcolor 60%, transparent);
+      }
+    }
+    .label:has(input) {
+      cursor: pointer;
+    }
+    .label:is(.input > *, .select > *) {
+      display: flex;
+      height: calc(100% - 0.5rem);
+      align-items: center;
+      padding-inline: calc(0.25rem * 3);
+      white-space: nowrap;
+      font-size: inherit;
+    }
+    .label:is(.input > *, .select > *):first-child {
+      margin-inline-start: calc(0.25rem * -3);
+      margin-inline-end: calc(0.25rem * 3);
+      border-inline-end: var(--border) solid currentColor;
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .label:is(.input > *, .select > *):first-child {
+        border-inline-end: var(--border) solid color-mix(in oklab, currentColor 10%, #0000);
+      }
+    }
+    .label:is(.input > *, .select > *):last-child {
+      margin-inline-start: calc(0.25rem * 3);
+      margin-inline-end: calc(0.25rem * -3);
+      border-inline-start: var(--border) solid currentColor;
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .label:is(.input > *, .select > *):last-child {
+        border-inline-start: var(--border) solid color-mix(in oklab, currentColor 10%, #0000);
+      }
+    }
+  }
+  .mt-auto {
+    margin-top: auto;
+  }
+  @layer daisyui.l1.l2.l3 {
     .fieldset-legend {
       margin-bottom: calc(0.25rem * -1);
       display: flex;
@@ -1604,6 +1656,9 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
   @layer daisyui.l1.l2 {
     .btn-square {
       padding-inline: calc(0.25rem * 0);
@@ -1631,6 +1686,12 @@
   }
   .grow {
     flex-grow: 1;
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -1670,6 +1731,23 @@
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .rounded-md {
+    border-radius: var(--radius-md);
+  }
+  .rounded-sm {
+    border-radius: var(--radius-sm);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-1 {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
   }
   .border-t {
     border-top-style: var(--tw-border-style);
@@ -1745,8 +1823,20 @@
   .bg-success {
     background-color: var(--color-success);
   }
+  @layer daisyui.l1.l2 {
+    .checkbox-sm {
+      padding: 0.1875rem;
+      --size: calc(var(--size-selector, 0.25rem) * 5);
+    }
+  }
+  .p-1 {
+    padding: calc(var(--spacing) * 1);
+  }
   .p-2 {
     padding: calc(var(--spacing) * 2);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
@@ -1764,6 +1854,9 @@
         color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
       }
     }
+  }
+  .px-2 {
+    padding-inline: calc(var(--spacing) * 2);
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
@@ -1817,6 +1910,10 @@
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
   }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
   .tracking-normal {
     --tw-tracking: var(--tracking-normal);
     letter-spacing: var(--tracking-normal);
@@ -1826,6 +1923,18 @@
       color: var(--color-info-content);
       --alert-border-color: var(--color-info);
       --alert-color: var(--color-info);
+    }
+  }
+  @layer daisyui.l1.l2 {
+    .checkbox-primary {
+      color: var(--color-primary-content);
+      --input-color: var(--color-primary);
+    }
+  }
+  @layer daisyui.l1.l2 {
+    .checkbox-success {
+      color: var(--color-success-content);
+      --input-color: var(--color-success);
     }
   }
   .text-base-content\/50 {
@@ -1854,6 +1963,12 @@
   .opacity-50 {
     opacity: 50%;
   }
+  .opacity-60 {
+    opacity: 60%;
+  }
+  .opacity-70 {
+    opacity: 70%;
+  }
   @layer daisyui.l1 {
     .btn-ghost:not(.btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn)) {
       --btn-shadow: "";
@@ -1878,6 +1993,11 @@
   }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
   @layer daisyui.l1.l2 {
     .btn-sm {
@@ -1910,6 +2030,11 @@
   }
   :is(.\*\:inline-block > *) {
     display: inline-block;
+  }
+  @media (hover: hover) {
+    .hover\:bg-base-200:hover {
+      background-color: var(--color-base-200);
+    }
   }
   @media (width >= 64rem) {
     @layer daisyui.l1.l2.l3 {
