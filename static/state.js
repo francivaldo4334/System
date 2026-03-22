@@ -20,6 +20,13 @@ const setState = (key, newValue) => {
     }));
   }
 };
+const getStateSet = (prefix) => {
+  const store = `${prefix}.`
+  const entries = Array.from(states.entries())
+    .filter(([key]) => key.startsWith(store))
+    .map(([key, value]) => [key.replace(store, ''), value])
+  return Object.fromEntries(entries)
+}
 class StateDef extends HTMLElement {
   static observedAttributes = ['value'];
   constructor() {
