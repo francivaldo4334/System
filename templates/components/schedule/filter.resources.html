@@ -1,8 +1,32 @@
-<select class="select">
-    <option selected disabled>{% trans 'Resource' %}</option>
-    {% for opt in resources %}
-        <option value="{{ opt.id }}">{{ opt.name }}</option>
-    {% empty %}
-        <option disabled>{% trans 'No items.' %}</option>
-    {% endfor %}
+<select class="select" id="filter-resources">
+    <option selected disabled>
+        {%trans 'Resource'%}
+    </option>
 </select>
+<form is="app-query" autofetch action="{% url 'resources-list'%}" querykey="resources" class="hidden">
+</form>
+<script is="app-scope" onclearup="FilterResource.clean()">
+    FilterResource = {
+        clean() {
+            window.removeEventListener("state:update", this.handler)
+            delete FilterResource
+        },
+        handler(event) {
+            const {queryKey, data} = event.detail;
+            if (queryKey !== "resources") return;
+            const obj = JSON.parse(data);
+            const el = document.getElementById('filter-resources')
+            el.querySelectorAll("[value]").forEach(e => e.remove())
+            obj.results.map(it => {
+                const opt = document.createElement('option')
+                opt.value = it.id
+                opt.textContent = it.name
+                el.appendChild(opt)
+            })
+        },
+        init() {
+            window.addEventListener("query:success", this.handler)
+        }
+    }
+    FilterResource.init()
+</script>
