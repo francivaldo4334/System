@@ -5,11 +5,11 @@
            oninput="FSearch.onInput(this.value)" />
 </label>
 <script is="app-scope" onclearup="delete FSearch">
-window.FSearch = {
+FSearch = {
     onInput(value) {
         clearTimeout(this.id)
         this.id = setTimeout(()=>{
-            setState('f-search', value);
+            setState('filter.search', value);
         },300)
     }    
 }
