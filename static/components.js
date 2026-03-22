@@ -54,36 +54,53 @@ class EanCodeField extends HTMLInputElement {
 }
 class CustomAjaxForm extends HTMLFormElement {
   connectedCallback() {
-    this.store = this.getAttribute('store');
-    if (!this.store) throw "'store' required."
-    this.clean()
+    this.queryKey = this.getAttribute('querykey');
     this.addEventListener('submit', this);
-    const autofetch = this.hasAttribute('autofetch')
-    if (autofetch) {
-      this._fetch()
+    if (this.hasAttribute('autofetch')) {
+      this._fetch();
     }
   }
-  clean() {
-    states.set(`${this.store}.loading`, false);
-    states.set(`${this.store}.status`, undefined);
-    states.set(`${this.store}.data`, undefined);
-  }
+
   async _fetch() {
-    setState(`${this.store}.loading`, true);
+    const action = this.getAttribute('action');
+    const method = (this.getAttribute('method') || 'GET').toUpperCase();
+
+    const options = { method };
+    if (method !== 'GET') {
+      options.body = new FormData(this);
+    }
+
     try {
-      const r = await fetch(this.getAttribute('action'), {
-        method: (this.getAttribute('method') || 'GET').toUpperCase()
-      })
-      const data = await r.text();
-      setState(`${this.store}.data`, data);
-      setState(`${this.store}.status`, r.status);
-    } finally {
-      setState(`${this.store}.loading`, false);
+      const response = await fetch(action, options);
+      const data = await response.text();
+
+      if (!response.ok) throw { status: response.status, data };
+
+      this._dispatch('app-ajax:success', {
+        queryKey: this.queryKey,
+        status: response.status,
+        data
+      });
+
+    } catch (error) {
+      this._dispatch('app-ajax:error', {
+        queryKey: this.queryKey,
+        error
+      });
     }
   }
+
+  _dispatch(type, detail) {
+    this.dispatchEvent(new CustomEvent(type, {
+      bubbles: true,
+      composed: true,
+      detail: detail
+    }));
+  }
+
   handleEvent(e) {
     e.preventDefault();
-    this._fetch()
+    this._fetch();
   }
 }
 class AppScope extends HTMLScriptElement {

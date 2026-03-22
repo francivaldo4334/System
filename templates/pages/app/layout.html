@@ -5,6 +5,7 @@
     <form is="app-ajax"
           store='sidebar.store'
           action="{% url url_name %}"
+          onsuccess="handlerSidebarStoreStatus"
           class="is-drawer-close:tooltip is-drawer-close:tooltip-right "
           data-state="sidebar.url_name"
           data-then="it =>this.classList.toggle('menu-active',it === '{{ url_name }}')"
@@ -21,12 +22,11 @@
 </li>
 {% endpartialdef %}
 {% block body %}
-    <app-state name="sidebar.url_name" value="schedule_view"></app-state>
+    <app-state name="sidebar.url_name" value="{{ request.resolver_match.url_name }}"></app-state>
     <div class="drawer lg:drawer-open h-screen">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]"
              data-state="sidebar.store.data"
-             data-then="it => it || throw"
              data-at="innerHTML">
             {% block content %}{% endblock %}
         </div>
@@ -57,6 +57,7 @@
     window.handlerSidebarStoreStatus = (status)=>{
         if (status !== 200) return;
         setState('sidebar.url_name', '{{ url_name }}');
+        window.history.pushState({},'','{{ url_name }}'xd)
         document.querySelector('form[store="sidebar.store"]')?.clean();
     }
     </script>

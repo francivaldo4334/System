@@ -1,8 +1,12 @@
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
 
 # Create your views here.
-def app_view(r):
-    return render(r, 'pages/app/index.html')
+class AppView(TemplateView):
+    template_name="pages/app/index.html"
+    extra_context = {
+        
+    }
 
-def schedule_view(request):
-    return render(request, 'schedule.html')
+class AppScheduleView(AppView):
+    template_name = 'schedule.html'
