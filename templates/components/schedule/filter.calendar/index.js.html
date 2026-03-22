@@ -35,14 +35,13 @@ FilterCalendar = {
   },
 
   _buildDayButton(day, isToday, isSelected, inRange) {
-    const baseClass = 'btn btn-sm btn-square font-normal transition-colors';
-    const rangeClass = inRange ? 'btn-soft btn-primary' : '';
-    const todayClass = isToday ? '!btn-outline' : 'btn-ghost';
-    const activeClass = isSelected ? 'btn-primary btn-active' : '';
-    return `
-  <button class="${baseClass} ${todayClass} ${activeClass} ${rangeClass}" onclick="FilterCalendar.selectDay(${day});">
-  ${day}
-  </button>`.trim();
+    const btn = document.createElement('button');
+    btn.textContent = day; 
+    btn.dataset.isToday = isToday;
+    btn.dataset.isSelected = isSelected;
+    btn.dataset.inRange = inRange;
+    btn.setAttribute('onclick', `FilterCalendar.selectDay(${day})`);
+    return btn.outerHTML;
   },
   setToday() {
     setState('filter.calendar.day', new Date().toISOString())

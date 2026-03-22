@@ -87,6 +87,30 @@
       linear-gradient(#eee .1em, transparent .1em);
     background-size: 100% 1.2em;
   }
+
+  .calendar-grid {
+    @apply grid grid-cols-7;
+  }
+
+  .calendar-grid>* {
+    @apply btn btn-sm btn-square btn-ghost transition-all duration-200;
+  }
+
+  .calendar-grid>[data-empty='true'] {
+    @apply opacity-0;
+  }
+
+  .calendar-grid>[data-is-today='true'] {
+    @apply btn-outline;
+  }
+
+  .calendar-grid>[data-in-range='true'] {
+    @apply btn-soft btn-primary;
+  }
+
+  .calendar-grid>[data-is-selected='true'] {
+    @apply btn-primary bg-primary text-primary-content;
+  }
 }
 
 @source "../../../**/*.{html,py,js}";
