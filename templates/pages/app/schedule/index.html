@@ -16,7 +16,7 @@
 <app-state name="filter.status" value="request.GET.status|default:'all'"></app-state>
 <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
     <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
-        {% include 'components/filter-calendar.html' %}
+        {% include 'components/filter-calendar/index.html' %}
         {% with content='components/filter-resources.html' title=_('Resources') %}
             {% partial fieldset_filter %}
         {% endwith %}

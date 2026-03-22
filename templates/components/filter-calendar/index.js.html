@@ -1,5 +1,8 @@
-<script is="app-scope" onclearup="FilterCalendar.clean()">
+<script is="app-scope" onclearup="FilterCalendar.clean()" type="text/javascript">
 FilterCalendar = {
+  clean(){
+  	delete FilterCalendar
+  },
 	init(){
     this.loadWeekDays()
     window.addEventListener('state:update', (event) => {
@@ -96,9 +99,6 @@ FilterCalendar = {
     const day = getState('filter.calendar.day')
     titleMonth.textContent = this.formatHeader(day, '{{ LANG_CODE }}')
   },
-  clean(){
-  	delete FilterCalendar
-  }
 }
 FilterCalendar.init()
 </script>
