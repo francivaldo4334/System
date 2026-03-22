@@ -104,58 +104,6 @@ class AppQuery extends HTMLFormElement {
     this.removeEventListener('submit', this._fetch)
   }
 }
-//@deprecated
-class CustomAjaxForm extends HTMLFormElement {
-  connectedCallback() {
-    this.queryKey = this.getAttribute('querykey');
-    this.addEventListener('submit', this);
-    if (this.hasAttribute('autofetch')) {
-      this._fetch();
-    }
-  }
-
-  async _fetch() {
-    const action = this.getAttribute('action');
-    const method = (this.getAttribute('method') || 'GET').toUpperCase();
-
-    const options = { method };
-    if (method !== 'GET') {
-      options.body = new FormData(this);
-    }
-
-    try {
-      const response = await fetch(action, options);
-      const data = await response.text();
-
-      if (!response.ok) throw { status: response.status, data };
-
-      this._dispatch('app-ajax:success', {
-        queryKey: this.queryKey,
-        status: response.status,
-        data
-      });
-
-    } catch (error) {
-      this._dispatch('app-ajax:error', {
-        queryKey: this.queryKey,
-        error
-      });
-    }
-  }
-
-  _dispatch(type, detail) {
-    this.dispatchEvent(new CustomEvent(type, {
-      bubbles: true,
-      composed: true,
-      detail: detail
-    }));
-  }
-
-  handleEvent(e) {
-    e.preventDefault();
-    this._fetch();
-  }
-}
 class AppScope extends HTMLScriptElement {
   constructor() {
     super();
@@ -218,6 +166,5 @@ customElements.define('app-timeline', AppTimeline)
 customElements.define('app-slot', AppSlot)
 customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
-customElements.define('app-ajax', CustomAjaxForm, { extends: 'form' })
 customElements.define('app-scope', AppScope, { extends: 'script' })
 customElements.define('app-query', AppQuery, { extends: 'form' })

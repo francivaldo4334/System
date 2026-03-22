@@ -22,7 +22,7 @@
         value="{{ request.resolver_match.url_name }}"
     {% endif %}
     "></app-state>
-    <app-state name="sidebar.store.data" value="helo">
+    <app-state name="sidebar.store.data">
     </app-state>
     <div class="drawer lg:drawer-open h-screen">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
@@ -72,10 +72,11 @@
         })
     });
     window.addEventListener('query:success', (event) => {
-        const {queryKey} = event.detail
+        const {queryKey, data} = event.detail
         if (queryKey !== 'sidebar-query') return;
         const form = event.target
         setState('sidebar.urlName', form.dataset.urlName)
+        setState('sidebar.store.data', data)
     })
     </script>
     <script src="{% static 'state.js' %}"></script>
