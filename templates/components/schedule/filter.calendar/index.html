@@ -11,7 +11,9 @@
     </header>
     <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase"
          id="calendar-weekdays"></div>
-    <div id="calendar-grid-days" class="grid grid-cols-7"></div>
+    <div id="calendar-grid-days"
+         class="grid grid-cols-7 *:[&[data-empty]]:opacity-0 *:btn *:btn-sm *:btn-square *:font-normal *:transition-colors ">
+    </div>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
             onclick="FilterCalendar.setToday()">{% trans "Today" %}</button>
 </section>
