@@ -24,7 +24,10 @@
     <app-state name="sidebar.url_name" value="schedule_view"></app-state>
     <div class="drawer lg:drawer-open h-screen">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
+        <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]"
+             data-state="sidebar.store.data"
+             data-then="it => it || throw"
+             data-at="innerHTML">
             {% block content %}{% endblock %}
         </div>
         <div class="drawer-side is-drawer-close:overflow-visible">
