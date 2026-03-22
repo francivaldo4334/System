@@ -1,6 +1,7 @@
 {% partialdef status %}
 <label class="label flex justify-between items-center">
-    <input type="radio" class="radio radio-primary" name="status" value="{{value}}" />
+    <input type="radio" class="radio radio-primary" name="status" value="{{value}}"
+        onchange="setState('filter.status', this.value)" />
     <span class="w-full">{{ label }}</span>
     {% if icon_path %}
     {% include icon_path %}

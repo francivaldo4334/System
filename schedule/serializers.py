@@ -4,8 +4,6 @@ from schedule.models import AssignmentSlot, Resource, Service
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
-    children = serializers.SerializerMethodField()
-
     class Meta:
         model = Resource
         fields = [
@@ -13,13 +11,9 @@ class ResourcesSerializer(serializers.ModelSerializer):
             'name',
             'code',
             'is_selectable',
-            'children',
             'parent_id'
         ]
 
-    def get_children(self, obj):
-        serializer = ResourcesSerializer(obj.children.all(), many=True)
-        return serializer.data
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:

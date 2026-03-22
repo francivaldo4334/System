@@ -1,4 +1,4 @@
-<select class="select" id="filter-services">
+<select class="select" id="filter-services" onchange="setState('filter.services', this.value)">
     <option selected>
         {%trans 'Show All Services'%}
     </option>
@@ -26,6 +26,12 @@
         },
         init() {
             window.addEventListener("query:success", this.handler)
+            window.addEventListener("state:update", (e) => {
+                if (e.detail.key.startsWith('filter.')) {
+                    const s = getStateSet("filter")
+                    console.log(s)
+                }
+            })
         }
     }
     FilterService.init()
