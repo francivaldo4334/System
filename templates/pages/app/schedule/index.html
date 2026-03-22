@@ -1,6 +1,12 @@
 {% extends 'pages/app/layout.html' %}
 {% partialdef main %}
-helo
+<app-state name="filter.calendar.range"></app-state>
+<app-state name="filter.calendar.day" value="{{ request.GET.day|default:today }}"></app-state>
+<app-state name="filter.calendar.mode" value="{{ request.GET.mode|default:'w' }}"></app-state>
+<app-state name="filter.search" value="{{ request.GET.search|default:'' }}"></app-state>
+<app-state name="filter.services" value="{{ request.GET.services|default:'' }}"></app-state>
+<app-state name="filter.resources" value="{{ request.GET.resources|default:'' }}"></app-state>
+<app-state name="filter.status" value="request.GET.status|default:'all'"></app-state>
 {% endpartialdef %}
 {% block navbar_title %}
     {% trans 'SRA Agenda' %}

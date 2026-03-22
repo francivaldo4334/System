@@ -79,7 +79,7 @@
     window.handlerSidebarStoreStatus = (status)=>{
         if (status !== 200) return;
         setState('sidebar.url_name', '{{ url_name }}');
-        window.history.pushState({},'','{{ url_name }}'xd)
+        window.history.pushState({},'','{{ url_name }}')
         document.querySelector('form[store="sidebar.store"]')?.clean();
     }
     </script>
