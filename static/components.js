@@ -52,6 +52,59 @@ class EanCodeField extends HTMLInputElement {
     return actualDigit === expectedDigit;
   }
 }
+class AppQuery extends HTMLFormElement {
+  constructor() {
+    super();
+    this.queryKey = this.getAttribute("querykey")
+    if (!this.queryKey) throw Error("Insira uma 'querykey'")
+    this._fetch = this._fetch.bind(this)
+  }
+  async _fetch(event) {
+    event.preventDefault();
+
+    const action = this.getAttribute('action');
+    const method = (this.getAttribute('method') || 'GET').toUpperCase();
+
+    let endpoint = action;
+    let options = { method };
+
+    const formData = new FormData(this);
+
+    if (method === 'GET') {
+      const params = new URLSearchParams(formData).toString();
+      endpoint = params ? `${action}?${params}` : action;
+    } else {
+      options.body = formData;
+    }
+
+    try {
+      const response = await fetch(endpoint, options);
+      const data = await response.text();
+      if (!response.ok) throw { status: response.status, data };
+      this.dispatchEvent(new CustomEvent('query:success', {
+        bubbles: true,
+        composed: true,
+        detail: { queryKey: this.queryKey, status: response.status, data }
+      }));
+    } catch (error) {
+      this.dispatchEvent(new CustomEvent('query:error', {
+        bubbles: true,
+        composed: true,
+        detail: { querykey: this.queryKey, error }
+      }));
+    }
+  }
+  connectedCallback() {
+    this.addEventListener('submit', this._fetch)
+    if (this.hasAttribute('autofetch')) {
+      this.requestSubmit()
+    }
+  }
+  disconnectedCallback() {
+    this.removeEventListener('submit', this._fetch)
+  }
+}
+//@deprecated
 class CustomAjaxForm extends HTMLFormElement {
   connectedCallback() {
     this.queryKey = this.getAttribute('querykey');
@@ -112,10 +165,8 @@ class AppScope extends HTMLScriptElement {
   connectedCallback() {
     if (!this.textContent.trim() || this._cleanUpFn) return;
     const code = this.getAttribute('oncleanup');
-
     try {
       this._cleanUpFn = new Function(`${code}`);;
-
     } catch (e) {
       console.error("Erro na execução do escopo AppScope:", e);
     }
@@ -125,9 +176,7 @@ class AppScope extends HTMLScriptElement {
     if (this._cleanUpFn) {
       this._cleanUpFn();
       this._cleanUpFn = null;
-      console.log("AppScope: Recursos limpos com sucesso.");
     }
-    this.textContent = "";
   }
 }
 
@@ -171,3 +220,4 @@ customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 customElements.define('app-ajax', CustomAjaxForm, { extends: 'form' })
 customElements.define('app-scope', AppScope, { extends: 'script' })
+customElements.define('app-query', AppQuery, { extends: 'form' })

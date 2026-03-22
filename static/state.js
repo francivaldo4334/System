@@ -24,7 +24,7 @@ class StateDef extends HTMLElement {
   static observedAttributes = ['value'];
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
+    this.attachShadow({ mode: 'open' })
     this.style.display = 'none'
     this.name = this.getAttribute('name');
     states.set(this.name, undefined);

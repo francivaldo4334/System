@@ -2,27 +2,20 @@
 {% load static %}
 {% partialdef menu-option %}
 <li class="relative">
-    <form is="app-ajax"
-          store='sidebar.store'
+    <form is="app-query"
+          querykey="sidebar-query"
           action="{% url url_name %}"
-          onsuccess="handlerSidebarStoreStatus"
-          class="is-drawer-close:tooltip is-drawer-close:tooltip-right "
-          data-state="sidebar.url_name"
-          data-then="it =>this.classList.toggle('menu-active',it === '{{ url_name }}')"
-          data-at="void"
+          class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          data-url-name="{{ url_name }}"
           data-tip="{% trans title %}">
         <span class="*:m-1.5 *:inline-block">{% include icon_path %}</span>
         <span class="is-drawer-close:hidden">{% trans title %}</span>
-        <button data-state="sidebar.url_name"
-                data-then="it => it === '{{ url_name }}'"
-                data-at="disabled"
-                type="submit"
-                class="absolute inset-0 opacity-0"></button>
+        <button type="submit" class="absolute inset-0 opacity-0"></button>
     </form>
 </li>
 {% endpartialdef %}
 {% block body %}
-    <app-state name="sidebar.url_name"
+    <app-state name="sidebar.urlName"
     {% if request.resolver_match.url_name == 'app' %}
         value="{{'app-schedule'}}"
     {% else %}
@@ -34,19 +27,9 @@
         <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]"
              data-state="sidebar.store.data"
              data-at="innerHTML">
-            <nav class="navbar w-full bg-base-300 border-b border-base-content/10">
-                <label for="my-drawer-4"
-                       aria-label="open sidebar"
-                       class="btn btn-square btn-ghost">{% include 'icons/panel-left-open.svg' %}</label>
-                <div class="px-4">
-                    {% block navbar_title %}Topbar{% endblock %}
-                </div>
-            </nav>
-            <div data-state="menu-page" data-at='innerHTML'>
-                {% block main %}
-                    {% include default_app_template_name %}
-                {% endblock %}
-            </div>
+            {% block section %}
+                {% include default_app_template_name %}
+            {% endblock %}
         </div>
         <div class="drawer-side is-drawer-close:overflow-visible">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -73,14 +56,26 @@
          data-at="void"></div>
 {% endblock %}
 {% block scripts %}
+    <script>
+    window.addEventListener('state:update', (event) => {
+        const { key, newValue } = event.detail;
+        if (key !== 'sidebar.urlName') return;
+        const forms = document.querySelectorAll('form[querykey="sidebar-query"]');
+        forms.forEach(form => {
+            const urlName = form.dataset.urlName; 
+            const isSelected = newValue === urlName;
+            form.classList.toggle('menu-active', isSelected);
+            const btn = form.querySelector('button[type="submit"]')
+            btn.disabled = isSelected;
+        })
+    });
+    window.addEventListener('query:success', (event) => {
+        const {queryKey} = event.detail
+        if (queryKey !== 'sidebar-query') return;
+        const form = event.target
+        setState('sidebar.urlName', form.dataset.urlName)
+    })
+    </script>
     <script src="{% static 'state.js' %}"></script>
     <script src="{% static 'components.js' %}"></script>
-    <script>
-    window.handlerSidebarStoreStatus = (status)=>{
-        if (status !== 200) return;
-        setState('sidebar.url_name', '{{ url_name }}');
-        window.history.pushState({},'','{{ url_name }}')
-        document.querySelector('form[store="sidebar.store"]')?.clean();
-    }
-    </script>
 {% endblock %}
