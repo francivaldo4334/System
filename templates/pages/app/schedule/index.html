@@ -17,19 +17,12 @@
 <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
     <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
         {% include 'components/filter-calendar/index.html' %}
-        {% with content='components/filter-resources.html' title=_('Resources') %}
-            {% partial fieldset_filter %}
-        {% endwith %}
-        {% with content='components/filter-services.html' title=_('Services') %}
-            {% partial fieldset_filter %}
-        {% endwith %}
     </aside>
     <main class="bg-base-200/30">
         <div class="w-full flex justify-between p-2 pr-4 border-b border-base-content/10 items-center">
             <div class="flex flex-wrap gap-4 w-full">
                 {% include 'components/calendar-view-mode.html' %}
                 {% include 'components/filter-search.html' %}
-                {% include 'components/filter-assignment-status.html' %}
             </div>
             <button class="btn btn-primary pl-2">
                 {% include 'icons/plus.svg' %}
