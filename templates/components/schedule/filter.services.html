@@ -8,7 +8,7 @@
 <script is="app-scope" onclearup="FilterService.clean()">
     FilterService = {
         clean() {
-            window.removeEventListener("state:update", this.handler)
+            window.removeEventListener("query:success", this.handler)
             delete FilterService
         },
         handler(event) {
