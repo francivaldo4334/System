@@ -28,7 +28,7 @@
         {% include 'components/schedule/filter.calendar/index.html' %}
         <fieldset class="fieldset mt-auto">
             <legend class="fieldset-legend">{% trans 'Status' %}</legend>
-            {% with  label=_('All') %}
+            {% with  label=_('Show All') %}
                 {% partial status %}
             {% endwith %}
             {% with  label=_('Created') icon_path="icons/status-created.svg" %}
