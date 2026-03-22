@@ -1,122 +1,18 @@
 {% get_current_language as LANG_CODE %}
 <section class="flex flex-col gap-2 relative  h-[calc(8*2rem)]">
     <header class="flex items-center justify-between gap-2">
-        <h2 class="text-sm font-bold capitalize"
-            data-then="iso => CalendarApp.formatHeader(iso, '{{ LANG_CODE }}')"></h2>
+        <h2 id="calendar-month-title" class="text-sm font-bold capitalize"></h2>
         <div class="flex gap-1">
             <button class="btn btn-ghost btn-sm btn-square"
-                    onclick="CalendarApp.changeMonth(-1)">{% include 'icons/chevron-left.svg' %}</button>
+                    onclick="FilterCalendar.changeMonth(-1)">{% include 'icons/chevron-left.svg' %}</button>
             <button class="btn btn-ghost btn-sm btn-square"
-                    onclick="CalendarApp.changeMonth(1)">{% include 'icons/chevron-right.svg' %}</button>
+                    onclick="FilterCalendar.changeMonth(1)">{% include 'icons/chevron-right.svg' %}</button>
         </div>
     </header>
     <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase"
          id="calendar-weekdays"></div>
-    <div id="calendar-grid"
-         class="grid grid-cols-7"
-         data-state="f-calendar-range"
-         data-then="CalendarApp.renderGrid"
-         data-at="innerHTML"></div>
+    <div id="calendar-grid-days" class="grid grid-cols-7"></div>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
-            onclick="setState('f-calendar', new Date().toISOString())">{% trans "Today" %}</button>
+            onclick="FilterCalendar.setToday()">{% trans "Today" %}</button>
 </section>
-<script is="app-scope" oncleanup="delete window.CalendarApp">
-  window.CalendarApp = {
-    locale: '{{ LANG_CODE|default:"en" }}',
-    _getCurrentDate() {
-      const iso = getState('f-calendar');
-      return iso ? new Date(iso) : new Date();
-    },
-
-    _getDateRange() {
-      const [isoStart, isoEnd] = getState("f-calendar-range") || [];
-      if (!isoStart || !isoEnd) return [null, null];
-      return [new Date(isoStart), new Date(isoEnd)];
-    },
-
-    _normalize(date) {
-      return new Date(date).setHours(0, 0, 0, 0);
-    },
-
-    formatHeader(iso, lang) {
-      const date = new Date(iso);
-      return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(date);
-    },
-
-    changeMonth(step) {
-      const date = this._getCurrentDate();
-      date.setDate(1); 
-      date.setMonth(date.getMonth() + step);
-      setState('f-calendar', date.toISOString());
-    },
-
-    selectDay(day) {
-      const date = this._getCurrentDate();
-      date.setDate(day);
-      setState('f-calendar', date.toISOString());
-    },
-
-    _isInRange(currentDate, init, end) {
-      if (!init || !end || !currentDate) return false;
-      const d = this._normalize(currentDate);
-      const start = this._normalize(init);
-      const finish = this._normalize(end);
-      return d >= start && d <= finish;
-    },
-
-    _isSameDay(d1, d2) {
-      return this._normalize(d1) === this._normalize(d2);
-    },
-
-    initWeekDays() {
-      const container = document.getElementById('calendar-weekdays');
-      if (!container) return;
-      const formatter = new Intl.DateTimeFormat(this.locale, { weekday: 'short' });
-      const daysHtml = Array.from({ length: 7 }, (_, i) => {
-        const d = new Date(2024, 0, 7 + i);
-        const name = formatter.format(d).replace('.', '');
-        return `<span>${name}</span>`;
-      }).join('');
-      container.innerHTML = daysHtml;
-    },
-
-    renderGrid() {
-      const iso = getState("f-calendar")
-      const date = new Date(iso);
-      const today = new Date();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-
-      const firstDayIndex = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const range = this._getDateRange();
-
-      const emptyCells = Array(firstDayIndex).fill('<div class="p-2"></div>');
-
-      const dayButtons = Array.from({ length: daysInMonth }, (_, i) => {
-        const day = i + 1;
-        const currentDate = new Date(year, month, day);
-        const isToday = this._isSameDay(today, currentDate);
-        const isSelected = date.getDate() === day;
-        const inRange = this._isInRange(currentDate, ...range);
-
-        return this._buildDayButton(day, isToday, isSelected, inRange);
-      });
-
-      return [...emptyCells, ...dayButtons].join('');
-    },
-    _buildDayButton(day, isToday, isSelected, inRange) {
-      const baseClass = 'btn btn-sm btn-square font-normal transition-colors';
-      const rangeClass = inRange ? 'btn-soft btn-primary' : '';
-      const todayClass = isToday ? '!btn-outline' : 'btn-ghost';
-      const activeClass = isSelected ? 'btn-primary btn-active' : '';
-
-      return `
-        <button class="${baseClass} ${todayClass} ${activeClass} ${rangeClass}" onclick="CalendarApp.selectDay(${day});">
-          ${day}
-        </button>`.trim();
-    }
-  };
-
-  window.CalendarApp.initWeekDays();
-</script>
+{% include 'components/filter-calendar/index.js.html' %}
