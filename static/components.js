@@ -64,9 +64,15 @@ class AppQuery extends HTMLFormElement {
 
     const action = this.getAttribute('action');
     const method = (this.getAttribute('method') || 'GET').toUpperCase();
-
+    const headers = [];
+    if (this.hasAttribute('headers')) {
+      this.getAttribute('headers').split(',').forEach(h => {
+        const [key, value] = h.split(':')
+        headers.push([key.trim(), value.trim()])
+      })
+    }
     let endpoint = action;
-    let options = { method };
+    let options = { method, headers };
 
     const formData = new FormData(this);
 
