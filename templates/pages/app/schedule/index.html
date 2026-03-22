@@ -5,15 +5,6 @@
     {% include content %}
 </fieldset>
 {% endpartialdef %}
-{% partialdef status %}
-<label class="label flex justify-between items-center">
-    <input type="radio" class="radio radio-primary" name="status" />
-    <span class="w-full">{{ label }}</span>
-    {% if icon_path %}
-        {% include icon_path %}
-    {% endif %}
-</label>
-{% endpartialdef %}
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
 <app-state name="filter.calendar.range"></app-state>
@@ -22,28 +13,11 @@
 <app-state name="filter.search" value="{{ request.GET.search|default:'' }}"></app-state>
 <app-state name="filter.services" value="{{ request.GET.services|default:'' }}"></app-state>
 <app-state name="filter.resources" value="{{ request.GET.resources|default:'' }}"></app-state>
-<app-state name="filter.status" value="request.GET.status|default:'all'"></app-state>
+<app-state name="filter.status" value="{{request.GET.status|default:'all'}}"></app-state>
 <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
     <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
         {% include 'components/schedule/filter.calendar/index.html' %}
-        <fieldset class="fieldset mt-auto">
-            <legend class="fieldset-legend">{% trans 'Status' %}</legend>
-            {% with  label=_('Show All') %}
-                {% partial status %}
-            {% endwith %}
-            {% with  label=_('Created') icon_path="icons/status-created.svg" %}
-                {% partial status %}
-            {% endwith %}
-            {% with  label=_('In Progress') icon_path="icons/status-in-progress.svg" %}
-                {% partial status %}
-            {% endwith %}
-            {% with  label=_('Completed') icon_path="icons/status-completed.svg" %}
-                {% partial status %}
-            {% endwith %}
-            {% with  label=_('Migrated') icon_path="icons/status-migrated.svg" %}
-                {% partial status %}
-            {% endwith %}
-        </fieldset>
+        {% include 'components/schedule/filter.status.html' %}
     </aside>
     <main class="bg-base-200/30">
         <div class="w-full flex justify-between p-2 pr-4 border-b border-base-content/10 items-center">
@@ -61,7 +35,8 @@
         <div>{% include 'schedule_view_mode/week.html' %}</div>
     </main>
 </div>
-<script is="app-scope" onclearup="window.removeEventListener('state:update', _computeFilterCalendarRange);delete _computeFilterCalendarRange">
+<script is="app-scope"
+    onclearup="window.removeEventListener('state:update', _computeFilterCalendarRange);delete _computeFilterCalendarRange">
         _computeFilterCalendarRange = (event) => {
             const {key} = event.detail
             if (!['filter.calendar.day', 'filter.calendar.mode'].includes(key)) return
@@ -87,8 +62,8 @@
         };
 
         window.addEventListener('state:update', _computeFilterCalendarRange);
-</script>
+    </script>
 {% endpartialdef %}
 {% block section %}
-    {% partial main %}
+{% partial main %}
 {% endblock %}

@@ -1,0 +1,46 @@
+{% partialdef status %}
+<label class="label flex justify-between items-center">
+    <input type="radio" class="radio radio-primary" name="status" value="{{value}}" />
+    <span class="w-full">{{ label }}</span>
+    {% if icon_path %}
+    {% include icon_path %}
+    {% endif %}
+</label>
+{% endpartialdef %}
+<fieldset class="fieldset mt-auto">
+    <legend class="fieldset-legend">{% trans 'Status' %}</legend>
+    {% with label=_('Show All') value="all"%}
+    {% partial status %}
+    {% endwith %}
+    {% with label=_('Created') icon_path="icons/status-created.svg" value="CR"%}
+    {% partial status %}
+    {% endwith %}
+    {% with label=_('In Progress') icon_path="icons/status-in-progress.svg" value="IP"%}
+    {% partial status %}
+    {% endwith %}
+    {% with label=_('Completed') icon_path="icons/status-completed.svg" value="CP" %}
+    {% partial status %}
+    {% endwith %}
+    {% with label=_('Migrated') icon_path="icons/status-migrated.svg" value="MG"%}
+    {% partial status %}
+    {% endwith %}
+</fieldset>
+<script is="app-scope" onclearup="FilterStatus.clean()">
+    FilterStatus = {
+        clean() {
+            window.removeEventListener('state:update', this.checkStatus)
+            delete FilterStatus
+        },
+        checkStatus(event) {
+            const {key, newValue} = event.detail
+            if (key !== "filter.status") return;
+            const el = document.querySelector(`input[name='status'][value='${newValue}']`)
+            if (!el) return;
+            el.checked = true
+        },
+        init() {
+            window.addEventListener('state:update', this.checkStatus)
+        }
+    }
+    FilterStatus.init()
+</script>
