@@ -17,5 +17,6 @@
   />
   <polygon
     points="21,3 21,21 3,21"
+    fill="currentColor"
   />
 </svg>

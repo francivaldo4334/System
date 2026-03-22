@@ -1,25 +1,25 @@
 {% partialdef assignment_status %}
-<input class="btn relative"
-       type="radio"
+<input type="radio"
+       class="btn"
        name="f-status"
        value="{{ value }}"
-       onclick="setState('f-assignment-status', this.value)"
-       aria-label="{{ label }}" />
+       aria-label="{{ label }}"
+       onclick="setState('f-assignment-status', this.value)" />
 {% endpartialdef %}
-<form class="filter">
-    {% with value='CF' label=_('Confirmed') icon_path='icons/status-created.svg' %}
+<form class="filter gap-2">
+    {% with value='CF' label=_('Confirmed') %}
         {% partial assignment_status %}
     {% endwith %}
-    {% with value='NP' label=_('In Progress') icon_path='icons/status-in-progress.svg' %}
+    {% with value='NP' label=_('In Progress') %}
         {% partial assignment_status %}
     {% endwith %}
-    {% with value='CP' label=_('Completed') icon_path='icons/status-completed.svg' %}
+    {% with value='CP' label=_('Completed') %}
         {% partial assignment_status %}
     {% endwith %}
-    {% with value='MG' label=_('Migrated') icon_path='icons/status-migrated.svg' %}
+    {% with value='MG' label=_('Migrated') %}
         {% partial assignment_status %}
     {% endwith %}
-    {% with value='CL' label=_('Cancelled') icon_path='icons/status-cancelled.svg' %}
+    {% with value='CL' label=_('Cancelled') %}
         {% partial assignment_status %}
     {% endwith %}
     <input class="btn btn-square text-xs"
