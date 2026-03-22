@@ -1,6 +1,6 @@
 <select class="select" id="filter-services">
-    <option selected disabled>
-        {%trans 'Service'%}
+    <option selected>
+        {%trans 'Show All Services'%}
     </option>
 </select>
 <form is="app-query" autofetch action="{% url 'services-list'%}" querykey="services" class="hidden">

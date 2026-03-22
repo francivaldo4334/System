@@ -1,6 +1,6 @@
-<select class="select" id="filter-resources">
-    <option selected disabled>
-        {%trans 'Resource'%}
+<select class="select" id="filter-resources" onchange="setState('filter.resources', this.value)">
+    <option selected>
+        {%trans 'Show All Resources'%}
     </option>
 </select>
 <form is="app-query" autofetch action="{% url 'resources-list'%}" querykey="resources" class="hidden">
