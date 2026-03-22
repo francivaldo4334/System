@@ -40,7 +40,7 @@
     </main>
 </div>
 <script is="app-scope" onclearup="window.removeEventListener('state:update', _computeFilterCalendarRange);delete _computeFilterCalendarRange">
-    const _computeFilterCalendarRange = (event) => {
+    _computeFilterCalendarRange = (event) => {
         const { key } = event.detail
         if (!['filter.calendar.day','filter.calendar.mode'].includes(key)) return
         const day = getState('filter.calendar.day')

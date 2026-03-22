@@ -2,10 +2,8 @@
 <label class="tab">
     <input value="{{ value }}"
            type="radio"
-           name="calendar-view"
-           data-state="f-calendar-view"
-           data-then="it => it === this.value"
-           onclick="setState('f-calendar-view', this.value)" />
+           name="filter-calendar-mode"
+           onclick="setState('filter.calendar.mode', this.value)" />
     {% include icon %}
 </label>
 {% endpartialdef %}
