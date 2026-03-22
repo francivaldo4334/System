@@ -1,11 +1,32 @@
-<select class="select">
+<select class="select" id="filter-services">
     <option selected disabled>
-    {%trans 'Service'%}
+        {%trans 'Service'%}
     </option>
-    {% for opt in services %}<option value="{{ opt.id }}">{{ opt.title }}</option>
-    {% empty %}
-        <option disabled>
-            {% trans 'No items.'%}
-        </option>
-    {% endfor %}
 </select>
+<form is="app-query" autofetch action="{% url 'services-list'%}" querykey="services" class="hidden">
+</form>
+<script is="app-scope" onclearup="FilterService.clean()">
+    FilterService = {
+        clean() {
+            window.removeEventListener("state:update", this.handler)
+            delete FilterService
+        },
+        handler(event) {
+            const {queryKey, data} = event.detail;
+            if (queryKey !== "services") return;
+            const obj = JSON.parse(data);
+            const el = document.getElementById('filter-services')
+            el.querySelectorAll("[value]").forEach(e => e.remove())
+            obj.results.map(it => {
+                const opt = document.createElement('option')
+                opt.value = it.id
+                opt.textContent = it.title
+                el.appendChild(opt)
+            })
+        },
+        init() {
+            window.addEventListener("query:success", this.handler)
+        }
+    }
+    FilterService.init()
+</script>
