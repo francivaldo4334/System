@@ -18,7 +18,7 @@ class AppView(TemplateView):
       'today': f'{timezone.localtime(timezone.now()).date().isoformat()}T00:00:00',
     }
     def get_template_names(self): # type: ignore
-        app_section = self.request.META.get('HTTP_APP_AJAX')
+        app_section = self.request.META.get('HTTP_AJAX_PARTIAL')
         if app_section:
             return [f"{self.template_name}#{app_section}"]
         return [self.template_name]
