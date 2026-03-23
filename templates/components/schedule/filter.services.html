@@ -26,12 +26,6 @@
         },
         init() {
             window.addEventListener("query:success", this.handler)
-            window.addEventListener("state:update", (e) => {
-                if (e.detail.key.startsWith('filter.')) {
-                    const s = getStateSet("filter")
-                    console.log(s)
-                }
-            })
         }
     }
     FilterService.init()
