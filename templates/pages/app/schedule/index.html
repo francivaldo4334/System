@@ -35,8 +35,8 @@
         <div>{% include 'schedule_view_mode/week.html' %}</div>
     </main>
 </div>
-{% include 'pages/app/schedule/index.html' %}
+{% include 'pages/app/schedule/index.js.html' %}
 {% endpartialdef %}
 {% block section %}
-{% partial main %}
-{% etransaction
+    {% partial main %}
+{% endblock %}
