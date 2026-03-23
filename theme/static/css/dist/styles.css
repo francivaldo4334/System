@@ -1359,6 +1359,9 @@
   .\!end {
     inset-inline-end: var(--spacing) !important;
   }
+  .end {
+    inset-inline-end: var(--spacing);
+  }
   @layer daisyui.l1.l2 {
     .toast-top {
       top: calc(0.25rem * 4);

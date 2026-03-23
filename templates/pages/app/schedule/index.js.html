@@ -1,28 +1,62 @@
-<script is="app-scope"
-    onclearup="window.removeEventListener('state:update', _computeFilterCalendarRange);delete _computeFilterCalendarRange">
-        _computeFilterCalendarRange = (event) => {
-            const {key} = event.detail
-            if (!['filter.calendar.day', 'filter.calendar.mode'].includes(key)) return
-            const day = getState('filter.calendar.day')
-            const mode = getState('filter.calendar.mode')
-            if (!day || !mode) return
-            const date = new Date(day);
-            const range = [undefined, undefined]
-            if (mode == 'm') {
-                range[0] = new Date(date.getFullYear(), date.getMonth(), 1);
-                range[1] = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            } else if (mode === 'w') {
-                const dayOfWeek = date.getDay();
-                range[0] = new Date(date);
-                range[0].setDate(date.getDate() - dayOfWeek);
-                range[1] = new Date(range[0]);
-                range[1].setDate(range[0].getDate() + 6);
-            } else if (mode === 'd') {
-                range[0] = new Date(date);
-                range[1] = new Date(date);
-            }
-            setState('filter.calendar.range', range)
-        };
+<script is="app-scope" onclearup="AppSchedule.clean()">
+var AppSchedule = {
+    _boundHandler: null,
+    init() {
+        this._boundHandler = this.handler.bind(this);
+        window.addEventListener('state:update', this._boundHandler);
+    },
 
-        window.addEventListener('state:update', _computeFilterCalendarRange);
+    clean() {
+        if (this._boundHandler) {
+            window.removeEventListener('state:update', this._boundHandler);
+        }
+        delete AppSchedule;
+    },
+    _weekRange(date) {
+        const start = new Date(date);
+        const dayOfWeek = date.getDay();
+        start.setDate(date.getDate() - dayOfWeek);
+        
+        const end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        return [start, end];
+    },
+
+    _monthRange(date) {
+        return [
+            new Date(date.getFullYear(), date.getMonth(), 1),
+            new Date(date.getFullYear(), date.getMonth() + 1, 0)
+        ];
+    },
+
+    _dayRange(date) {
+        const d = new Date(date);
+        return [d, d];
+    },
+
+    _getRangeFactory(t) {
+        const strategies = {
+            'w': this._weekRange,
+            'm': this._monthRange,
+            'd': this._dayRange
+        };
+        if (!strategies[t]) throw Error(`Modo de calendário inválido: ${t}`);
+        return strategies[t].bind(this); 
+    },
+
+    handler(event) {
+        const { key } = event.detail;
+        if (!['filter.calendar.day', 'filter.calendar.mode'].includes(key)) return;
+
+        const day = getState('filter.calendar.day');
+        const mode = getState('filter.calendar.mode');
+        if (!day || !mode) return;
+        const date = new Date(day);
+        const range = this._getRangeFactory(mode)(date);
+        
+        setState('filter.calendar.range', range);
+    }
+};
+
+AppSchedule.init();
 </script>
