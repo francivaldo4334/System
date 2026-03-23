@@ -15,7 +15,6 @@ class AppView(TemplateView):
                     'icon_template_name': 'icons/calendar.svg'
                 }
             ],
-            'default_app_template_name': 'pages/app/schedule/index.html#main',
             'today': f'{timezone.localtime(timezone.now()).date().isoformat()}T00:00:00',
         })
         return context

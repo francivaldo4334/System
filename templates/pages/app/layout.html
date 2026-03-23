@@ -1,9 +1,10 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{%with app_url_name=default_url_name|default:request.resolver_match.url_name%}
 {% partialdef menu-option %}
 <li class="relative">
-    <form class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-url="{% url url_name %}"
-        data-url-name="{{ url_name }}" data-tip="{% trans title %}">
+    <form class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="{% trans title %}"
+        data-url="{% url url_name %}">
         <span class="*:m-1.5 *:inline-block">{% include icon_path %}</span>
         <span class="is-drawer-close:hidden">{% trans title %}</span>
         <button type="submit" class="absolute inset-0 opacity-0"></button>
@@ -15,13 +16,13 @@
     <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
         {% block section %}
-        {% include default_app_template_name %}
+        {% include 'pages/app/schedule/index.html#main' %}
         {% endblock %}
     </div>
     <div class="drawer-side is-drawer-close:overflow-visible">
         <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
         <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
-            <ul class="menu w-full grow" id="sidebarmenu">
+            <ul class="menu w-full grow" id="id-app-menu">
                 <li class='border-b mb-2 border-base-content/10 h-14 pb-0'>
                     <span class="menu-title flex gap-3">
                         {% include 'icons/logo.svg' %}
@@ -30,7 +31,7 @@
                 </li>
                 {% for option in app_template_name_options %}
                 {% with url_name=option.url_name title=option.title icon_path=option.icon_template_name %}
-                {% include 'pages/app/layout.html#menu-option' %}
+                {% partial menu-option %}
                 {% endwith %}
                 {% endfor %}
             </ul>
@@ -45,18 +46,21 @@
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 </script>
 <script src="{% static 'state.js' %}"></script>
-{# with url_name=request.resolver_match.url_name#}
-{# with final_url=url_name=='app'|yesno:"app-schedule"|default:url_name#}
 <script>
+    const formQuerySelector = "#id-app-menu form"
     $s.create("sidebar.urlName")
-    $s.observer("sidebar.urlName", 'form[querykey="sidebar-query"]', undefined, (newValue, form) => {
-        const urlName = form.dataset.urlName;
-        const isSelected = newValue === urlName;
-        form.classList.toggle('menu-active', isSelected);
-        return null
-    })
-    $s.set("sidebar.urlName", "{% if url_name == 'app' %}app-schedule{% else %}{{ url_name }}{% endif %}")
-    document.querySelectorAll('#sidebarmenu form').forEach(form => {
+    $s.subscribe(
+        "sidebar.urlName",
+        formQuerySelector,
+        null,
+        (newValue, form) => {
+            const urlName = form.dataset.urlName;
+            const isSelected = newValue === urlName;
+            form.classList.toggle('menu-active', isSelected);
+        }
+    )
+    $s.set("sidebar.urlName", "{{app_url_name}}")
+    document.querySelectorAll(formQuerySelector).forEach(form => {
         form.addEventListener("submit", e => {
             e.preventDefault()
             axios.get(
@@ -82,3 +86,4 @@
 </script>
 <script src="{% static 'components.js' %}"></script>
 {% endblock %}
+{% endwith %}
