@@ -1,11 +1,11 @@
 import django_filters as filters
 
-from schedule.models import AssignmentSlot
+from schedule.models import Appointment
 
 
 class AssignmentSlotFilterSet(filters.FilterSet):
     class Meta:
-        model = AssignmentSlot
+        model = Appointment
         fields = {
             'date':['gte', 'lte', 'exact'],
             'status': ['exact'],

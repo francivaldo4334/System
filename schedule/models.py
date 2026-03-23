@@ -5,14 +5,12 @@
 # pyright: reportGeneralTypeIssues=false
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models.functions import Concat, Substr
-from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel, TitleModel
+from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import rrulestr, rruleset
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from schedule.flows import AssignmentSlotStateCancelled, AssignmentSlotStateCompleted, AssignmentSlotStateConfirmed, AssignmentSlotStateCreated, AssignmentSlotState, AssignmentSlotStateInProgress, AssignmentSlotStateMigrated, NotStateError
+from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentSlotState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -20,11 +18,7 @@ class Resource(TimeStampedModel, ActivatorModel):
     parent = models.ForeignKey('ResourceNotSelectable',models.CASCADE,'children', null=True, blank=True)
     code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
     is_selectable = models.BooleanField()
-
-    content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = GenericForeignKey()
-
+    uri = models.ForeignKey('core.URIModel', models.CASCADE)
     def clean(self):
         if self.parent and not str(self.code).startswith(getattr(self.parent,'code')):
             raise ValidationError({'code': _('Enter a valid value.')})
@@ -94,6 +88,7 @@ class Availability(TimeStampedModel, ActivatorModel):
 class ResourceOccupation(models.Model):
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     date = models.DateField()
+    # 288 é a queantidade de slots de 5 minutos em um dia / 24 horas
     bitmap = models.CharField(max_length=288,
                               validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)],
                               default='0'*288)
@@ -112,48 +107,56 @@ class ResourceOccupation(models.Model):
                 )
             )
         def vacate(self, start_slot, duration_slot):
-            return self.update(
-                bitmap=Concat(
-                    Substr('bitmap',1,start_slot),
-                    models.Value('0' * duration_slot),
-                    Substr('bitmap',start_slot + duration_slot + 1),
-                    output_field=models.CharField()
+            with transaction.atomic():
+                qs = self.all() 
+                qs.update(
+                    bitmap=Concat(
+                        Substr('bitmap',1,start_slot),
+                        models.Value('0' * duration_slot),
+                        Substr('bitmap',start_slot + duration_slot + 1),
+                        output_field=models.CharField()
+                    )
                 )
-            )
+            return qs.filter(bitmap='0' * 288).delete()
+
     objects = QuerySet.as_manager()
 
     class Meta:
         unique_together = ['resource', 'date']
 
-
-class AssignmentSlot(TimeStampedModel, CreatedByModel):
-    class Status(models.TextChoices):
-        CREATED = 'CR', _('Created')
-        CONFIRMED = 'CF', _('Confirmed')
-        IN_PROGRESS = 'NP', _('In Progress')
-        COMPLETED = 'CP', _('Completed')
-        MIGRATED = 'MG', _('Migrated')
-        CANCELLED = 'CL', _('Cancelled')
-
-    status = models.CharField(max_length=2,
-                              choices=Status.choices,
-                              default=Status.CREATED.value)
-
+class Assignment(TimeStampedModel, CreatedByModel):
     service = models.ForeignKey(Service, models.CASCADE, null=True, blank=True)
     resources = models.ManyToManyField(ResourceSelectable)
     date = models.DateField()
     start_slot = models.PositiveSmallIntegerField()
     duration_slot = models.PositiveSmallIntegerField()
 
+
+class Appointment(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'PD', _('Pending')
+        CONFIRMED = 'CF', _('Confirmed')
+        MIGRATED = 'MG', _('Migrated')
+        CANCELLED = 'CC', _('Cancelled')
+        ABSENT = 'AB', _('Absent')
+        IN_PROGRESS = 'IP', _('In Progress')
+        COMPLETED = 'CP', _('Completed')
+
+    assignment = models.ForeignKey(Assignment, models.CASCADE)
+    status = models.CharField(max_length=2,
+                              choices=Status.choices,
+                              default=Status.PENDING.value)
+
+
     @property
     def state(self) -> AssignmentSlotState:
         states = {
-            self.Status.CREATED.value: AssignmentSlotStateCreated,
-            self.Status.CONFIRMED.value: AssignmentSlotStateConfirmed,
-            self.Status.IN_PROGRESS.value: AssignmentSlotStateInProgress,
-            self.Status.COMPLETED.value: AssignmentSlotStateCompleted,
-            self.Status.MIGRATED.value: AssignmentSlotStateMigrated,
-            self.Status.CANCELLED.value: AssignmentSlotStateCancelled,
+            self.Status.PENDING.value: AssignmentStatePeding,
+            self.Status.CONFIRMED.value: AssignmentStateConfirmed,
+            self.Status.IN_PROGRESS.value: AssignmentStateInProgress,
+            self.Status.COMPLETED.value: AssignmentStateCompleted,
+            self.Status.MIGRATED.value: AssignmentStateMigrated,
+            self.Status.CANCELLED.value: AssignmentStateCancelled,
         }
         state_class = states.get(str(self.status))
         if not state_class: raise NotStateError()

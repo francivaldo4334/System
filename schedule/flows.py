@@ -7,8 +7,8 @@ from typing import List, cast
 
 class AssignmentSlotState:
     def __init__(self, instance) -> None:
-        from schedule.models import AssignmentSlot
-        self.instance = cast(AssignmentSlot, instance)
+        from schedule.models import Appointment
+        self.instance = cast(Appointment, instance)
 
     def confirm(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
@@ -25,7 +25,7 @@ class AssignmentSlotState:
     def cancel(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
     
-class AssignmentSlotStateCreated(AssignmentSlotState):
+class AssignmentStatePeding(AssignmentSlotState):
     class ResourceNotAllowed(Exception):
         pass
     class ReourceQuantityNotEguals(Exception):
@@ -73,19 +73,19 @@ class AssignmentSlotStateCreated(AssignmentSlotState):
             self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
             self.instance.save()
             
-class AssignmentSlotStateConfirmed(AssignmentSlotState):
+class AssignmentStateConfirmed(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateInProgress(AssignmentSlotState):
+class AssignmentStateInProgress(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateCompleted(AssignmentSlotState):
+class AssignmentStateCompleted(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateMigrated(AssignmentSlotState):
+class AssignmentStateMigrated(AssignmentSlotState):
     pass
 
-class AssignmentSlotStateCancelled(AssignmentSlotState):
+class AssignmentStateCancelled(AssignmentSlotState):
     pass
 
 class NotStateError(Exception):

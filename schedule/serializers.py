@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import AssignmentSlot, Resource, Service
+from schedule.models import Appointment, Resource, Service
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class AssignmentSlotSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
     class Meta:
-        model = AssignmentSlot
+        model = Appointment
         fields = [
             'id',
             'status',

@@ -2,7 +2,7 @@ from django.contrib import admin
 from schedule.models import *
 
 # Register your models here.
-@admin.register(AssignmentSlot)
+@admin.register(Appointment)
 class AssignmentSlotAdmin(admin.ModelAdmin):
     actions = [        
         'confirm',
