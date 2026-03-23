@@ -90,7 +90,7 @@ class ResourceOccupation(models.Model):
     date = models.DateField()
     # 288 é a queantidade de slots de 5 minutos em um dia / 24 horas
     bitmap = models.CharField(max_length=288,
-                              validators=[RegexValidator(r'^[0-1]+$'), MinLengthValidator(288)],
+                              validators=[RegexValidator(r'^[0-1]+\Z'), MinLengthValidator(288)],
                               default='0'*288)
     class QuerySet(models.QuerySet):
         def available(self,start_slot, duration_slot):
