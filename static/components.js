@@ -158,57 +158,6 @@ class AppSlot extends HTMLElement {
     this.shadowRoot.innerHTML = `<slot></slot>`;
   }
 }
-class AppCombobox extends HTMLElement {
-  static formAssociated = true;
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-    this.attachShadow({ mode: 'open' });
-    this._value = "";
-  }
-  get value() { return this._value; }
-  set value(v) {
-    this._value = v;
-    this._internals.setFormValue(v);
-    this.validate();
-  }
-  validate() {
-    if (this.hasAttribute('required') && !this.value) {
-      this._internals.setValidity({ valueMissing: true }, ' ');
-    } else {
-      this._internals.setValidity({});
-    }
-  }
-
-  connectedCallback() {
-    const uid = this.id;
-    this.shadowRoot.innerHTML = `
-      <style>
-        ::slotted([slot="trigger"]) {
-          anchor-name: --anchor;
-        }
-
-        ::slotted([slot="popover"]) {
-          position-anchor: --anchor;
-        }
-      </style>      
-      <slot name="trigger"></slot>
-      <slot name="popover"></slot>
-    `;
-    const trigger = this.querySelector('[slot="trigger"]');
-    const popover = this.querySelector('[slot="popover"]');
-
-    if (trigger && popover) {
-      if (!popover.id) popover.id = `popover-${uid}`;
-      popover.setAttribute('popover', 'auto');
-      trigger.setAttribute('popovertarget', popover.id);
-    }
-    this.validate();
-  }
-  formResetCallback() {
-    this.value = "";
-  }
-}
 
 customElements.define('app-timeline', AppTimeline)
 customElements.define('app-slot', AppSlot)
@@ -216,4 +165,3 @@ customElements.define('app-input-currency', CurrencyField, { extends: 'input' })
 customElements.define('app-input-ean', EanCodeField, { extends: 'input' })
 customElements.define('app-scope', AppScope, { extends: 'script' })
 customElements.define('app-query', AppQuery, { extends: 'form' })
-customElements.define('app-combobox', AppCombobox)
