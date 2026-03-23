@@ -2,13 +2,8 @@
 {% load static %}
 {% partialdef menu-option %}
 <li class="relative">
-    <form is="app-query"
-          querykey="sidebar-query"
-          headers="Ajax-Partial:main"
-          action="{% url url_name %}"
-          class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-          data-url-name="{{ url_name }}"
-          data-tip="{% trans title %}">
+    <form class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-url="{% url url_name %}"
+        data-url-name="{{ url_name }}" data-tip="{% trans title %}">
         <span class="*:m-1.5 *:inline-block">{% include icon_path %}</span>
         <span class="is-drawer-close:hidden">{% trans title %}</span>
         <button type="submit" class="absolute inset-0 opacity-0"></button>
@@ -16,70 +11,74 @@
 </li>
 {% endpartialdef %}
 {% block body %}
-    <app-state name="sidebar.urlName"
-    {% if request.resolver_match.url_name == 'app' %}
-        value="{{'app-schedule'}}"
-    {% else %}
-        value="{{ request.resolver_match.url_name }}"
-    {% endif %}
-    "></app-state>
-    <app-state name="sidebar.store.data">
-    </app-state>
-    <div class="drawer lg:drawer-open h-screen">
-        <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]"
-             data-state="sidebar.store.data"
-             data-at="innerHTML">
-            {% block section %}
-                {% include default_app_template_name %}
-            {% endblock %}
-        </div>
-        <div class="drawer-side is-drawer-close:overflow-visible">
-            <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-            <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
-                <ul class="menu w-full grow">
-                    <li class='border-b mb-2 border-base-content/10 h-14 pb-0'>
-                        <span class="menu-title flex gap-3">
-                            {% include 'icons/logo.svg' %}
-                            <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Agio' %}</span>
-                        </span>
-                    </li>
-                    {% for option in app_template_name_options %}
-                        {% with url_name=option.url_name title=option.title icon_path=option.icon_template_name %}
-                            {% include 'pages/app/layout.html#menu-option' %}
-                        {% endwith %}
-                    {% endfor %}
-                </ul>
-            </div>
+<div class="drawer lg:drawer-open h-screen">
+    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
+        {% block section %}
+        {% include default_app_template_name %}
+        {% endblock %}
+    </div>
+    <div class="drawer-side is-drawer-close:overflow-visible">
+        <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+        <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
+            <ul class="menu w-full grow" id="sidebarmenu">
+                <li class='border-b mb-2 border-base-content/10 h-14 pb-0'>
+                    <span class="menu-title flex gap-3">
+                        {% include 'icons/logo.svg' %}
+                        <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Agio' %}</span>
+                    </span>
+                </li>
+                {% for option in app_template_name_options %}
+                {% with url_name=option.url_name title=option.title icon_path=option.icon_template_name %}
+                {% include 'pages/app/layout.html#menu-option' %}
+                {% endwith %}
+                {% endfor %}
+            </ul>
         </div>
     </div>
-    <div class="hidden"
-         data-state="sidebar.store.status"
-         data-then="handlerSidebarStoreStatus"
-         data-at="void"></div>
+</div>
 {% endblock %}
 {% block scripts %}
-    <script>
-    window.addEventListener('state:update', (event) => {
-        const { key, newValue } = event.detail;
-        if (key !== 'sidebar.urlName') return;
-        const forms = document.querySelectorAll('form[querykey="sidebar-query"]');
-        forms.forEach(form => {
-            const urlName = form.dataset.urlName; 
-            const isSelected = newValue === urlName;
-            form.classList.toggle('menu-active', isSelected);
-            const btn = form.querySelector('button[type="submit"]')
-            btn.disabled = isSelected;
-        })
-    });
-    window.addEventListener('query:success', (event) => {
-        const {queryKey, data} = event.detail
-        if (queryKey !== 'sidebar-query') return;
-        const form = event.target
-        setState('sidebar.urlName', form.dataset.urlName)
-        setState('sidebar.store.data', data)
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+</script>
+<script src="{% static 'state.js' %}"></script>
+{# with url_name=request.resolver_match.url_name#}
+{# with final_url=url_name=='app'|yesno:"app-schedule"|default:url_name#}
+<script>
+    $s.create("sidebar.urlName")
+    $s.observer("sidebar.urlName", 'form[querykey="sidebar-query"]', undefined, (newValue, form) => {
+        const urlName = form.dataset.urlName;
+        const isSelected = newValue === urlName;
+        form.classList.toggle('menu-active', isSelected);
+        return null
     })
-    </script>
-    <script src="{% static 'state.js' %}"></script>
-    <script src="{% static 'components.js' %}"></script>
+    $s.set("sidebar.urlName", "{% if url_name == 'app' %}app-schedule{% else %}{{ url_name }}{% endif %}")
+    document.querySelectorAll('#sidebarmenu form').forEach(form => {
+        form.addEventListener("submit", e => {
+            e.preventDefault()
+            axios.get(
+                e.target.dataset.url,
+                {
+                    headers: {
+                        'Ajax-Partial': 'main'
+                    }
+                }
+            ).then(r => {
+                console.log(r)
+            })
+        })
+    })
+//window.addEventListener('query:success', (event) => {
+//const {queryKey, data} = event.detail
+//if (queryKey !== 'sidebar-query') return;
+//const form = event.target
+//setState('sidebar.urlName', form.dataset.urlName)
+//setState('sidebar.store.data', data)
+//})
+//""
+</script>
+<script src="{% static 'components.js' %}"></script>
 {% endblock %}

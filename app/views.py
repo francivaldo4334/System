@@ -2,14 +2,11 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-
-# Create your views here.
 class AppView(TemplateView):
     template_name = "pages/app/index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Dados da UI movidos para cá para serem dinâmicos
         context.update({
             'app_template_name_options': [
                 {
