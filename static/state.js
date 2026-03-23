@@ -13,7 +13,6 @@ function createStateManager() {
       const elements = document.querySelectorAll(selector);
       elements.forEach(el => {
         state.observers.push({ el, at: attribute, transform });
-        el[attribute] = transform(state.value, el);
       });
     },
 

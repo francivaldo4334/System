@@ -14,7 +14,7 @@
 {% block body %}
 <div class="drawer lg:drawer-open h-screen">
     <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
+    <div id="id-app-content" class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
         {% block section %}
         {% include 'pages/app/schedule/index.html#main' %}
         {% endblock %}
@@ -49,6 +49,7 @@
 <script>
     const formQuerySelector = "#id-app-menu form"
     $s.create("sidebar.urlName")
+    $s.create("sidebar.store.data")
     $s.subscribe(
         "sidebar.urlName",
         formQuerySelector,
@@ -59,6 +60,7 @@
             form.classList.toggle('menu-active', isSelected);
         }
     )
+    $s.subscribe("sidebar.store.data", "#id-app-content", "innerHTML")
     $s.set("sidebar.urlName", "{{app_url_name}}")
     document.querySelectorAll(formQuerySelector).forEach(form => {
         form.addEventListener("submit", e => {
@@ -70,8 +72,9 @@
                         'Ajax-Partial': 'main'
                     }
                 }
-            ).then(r => {
-                console.log(r)
+            ).then(({data}) => {
+                debugger
+                $s.set("sidebar.store.data", data)
             })
         })
     })
