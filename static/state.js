@@ -1,4 +1,4 @@
-const states = new Map();
+const states = new WeakMap();
 
 const getState = (key) => states.get(key);
 
