@@ -10,7 +10,7 @@ from django.db.models.functions import Concat, Substr
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import rrulestr, rruleset
 from django.utils.translation import gettext_lazy as _
-from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentSlotState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
+from schedule.flows import AppointmentStateCancelled, AppointmentStateCompleted, AppointmentStateConfirmed, AppointmentStatePeding, AppointmentState, AppointmentStateInProgress, AppointmentStateMigrated, NotStateError
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -149,14 +149,14 @@ class Appointment(models.Model):
 
 
     @property
-    def state(self) -> AssignmentSlotState:
+    def state(self) -> AppointmentState:
         states = {
-            self.Status.PENDING.value: AssignmentStatePeding,
-            self.Status.CONFIRMED.value: AssignmentStateConfirmed,
-            self.Status.IN_PROGRESS.value: AssignmentStateInProgress,
-            self.Status.COMPLETED.value: AssignmentStateCompleted,
-            self.Status.MIGRATED.value: AssignmentStateMigrated,
-            self.Status.CANCELLED.value: AssignmentStateCancelled,
+            self.Status.PENDING.value: AppointmentStatePeding,
+            self.Status.CONFIRMED.value: AppointmentStateConfirmed,
+            self.Status.IN_PROGRESS.value: AppointmentStateInProgress,
+            self.Status.COMPLETED.value: AppointmentStateCompleted,
+            self.Status.MIGRATED.value: AppointmentStateMigrated,
+            self.Status.CANCELLED.value: AppointmentStateCancelled,
         }
         state_class = states.get(str(self.status))
         if not state_class: raise NotStateError()
