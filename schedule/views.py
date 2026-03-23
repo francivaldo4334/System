@@ -2,9 +2,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
-from schedule.filters import AssignmentSlotFilterSet
-from schedule.models import Appointment, Resource, ResourceSelectable, Service
-from schedule.serializers import AssignmentSlotSerializer, ResourcesSerializer, ServiceSerializer
+from schedule.models import ResourceSelectable, Service
+from schedule.serializers import ResourcesSerializer, ServiceSerializer
 
 # Create your views here.
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
@@ -17,7 +16,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ServiceSerializer
 
 
-class AssignmentSlotViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Appointment.objects.all()
-    serializer_class = AssignmentSlotSerializer
-    filterset_class = AssignmentSlotFilterSet
+# class AssignmentViewSet(viewsets.ReadOnlyModelViewSet):
+#     queryset = Appointment.objects.all()
+#     serializer_class = AssignmentSlotSerializer
+#     filterset_class = AssignmentSlotFilterSet

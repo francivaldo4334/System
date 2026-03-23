@@ -35,35 +35,8 @@
         <div>{% include 'schedule_view_mode/week.html' %}</div>
     </main>
 </div>
-<script is="app-scope"
-    onclearup="window.removeEventListener('state:update', _computeFilterCalendarRange);delete _computeFilterCalendarRange">
-        _computeFilterCalendarRange = (event) => {
-            const {key} = event.detail
-            if (!['filter.calendar.day', 'filter.calendar.mode'].includes(key)) return
-            const day = getState('filter.calendar.day')
-            const mode = getState('filter.calendar.mode')
-            if (!day || !mode) return
-            const date = new Date(day);
-            const range = [undefined, undefined]
-            if (mode == 'm') {
-                range[0] = new Date(date.getFullYear(), date.getMonth(), 1);
-                range[1] = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            } else if (mode === 'w') {
-                const dayOfWeek = date.getDay();
-                range[0] = new Date(date);
-                range[0].setDate(date.getDate() - dayOfWeek);
-                range[1] = new Date(range[0]);
-                range[1].setDate(range[0].getDate() + 6);
-            } else if (mode === 'd') {
-                range[0] = new Date(date);
-                range[1] = new Date(date);
-            }
-            setState('filter.calendar.range', range)
-        };
-
-        window.addEventListener('state:update', _computeFilterCalendarRange);
-    </script>
+{% include 'pages/app/schedule/index.html' %}
 {% endpartialdef %}
 {% block section %}
 {% partial main %}
-{% endblock %}
+{% etransaction
