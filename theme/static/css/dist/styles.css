@@ -2464,17 +2464,61 @@
   @layer daisyui.l1 {
     .calendar-grid>[data-type='today']:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
       --btn-shadow: "";
-      --btn-bg: #0000;
-      --btn-fg: var(--btn-color);
-      --btn-border: var(--btn-color);
+      --btn-fg: var(--btn-color, var(--color-base-content));
+      --btn-bg: var(--btn-color, var(--color-base-content));
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .calendar-grid>[data-type='today']:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
+        --btn-bg: color-mix(
+        in oklab,
+        var(--btn-color, var(--color-base-content)) 8%,
+        var(--color-base-100)
+      );
+      }
+    }
+    .calendar-grid>[data-type='today']:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
+      --btn-border: var(--btn-color, var(--color-base-content));
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .calendar-grid>[data-type='today']:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
+        --btn-border: color-mix(
+        in oklab,
+        var(--btn-color, var(--color-base-content)) 10%,
+        var(--color-base-100)
+      );
+      }
+    }
+    .calendar-grid>[data-type='today']:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {
       --btn-noise: none;
     }
     @media (hover: none) {
       .calendar-grid>[data-type='today']:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
         --btn-shadow: "";
-        --btn-bg: #0000;
-        --btn-fg: var(--btn-color);
-        --btn-border: var(--btn-color);
+        --btn-fg: var(--btn-color, var(--color-base-content));
+        --btn-bg: var(--btn-color, var(--color-base-content));
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .calendar-grid>[data-type='today']:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
+          --btn-bg: color-mix(
+          in oklab,
+          var(--btn-color, var(--color-base-content)) 8%,
+          var(--color-base-100)
+        );
+        }
+      }
+      .calendar-grid>[data-type='today']:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
+        --btn-border: var(--btn-color, var(--color-base-content));
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .calendar-grid>[data-type='today']:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
+          --btn-border: color-mix(
+          in oklab,
+          var(--btn-color, var(--color-base-content)) 10%,
+          var(--color-base-100)
+        );
+        }
+      }
+      .calendar-grid>[data-type='today']:not(.btn-active, :active, :focus-visible, input:checked:not(.filter .btn)):hover {
         --btn-noise: none;
       }
     }
