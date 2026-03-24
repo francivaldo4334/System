@@ -22,9 +22,6 @@ createComponent('c-days', {
         const v = $s.get('filter.calendar.day')
         this.render(new Date(v));
       });
-      $s.subscribe('filter.calendar.day', this.$(".calendar-grid"), null, (v) => {
-        this.render(new Date(v));
-      });
     },
     _check(date, other, type) {
       const d = new Date(date).setHours(0,0,0,0);
@@ -53,9 +50,9 @@ createComponent('c-days', {
         const iterDate = new Date(year, month, day);
         const btn = document.createElement('button');        
         btn.textContent = day;        
-        if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
-        if (day === currentDate.getDate()) btn.dataset.type = 'selected';
         if (this._check(iterDate, null, 'range')) btn.dataset.type = 'range';
+        if (day === currentDate.getDate()) btn.dataset.type = 'selected';
+        if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
         btn.onclick = () => {
           currentDate.setDate(day);
           $s.set('filter.calendar.day', currentDate.toISOString());
@@ -74,7 +71,6 @@ document.querySelectorAll('.btn-filter-calendar').forEach(el => {
     if (!iso) return;
     const date = new Date(iso)
     const step = Number(el.dataset.dir)
-    date.setDate(1);
     date.setMonth(date.getMonth() + step);
     $s.set('filter.calendar.day', date.toISOString());
   }
