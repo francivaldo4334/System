@@ -51,8 +51,8 @@ createComponent('c-days', {
         const btn = document.createElement('button');        
         btn.textContent = day;        
         if (this._check(iterDate, null, 'range')) btn.dataset.type = 'range';
-        if (day === currentDate.getDate()) btn.dataset.type = 'selected';
         if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
+        if (day === currentDate.getDate()) btn.dataset.type = 'selected';
         btn.onclick = () => {
           currentDate.setDate(day);
           $s.set('filter.calendar.day', currentDate.toISOString());
