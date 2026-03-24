@@ -18,79 +18,52 @@ createComponent('c-days', {
   html: '<div class="calendar-grid"></div>',
   methods: {
     onMount(){
-      const c = this.$(".calendar-grid")
-      $s.subscribe(
-        'filter.calendar.day', c,
-        null,
-        (v)=>{
-          this.render(new Date(v))
-        }
-      )
-      const iso = $s.get("filter.calendar.day")
-      if (!iso) return;
-      const date = new Date(iso)
-      this.render(date)
-    },
-    _getDay() {
-        const iso = $s.get('filter.calendar.day')
-        return new Date(iso)
-    },
-    _normalize(date) {
-        return new Date(date).setHours(0, 0, 0, 0);
-    },
-    _isSameDay(d1, d2) {
-        return this._normalize(d1) === this._normalize(d2);
-    },
-    _isInRange(currentDate, init, end) {
-        if (!init || !end || !currentDate) return false;
-        const d = this._normalize(currentDate);
-        const start = this._normalize(init);
-        const finish = this._normalize(end);
-        return d >= start && d <= finish;
-    },
-    _buildDayButton(day, isToday, isSelected, inRange) {
-        const btn = document.createElement('button');
-        btn.textContent = day;
-        if (isToday) btn.type = 'today'
-        if (isSelected) btn.type = 'selected'
-        if (inRange) btn.type = 'range'
-        btn.onclick = ()=> {
-          console.log("hire")
-          this.selectDay(day)
-        }
-        return btn;
-    },
-    _getDateRange() {
-        const [isoStart, isoEnd] = $s.get("filter.calendar.range") || [];
-        if (!isoStart || !isoEnd) return [null, null];
-        return [new Date(isoStart), new Date(isoEnd)];
-    },
-    selectDay(day) {
-        const date = this._getDay();
-        date.setDate(day);
-        $s.set('filter.calendar.day', date.toISOString());
-    },
-    render(date){
-      const gridDays = this.$('.calendar-grid')
-      const today = new Date();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const firstDayIndex = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const range = this._getDateRange();
-      const emptyCells = Array(firstDayIndex).fill('<div type="empty"></div>');
-      const frag = document.createDocumentFragment()
-      const dayButtons = Array.from({length: daysInMonth}, (_, i) => {
-          const day = i + 1;
-          const currentDate = new Date(year, month, day);
-          const isToday = this._isSameDay(today, currentDate);
-          const isSelected = date.getDate() === day;
-          const inRange = this._isInRange(currentDate, ...range);
-          frag.appendChild(this._buildDayButton(day, isToday, isSelected, inRange))
+      $s.subscribe('filter.calendar.day', this.$(".calendar-grid"), null, (v) => {
+        this.render(new Date(v));
       });
-      gridDays.innerHTML = ''
-      gridDays.appendChild(frag)
-    }
+    },
+    _check(date, other, type) {
+      const d = new Date(date).setHours(0,0,0,0);
+      const o = new Date(other).setHours(0,0,0,0);
+      if (type === 'same') return d === o;
+      if (type === 'range') {
+        const [start, end] = ($s.get("filter.calendar.range") || []).map(d => new Date(d).setHours(0,0,0,0));
+        return start && end && d >= start && d <= end;
+      }
+    },
+    render(currentDate) {
+      const grid = this.$('.calendar-grid');
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();  
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+
+      const frag = document.createDocumentFragment();
+
+      for (let i = 0; i < firstDay; i++) {
+        const spacer = document.createElement('div');
+        spacer.setAttribute('type', 'empty');
+        frag.appendChild(spacer);
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const iterDate = new Date(year, month, day);
+        const btn = document.createElement('button');        
+        btn.textContent = day;        
+        if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
+        if (day === currentDate.getDate()) btn.dataset.type = 'selected';
+        if (this._check(iterDate, null, 'range')) btn.dataset.type = 'range';
+        btn.onclick = () => {
+          currentDate.setDate(day);
+          $s.set('filter.calendar.day', currentDate.toISOString());
+        };
+        frag.appendChild(btn);
+      }
+
+      grid.innerHTML = '';
+      grid.appendChild(frag);
+    },
   }
 })
 document.querySelectorAll('.btn-filter-calendar').forEach(el => {
