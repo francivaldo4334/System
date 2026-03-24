@@ -26,8 +26,18 @@ function createStateManager() {
       });
     },
     get: (name) => {
-      return states.get(name).value
-    }
+      const searchKey = String(name);
+      const matches = Array.from(states.entries()).filter(([key]) => 
+        key.startsWith(searchKey)
+      );
+      if (matches.length === 0) return null;
+      if (matches.length === 1 && matches[0][0] === searchKey) {
+        return matches[0][1].value;
+      }
+      return Object.fromEntries(
+        matches.map(([key, data]) => [key.replace(`${name}.`, ''), data.value])
+      );
+    },
   };
 }
 const $s = createStateManager()
