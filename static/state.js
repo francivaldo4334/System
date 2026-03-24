@@ -27,6 +27,7 @@ function createStateManager() {
       })
     },
     subscribe: (name, element, attribute = 'textContent', transform = (v) => v) => {
+      if (!element) throw Error("elemento não existe")
       const state = states.get(name);
       if (!state) return;
       state.observers.push({ el: element, at: attribute, transform });

@@ -1,7 +1,7 @@
 {% get_current_language as LANG_CODE %}
 <section class="flex flex-col gap-2 relative  h-[calc(8*2rem)]">
     <header class="flex items-center justify-between gap-2">
-        <c-header></c-header>
+        <span class="text-sm font-bold capitalize" id="id-filter-calendar-header"></span>
         <div class="flex gap-1">
             <button class="btn btn-ghost btn-sm btn-square"
                     onclick="FilterCalendar.changeMonth(-1)">{% include 'icons/chevron-left.svg' %}</button>
@@ -32,18 +32,11 @@ createComponent('c-day',{
     }    
   }
 })
-createComponent('c-header', {
-  html: `<span class="text-sm font-bold capitalize"></span>`,
-  methods: {
-    onMount(){
-      const span = this.$('span')
-      const lang = '{{ LANG_CODE }}';
-      const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
-      $s.subscribe('filter.calendar.day', span, 'textContent', (v)=>formatter.format(date))
-      const date = new Date($s.get("filter.calendar.day"))
-      span.textContent = formatter.format(date)
-    }
-  }
+$s.subscribe('filter.calendar.day', document.querySelector('#id-filter-calendar-header'), 'textContent', (v)=>{
+  const lang = '{{ LANG_CODE }}';
+  const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
+  const date = new Date(v)
+  return formatter.format(date)
 })
 </script>
 {# include 'components/schedule/filter.calendar/index.js.html' #}
