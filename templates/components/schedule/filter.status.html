@@ -1,7 +1,7 @@
 {% partialdef status %}
 <label class="label flex justify-between items-center">
-    <input type="radio" class="radio radio-primary" name="status" value="{{value}}"
-        onchange="setState('filter.status', this.value)" />
+    <input type="radio" class="radio radio-primary" name="filter-status" value="{{value}}"
+        onchange="$s.set('filter.status', this.value)" />
     <span class="w-full">{{ label }}</span>
     {% if icon_path %}
     {% include icon_path %}
@@ -26,22 +26,8 @@
     {% partial status %}
     {% endwith %}
 </fieldset>
-<script is="app-scope" onclearup="FilterStatus.clean()">
-    FilterStatus = {
-        clean() {
-            window.removeEventListener('state:update', this.checkStatus)
-            delete FilterStatus
-        },
-        checkStatus(event) {
-            const {key, newValue} = event.detail
-            if (key !== "filter.status") return;
-            const el = document.querySelector(`input[name='status'][value='${newValue}']`)
-            if (!el) return;
-            el.checked = true
-        },
-        init() {
-            window.addEventListener('state:update', this.checkStatus)
-        }
-    }
-    FilterStatus.init()
+<script>
+document.querySelectorAll("input[name='filter-status']").forEach(el => {
+    $s.subscribe("filter.status", el, 'checked', (v, el) => v === el.value) 
+})
 </script>
