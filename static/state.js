@@ -47,7 +47,7 @@ function createStateManager() {
     get: (name) => {
       const matches = getSet(name)
       if (matches.length === 0) return null;
-      if (matches.length === 1 && matches[0][0] === searchKey) {
+      if (matches.length === 1) {
         return matches[0][1].value;
       }
       return Object.fromEntries(

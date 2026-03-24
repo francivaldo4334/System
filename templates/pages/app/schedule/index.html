@@ -7,7 +7,7 @@
 {% endpartialdef %}
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-<script>
+<script is="app-scope" onclearup="$s.remove('filter')">
     $s.create("filter.calendar.range")
     $s.create("filter.calendar.day", "{{ request.GET.day|default:today }}")
     $s.create("filter.calendar.mode", "{{ request.GET.mode|default:'w' }}")
