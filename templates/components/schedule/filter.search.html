@@ -1,16 +1,16 @@
 <label class="input">
     {% include 'icons/search.svg' %}
-    <input type="search"
-           placeholder="{% trans 'Search...' %}"
-           oninput="FSearch.onInput(this.value)" />
+    <input type="search" id="id-fillter-search" placeholder="{% trans 'Search...' %}" />
 </label>
-<script is="app-scope" onclearup="delete FSearch">
-FSearch = {
-    onInput(value) {
-        clearTimeout(this.id)
-        this.id = setTimeout(()=>{
-            setState('filter.search', value);
+<script>
+{
+    const input = document.querySelector('#id-fillter-search');
+    let tid;
+    input.oninput = (el) => {
+        clearTimeout(tid)
+        iid = setTimeout(()=>{
+            $s.set('filter.search', el.target.value);
         },300)
-    }    
+    }
 }
 </script>
