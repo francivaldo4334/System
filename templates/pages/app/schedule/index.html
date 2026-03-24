@@ -9,13 +9,17 @@
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
 <script is="app-scope" onclearup="$s.remove('filter')">
     $s.createStore('filter', {        
-       "calendar.range": null,
-       "calendar.day": "{{ request.GET.day|default:today }}",
-       "calendar.mode": "{{ request.GET.mode|default:'w' }}",
        "search": "{{ request.GET.search|default:'' }}",
        "services": "{{ request.GET.services|default:'' }}",
        "resources": "{{ request.GET.resources|default:'' }}",
        "status": "{{request.GET.status|default:'all'}}",
+    })
+    $s.createStore('filter.calendar', {
+       "day": new Date("{{ request.GET.day|default:today }}"),
+       "mode": "{{ request.GET.mode|default:'w' }}",
+    })
+    $s.compute('filter.calendar.range', ['filter.calendar.day'], ()=> {
+        
     })
 </script>
 
