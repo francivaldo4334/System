@@ -3,10 +3,8 @@
     <header class="flex items-center justify-between gap-2">
         <span class="text-sm font-bold capitalize" id="id-filter-calendar-header"></span>
         <div class="flex gap-1">
-            <button class="btn btn-ghost btn-sm btn-square"
-                    onclick="FilterCalendar.changeMonth(-1)">{% include 'icons/chevron-left.svg' %}</button>
-            <button class="btn btn-ghost btn-sm btn-square"
-                    onclick="FilterCalendar.changeMonth(1)">{% include 'icons/chevron-right.svg' %}</button>
+            <button data-dir="-1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square" >{% include 'icons/chevron-left.svg' %}</button>
+            <button data-dir="1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square" >{% include 'icons/chevron-right.svg' %}</button>
         </div>
     </header>
     <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase"
@@ -37,6 +35,17 @@ $s.subscribe('filter.calendar.day', document.querySelector('#id-filter-calendar-
   const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
   const date = new Date(v)
   return formatter.format(date)
+})
+document.querySelectorAll('.btn-filter-calendar').forEach(el => {
+  el.onclick = () => {
+    const iso = $s.get("filter.calendar.day")
+    if (!iso) return;
+    const date = new Date(iso)
+    const step = Number(el.dataset.dir)
+    date.setDate(1);
+    date.setMonth(date.getMonth() + step);
+    $s.set('filter.calendar.day', date.toISOString());
+  }
 })
 </script>
 {# include 'components/schedule/filter.calendar/index.js.html' #}
