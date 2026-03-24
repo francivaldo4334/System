@@ -38,7 +38,29 @@ function createStateManager() {
         state.observers = state.observers.filter(obs => obs.el !== element);
       };
     },
-
+    compute: (name, dependencies, formula) => {
+      registerState(name, null);
+      const update = () => {
+        const args = dependencies.map(dep => {
+          const val = getSet(dep);
+          return val.length === 1 ? val[0][1].value : null; 
+        });    
+        const newValue = formula(...args);
+        const state = states.get(name);
+        state.value = newValue;
+        state.observers.forEach(obs => {
+          const content = obs.transform(newValue, obs.el);
+          if (obs.at !== null) obs.el[obs.at] = content;
+        });
+      };
+      dependencies.forEach(dep => {
+        const depState = states.get(dep);
+        if (depState) {
+          depState.observers.push({ el: { isComputed: true }, at: null, transform: update });
+        }
+      });
+      update();
+    },
     set: (name, newValue) => {
       const state = states.get(name);
       if (!state) return;

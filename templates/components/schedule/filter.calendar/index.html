@@ -18,6 +18,10 @@ createComponent('c-days', {
   html: '<div class="calendar-grid"></div>',
   methods: {
     onMount(){
+      $s.subscribe('filter.calendar.range', this.$(".calendar-grid"), null, () => {
+        const v = $s.get('filter.calendar.day')
+        this.render(new Date(v));
+      });
       $s.subscribe('filter.calendar.day', this.$(".calendar-grid"), null, (v) => {
         this.render(new Date(v));
       });
