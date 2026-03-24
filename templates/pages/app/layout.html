@@ -1,16 +1,17 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-{%with app_url_name=default_url_name|default:request.resolver_match.url_name%}
 {% partialdef menu-option %}
 <li class="relative">
-    <form class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="{% trans title %}"
-        data-url="{% url url_name %}">
-        <span class="*:m-1.5 *:inline-block">{% include icon_path %}</span>
-        <span class="is-drawer-close:hidden">{% trans title %}</span>
+    <form
+        class="is-drawer-close:tooltip is-drawer-close:tooltip-right {%if app_url_name == option.url_name%}menu-active{%endif%}"
+        data-tip="{% trans option.title %}" data-url="{% url option.url_name %}">
+        <span class="*:m-1.5 *:inline-block">{% include option.icon_template_name %}</span>
+        <span class="is-drawer-close:hidden">{% trans option.title %}</span>
         <button type="submit" class="absolute inset-0 opacity-0"></button>
     </form>
 </li>
 {% endpartialdef %}
+{%with app_url_name=request.resolver_match.url_name%}
 {% block body %}
 <div class="drawer lg:drawer-open h-screen">
     <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
@@ -29,10 +30,8 @@
                         <span class="is-drawer-close:hidden text-2xl text-primary font-bold">{% trans 'Agio' %}</span>
                     </span>
                 </li>
-                {% for option in app_template_name_options %}
-                {% with url_name=option.url_name title=option.title icon_path=option.icon_template_name %}
+                {% for option in app_template_name_options%}
                 {% partial menu-option %}
-                {% endwith %}
                 {% endfor %}
             </ul>
         </div>
@@ -55,9 +54,9 @@
         formQuerySelector,
         null,
         (newValue, form) => {
-            const urlName = form.dataset.urlName;
+            const urlName = form.dataset.url;
             const isSelected = newValue === urlName;
-            form.classList.toggle('menu-active', isSelected);
+            form.classList.toggle('menu-active', true);
         }
     )
     $s.subscribe("sidebar.store.data", "#id-app-content", "innerHTML")
@@ -65,27 +64,11 @@
     document.querySelectorAll(formQuerySelector).forEach(form => {
         form.addEventListener("submit", e => {
             e.preventDefault()
-            axios.get(
-                e.target.dataset.url,
-                {
-                    headers: {
-                        'Ajax-Partial': 'main'
-                    }
-                }
-            ).then(({data}) => {
-                debugger
+            axios.get(e.target.dataset.url).then(({data}) => {
                 $s.set("sidebar.store.data", data)
             })
         })
     })
-//window.addEventListener('query:success', (event) => {
-//const {queryKey, data} = event.detail
-//if (queryKey !== 'sidebar-query') return;
-//const form = event.target
-//setState('sidebar.urlName', form.dataset.urlName)
-//setState('sidebar.store.data', data)
-//})
-//""
 </script>
 <script src="{% static 'components.js' %}"></script>
 {% endblock %}
