@@ -96,20 +96,20 @@
     @apply btn btn-sm btn-square btn-ghost transition-all duration-200;
   }
 
-  .calendar-grid>[type='empty'] {
+  .calendar-grid>div {
     @apply opacity-0;
   }
 
 
-  .calendar-grid>[type='range'] {
+  .calendar-grid>[data-type='range'] {
     @apply btn-soft btn-primary;
   }
 
-  .calendar-grid>[type='today'] {
+  .calendar-grid>[data-type='today'] {
     @apply btn-outline;
   }
 
-  .calendar-grid>[type-='selected'] {
+  .calendar-grid>[data-type='selected'] {
     @apply btn-primary bg-primary text-primary-content;
   }
 }

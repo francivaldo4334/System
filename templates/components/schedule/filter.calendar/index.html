@@ -42,9 +42,7 @@ createComponent('c-days', {
       const frag = document.createDocumentFragment();
 
       for (let i = 0; i < firstDay; i++) {
-        const spacer = document.createElement('div');
-        spacer.setAttribute('type', 'empty');
-        frag.appendChild(spacer);
+        frag.appendChild(document.createElement('div'));
       }
 
       for (let day = 1; day <= totalDays; day++) {
