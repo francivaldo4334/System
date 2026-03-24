@@ -26,13 +26,10 @@ function createStateManager() {
         registerState(`${name}.${key}`, value)
       })
     },
-    subscribe: (name, selector, attribute = 'textContent', transform = (v) => v) => {
+    subscribe: (name, element, attribute = 'textContent', transform = (v) => v) => {
       const state = states.get(name);
       if (!state) return;
-      const elements = document.querySelectorAll(selector);
-      elements.forEach(el => {
-        state.observers.push({ el, at: attribute, transform });
-      });
+      state.observers.push({ el: element, at: attribute, transform });
     },
 
     set: (name, newValue) => {

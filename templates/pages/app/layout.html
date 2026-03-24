@@ -49,22 +49,18 @@
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 </script>
 <script>
-    const formQuerySelector = "#id-app-menu form"
     $s.create("sidebar.urlName")
     $s.create("sidebar.store.data")
-    $s.subscribe(
-        "sidebar.urlName",
-        formQuerySelector,
-        null,
-        (newValue, form) => {
-            const urlName = form.dataset.url;
-            const isSelected = newValue === urlName;
-            form.classList.toggle('menu-active', true);
-        }
-    )
-    $s.subscribe("sidebar.store.data", "#id-app-content", "innerHTML")
+    $s.subscribe("sidebar.store.data", document.querySelector("#id-app-content"), "innerHTML")
     $s.set("sidebar.urlName", "{{app_url_name}}")
-    document.querySelectorAll(formQuerySelector).forEach(form => {
+    document.querySelectorAll('#id-app-menu form').forEach(form => {
+        $s.subscribe("sidebar.urlName", form, null,
+            (v, f) => {
+                const urlName = f.dataset.url;
+                const isSelected = v === urlName;
+                f.classList.toggle('menu-active', true);
+            }
+        )
         form.addEventListener("submit", e => {
             e.preventDefault()
             axios.get(e.target.dataset.url).then(({data}) => {
