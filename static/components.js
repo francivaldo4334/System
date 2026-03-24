@@ -196,7 +196,6 @@ createComponent('c-days', {
     for (let i = 0; i < firstDay; i++) {
       frag.appendChild(document.createElement('div'));
     }
-
     for (let day = 1; day <= totalDays; day++) {
       const iterDate = new Date(year, month, day);
       const btn = document.createElement('button');
