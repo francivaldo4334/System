@@ -26,7 +26,7 @@ function createStateManager() {
       });
     },
     get: (name) => {
-      return states.get(name)
+      return states.get(name).value
     }
   };
 }

@@ -7,13 +7,13 @@
             this.loadWeekDays()
             this.loadCalendarMonth()
             this.loadGridDays()
-            debugger
             document.querySelectorAll('#calendar-grid-days button').forEach(el => {
                 $s.subscribe(el, "filter.calendar.day")
             })
         },
         _getDay() {
-            return new Date($s.get('filter.calendar.day'))
+            const iso = $s.get('filter.calendar.day')
+            return new Date(iso)
         },
         _getDateRange() {
             const [isoStart, isoEnd] = $s.get("filter.calendar.range") || [];
@@ -44,22 +44,21 @@
             return btn.outerHTML;
         },
         setToday() {
-            setState('filter.calendar.day', new Date().toISOString())
+            $s.set('filter.calendar.day', new Date().toISOString())
         },
         selectDay(day) {
             const date = this._getDay();
             date.setDate(day);
-            setState('filter.calendar.day', date.toISOString());
+            $s.set('filter.calendar.day', date.toISOString());
         },
         changeMonth(step) {
             const date = this._getDay()
             date.setDate(1);
             date.setMonth(date.getMonth() + step);
-            setState('filter.calendar.day', date.toISOString());
+            $s.set('filter.calendar.day', date.toISOString());
         },
 
-        formatHeader(iso, lang) {
-            const date = new Date(iso);
+        formatHeader(date, lang) {
             return new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'}).format(date);
         },
 
