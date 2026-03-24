@@ -1,11 +1,19 @@
 function createStateManager() {
   const states = new Map();
+  const registerState = (name, initialValue) => {
+    if (!states.has(name)) {
+      states.set(name, { value: initialValue, observers: [] });
+    }
+  }
   return {
     remove: (name) => states.delete(name),
     create: (name, initialValue = null) => {
-      if (!states.has(name)) {
-        states.set(name, { value: initialValue, observers: [] });
-      }
+      registerState(name, initialValue)
+    },
+    createStore: (name, store = {}) => {
+      Object.entries(store).forEach(([key, value]) => {
+        registerState(`${name}.${key}`, value)
+      })
     },
     subscribe: (name, selector, attribute = 'textContent', transform = (v) => v) => {
       const state = states.get(name);
@@ -27,7 +35,7 @@ function createStateManager() {
     },
     get: (name) => {
       const searchKey = String(name);
-      const matches = Array.from(states.entries()).filter(([key]) => 
+      const matches = Array.from(states.entries()).filter(([key]) =>
         key.startsWith(searchKey)
       );
       if (matches.length === 0) return null;
