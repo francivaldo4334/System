@@ -30,7 +30,13 @@ function createStateManager() {
       if (!element) throw Error("elemento não existe")
       const state = states.get(name);
       if (!state) return;
-      state.observers.push({ el: element, at: attribute, transform });
+      const observer = { el: element, at: attribute, transform };
+      state.observers.push(observer);
+      const content = transform(state.value, element);
+      if (attribute !== null && content) element[attribute] = content;
+      return () => {
+        state.observers = state.observers.filter(obs => obs.el !== element);
+      };
     },
 
     set: (name, newValue) => {
@@ -38,8 +44,8 @@ function createStateManager() {
       if (!state) return;
       state.value = newValue;
       state.observers.forEach(obs => {
-        const content = obs.transform(newValue, obs.el);
-        if (obs.at !== null) obs.el[obs.at] = content;
+          const content = obs.transform(newValue, obs.el);
+          if (obs.at !== null) obs.el[obs.at] = content;
       });
     },
     get: (name) => {
