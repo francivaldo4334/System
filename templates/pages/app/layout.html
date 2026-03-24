@@ -13,6 +13,7 @@
 {% endpartialdef %}
 {% block header%}
 <script src="{% static 'state.js' %}"></script>
+<script src="{% static 'web-component-factory.js' %}"></script>
 {%endblock%}
 {%with app_url_name=request.resolver_match.url_name%}
 {% block body %}
