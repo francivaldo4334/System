@@ -1370,9 +1370,6 @@
   .start {
     inset-inline-start: var(--spacing);
   }
-  .\!end {
-    inset-inline-end: var(--spacing) !important;
-  }
   .end {
     inset-inline-end: var(--spacing);
   }
@@ -2390,6 +2387,11 @@
   }
   .calendar-grid>div {
     opacity: 0%;
+  }
+  .calendar-grid>[data-type='range'] {
+    border-radius: 0;
+    --tw-border-style: none;
+    border-style: none;
   }
   @layer daisyui.l1 {
     .calendar-grid>[data-type='range']:not( .btn-active, :hover, :active:focus, :focus-visible, input:checked:not(.filter .btn), :disabled, [disabled], .btn-disabled ) {

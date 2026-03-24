@@ -102,7 +102,7 @@
 
 
   .calendar-grid>[data-type='range'] {
-    @apply btn-soft btn-primary;
+    @apply btn-soft btn-primary rounded-none border-none;
   }
 
   .calendar-grid>[data-type='today'] {
