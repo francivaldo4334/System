@@ -25,14 +25,14 @@ createComponent('c-day',{
     onUpdate(prop, value){
       debugger
       const el = this.$('div')
+      const mapCls = {
+        'is-today': '',
+        'is-selected': '',
+        'is-range': '',
+      }
       el.classList.value = ''
       if (value !== 'true') return;
-      if (prop === 'is-today')
-        el.classList.add('today')
-      if (prop === 'is-selected')
-        el.classList.add('selected')
-      if (prop === 'is-range')
-        el.classList.add('range')
+      el.classList.value = mapCls[prop]
     }    
   }
 })
