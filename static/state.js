@@ -20,7 +20,7 @@ function createStateManager() {
       const state = states.get(name);
       if (!state) return;
       state.value = newValue;
-      state.observers = state.observers.forEach(obs => {
+      state.observers.forEach(obs => {
         const content = obs.transform(newValue, obs.el);
         if (obs.at !== null) obs.el[obs.at] = content;
       });

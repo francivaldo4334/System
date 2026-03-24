@@ -7,13 +7,16 @@
 {% endpartialdef %}
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-<app-state name="filter.calendar.range"></app-state>
-<app-state name="filter.calendar.day" value="{{ request.GET.day|default:today }}"></app-state>
-<app-state name="filter.calendar.mode" value="{{ request.GET.mode|default:'w' }}"></app-state>
-<app-state name="filter.search" value="{{ request.GET.search|default:'' }}"></app-state>
-<app-state name="filter.services" value="{{ request.GET.services|default:'' }}"></app-state>
-<app-state name="filter.resources" value="{{ request.GET.resources|default:'' }}"></app-state>
-<app-state name="filter.status" value="{{request.GET.status|default:'all'}}"></app-state>
+<script>
+    $s.create("filter.calendar.range")
+    $s.create("filter.calendar.day", "{{ request.GET.day|default:today }}")
+    $s.create("filter.calendar.mode", "{{ request.GET.mode|default:'w' }}")
+    $s.create("filter.search", "{{ request.GET.search|default:'' }}")
+    $s.create("filter.services", "{{ request.GET.services|default:'' }}")
+    $s.create("filter.resources", "{{ request.GET.resources|default:'' }}")
+    $s.create("filter.status", "{{request.GET.status|default:'all'}}")
+</script>
+
 <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
     <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
         {% include 'components/schedule/filter.calendar/index.html' %}
@@ -38,5 +41,5 @@
 {% include 'pages/app/schedule/index.js.html' %}
 {% endpartialdef %}
 {% block section %}
-    {% partial main %}
+{% partial main %}
 {% endblock %}

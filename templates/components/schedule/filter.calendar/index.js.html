@@ -99,4 +99,14 @@
         },
     }
     FilterCalendar.init()
+    const daysQs = "#calendar-grid-days"
+    $s.subscribe("filter.calendar.range", daysQs, null, () => {
+        FilterCalendar.init()
+    })
+    $s.subscribe("filter.calendar.day", daysQs, null, () => {
+        FilterCalendar.init()
+    })
+    $s.subscribe("filter.calendar.mode", daysQs, null, () => {
+        FilterCalendar.init()
+    })
 </script>
