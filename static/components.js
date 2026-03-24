@@ -159,6 +159,27 @@ class AppSlot extends HTMLElement {
   }
 }
 
+class AppState extends HTMLElement {
+  constructor() {
+    super();
+    this.style.display = 'none'
+  }
+  connectedCallback() {
+    this.stateName = this.getAttribute('name');
+    const selector = this.getAttribute('selector');
+    const value = this.getAttribute('value');
+    const attr = this.getAttribute('attribute');
+    if (!this.stateName) return console.error("AppState: Atributo 'name' é obrigatório.");
+    $s.create(this.stateName);
+    if (selector) $s.subscribe(this.stateName, selector, attr);
+    if (value) $s.set(this.name, value)
+  }
+  disconnectedCallback() {
+    $s.remove(this.stateName);
+  }
+}
+
+customElements.define('app-state', AppState);
 customElements.define('app-timeline', AppTimeline)
 customElements.define('app-slot', AppSlot)
 customElements.define('app-input-currency', CurrencyField, { extends: 'input' })

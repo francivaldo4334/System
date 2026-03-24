@@ -11,6 +11,9 @@
     </form>
 </li>
 {% endpartialdef %}
+{% block header%}
+<script src="{% static 'state.js' %}"></script>
+{%endblock%}
 {%with app_url_name=request.resolver_match.url_name%}
 {% block body %}
 <div class="drawer lg:drawer-open h-screen">
@@ -44,7 +47,6 @@
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 </script>
-<script src="{% static 'state.js' %}"></script>
 <script>
     const formQuerySelector = "#id-app-menu form"
     $s.create("sidebar.urlName")

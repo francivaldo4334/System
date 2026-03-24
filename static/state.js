@@ -24,27 +24,10 @@ function createStateManager() {
         const content = obs.transform(newValue, obs.el);
         if (obs.at !== null) obs.el[obs.at] = content;
       });
+    },
+    get: (name) => {
+      return states.get(name)
     }
   };
 }
 const $s = createStateManager()
-
-class AppState extends HTMLElement {
-  constructor() {
-    super();
-    this.style.display = 'none'
-  }
-  connectedCallback() {
-    this.stateName = this.getAttribute('name');
-    const selector = this.getAttribute('selector');
-    const attr = this.getAttribute('attribute');
-    if (!this.stateName) return console.error("AppState: Atributo 'name' é obrigatório.");
-    $s.create(this.stateName);
-    if (selector) $s.addObserver(this.stateName, selector, attr);
-  }
-  disconnectedCallback() {
-    $s.remove(this.stateName);
-  }
-}
-
-customElements.define('app-state', AppState);
