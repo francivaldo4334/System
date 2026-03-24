@@ -14,8 +14,8 @@ function createStateManager() {
   return {
     remove: (name) => {
       const matches = getSet(name)
-      matches.forEach(name => {
-        states.delete(name)
+      matches.forEach(([n]) => {
+        states.delete(n)
       })
     },
     create: (name, initialValue = null) => {

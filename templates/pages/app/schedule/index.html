@@ -8,13 +8,15 @@
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
 <script is="app-scope" onclearup="$s.remove('filter')">
-    $s.create("filter.calendar.range")
-    $s.create("filter.calendar.day", "{{ request.GET.day|default:today }}")
-    $s.create("filter.calendar.mode", "{{ request.GET.mode|default:'w' }}")
-    $s.create("filter.search", "{{ request.GET.search|default:'' }}")
-    $s.create("filter.services", "{{ request.GET.services|default:'' }}")
-    $s.create("filter.resources", "{{ request.GET.resources|default:'' }}")
-    $s.create("filter.status", "{{request.GET.status|default:'all'}}")
+    $s.createStore('filter', {        
+       "calendar.range": null,
+       "calendar.day": "{{ request.GET.day|default:today }}",
+       "calendar.mode": "{{ request.GET.mode|default:'w' }}",
+       "search": "{{ request.GET.search|default:'' }}",
+       "services": "{{ request.GET.services|default:'' }}",
+       "resources": "{{ request.GET.resources|default:'' }}",
+       "status": "{{request.GET.status|default:'all'}}",
+    })
 </script>
 
 <div class="grid grid-cols-[16rem_1fr] h-full bg-base-100">
