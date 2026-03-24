@@ -14,5 +14,30 @@
     <div id="calendar-grid-days" class="calendar-grid"></div>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
             onclick="FilterCalendar.setToday()">{% trans "Today" %}</button>
+    <c-day>
+    </c-day>
 </section>
+<script>
+createComponent('c-day',{
+  props:['is-today', 'is-selected', 'is-range'],
+  html: `<div>ok</div>`,
+  methods: {
+    onUpdate(prop, value){
+      debugger
+      const el = this.$('div')
+      el.classList.value = ''
+      if (value !== 'true') return;
+      if (prop === 'is-today') {
+        el.classList.add('today')
+      }
+      if (prop === 'is-selected') {
+        el.classList.add('selected')
+      }
+      if (prop === 'is-range') {
+        el.classList.add('range')
+      }
+    }    
+  }
+})
+</script>
 {% include 'components/schedule/filter.calendar/index.js.html' %}

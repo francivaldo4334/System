@@ -1,4 +1,4 @@
-const createComponent = (tagName,{
+const createComponent = (tagName, {
   html, css,
   scoped = false,
   props = [],
@@ -10,10 +10,10 @@ const createComponent = (tagName,{
     ${html}
   `
   class CustomElement extends HTMLElement {
-    constructor(){
+    constructor() {
       super();
-      if (scoped){
-        this.attachShadow({mode: 'open'})
+      if (scoped) {
+        this.attachShadow({ mode: 'open' })
         this.shadowRoot.appendChild(template.content.cloneNode(true))
       }
       else {
@@ -21,29 +21,30 @@ const createComponent = (tagName,{
       }
       Object.assign(this, methods)
     }
-    getProps(){
+    getProps() {
       return Object.fromEntries(props.map(prop => [
         prop,
         this.getAttribute(prop)
       ]))
     }
-    static get observedAttributes(){
+    static get observedAttributes() {
       return props
     }
-    attributeChangedCallback(name, oldValue, newValue){
+    attributeChangedCallback(name, oldValue, newValue) {
       if (oldValue === newValue || !this.onUpdate)
         return
       this.onUpdate(name, newValue);
     }
-    connectedCallback(){
+    connectedCallback() {
       if (!this.onMount) return;
       this.onMount();
     }
-    disconnectedCallback(){
+    disconnectedCallback() {
       if (!this.onUmount) return;
       this.onUmount();
     }
-    $(selector){
+    $(selector) {
+      if (!scoped) return this.querySelector(selector)
       return this.shadowRoot.querySelector(selector)
     }
   }
