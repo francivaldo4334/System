@@ -5,8 +5,19 @@ function createStateManager() {
       states.set(name, { value: initialValue, observers: [] });
     }
   }
+  const getSet = (name) => {
+    const searchKey = String(name);
+    return Array.from(states.entries()).filter(([key]) =>
+      key.startsWith(searchKey)
+    );
+  }
   return {
-    remove: (name) => states.delete(name),
+    remove: (name) => {
+      const matches = getSet(name)
+      matches.forEach(name => {
+        states.delete(name)
+      })
+    },
     create: (name, initialValue = null) => {
       registerState(name, initialValue)
     },
@@ -34,10 +45,7 @@ function createStateManager() {
       });
     },
     get: (name) => {
-      const searchKey = String(name);
-      const matches = Array.from(states.entries()).filter(([key]) =>
-        key.startsWith(searchKey)
-      );
+      const matches = getSet(name)
       if (matches.length === 0) return null;
       if (matches.length === 1 && matches[0][0] === searchKey) {
         return matches[0][1].value;
