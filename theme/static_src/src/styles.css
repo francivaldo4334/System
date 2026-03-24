@@ -96,20 +96,20 @@
     @apply btn btn-sm btn-square btn-ghost transition-all duration-200;
   }
 
-  .calendar-grid>[data-empty='true'] {
+  .calendar-grid>[type='empty'] {
     @apply opacity-0;
   }
 
 
-  .calendar-grid>[data-in-range='true'] {
+  .calendar-grid>[type='range'] {
     @apply btn-soft btn-primary;
   }
 
-  .calendar-grid>[data-is-today='true'] {
+  .calendar-grid>[type='today'] {
     @apply btn-outline;
   }
 
-  .calendar-grid>[data-is-selected='true'] {
+  .calendar-grid>[type-='selected'] {
     @apply btn-primary bg-primary text-primary-content;
   }
 }
