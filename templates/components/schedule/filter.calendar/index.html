@@ -27,15 +27,12 @@ createComponent('c-day',{
       const el = this.$('div')
       el.classList.value = ''
       if (value !== 'true') return;
-      if (prop === 'is-today') {
+      if (prop === 'is-today')
         el.classList.add('today')
-      }
-      if (prop === 'is-selected') {
+      if (prop === 'is-selected')
         el.classList.add('selected')
-      }
-      if (prop === 'is-range') {
+      if (prop === 'is-range')
         el.classList.add('range')
-      }
     }    
   }
 })
