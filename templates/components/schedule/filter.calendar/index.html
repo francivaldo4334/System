@@ -21,15 +21,19 @@ createComponent('c-days', {
       const c = this.$(".calendar-grid")
       $s.subscribe(
         'filter.calendar.day', c,
-        'innerHTML',
+        null,
         (v)=>{
-          return this.render(new Date(v))
+          this.render(new Date(v))
         }
       )
       const iso = $s.get("filter.calendar.day")
       if (!iso) return;
       const date = new Date(iso)
-      c.innerHTML = this.render(date)
+      this.render(date)
+    },
+    _getDay() {
+        const iso = $s.get('filter.calendar.day')
+        return new Date(iso)
     },
     _normalize(date) {
         return new Date(date).setHours(0, 0, 0, 0);
@@ -54,7 +58,7 @@ createComponent('c-days', {
           console.log("hire")
           this.selectDay(day)
         }
-        return btn.outerHTML;
+        return btn;
     },
     _getDateRange() {
         const [isoStart, isoEnd] = $s.get("filter.calendar.range") || [];
@@ -75,15 +79,17 @@ createComponent('c-days', {
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const range = this._getDateRange();
       const emptyCells = Array(firstDayIndex).fill('<div type="empty"></div>');
+      const frag = document.createDocumentFragment()
       const dayButtons = Array.from({length: daysInMonth}, (_, i) => {
           const day = i + 1;
           const currentDate = new Date(year, month, day);
           const isToday = this._isSameDay(today, currentDate);
           const isSelected = date.getDate() === day;
           const inRange = this._isInRange(currentDate, ...range);
-          return this._buildDayButton(day, isToday, isSelected, inRange);
+          frag.appendChild(this._buildDayButton(day, isToday, isSelected, inRange))
       });
-      return [...emptyCells, ...dayButtons].join('');
+      gridDays.innerHTML = ''
+      gridDays.appendChild(frag)
     }
   }
 })
