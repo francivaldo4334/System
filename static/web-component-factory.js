@@ -1,9 +1,9 @@
-const createComponent = (tagName, {
+export function createComponent(tagName, {
   html, css,
   scoped = false,
   props = [],
-  methods = {},
-}) => {
+  ...methods
+}) {
   const template = document.createElement('template')
   template.innerHTML = `
     <style>${css}</style>

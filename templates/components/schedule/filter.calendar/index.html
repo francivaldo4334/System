@@ -3,88 +3,39 @@
     <header class="flex items-center justify-between gap-2">
         <span class="text-sm font-bold capitalize" id="id-filter-calendar-header"></span>
         <div class="flex gap-1">
-            <button data-dir="-1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square" >{% include 'icons/chevron-left.svg' %}</button>
-            <button data-dir="1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square" >{% include 'icons/chevron-right.svg' %}</button>
+            <button data-dir="-1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square">
+                {% include 'icons/chevron-left.svg' %}
+            </button>
+            <button data-dir="1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square">
+                {% include 'icons/chevron-right.svg' %}
+            </button>
         </div>
     </header>
-    <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase"
-         id="calendar-weekdays"></div>
+    <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase" id="calendar-weekdays"></div>
     <c-days></c-days>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
-            onclick="$s.set('filter.calendar.day', new Date().toISOString())">{% trans "Today" %}</button>
+        onclick="$s.set('filter.calendar.day', new Date().toISOString())">{% trans "Today" %}</button>
 </section>
 <script>
-createComponent('c-days', {
-  html: '<div class="calendar-grid"></div>',
-  methods: {
-    onMount(){
-      $s.subscribe('filter.calendar.range', this.$(".calendar-grid"), null, () => {
-        const v = $s.get('filter.calendar.day')
-        this.render(new Date(v));
-      });
-    },
-    _check(date, other, type) {
-      const d = new Date(date).setHours(0,0,0,0);
-      const o = new Date(other).setHours(0,0,0,0);
-      if (type === 'same') return d === o;
-      if (type === 'range') {
-        const [start, end] = ($s.get("filter.calendar.range") || []).map(d => new Date(d).setHours(0,0,0,0));
-        return start && end && d >= start && d <= end;
-      }
-    },
-    render(currentDate) {
-      const grid = this.$('.calendar-grid');
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();  
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-      const today = new Date();
-
-      const frag = document.createDocumentFragment();
-
-      for (let i = 0; i < firstDay; i++) {
-        frag.appendChild(document.createElement('div'));
-      }
-
-      for (let day = 1; day <= totalDays; day++) {
-        const iterDate = new Date(year, month, day);
-        const btn = document.createElement('button');        
-        btn.textContent = day;        
-        if (this._check(iterDate, null, 'range')) btn.dataset.type = 'range';
-        if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
-        if (day === currentDate.getDate()) btn.dataset.type = 'selected';
-        btn.onclick = () => {
-          currentDate.setDate(day);
-          $s.set('filter.calendar.day', currentDate.toISOString());
-        };
-        frag.appendChild(btn);
-      }
-
-      grid.innerHTML = '';
-      grid.appendChild(frag);
-    },
-  }
-})
-document.querySelectorAll('.btn-filter-calendar').forEach(el => {
-  el.onclick = () => {
-    const iso = $s.get("filter.calendar.day")
-    if (!iso) return;
-    const date = new Date(iso)
-    const step = Number(el.dataset.dir)
-    date.setMonth(date.getMonth() + step);
-    $s.set('filter.calendar.day', date.toISOString());
-  }
-})
-{
-  let ch = document.querySelector('#id-filter-calendar-header')
-  const lang = '{{ LANG_CODE }}';
-  const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
-  $s.subscribe('filter.calendar.day', ch, 'textContent', (v)=>{
-    const date = new Date(v)
-    return formatter.format(date)
-  })
-  const date = new Date($s.get('filter.calendar.day'))
-  ch.textContent =  formatter.format(date)
-}
+    document.querySelectorAll('.btn-filter-calendar').forEach(el => {
+        el.onclick = () => {
+            const iso = $s.get("filter.calendar.day")
+            if (!iso) return;
+            const date = new Date(iso)
+            const step = Number(el.dataset.dir)
+            date.setMonth(date.getMonth() + step);
+            $s.set('filter.calendar.day', date.toISOString());
+        }
+    })
+    {
+        let ch = document.querySelector('#id-filter-calendar-header')
+        const lang = '{{ LANG_CODE }}';
+        const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
+        $s.subscribe('filter.calendar.day', ch, 'textContent', (v) => {
+            const date = new Date(v)
+            return formatter.format(date)
+        })
+        const date = new Date($s.get('filter.calendar.day'))
+        ch.textContent = formatter.format(date)
+    }
 </script>
-{# include 'components/schedule/filter.calendar/index.js.html' #}
