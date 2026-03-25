@@ -2,6 +2,8 @@ export function createComponent(tagName, {
   html, css,
   scoped = false,
   props = [],
+  base = HTMLElement,
+  baseName = null,
   ...methods
 }) {
   const template = document.createElement('template')
@@ -9,7 +11,7 @@ export function createComponent(tagName, {
     <style>${css}</style>
     ${html}
   `
-  class CustomElement extends HTMLElement {
+  class CustomElement extends base {
     constructor() {
       super();
       if (scoped) {
@@ -49,6 +51,10 @@ export function createComponent(tagName, {
     }
   }
   if (!customElements.get(tagName)) {
+    if (typeof baseName === 'string') {
+      customElements.define(tagName, CustomElement, {extends: baseName})
+      return;
+    }
     customElements.define(tagName, CustomElement)
   }
 }

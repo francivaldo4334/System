@@ -112,18 +112,6 @@ import { createComponent } from './web-component-factory.js'
 //   }
 // }
 
-// class AppScope extends HTMLScriptElement {
-//   disconnectedCallback() {
-//     const cleanupCode = this.getAttribute('onclearup');
-//     if (cleanupCode) {
-//       try {
-//         new Function(cleanupCode).call(globalThis);
-//       } catch (e) {
-//         console.error("Erro ao executar cleanup do AppScope:", e);
-//       }
-//     }
-//   }
-// }
 // class AppState extends HTMLElement {
 //   constructor() {
 //     super();
@@ -215,6 +203,32 @@ createComponent('c-days', {
     grid.appendChild(frag);
   },
 })
+createComponent('app-scope', {
+  base:HTMLScriptElement,
+  baseName: 'script',
+  onUmount(){
+    const cleanupCode = this.getAttribute('onclearup');
+    if (cleanupCode) {
+      try {
+        new Function(cleanupCode).call(globalThis);
+      } catch (e) {
+        console.error("Erro ao executar cleanup do AppScope:", e);
+      }
+    }
+  }
+})
+// class AppScope extends HTMLScriptElement {
+//   disconnectedCallback() {
+//     const cleanupCode = this.getAttribute('onclearup');
+//     if (cleanupCode) {
+//       try {
+//         new Function(cleanupCode).call(globalThis);
+//       } catch (e) {
+//         console.error("Erro ao executar cleanup do AppScope:", e);
+//       }
+//     }
+//   }
+// }
 // customElements.define('app-state', AppState);
 // customElements.define('app-timeline', AppTimeline)
 // customElements.define('', AppSlot)
