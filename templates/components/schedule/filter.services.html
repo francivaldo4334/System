@@ -1,32 +1,15 @@
-<select class="select" id="filter-services" onchange="setState('filter.services', this.value)">
+<select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)">
     <option selected>
         {%trans 'Show All Services'%}
     </option>
 </select>
-<form is="app-query" autofetch action="{% url 'services-list'%}" querykey="services" class="hidden">
-</form>
-<script is="app-scope" onclearup="FilterService.clean()">
-    FilterService = {
-        clean() {
-            window.removeEventListener("query:success", this.handler)
-            delete FilterService
-        },
-        handler(event) {
-            const {queryKey, data} = event.detail;
-            if (queryKey !== "services") return;
-            const obj = JSON.parse(data);
-            const el = document.getElementById('filter-services')
-            el.querySelectorAll("[value]").forEach(e => e.remove())
-            obj.results.map(it => {
-                const opt = document.createElement('option')
-                opt.value = it.id
-                opt.textContent = it.title
-                el.appendChild(opt)
-            })
-        },
-        init() {
-            window.addEventListener("query:success", this.handler)
-        }
-    }
-    FilterService.init()
+<script>
+$q(
+'get-schedule-services',
+"{% url 'services-list' %}",
+(dt)=> {
+    console.log("success",dt)
+}, () => {
+    console.log("error")
+})
 </script>
