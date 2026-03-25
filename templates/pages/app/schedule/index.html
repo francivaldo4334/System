@@ -15,7 +15,7 @@
        "status": "{{request.GET.status|default:'all'}}",
     })
     $s.createStore('filter.calendar', {
-       "day": new Date("{{ request.GET.day|default:today }}"),
+       "day": "{{ request.GET.day|default:today }}",
        "mode": "{{ request.GET.mode|default:'w' }}",
     })
     $s.compute('filter.calendar.range', ['filter.calendar.day', 'filter.calendar.mode'], (isoDay, mode) => {
@@ -48,7 +48,7 @@
         return strategy(date).map(d => {
             d.setHours(0, 0, 0, 0);
             return d.toISOString();
-        });
+        }).join(",");
     });
 </script>
 

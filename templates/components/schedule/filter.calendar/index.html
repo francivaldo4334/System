@@ -12,7 +12,7 @@
         </div>
     </header>
     <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase" id="calendar-weekdays"></div>
-    <c-days></c-days>
+    <c-days id="id-c-days" onchange="$s.set('filter.calendar.day', it)"></c-days>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
         onclick="$s.set('filter.calendar.day', new Date().toISOString())">{% trans "Today" %}</button>
 </section>
@@ -28,7 +28,7 @@
         }
     })
     {
-        let ch = document.querySelector('#id-filter-calendar-header')
+        const ch = document.querySelector('#id-filter-calendar-header')
         const lang = '{{ LANG_CODE }}';
         const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
         $s.subscribe('filter.calendar.day', ch, 'textContent', (v) => {
@@ -37,5 +37,14 @@
         })
         const date = new Date($s.get('filter.calendar.day'))
         ch.textContent = formatter.format(date)
+    }
+    {
+        const days = document.getElementById('id-c-days')
+        $s.subscribe('filter.calendar.day', days, null, (v, el) => {
+            el.setAttribute('date', v)
+        })
+        $s.subscribe('filter.calendar.range', days, null, (v, el)=>{
+            el.setAttribute('range', v)
+        })
     }
 </script>

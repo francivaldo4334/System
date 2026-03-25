@@ -168,31 +168,33 @@ createComponent('app-slot', {
 
 createComponent('c-days', {
   html: '<div class="calendar-grid"></div>',
-  onMount() {
-    $s.subscribe('filter.calendar.range', this.$(".calendar-grid"), null, () => {
-      const v = $s.get('filter.calendar.day')
-      this.render(new Date(v));
-    });
+  props: ['date', 'range', 'onchange'],
+  onUpdate(prop, value){
+    this.setAttribute(prop, value)
+    const dateIso = this.getAttribute('date')
+    const rangeIso = this.getAttribute('range')
+    const onchange = this.getAttribute('onchange')
+    if (!dateIso || !rangeIso) return;
+    const date = new Date(dateIso)
+    const [init, end] = rangeIso.split(',').map(iso => new Date(iso))
+    this.render(date, init, end, onchange)
   },
-  _check(date, other, type) {
+  _check(date, other, type, start, end) {
     const d = new Date(date).setHours(0, 0, 0, 0);
     const o = new Date(other).setHours(0, 0, 0, 0);
     if (type === 'same') return d === o;
     if (type === 'range') {
-      const [start, end] = ($s.get("filter.calendar.range") || []).map(d => new Date(d).setHours(0, 0, 0, 0));
       return start && end && d >= start && d <= end;
     }
   },
-  render(currentDate) {
+  render(date, startR, endR,onchange) {
     const grid = this.$('.calendar-grid');
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+    const year = date.getFullYear();
+    const month = date.getMonth();
     const firstDay = new Date(year, month, 1).getDay();
     const totalDays = new Date(year, month + 1, 0).getDate();
     const today = new Date();
-
     const frag = document.createDocumentFragment();
-
     for (let i = 0; i < firstDay; i++) {
       frag.appendChild(document.createElement('div'));
     }
@@ -200,12 +202,11 @@ createComponent('c-days', {
       const iterDate = new Date(year, month, day);
       const btn = document.createElement('button');
       btn.textContent = day;
-      if (this._check(iterDate, null, 'range')) btn.dataset.type = 'range';
+      if (this._check(iterDate, null, 'range', startR, endR)) btn.dataset.type = 'range';
       if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
-      if (day === currentDate.getDate()) btn.dataset.type = 'selected';
-      btn.onclick = () => {
-        currentDate.setDate(day);
-        $s.set('filter.calendar.day', currentDate.toISOString());
+      if (day === date.getDate()) btn.dataset.type = 'selected';
+      btn.onclick = ()=>{
+        new Function('it',onchange)(iterDate.toISOString())
       };
       frag.appendChild(btn);
     }
