@@ -1,13 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from schedule.views import ResourceViewSet, ServiceViewSet
+from schedule.views import AssignmentViewSet, ResourceViewSet, ServiceViewSet
 
 router = routers.SimpleRouter()
 
 router.register('resources', ResourceViewSet, 'resources')
 router.register('services', ServiceViewSet, 'services')
-router.register('assignment', ServiceViewSet, 'assignment')
+router.register('assignment', AssignmentViewSet, 'assignment')
 
 
 urlpatterns = [
