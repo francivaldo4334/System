@@ -9,16 +9,10 @@ $q.use(
     "{% url 'services-list' %}",
     {
         onSuccess:(data)=> {
-            const el = document.getElementById('id-filter-services')
-            const frag = document.createDocumentFragment()
-            el.querySelectorAll("[value]").forEach(e => e.remove())
-            data.results.map(it => {
-                const opt = document.createElement('option')
-                opt.value = it.id
-                opt.textContent = it.title
-                frag.appendChild(opt)
-            })
-            el.appendChild(frag)
+            const options = data.results.map(it => 
+                `<option value="${it.id}">${it.title}</option>`
+            ).join('');
+            el.innerHTML = `<option value="">{% trans 'Show All Services' %}</option>` + options;
         }
     },
 )
