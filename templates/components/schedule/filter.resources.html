@@ -1,32 +1,16 @@
-<select class="select" id="filter-resources" onchange="setState('filter.resources', this.value)">
-    <option selected>
-        {%trans 'Show All Resources'%}
-    </option>
-</select>
-<form is="app-query" autofetch action="{% url 'resources-list'%}" querykey="resources" class="hidden">
-</form>
-<script is="app-scope" onclearup="FilterResource.clean()">
-    FilterResource = {
-        clean() {
-            window.removeEventListener("query:success", this.handler)
-            delete FilterResource
-        },
-        handler(event) {
-            const {queryKey, data} = event.detail;
-            if (queryKey !== "resources") return;
-            const obj = JSON.parse(data);
-            const el = document.getElementById('filter-resources')
-            el.querySelectorAll("[value]").forEach(e => e.remove())
-            obj.results.map(it => {
-                const opt = document.createElement('option')
-                opt.value = it.id
-                opt.textContent = it.name
-                el.appendChild(opt)
-            })
-        },
-        init() {
-            window.addEventListener("query:success", this.handler)
+<select class="select" id="id-filter-resources" onchange="$s.set('filter.resources', this.value)"> </select>
+<script>
+$q.use(
+    'resources-list',
+    "{% url 'resources-list' %}",
+    {
+        onSuccess:(data)=> {
+            const el = document.getElementById('id-filter-resources')
+            const options = data.results.map(it => 
+                `<option value="${it.id}">${it.name}</option>`
+            ).join('');
+            el.innerHTML = `<option value="">{% trans 'Show All Resources' %}</option>` + options;
         }
-    }
-    FilterResource.init()
+    },
+)
 </script>
