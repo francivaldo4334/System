@@ -1,14 +1,11 @@
-<select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)">
-    <option selected>
-        {%trans 'Show All Services'%}
-    </option>
-</select>
+<select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)"> </select>
 <script>
 $q.use(
     'get-schedule-services',
     "{% url 'services-list' %}",
     {
         onSuccess:(data)=> {
+            const el = document.getElementById('id-filter-services')
             const options = data.results.map(it => 
                 `<option value="${it.id}">${it.title}</option>`
             ).join('');
