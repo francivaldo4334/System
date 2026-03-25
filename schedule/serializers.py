@@ -24,20 +24,15 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
 
 
-# class AssignmentSerializer(serializers.ModelSerializer):
-#     service_title = serializers.CharField(
-#         source="service.title",
-#         allow_null=True,
-#     )
-#     class Meta:
-#         model = Appointment
-#         fields = [
-#             'id',
-#             'status',
-#             'service_id',
-#             'service_title',
-#             'resources',
-#             'date',
-#             'start_slot',
-#             'duration_slot',
-#         ]
+class AssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = [
+            'id',
+            'services',
+            'resources',
+            'date',
+            'start_slot',
+            'duration_slot',
+        ]
+        depth = 1

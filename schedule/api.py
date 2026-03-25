@@ -7,6 +7,7 @@ router = routers.SimpleRouter()
 
 router.register('resources', ResourceViewSet, 'resources')
 router.register('services', ServiceViewSet, 'services')
+router.register('assignment', ServiceViewSet, 'assignment')
 
 
 urlpatterns = [

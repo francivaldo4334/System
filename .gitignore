@@ -3,3 +3,4 @@ schedule/__pycache__
 **/migrations/__pycache__
 **/__pycache__
 locale/pt_BR/LC_MESSAGES/django.mo
+theme/static/css/dist/styles.css

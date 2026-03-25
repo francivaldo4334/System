@@ -27,6 +27,7 @@ class AssignmentSlotAdmin(admin.ModelAdmin):
     def cancel(self, request, queryset):
         for obj in queryset:
             obj.state.cancel()
+admin.site.register(Assignment)
 admin.site.register(Resource)
 admin.site.register(Availability)
 admin.site.register(Service)
