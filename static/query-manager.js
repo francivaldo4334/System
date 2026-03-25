@@ -1,6 +1,6 @@
 const queryCacheFactory = () => {
   const _internalCache = new Map();
-  return async function useQueryCache(queryKey, fn, onSuccess, onError, ttl = 0) {
+  return async function useQueryCache(queryKey, fn, onSuccess, onError, onFinally, ttl = 0) {
     const now = Date.now();
     try {
       if (_internalCache.has(queryKey)) {
@@ -23,6 +23,8 @@ const queryCacheFactory = () => {
     } catch (error) {
       if (onError) onError(error);
       throw error;
+    } finally {
+      onFinally?.()
     }
   };
 };
