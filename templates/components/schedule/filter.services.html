@@ -10,13 +10,15 @@ $q.use(
     {
         onSuccess:(data)=> {
             const el = document.getElementById('id-filter-services')
+            const frag = document.createDocumentFragment()
             el.querySelectorAll("[value]").forEach(e => e.remove())
             data.results.map(it => {
                 const opt = document.createElement('option')
                 opt.value = it.id
                 opt.textContent = it.title
-                el.appendChild(opt)
+                frag.appendChild(opt)
             })
+            el.appendChild(frag)
         }
     },
 )
