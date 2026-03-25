@@ -2,6 +2,7 @@ from .base import INSTALLED_APPS
 INSTALLED_APPS += [
     'rest_framework',
     'django_filters',
+    'uri',
     'schedule',
     'sale',
     'stock',

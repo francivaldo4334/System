@@ -18,7 +18,7 @@ class Resource(TimeStampedModel, ActivatorModel):
     parent = models.ForeignKey('ResourceNotSelectable',models.CASCADE,'children', null=True, blank=True)
     code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
     is_selectable = models.BooleanField()
-    uri = models.ForeignKey('core.URIModel', models.CASCADE)
+    uri = models.ForeignKey('uri.URIModel', models.CASCADE, blank=True, null=True)
     def clean(self):
         if self.parent and not str(self.code).startswith(getattr(self.parent,'code')):
             raise ValidationError({'code': _('Enter a valid value.')})
