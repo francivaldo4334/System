@@ -53,12 +53,11 @@
 </script>
 
 <div class="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] max-h-full bg-base-100 overflow-y-auto">
-    <details class="max-sm:dropdown sm:row-span-2 sm:border-r border-base-content/10" open>
-        <summary class="btn btn-square m-2 sm:hidden">
+    <div class="max-sm:dropdown dropdown-open sm:row-span-2 sm:border-r border-base-content/10 col-start-1 row-start-1">
+        <button class="btn btn-square m-2 sm:hidden" onclick="this.nextElementSibling.classList.toggle('opacity-0')">
             {% include 'icons/settings-2.svg' %}
-        </summary>
-
-      <aside tabindex="-1" class="dropdown-content menu bg-base-100 min-w-[16rem] rounded-box z-1 p-2 shadow-sm sm:shadow-none">
+        </button>
+        <aside tabindex="-1" class="dropdown-content menu bg-base-100 min-w-[16rem] rounded-box z-1 p-2 shadow-sm sm:shadow-none transition-opacity duration-300 opacity-0 sm:opacity-100">
             <div class="p-4 border-base-content/10 flex flex-col ">
                 {% include 'components/schedule/filter.calendar/index.html' %}
                 <div class="divider divider-start -mx-2 text-xs">Filtros</div>
@@ -68,10 +67,11 @@
                     {% include 'components/schedule/filter.status.html' %}
                 </div>
             </div>
-      </aside>
-    </details>
-    <header class="w-full flex justify-between p-2 pr-4 border-base-content/10">
-        <div class="flex flex-wrap gap-4 w-full">
+        </aside>
+    </div>
+    <header class="w-full flex justify-between p-2 pr-4 border-base-content/10 col-start-1 row-start-1 sm:col-start-2">
+        <div class="flex flex-wrap gap-4 w-full z-1">
+            <div class="w-10 sm:hidden"></div>
             {% include 'components/schedule/filter.calendar.mode/index.html' %}
             {% include 'components/schedule/filter.search.html' %}
         </div>
