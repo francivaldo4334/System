@@ -52,24 +52,35 @@
     });
 </script>
 
-<div class="grid grid-cols-[16rem_1fr] max-h-full bg-base-100 overflow-y-auto">
-    <aside class="p-4 border-r border-base-content/10 flex flex-col gap-4">
-        {% include 'components/schedule/filter.calendar/index.html' %}
-        {% include 'components/schedule/filter.status.html' %}
-    </aside>
-    <main class="bg-base-200/30 grid grid-rows-[auto_1fr] max-h-full overflow-y-auto">
-        <div class="w-full flex justify-between p-2 pr-4 border-b border-base-content/10">
-            <div class="flex flex-wrap gap-4 w-full">
-                {% include 'components/schedule/filter.calendar.mode/index.html' %}
-                {% include 'components/schedule/filter.search.html' %}
-                {% include 'components/schedule/filter.resources.html' %}
-                {% include 'components/schedule/filter.services.html' %}
+<div class="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] max-h-full bg-base-100 overflow-y-auto">
+    <details class="max-sm:dropdown sm:row-span-2 sm:border-r border-base-content/10" open>
+        <summary class="btn btn-square m-2 sm:hidden">
+            {% include 'icons/settings-2.svg' %}
+        </summary>
+
+      <aside tabindex="-1" class="dropdown-content menu bg-base-100 min-w-[16rem] rounded-box z-1 p-2 shadow-sm sm:shadow-none">
+            <div class="p-4 border-base-content/10 flex flex-col ">
+                {% include 'components/schedule/filter.calendar/index.html' %}
+                <div class="divider divider-start -mx-2 text-xs">Filtros</div>
+                <div class="flex flex-col gap-4">
+                    {% include 'components/schedule/filter.resources.html' %}
+                    {% include 'components/schedule/filter.services.html' %}
+                    {% include 'components/schedule/filter.status.html' %}
+                </div>
             </div>
-            <button class="btn btn-primary pl-2">
-                {% include 'icons/plus.svg' %}
-                {% trans 'Add' %}
-            </button>
+      </aside>
+    </details>
+    <header class="w-full flex justify-between p-2 pr-4 border-base-content/10">
+        <div class="flex flex-wrap gap-4 w-full">
+            {% include 'components/schedule/filter.calendar.mode/index.html' %}
+            {% include 'components/schedule/filter.search.html' %}
         </div>
+        <button class="btn btn-primary pl-2">
+            {% include 'icons/plus.svg' %}
+            {% trans 'Add' %}
+        </button>
+    </header>
+    <main class="bg-base-200/30 max-h-full overflow-y-auto col-span-2 sm:col-start-2 sm:col-span-1 border-t border-base-content/10">
         {% include 'components/schedule/view_mode/day/index.html' %}
     </main>
 </div>

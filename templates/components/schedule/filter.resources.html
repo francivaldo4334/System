@@ -1,4 +1,7 @@
-<select class="select" id="id-filter-resources" onchange="$s.set('filter.resources', this.value)"> </select>
+<label for="id-filter-resources" class="floating-label">
+    <select class="select" id="id-filter-resources" onchange="$s.set('filter.resources', this.value)"> </select>
+    <span>{% trans "Resource"%}</span>
+</label>
 <script>
 $q.use(
     'resources-list',

@@ -193,6 +193,7 @@ createComponent('c-days', {
     for (let day = 1; day <= totalDays; day++) {
       const iterDate = new Date(year, month, day);
       const btn = document.createElement('button');
+      btn.type="button"
       btn.textContent = day;
       if (this._check(iterDate, null, 'range', startR, endR)) btn.dataset.type = 'range';
       if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';

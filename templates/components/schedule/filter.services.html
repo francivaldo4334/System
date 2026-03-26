@@ -1,4 +1,7 @@
-<select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)"> </select>
+<label for="id-filter-services" class="floating-label">
+    <select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)"> </select>
+    <span>{% trans 'Service' %}</span>
+</label>
 <script>
 $q.use(
     'services-list',

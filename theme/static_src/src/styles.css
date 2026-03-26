@@ -113,7 +113,7 @@
   }
 
   .calendar-grid>[data-type='selected'] {
-    @apply btn-primary bg-primary text-primary-content;
+    @apply btn-primary bg-primary text-primary-content z-1;
   }
 
   .appointment-slot {
