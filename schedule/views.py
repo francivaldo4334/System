@@ -17,6 +17,6 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AssignmentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Assignment.objects.all().select_related('service').prefetch_related('resources', 'appointment_set')
+    queryset = Assignment.objects.all().select_related('service').prefetch_related('resources')
     serializer_class = AssignmentSerializer
     # filterset_class = AssignmentSlotFilterSet
