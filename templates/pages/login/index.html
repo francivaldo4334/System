@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+
+{% block body %}
+<div class="flex items-center justify-center min-h-screen bg-base-200">
+    <div class="card w-full max-w-sm shadow-2xl bg-base-100 rounded-box">
+        <div class="card-body">
+            <h2 class="card-title justify-center text-2xl mb-4">Acessar Conta</h2>
+
+            {% if form.errors %}
+            <div class="alert alert-error mb-4 py-2">
+                <span class="text-sm">Usuário ou senha incorretos.</span>
+            </div>
+            {% endif %}
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Nome de Usuário</span>
+                    </label>
+                    <input type="text" name="username" autofocus autocomplete="username" required
+                           class="input w-full" />
+                </div>
+
+                <div class="form-control w-full mt-4">
+                    <label class="label">
+                        <span class="label-text">Senha</span>
+                    </label>
+                    <input type="password" name="password" autocomplete="current-password" required
+                           class="input w-full" />
+                </div>
+                <div class="form-control mt-6">
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
+{% endblock %}

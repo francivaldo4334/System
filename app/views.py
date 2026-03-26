@@ -1,8 +1,11 @@
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-class AppView(TemplateView):
+
+
+class AppView(LoginRequiredMixin,TemplateView):
     template_name = "pages/app/index.html"
 
     def get_context_data(self, **kwargs):
