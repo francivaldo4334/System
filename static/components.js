@@ -136,7 +136,7 @@ createComponent('app-timeline', {
   css: `:host {
     display: grid;
     grid-auto-columns: var(--tab-space) 1fr;
-    gap: 2px;
+    gap: 0 2px;
     grid-auto-rows: var(--slotunit);
     position: relative; 
   }`,
