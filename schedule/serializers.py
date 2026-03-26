@@ -46,3 +46,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'duration_slot',
         ]
         # depth = 1
+
+# pyright: reportAttributeAccessIssue=false
+class CreateAssigmentSerializer(AssignmentSerializer):
+    service = serializers.PrimaryKeyRelatedField(
+        queryset=Service.objects.all()
+    )
+    resources = serializers.PrimaryKeyRelatedField(
+                queryset=Resource.objects.all(),
+        many=True
+    )

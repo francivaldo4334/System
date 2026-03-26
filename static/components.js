@@ -163,7 +163,7 @@ createComponent('app-slot', {
 createComponent('c-days', {
   html: '<div class="calendar-grid"></div>',
   props: ['date', 'range', 'onchange'],
-  onUpdate(prop, value){
+  onUpdate(prop, value) {
     this.setAttribute(prop, value)
     const dateIso = this.getAttribute('date')
     const rangeIso = this.getAttribute('range')
@@ -181,7 +181,7 @@ createComponent('c-days', {
       return start && end && d >= start && d <= end;
     }
   },
-  render(date, startR, endR,onchange) {
+  render(date, startR, endR, onchange) {
     const grid = this.$('.calendar-grid');
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -195,13 +195,13 @@ createComponent('c-days', {
     for (let day = 1; day <= totalDays; day++) {
       const iterDate = new Date(year, month, day);
       const btn = document.createElement('button');
-      btn.type="button"
+      btn.type = "button"
       btn.textContent = day;
       if (this._check(iterDate, null, 'range', startR, endR)) btn.dataset.type = 'range';
       if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
       if (day === date.getDate()) btn.dataset.type = 'selected';
-      btn.onclick = ()=>{
-        new Function('it',onchange)(iterDate.toISOString())
+      btn.onclick = () => {
+        new Function('it', onchange)(iterDate.toISOString())
       };
       frag.appendChild(btn);
     }
@@ -211,9 +211,9 @@ createComponent('c-days', {
   },
 })
 createComponent('app-scope', {
-  base:HTMLScriptElement,
+  base: HTMLScriptElement,
   baseName: 'script',
-  onUmount(){
+  onUmount() {
     const cleanupCode = this.getAttribute('onclearup');
     if (cleanupCode) {
       try {

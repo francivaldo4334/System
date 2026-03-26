@@ -57,13 +57,14 @@
         <button class="btn btn-square m-2 sm:hidden" onclick="this.nextElementSibling.classList.toggle('opacity-0')">
             {% include 'icons/settings-2.svg' %}
         </button>
-        <aside tabindex="-1" class="dropdown-content menu bg-base-100 min-w-[16rem] rounded-box z-1 p-2 shadow-sm sm:shadow-none transition-opacity duration-300 opacity-0 sm:opacity-100">
+        <aside tabindex="-1"
+            class="dropdown-content menu bg-base-100 min-w-[16rem] rounded-box z-1 p-2 shadow-sm sm:shadow-none transition-opacity duration-300 opacity-0 sm:opacity-100">
             <div class="p-4 border-base-content/10 flex flex-col max-h-[30rem] sm:max-h-full overflow-y-auto">
                 <div class="sm:hidden mb-4">
                     {% include 'components/schedule/filter.search.html' %}
                 </div>
                 {% include 'components/schedule/filter.calendar/index.html' %}
-                <div class="divider divider-start -mx-2 text-xs">Filtros</div>
+                <div class="divider divider-start -mx-2 text-xs">{% trans 'Filters'%}</div>
                 <div class="flex flex-col gap-4">
                     {% include 'components/schedule/filter.resources.html' %}
                     {% include 'components/schedule/filter.services.html' %}
@@ -80,15 +81,42 @@
                 {% include 'components/schedule/filter.search.html' %}
             </div>
         </div>
-        <button class="btn btn-primary pl-2">
+        <button class="btn btn-primary pl-2" onclick="id_add_assignment_modal.showModal()">
             {% include 'icons/plus.svg' %}
             {% trans 'Add' %}
         </button>
     </header>
-    <main class="bg-base-200/30 max-h-full overflow-y-auto col-span-2 sm:col-start-2 sm:col-span-1 border-t border-base-content/10">
+    <main
+        class="bg-base-200/30 max-h-full overflow-y-auto col-span-2 sm:col-start-2 sm:col-span-1 border-t border-base-content/10">
         {% include 'components/schedule/view_mode/day/index.html' %}
     </main>
 </div>
+
+<dialog id="id_add_assignment_modal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">{% trans 'New Appointment'%}</h3>
+        <form>
+            <select name="service" required>
+                <option value="1">Option 1</option>
+            </select>
+            <select name="resources" multiple required>
+                <option value="1">Option 1</option>
+            </select>
+            <input type="date" name="date" required />
+            <input type="time" name="start_slot" step="300" required onchange="$s.set('start_slot', this.value)" />
+            <input id="id_duration_slot" type="time" name="duration_slot" step="300" required />
+            <button type="submit">
+                submit
+            </button>
+        </form>
+        <div class="modal-action">
+            <form method="dialog">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn">Close</button>
+            </form>
+        </div>
+    </div>
+</dialog>
 {# include 'pages/app/schedule/index.js.html' #}
 {% endpartialdef %}
 {% block section %}
