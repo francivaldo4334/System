@@ -42,6 +42,12 @@
                     slot.setAttribute("start", it.start_slot)
                     slot.setAttribute("duration", it.duration_slot)
                     slot.classList.add("appointment-slot")
+                    slot.innerHTML = `
+                        <label>{% trans 'Service' %}</label>
+                        <span>${it.service.title}</span>
+                        <label>{% trans 'Resources' %}</label>
+                        <ul>${it.resources.map(r => `<span>${r.name}</span>`)}</ul>
+                    `
                     frag.appendChild(slot)
                 })
                 el.appendChild(frag)

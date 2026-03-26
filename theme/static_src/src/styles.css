@@ -117,7 +117,18 @@
   }
 
   .appointment-slot {
-    @apply bg-info
+    @apply p-2 
+    [&>label]:block 
+    [&>label]:label
+    [&_span]:bg-info
+    [&_span]:px-1
+    [&_span]:py-0.5
+    [&_span]:rounded-field
+    [&>ul]:frex
+    [&>ul]:flex-wrap
+    [&>ul]:gap-2
+    
+    ;
   }
   .slot-time-label {
     @apply
