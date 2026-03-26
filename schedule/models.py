@@ -125,14 +125,6 @@ class ResourceOccupation(models.Model):
         unique_together = ['resource', 'date']
 
 class Assignment(TimeStampedModel, CreatedByModel):
-    service = models.ForeignKey(Service, models.CASCADE, null=True, blank=True)
-    resources = models.ManyToManyField(ResourceSelectable)
-    date = models.DateField()
-    start_slot = models.PositiveSmallIntegerField()
-    duration_slot = models.PositiveSmallIntegerField()
-
-
-class Appointment(models.Model):
     class Status(models.TextChoices):
         PENDING = 'PD', _('Pending')
         CONFIRMED = 'CF', _('Confirmed')
@@ -142,7 +134,11 @@ class Appointment(models.Model):
         IN_PROGRESS = 'IP', _('In Progress')
         COMPLETED = 'CP', _('Completed')
 
-    assignment = models.ForeignKey(Assignment, models.CASCADE)
+    service = models.ForeignKey(Service, models.CASCADE, null=True, blank=True)
+    resources = models.ManyToManyField(ResourceSelectable)
+    date = models.DateField()
+    start_slot = models.PositiveSmallIntegerField()
+    duration_slot = models.PositiveSmallIntegerField()
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.PENDING.value)
