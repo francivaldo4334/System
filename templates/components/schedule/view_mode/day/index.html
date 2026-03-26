@@ -14,9 +14,10 @@
                 const el = document.getElementById('id-app-timeline')
                 const frag = document.createDocumentFragment()
                 data.results.forEach(it => {
-                    const slot = document.createElement("app-slog")
+                    const slot = document.createElement("app-slot")
                     slot.setAttribute("start", it.start_slot)
                     slot.setAttribute("duration", it.duration_slot)
+                    slot.classList.add("appointment-slot")
                     frag.appendChild(slot)
                 })
                 el.appendChild(frag)

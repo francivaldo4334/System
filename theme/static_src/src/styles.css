@@ -112,6 +112,10 @@
   .calendar-grid>[data-type='selected'] {
     @apply btn-primary bg-primary text-primary-content;
   }
+
+  .appointment-slot {
+    @apply bg-info
+  }
 }
 
 @source "../../../**/*.{html,py,js}";
