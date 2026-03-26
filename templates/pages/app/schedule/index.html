@@ -57,7 +57,7 @@
         {% include 'components/schedule/filter.calendar/index.html' %}
         {% include 'components/schedule/filter.status.html' %}
     </aside>
-    <main class="bg-base-200/30">
+    <main class="bg-base-200/30 grid grid-rows-[auto_1fr]">
         <div class="w-full flex justify-between p-2 pr-4 border-b border-base-content/10">
             <div class="flex flex-wrap gap-4 w-full">
                 {% include 'components/schedule/filter.calendar.mode/index.html' %}
@@ -70,7 +70,7 @@
                 {% trans 'Add' %}
             </button>
         </div>
-        <div>{% include 'components/schedule/view_mode/day/index.html' %}</div>
+        {% include 'components/schedule/view_mode/day/index.html' %}
     </main>
 </div>
 {# include 'pages/app/schedule/index.js.html' #}

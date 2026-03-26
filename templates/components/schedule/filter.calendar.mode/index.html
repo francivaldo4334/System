@@ -1,21 +1,19 @@
 {% partialdef tab %}
 <label class="tab">
-    <input value="{{ value }}"
-           type="radio"
-           name="filter-calendar-mode"
-           onclick="$s.set('filter.calendar.mode', this.value)" />
+    <input value="{{ value }}" type="radio" name="filter-calendar-mode"
+        onclick="$s.set('filter.calendar.mode', this.value)" />
     {% include icon %}
 </label>
 {% endpartialdef %}
-<div class="tabs tabs-box tabs-sm bg-base-content/4">
+<div class="tabs tabs-box tabs-sm">
     {% with icon='icons/calendar.svg' value='m' %}
-        {% partial tab %}
+    {% partial tab %}
     {% endwith %}
     {% with icon='icons/calendar-range.svg' value='w' %}
-        {% partial tab %}
+    {% partial tab %}
     {% endwith %}
     {% with icon='icons/calendar-clock.svg' value='d' %}
-        {% partial tab %}
+    {% partial tab %}
     {% endwith %}
 </div>
-<script>document.querySelector('input[name="filter-calendar-mode"][value="{{request.GET.mode|default:"w"|escapejs}}"]').checked=true</script>
+<script>document.querySelector('input[name="filter-calendar-mode"][value="{{request.GET.mode|default:"w"|escapejs}}"]').checked = true</script>
