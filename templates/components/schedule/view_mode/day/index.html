@@ -3,14 +3,14 @@
         Nomes de recursos
     </header>
     <div class="overflow-y-auto max-h-full snap-y">
-        <app-timeline id="id-app-timeline" slotunit="15px" class="w-full bg-pattern-paper">
+        <app-timeline id="id-app-timeline" slotunit="24px" class="w-full bg-pattern-paper">
         </app-timeline>
     </div>
 </div>
 <script>
     {
         const el = document.getElementById('id-app-timeline');
-        const slotInterval = 10;
+        const slotInterval = 1;
         const totalMinutesInDay = 1440;
         const totalSlots = totalMinutesInDay / slotInterval;
         const frag = document.createDocumentFragment();
