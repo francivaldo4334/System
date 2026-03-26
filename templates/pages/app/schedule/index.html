@@ -8,15 +8,15 @@
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
 <script is="app-scope" onclearup="$s.remove('filter')">
-    $s.createStore('filter', {        
-       "search": "{{ request.GET.search|default:'' }}",
-       "services": "{{ request.GET.services|default:'' }}",
-       "resources": "{{ request.GET.resources|default:'' }}",
-       "status": "{{request.GET.status|default:'all'}}",
+    $s.createStore('filter', {
+        "search": "{{ request.GET.search|default:'' }}",
+        "services": "{{ request.GET.services|default:'' }}",
+        "resources": "{{ request.GET.resources|default:'' }}",
+        "status": "{{request.GET.status|default:'all'}}",
     })
     $s.createStore('filter.calendar', {
-       "day": "{{ request.GET.day|default:today }}",
-       "mode": "{{ request.GET.mode|default:'w' }}",
+        "day": "{{ request.GET.day|default:today }}",
+        "mode": "{{ request.GET.mode|default:'w' }}",
     })
     $s.compute('filter.calendar.range', ['filter.calendar.day', 'filter.calendar.mode'], (isoDay, mode) => {
         if (!isoDay || !mode) return [];
@@ -70,7 +70,7 @@
                 {% trans 'Add' %}
             </button>
         </div>
-        <div>{% include 'schedule_view_mode/week.html' %}</div>
+        <div>{% include 'components/schedule/view_mode/day/index.html' %}</div>
     </main>
 </div>
 {# include 'pages/app/schedule/index.js.html' #}

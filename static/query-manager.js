@@ -2,8 +2,8 @@ const queryCacheFactory = () => {
   const _internalCache = new Map();
   const _watchedQueries = new Map();
   const refetch = async (queryKey) => {
-      const config = _watchedQueries.get(queryKey)
-      await useQueryCache(queryKey, config.url, config.callbacks, config.options);
+    const config = _watchedQueries.get(queryKey)
+    await useQueryCache(queryKey, config.url, config.callbacks, config.options);
   }
   window.addEventListener('focus', () => {
     _watchedQueries.forEach(async (config, queryKey) => {
@@ -22,7 +22,7 @@ const queryCacheFactory = () => {
         const entry = _internalCache.get(queryKey);
         if (now - entry.timestamp <= ttl) {
           onSuccess?.(entry.data, entry.status);
-          return entry.data; 
+          return entry.data;
         }
       }
       const response = await fetch(url);

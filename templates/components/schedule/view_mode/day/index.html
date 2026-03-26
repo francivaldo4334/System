@@ -1,11 +1,21 @@
-<app-timeline slotunit="20px" class='w-full'>
-    <app-slot start="2" duration="4">
-        <div class="bg-primary w-full h-full">Dr. A - Consulta</div>
-    </app-slot>
-    <app-slot start="7" duration="2">
-        <div class="bg-success w-full h-full">Dr. B - Retorno</div>
-    </app-slot>
-    <app-slot start="8" duration="2">
-        <div class="bg-success w-full h-full">Dr. B - Retorno</div>
-    </app-slot>
+<app-timeline id="id-app-timeline" slotunit="20px" class='w-full'>
 </app-timeline>
+<script>
+    $q.use(
+        "assignment-list",
+        "{% url 'assignment-list'%}",
+        {
+            onSuccess: (data) => {
+                const el = document.getElementById('id-app-timeline')
+                const frag = document.createDocumentFragment()
+                data.results.forEach(it => {
+                    const slot = document.createElement("app-slog")
+                    slot.setAttribute("start", it.start_slot)
+                    slot.setAttribute("duration", it.duration_slot)
+                    frag.appendChild(slot)
+                })
+                el.appendChild(frag)
+            }
+        }
+    )
+</script>
