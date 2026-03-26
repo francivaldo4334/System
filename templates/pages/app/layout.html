@@ -19,7 +19,7 @@
 {% block body %}
 <div class="drawer lg:drawer-open h-screen">
     <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-    <div id="id-app-content" class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr]">
+    <div id="id-app-content" class="drawer-content  border-l border-base-content/10 grid grid-rows-[auto_1fr] max-h-screen overflow-y-auto">
         {% block section %}
         {% include 'pages/app/schedule/index.html#main' %}
         {% endblock %}

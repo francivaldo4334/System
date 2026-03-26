@@ -1,17 +1,41 @@
-<div class="grid grid-rows-[auto_1fr]">
+<div class="grid grid-rows-[auto_1fr] max-h-full overflow-y-auto" style="--tab-space:70px">
     <header>
         Nomes de recursos
     </header>
-    <app-timeline id="id-app-timeline" slotunit="20px" class="w-full bg-pattern-paper">
-    </app-timeline>
+    <div class="overflow-y-auto max-h-full snap-y">
+        <app-timeline id="id-app-timeline" slotunit="15px" class="w-full bg-pattern-paper">
+        </app-timeline>
+    </div>
 </div>
 <script>
+    {
+        const el = document.getElementById('id-app-timeline');
+        const slotInterval = 10;
+        const totalMinutesInDay = 1440;
+        const totalSlots = totalMinutesInDay / slotInterval;
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < totalSlots; i++) {
+            const slot = document.createElement("app-slot");
+            slot.setAttribute('start', (i * slotInterval) + 1);
+            slot.setAttribute('duration', slotInterval);
+            slot.classList.add('slot-time-label');
+            const currentMinute = i * slotInterval;
+            const hours = Math.floor(currentMinute / 60);
+            const minutes = currentMinute % 60;
+            slot.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;    
+            frag.appendChild(slot);
+        }
+
+        el.querySelectorAll('.slot-time-label').forEach(e => e.remove())
+        el.append(frag);
+    }
     $q.use(
         "assignment-list",
         "{% url 'assignment-list'%}",
         {
             onSuccess: (data) => {
                 const el = document.getElementById('id-app-timeline')
+                el.querySelectorAll(':not(.slot-time-label)').forEach(e => e.remove())
                 const frag = document.createDocumentFragment()
                 data.results.forEach(it => {
                     const slot = document.createElement("app-slot")

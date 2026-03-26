@@ -133,7 +133,11 @@ import { createComponent } from './web-component-factory.js'
 // }
 createComponent('app-timeline', {
   scoped: true,
-  css: `:host { display: grid; grid-auto-rows: var(--slotunit); position: relative; }`,
+  css: `:host {
+    display: grid;
+    grid-auto-rows: var(--slotunit);
+    position: relative; 
+  }`,
   html: `<slot></slot>`,
   props: ['slotunit'],
   onUpdate(prop, value) {
@@ -142,7 +146,7 @@ createComponent('app-timeline', {
 })
 createComponent('app-slot', {
   scoped: true,
-  html: "<slot></slot>",
+  html: "<span><slot></slot></span>",
   props: ['start', 'duration'],
   css: ` :host { display: block; } `,
   onUpdate(prop, value) {

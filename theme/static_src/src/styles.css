@@ -83,8 +83,11 @@
 
   .bg-pattern-paper {
     background-color: var(--color-base-100);
-    background-image: linear-gradient(90deg, transparent 79px, var(--color-base-content) 79px, var(--color-base-content) 81px, transparent 81px),
-      linear-gradient(var(--color-base-300) .1em, transparent .1em);
+    --_ts:var(--tab-space, 79px);
+    --_tsend:calc(var(--_ts) + 2px);
+    --_lh: 1px;
+    background-image: linear-gradient(90deg, transparent var(--_ts), var(--color-base-content) var(--_ts), var(--color-base-content) var(--_tsend), transparent var(--_tsend)),
+      linear-gradient(var(--color-base-300) var(--_lh), transparent var(--_lh));
     background-size: 100% var(--slotunit, 1.2em);
   }
 
@@ -115,6 +118,9 @@
 
   .appointment-slot {
     @apply bg-info
+  }
+  .slot-time-label {
+    @apply max-w-[var(--tab-space)] label text-xs justify-center flex items-start snap-start;
   }
 }
 
