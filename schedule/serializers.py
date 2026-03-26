@@ -25,6 +25,21 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
+    class ServiceSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Service
+            fields = ['id','title']
+    class ResourceSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Resource
+            fields = ['id','name']
+    class AppointmentSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Appointment
+            fields = ['status']
+    service = ServiceSerializer()
+    resources = ResourceSerializer(many=True)
+    appointment_set = AppointmentSerializer(many=True)
     class Meta:
         model = Assignment
         fields = [
@@ -36,4 +51,4 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'start_slot',
             'duration_slot',
         ]
-        depth = 1
+        # depth = 1
