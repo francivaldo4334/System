@@ -5,10 +5,10 @@ from django.db.models import QuerySet
 from typing import List, cast
 
 
-class AppointmentState:
+class AssignmentState:
     def __init__(self, instance) -> None:
-        from schedule.models import Appointment
-        self.instance = cast(Appointment, instance)
+        from schedule.models import Assignment
+        self.instance = cast(Assignment, instance)
 
     def confirm(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
@@ -25,7 +25,7 @@ class AppointmentState:
     def cancel(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
     
-class AppointmentStatePeding(AppointmentState):
+class AssignmentStatePeding(AssignmentState):
     class ResourceNotAllowed(Exception):
         pass
     class ReourceQuantityNotEguals(Exception):
@@ -73,19 +73,19 @@ class AppointmentStatePeding(AppointmentState):
             self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
             self.instance.save()
             
-class AppointmentStateConfirmed(AppointmentState):
+class AssignmentStateConfirmed(AssignmentState):
     pass
 
-class AppointmentStateInProgress(AppointmentState):
+class AssignmentStateInProgress(AssignmentState):
     pass
 
-class AppointmentStateCompleted(AppointmentState):
+class AssignmentStateCompleted(AssignmentState):
     pass
 
-class AppointmentStateMigrated(AppointmentState):
+class AssignmentStateMigrated(AssignmentState):
     pass
 
-class AppointmentStateCancelled(AppointmentState):
+class AssignmentStateCancelled(AssignmentState):
     pass
 
 class NotStateError(Exception):

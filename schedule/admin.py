@@ -2,7 +2,7 @@ from django.contrib import admin
 from schedule.models import *
 
 # Register your models here.
-@admin.register(Appointment)
+@admin.register(Assignment)
 class AssignmentSlotAdmin(admin.ModelAdmin):
     actions = [        
         'confirm',
@@ -28,7 +28,6 @@ class AssignmentSlotAdmin(admin.ModelAdmin):
         for obj in queryset:
             obj.state.cancel()
 admin.site.register(Resource)
-admin.site.register(Assignment)
 admin.site.register(Availability)
 admin.site.register(Service)
 admin.site.register(ServiceResourceRelation)
