@@ -48,16 +48,14 @@
                     slot.setAttribute("start", it.start_slot)
                     slot.setAttribute("duration", it.duration_slot)
                     slot.classList.add("appointment-slot")
+                    const startTime = minutesToTime(((it.start_slot - 1) * 5))
+                    const endTime = minutesToTime(((it.start_slot - 2) + it.duration_slot) * 5)
                     slot.innerHTML = `
                         <span>${it.service.title}</span>
                         <div class="flex items-center gap-2">
                             <span class='*:w-4'> {% include 'icons/clock.svg' %} </span>
                             <span>
-                                ${
-                                    minutesToTime(((it.start_slot - 1) * 5))
-                                } - ${
-                                    minutesToTime(((it.start_slot - 2) + it.duration_slot) * 5)
-                                }
+                                ${startTime} - ${endTime}
                             </span>
                         </div>
                     `
