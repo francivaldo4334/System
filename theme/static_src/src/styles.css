@@ -118,7 +118,7 @@
 
   .appointment-slot {
     @apply p-2 flex flex-col border border-dashed bg-primary/8 border-primary text-xs rounded-field 
-      [&>span]:text-neutral
+      [&>span]:text-primary
       [&>span]:font-bold
       [&>span]:block
     ;
