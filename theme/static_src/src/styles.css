@@ -117,18 +117,10 @@
   }
 
   .appointment-slot {
-    @apply p-2 flex flex-col border border-dashed bg-info text-xs rounded-field
-    [&>label]:label
-    [&_span]:bg-neutral
-    [&_span]:text-neutral-content
-    [&_span]:px-1
-    [&_span]:py-0.5
-    [&_span]:rounded-field
-    [&>ul]:inline
-    [&>ul]:flex
-    [&>ul]:flex-wrap
-    [&>ul]:gap-2
-    
+    @apply p-2 flex flex-col border border-dashed bg-primary/8 border-primary text-xs rounded-field 
+      [&>span]:text-neutral
+      [&>span]:font-bold
+      [&>span]:block
     ;
   }
   .slot-time-label {
