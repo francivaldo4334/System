@@ -34,7 +34,6 @@
     $q.use(
         "assignment-list",
         ()=>fetch("{% url 'assignment-list'%}").then(r => r.json()).then(data => {
-                console.log("Helo")
                 const frag = document.createDocumentFragment();
                 const format = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
                 const appointmentsHTML = data.results.map(it => {
