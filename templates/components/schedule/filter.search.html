@@ -2,7 +2,7 @@
     {% include 'icons/search.svg' %}
     <input type="search" id="id-fillter-search" placeholder="{% trans 'Search...' %}" />
 </label>
-<script>
+<script is="exec-mount" type="text/template">
 {
     const input = document.querySelector('#id-fillter-search');
     let tid;
