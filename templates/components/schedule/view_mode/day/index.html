@@ -1,7 +1,5 @@
 <div class="grid grid-rows-[auto_1fr] max-h-full overflow-y-auto" style="--tab-space:70px">
-    <header>
-        Nomes de recursos
-    </header>
+    <header> </header>
     <div class="overflow-y-auto max-h-full snap-y">
         <app-timeline id="id-app-timeline" slotunit="24px" class="w-full bg-pattern-paper">
         </app-timeline>
@@ -22,7 +20,7 @@
             const currentMinute = i * slotInterval;
             const hours = Math.floor(currentMinute / 60);
             const minutes = currentMinute % 60;
-            slot.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;    
+            slot.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
             frag.appendChild(slot);
         }
 
@@ -34,7 +32,7 @@
         "{% url 'assignment-list'%}",
         {
             onSuccess: (data) => {
-                function minutesToTime(currentMinutes){
+                function minutesToTime(currentMinutes) {
                     const hours = Math.floor(currentMinutes / 60);
                     const minutes = currentMinutes % 60;
                     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
