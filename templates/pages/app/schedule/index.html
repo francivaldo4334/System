@@ -3,14 +3,16 @@
 
 {% include 'pages/app/schedule/index.js.html' %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-<section class="grid grid-cols-[auto_1fr]">
-    <aside>
-        <div class="w-[16rem]">
+<section class="drawer sm:drawer-open overflow-hidden">
+    <input type="checkbox" class="drawer-toggle" id="id_schdule_drawer_toggle">
+    <aside class="drawer-side">
+        <label class="drawer-overlay" for="id_schdule_drawer_toggle"> </label>
+        <div class="w-[16rem] h-full">
             {% include 'pages/app/schedule/aside.html' %}
         </div>
     </aside>
-    <main class="relative border-l border-base-content/10">
-        <div class="absolute inset-0 grid grid-rows-[auto_1fr]">
+    <main class="drawer-content">
+        <div class="absolute inset-0  sm:left-[16rem] grid grid-rows-[auto_1fr] border-l border-base-content/10 ">
             {% include 'pages/app/schedule/main.html' %}
         </div>
     </main>
