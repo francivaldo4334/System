@@ -12,7 +12,7 @@ const queryCacheFactory = () => {
   });
   async function useQueryCache(queryKey, url, callbacks = {}, options = {}) {
     const { onSuccess, onError, onFinally } = callbacks;
-    const { ttl = 0, selection = (r) => r.json(), refetchOnFocus = false } = options;
+    const { ttl = 5000, selection = (r) => r.json(), refetchOnFocus = false } = options;
     if (refetchOnFocus) {
       _watchedQueries.set(queryKey, { url, callbacks, options });
     }
