@@ -1,14 +1,16 @@
 {% extends 'pages/app/layout.html' %}
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-<section class="w-full">
-    <main class="max-w-lg mx-auto">
-        <div class="tabs tabs-border">
+<section class="w-full flex">
+    <main class="min-w-[1080px] mx-auto">
+        <div class="tabs tabs-border p-4">
+            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{%trans " Availabilities"%}" />
             <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
             <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
             <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
             <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
+        </div>
+        <div id="id_schedule_settings_content">
         </div>
     </main>
 </section>
