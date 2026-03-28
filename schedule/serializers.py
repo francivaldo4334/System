@@ -11,8 +11,10 @@ class ResourcesSerializer(serializers.ModelSerializer):
             'name',
             'code',
             'is_selectable',
-            'parent_id'
+            'parent_id',
+            'childrens',
         ]
+        depth=1
 
 
 class ServiceSerializer(serializers.ModelSerializer):

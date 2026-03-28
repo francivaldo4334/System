@@ -1,14 +1,13 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% partialdef menu-option %}
-<li class="relative">
-    <form
-        class="is-drawer-close:tooltip is-drawer-close:tooltip-right {%if app_url_name == option.url_name%}menu-active{%endif%}"
-        data-tip="{% trans option.title %}" data-url="{% url option.url_name %}">
+<li>
+    <button class="app-menu-option is-drawer-close:tooltip is-drawer-close:tooltip-right"
+        data-tip="{% trans option.title %}" data-url="{% url option.url_name %}?exclude_appbar=true"
+        data-url-name="{{option.url_name}}">
         <span class="*:m-1.5 *:inline-block">{% include option.icon_template_name %}</span>
         <span class="is-drawer-close:hidden">{% trans option.title %}</span>
-        <button type="submit" class="absolute inset-0 opacity-0"></button>
-    </form>
+    </button>
 </li>
 {% endpartialdef %}
 {% block header%}
@@ -44,21 +43,29 @@
 {% endblock %}
 {% block scripts %}
 <script>
-    $s.create("sidebar.urlName")
-    $s.create("sidebar.store.data")
-    $s.subscribe("sidebar.store.data", document.querySelector("#id-app-content"), "innerHTML")
-    $s.set("sidebar.urlName", "{{app_url_name}}")
-    document.querySelectorAll('#id-app-menu form').forEach(form => {
-        $s.subscribe("sidebar.urlName", form, null,
-            (v, f) => {
-                const urlName = f.dataset.url;
-                const isSelected = v === urlName;
-                f.classList.toggle('menu-active', true);
-            }
-        )
-        form.addEventListener("submit", e => {
-            e.preventDefault()
+    $s.createStore('app-menu', {
+        selected: "{{ request.resolver_match.url_name|default:default_url_name }}"
+    })
+    document.querySelectorAll('.app-menu-option').forEach(el => {
+        $s.subscribe("app-menu.selected", el, null, (value, currentEl) => {
+            const isSelected = value === currentEl.dataset.urlName
+            currentEl.classList.toggle("menu-active", isSelected)
+            currentEl.disabled = isSelected
         })
+        el.onclick = () => {
+            $q.use(
+                el.dataset.urlName,
+                el.dataset.url,
+                {
+                    onSuccess(data) {
+                        console.log(data)
+                    }
+                },
+                {
+                    selection: (r) => r.text()
+                }
+            )
+        }
     })
 </script>
 <script src="{% static 'components.js' %}" type="module"></script>

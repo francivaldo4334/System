@@ -15,7 +15,7 @@ from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, A
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
     name = models.CharField()
-    parent = models.ForeignKey('ResourceNotSelectable',models.CASCADE,'children', null=True, blank=True)
+    parent = models.ForeignKey('ResourceNotSelectable',models.CASCADE,'childrens', null=True, blank=True)
     code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
     is_selectable = models.BooleanField()
     uri = models.ForeignKey('uri.URIModel', models.CASCADE, blank=True, null=True)

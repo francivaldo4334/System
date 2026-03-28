@@ -11,16 +11,29 @@ class AppView(LoginRequiredMixin,TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
+            'default_url_name': 'app-schedule',
             'app_template_name_options': [
                 {
                     'url_name': 'app-schedule',
                     'title': _('Agenda'),
                     'icon_template_name': 'icons/calendar.svg'
-                }
+                },
+                {
+                    'url_name': 'app-schedule-settings',
+                    'title': _('Agenda Settings'),
+                    'icon_template_name': 'icons/calendar-cog.svg'
+                },
             ],
             'today': f'{timezone.localtime(timezone.now()).date().isoformat()}T00:00:00',
         })
         return context
+    def get_template_names(self):
+        if self.request.GET.get('exclude_appbar', None):
+            self.template_name += "#main"
+        return super().get_template_names()
 
 class AppScheduleView(AppView):
     template_name = 'pages/app/schedule/index.html'
+
+class AppScheduleSettingsView(AppView):
+    template_name = 'pages/app/schedule/settings/index.html'
