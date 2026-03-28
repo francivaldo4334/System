@@ -3,8 +3,7 @@
 {% partialdef menu-option %}
 <li>
     <button class="app-menu-option is-drawer-close:tooltip is-drawer-close:tooltip-right"
-        data-tip="{% trans option.title %}" data-url="{% url option.url_name %}?exclude_appbar=true"
-        data-url-name="{{option.url_name}}">
+        data-tip="{% trans option.title %}" data-url="{% url option.url_name %}" data-url-name="{{option.url_name}}">
         <span class="*:m-1.5 *:inline-block">{% include option.icon_template_name %}</span>
         <span class="is-drawer-close:hidden">{% trans option.title %}</span>
     </button>
@@ -55,7 +54,14 @@
         el.onclick = () => {
             $q.use(
                 el.dataset.urlName,
-                () => fetch(el.dataset.url).then(r => r.text()),
+                () => fetch(el.dataset.url, {
+                    headers: {
+                        "Ajax-Request": 'true'
+                    }
+                }).then(r => {
+                    history.pushState({}, "", el.dataset.url + location.search)
+                    return r.text()
+                }),
                 {
                     onSuccess(data) {
                         id_app_content.innerHTML = data

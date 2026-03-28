@@ -28,7 +28,7 @@ class AppView(LoginRequiredMixin,TemplateView):
         })
         return context
     def get_template_names(self):
-        if self.request.GET.get('exclude_appbar', None):
+        if self.request.META.get('HTTP_AJAX_REQUEST', False):
             self.template_name += "#main"
         return super().get_template_names()
 
