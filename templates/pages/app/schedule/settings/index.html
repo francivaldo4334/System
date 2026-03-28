@@ -1,7 +1,13 @@
 {% extends 'pages/app/layout.html' %}
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-helo
+<div class="tabs tabs-border">
+    <input type="radio" class="tab" aria-label="item 1" />
+    <input type="radio" class="tab" aria-label="item 1" />
+    <input type="radio" class="tab" aria-label="item 1" />
+    <input type="radio" class="tab" aria-label="item 1" />
+    <input type="radio" class="tab" aria-label="item 1" />
+</div>
 {% endpartialdef %}
 {% block section %}
 {% partial main %}

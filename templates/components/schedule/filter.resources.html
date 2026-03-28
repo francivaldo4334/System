@@ -5,7 +5,7 @@
 <script is="exec-mount" type="text/template">
 $q.use(
     'resources-list',
-    "{% url 'resources-list' %}",
+    ()=>fetch("{% url 'resources-list' %}").then(r => r.json()),
     {
         onSuccess:(data)=> {
             const el = document.getElementById('id-filter-resources')

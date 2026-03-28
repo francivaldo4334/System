@@ -55,16 +55,13 @@
         el.onclick = () => {
             $q.use(
                 el.dataset.urlName,
-                el.dataset.url,
+                () => fetch(el.dataset.url).then(r => r.text()),
                 {
                     onSuccess(data) {
                         id_app_content.innerHTML = data
                         $s.set("app-menu.selected", el.dataset.urlName)
                     }
                 },
-                {
-                    selection: (r) => r.text()
-                }
             )
         }
     })

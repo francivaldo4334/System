@@ -1,66 +1,65 @@
 <div class="grid grid-rows-[auto_1fr] max-h-full overflow-y-auto" style="--tab-space:70px">
     <header> </header>
     <div class="overflow-y-auto max-h-full snap-y">
-        <app-timeline id="id-app-timeline" slotunit="24px" class="w-full bg-pattern-paper">
+        <app-timeline id="id_schedule_timeline" slotunit="24px" class="w-full bg-pattern-paper">
         </app-timeline>
     </div>
 </div>
 <script is="exec-mount" type="text/template">
-    {
-        const el = document.getElementById('id-app-timeline');
-        const slotInterval = 5;
-        const totalMinutesInDay = 1440;
-        const totalSlots = totalMinutesInDay / slotInterval;
-        const frag = document.createDocumentFragment();
-        for (let i = 0; i < totalSlots; i++) {
-            const slot = document.createElement("app-slot");
-            slot.setAttribute('start', i + 1);
-            slot.setAttribute('duration', 1);
-            slot.classList.add('slot-time-label');
-            const currentMinute = i * slotInterval;
-            const hours = Math.floor(currentMinute / 60);
-            const minutes = currentMinute % 60;
-            slot.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-            frag.appendChild(slot);
-        }
+    $q.use(
+        "assignment-meno-times",
+        () => new Promise((r) => {
+            const slotInterval = 5;
+            const totalSlots = 288;
+            let timelineHTML = '';
+            for (let i = 0; i < totalSlots; i++) {
+                const currentMinute = i * slotInterval;
+                const h = String(Math.floor(currentMinute / 60)).padStart(2, '0');
+                const m = String(currentMinute % 60).padStart(2, '0');        
+                timelineHTML += `<app-slot start="${i + 1}" duration="1" class="slot-time-label">${h}:${m}</app-slot>`;
+            }
 
-        el.querySelectorAll('.slot-time-label').forEach(e => e.remove())
-        el.append(frag);
-    }
+            r(timelineHTML)
+        }),
+        {
+            onSuccess(timelineHTML){
+                id_schedule_timeline.innerHTML = timelineHTML;
+            }
+        
+        },
+        {
+            ttl: 30000
+        }
+    )
     $q.use(
         "assignment-list",
-        "{% url 'assignment-list'%}",
+        ()=>fetch("{% url 'assignment-list'%}").then(r => r.json()).then(data => {
+                console.log("Helo")
+                const frag = document.createDocumentFragment();
+                const format = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+                const appointmentsHTML = data.results.map(it => {
+                    const startMin = (it.start_slot - 1) * 5;
+                    const endMin = ((it.start_slot - 2) + it.duration_slot) * 5;
+                    return `
+                        <app-slot start="${it.start_slot}" duration="${it.duration_slot}" class="appointment-slot">
+                            <span>${it.service.title}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="w-4">{% include 'icons/clock.svg' %}</span>
+                                <span>${format(startMin)} - ${format(endMin)}</span>
+                            </div>
+                        </app-slot>
+                    `;
+                }).join('');
+                return appointmentsHTML 
+        }),
         {
-            onSuccess: (data) => {
-                function minutesToTime(currentMinutes) {
-                    const hours = Math.floor(currentMinutes / 60);
-                    const minutes = currentMinutes % 60;
-                    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
-                }
-
-                const el = document.getElementById('id-app-timeline')
-                el.querySelectorAll(':not(.slot-time-label)').forEach(e => e.remove())
-                const frag = document.createDocumentFragment()
-                data.results.forEach(it => {
-                    const slot = document.createElement("app-slot")
-                    slot.setAttribute("start", it.start_slot)
-                    slot.setAttribute("duration", it.duration_slot)
-                    slot.classList.add("appointment-slot")
-                    const startTime = minutesToTime(((it.start_slot - 1) * 5))
-                    const endTime = minutesToTime(((it.start_slot - 2) + it.duration_slot) * 5)
-                    slot.innerHTML = `
-                        <span>${it.service.title}</span>
-                        <div class="flex items-center gap-2">
-                            <span class='*:w-4'> {% include 'icons/clock.svg' %} </span>
-                            <span>
-                                ${startTime} - ${endTime}
-                            </span>
-                        </div>
-                    `
-                    frag.appendChild(slot)
-                })
-                el.appendChild(frag)
+            onSuccess(appointmentsHTML){
+                id_schedule_timeline.querySelectorAll('.appointment-slot').forEach(e => e.remove());
+                id_schedule_timeline.insertAdjacentHTML('beforeend', appointmentsHTML);
             }
+        },
+        {
+            ttl: 10000
         }
     )
 </script>
