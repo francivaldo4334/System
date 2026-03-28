@@ -13,21 +13,31 @@
     {% with label=_('Show All') value="all"%}
     {% partial status %}
     {% endwith %}
-    {% with label=_('Created') icon_path="icons/status-created.svg" value="CR"%}
-    {% partial status %}
-    {% endwith %}
-    {% with label=_('In Progress') icon_path="icons/status-in-progress.svg" value="IP"%}
-    {% partial status %}
-    {% endwith %}
-    {% with label=_('Completed') icon_path="icons/status-completed.svg" value="CP" %}
-    {% partial status %}
-    {% endwith %}
-    {% with label=_('Migrated') icon_path="icons/status-migrated.svg" value="MG"%}
-    {% partial status %}
-    {% endwith %}
+    {% with value='PD' label=_('Pending') icon_path="icons/status-pendding.svg"%}
+    {%partial status%}
+    {% endwith%}
+    {% with value='CF' label=_('Confirmed') icon_path="icons/status-confirmed.svg"%}
+    {%partial status%}
+    {% endwith%}
+    {% with value='IP' label=_('In Progress') icon_path="icons/status-in-progress.svg"%}
+    {%partial status%}
+    {% endwith%}
+    {% with value='CP' label=_('Completed') icon_path="icons/status-completed.svg"%}
+    {%partial status%}
+    {% endwith%}
+
+    {% with value='MG' label=_('Migrated') icon_path="icons/status-migrated.svg"%}
+    {%partial status%}
+    {% endwith%}
+    {% with value='CC' label=_('Cancelled') icon_path="icons/status-cancelled.svg"%}
+    {%partial status%}
+    {% endwith%}
+    {% with value='AB' label=_('Absent') icon_path="icons/status-absent.svg"%}
+    {%partial status%}
+    {% endwith%}
 </fieldset>
 <script>
-document.querySelectorAll("input[name='filter-status']").forEach(el => {
-    $s.subscribe("filter.status", el, 'checked', (v, el) => v === el.value) 
-})
+    document.querySelectorAll("input[name='filter-status']").forEach(el => {
+        $s.subscribe("filter.status", el, 'checked', (v, el) => v === el.value)
+    })
 </script>
