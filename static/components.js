@@ -210,18 +210,26 @@ createComponent('c-days', {
     grid.appendChild(frag);
   },
 })
-createComponent('app-scope', {
+createComponent('exec-mount', {
+  base: HTMLScriptElement,
+  baseName: 'script',
+  onMount() {
+    if (!this.innerText.trim()) return;
+    const runner = document.createElement('script');
+    runner.textContent = this.innerText;
+    document.head.appendChild(runner);
+    document.head.removeChild(runner);
+  }
+})
+createComponent('exec-umount', {
   base: HTMLScriptElement,
   baseName: 'script',
   onUmount() {
-    const cleanupCode = this.getAttribute('onclearup');
-    if (cleanupCode) {
-      try {
-        new Function(cleanupCode).call(globalThis);
-      } catch (e) {
-        console.error("Erro ao executar cleanup do AppScope:", e);
-      }
-    }
+    if (!this.innerText.trim()) return;
+    const runner = document.createElement('script');
+    runner.textContent = this.innerText;
+    document.head.appendChild(runner);
+    document.head.removeChild(runner);
   }
 })
 // class AppScope extends HTMLScriptElement {

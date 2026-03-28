@@ -22,6 +22,7 @@ export function createComponent(tagName, {
         this.appendChild(template.content.cloneNode(true))
       }
       Object.assign(this, methods)
+      this.onInit?.()
     }
     getProps() {
       return Object.fromEntries(props.map(prop => [
@@ -52,7 +53,7 @@ export function createComponent(tagName, {
   }
   if (!customElements.get(tagName)) {
     if (typeof baseName === 'string') {
-      customElements.define(tagName, CustomElement, {extends: baseName})
+      customElements.define(tagName, CustomElement, { extends: baseName })
       return;
     }
     customElements.define(tagName, CustomElement)

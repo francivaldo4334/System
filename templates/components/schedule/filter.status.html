@@ -35,7 +35,7 @@
     {%partial status%}
     {% endwith%}
 </fieldset>
-<script>
+<script is="exec-mount" type="text/template">
     document.querySelectorAll("input[name='filter-status']").forEach(el => {
         $s.subscribe("filter.status", el, 'checked', (v, el) => v === el.value)
     })

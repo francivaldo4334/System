@@ -1,4 +1,4 @@
-<script is="app-scope" onclearup="$s.remove('filter')">
+<script is="exec-mount" type="text/template">
     $s.createStore('filter', {
         "search": "{{ request.GET.search|default:'' }}",
         "services": "{{ request.GET.services|default:'' }}",
@@ -41,4 +41,7 @@
             return d.toISOString();
         }).join(",");
     });
+</script>
+<script is="exec-umount" type="text/template">
+$s.remove('filter')
 </script>

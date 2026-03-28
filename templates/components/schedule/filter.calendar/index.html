@@ -16,7 +16,7 @@
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
         onclick="$s.set('filter.calendar.day', new Date().toISOString())">{% trans "Today" %}</button>
 </section>
-<script>
+<script is="exec-mount" type="text/template">
     document.querySelectorAll('.btn-filter-calendar').forEach(el => {
         el.onclick = () => {
             const iso = $s.get("filter.calendar.day")
@@ -37,8 +37,6 @@
         })
         const date = new Date($s.get('filter.calendar.day'))
         ch.textContent = formatter.format(date)
-    }
-    {
         const days = document.getElementById('id-c-days')
         $s.subscribe('filter.calendar.day', days, null, (v, el) => {
             el.setAttribute('date', v)

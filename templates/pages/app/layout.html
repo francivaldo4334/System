@@ -18,7 +18,7 @@
 {% block body %}
 <div class="drawer lg:drawer-open h-screen">
     <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-    <div id="id-app-content" class="drawer-content  border-l border-base-content/10 h-screen grid grid-rows-[auto_1fr]">
+    <div id="id_app_content" class="drawer-content  border-l border-base-content/10 h-screen grid grid-rows-[auto_1fr]">
         {% block section %}
         {% include 'pages/app/schedule/index.html#main' %}
         {% endblock %}
@@ -58,7 +58,8 @@
                 el.dataset.url,
                 {
                     onSuccess(data) {
-                        console.log(data)
+                        id_app_content.innerHTML = data
+                        $s.set("app-menu.selected", el.dataset.urlName)
                     }
                 },
                 {
