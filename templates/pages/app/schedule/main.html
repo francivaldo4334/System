@@ -1,0 +1,17 @@
+<header class="w-full flex justify-between p-2 pr-4 border-base-content/10 max-h-full">
+    <div class="flex flex-wrap gap-4 w-full">
+        {% include 'components/schedule/filter.calendar.mode/index.html' %}
+        {% include 'components/schedule/filter.search.html' %}
+    </div>
+    <div class="max-sm:fab">
+        <button class="btn btn-primary max-sm:btn-lg max-sm:btn-circle" onclick="id_add_assignment_modal.showModal()">
+            {% include 'icons/plus.svg' %}
+            <div class="max-sm:hidden">
+                {% trans 'Add' %}
+            </div>
+        </button>
+    </div>
+</header>
+<main class="bg-base-200/30 border-t border-base-content/10 max-h-full overflow-y-auto">
+    {% include 'components/schedule/view_mode/day/index.html' %}
+</main>

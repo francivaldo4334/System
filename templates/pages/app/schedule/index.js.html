@@ -1,0 +1,44 @@
+<script is="app-scope" onclearup="$s.remove('filter')">
+    $s.createStore('filter', {
+        "search": "{{ request.GET.search|default:'' }}",
+        "services": "{{ request.GET.services|default:'' }}",
+        "resources": "{{ request.GET.resources|default:'' }}",
+        "status": "{{request.GET.status|default:'all'}}",
+    })
+    $s.createStore('filter.calendar', {
+        "day": "{{ request.GET.day|default:today }}",
+        "mode": "{{ request.GET.mode|default:'w' }}",
+    })
+    $s.compute('filter.calendar.range', ['filter.calendar.day', 'filter.calendar.mode'], (isoDay, mode) => {
+        if (!isoDay || !mode) return [];
+        const date = new Date(isoDay);
+        date.setHours(0, 0, 0, 0);
+        const strategies = {
+            // Semana: do Domingo (0) ao Sábado (6)
+            'w': (d) => {
+                const start = new Date(d);
+                start.setDate(d.getDate() - d.getDay());
+                const end = new Date(start);
+                end.setDate(start.getDate() + 6);
+                return [start, end];
+            },
+            // Mês: do dia 1 ao último dia do mês
+            'm': (d) => [
+                new Date(d.getFullYear(), d.getMonth(), 1),
+                new Date(d.getFullYear(), d.getMonth() + 1, 0)
+            ],
+            // Dia: range de um único dia (útil para consultas SQL BETWEEN)
+            'd': (d) => [new Date(d), new Date(d)]
+        };
+
+        const strategy = strategies[mode];
+        if (!strategy) {
+            console.error(`Modo de calendário inválido: ${mode}`);
+            return [];
+        }
+        return strategy(date).map(d => {
+            d.setHours(0, 0, 0, 0);
+            return d.toISOString();
+        }).join(",");
+    });
+</script>

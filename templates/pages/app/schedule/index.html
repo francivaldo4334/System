@@ -1,123 +1,21 @@
 {% extends 'pages/app/layout.html' %}
-{% partialdef fieldset_filter %}
-<fieldset class="fieldset border-t border-base-content/10">
-    <legend class="fieldset-legend text-base-content/50">{{ title }}</legend>
-    {% include content %}
-</fieldset>
-{% endpartialdef %}
 {% partialdef main %}
+
+{% include 'pages/app/schedule/index.js.html' %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-<script is="app-scope" onclearup="$s.remove('filter')">
-    $s.createStore('filter', {
-        "search": "{{ request.GET.search|default:'' }}",
-        "services": "{{ request.GET.services|default:'' }}",
-        "resources": "{{ request.GET.resources|default:'' }}",
-        "status": "{{request.GET.status|default:'all'}}",
-    })
-    $s.createStore('filter.calendar', {
-        "day": "{{ request.GET.day|default:today }}",
-        "mode": "{{ request.GET.mode|default:'w' }}",
-    })
-    $s.compute('filter.calendar.range', ['filter.calendar.day', 'filter.calendar.mode'], (isoDay, mode) => {
-        if (!isoDay || !mode) return [];
-        const date = new Date(isoDay);
-        date.setHours(0, 0, 0, 0);
-        const strategies = {
-            // Semana: do Domingo (0) ao Sábado (6)
-            'w': (d) => {
-                const start = new Date(d);
-                start.setDate(d.getDate() - d.getDay());
-                const end = new Date(start);
-                end.setDate(start.getDate() + 6);
-                return [start, end];
-            },
-            // Mês: do dia 1 ao último dia do mês
-            'm': (d) => [
-                new Date(d.getFullYear(), d.getMonth(), 1),
-                new Date(d.getFullYear(), d.getMonth() + 1, 0)
-            ],
-            // Dia: range de um único dia (útil para consultas SQL BETWEEN)
-            'd': (d) => [new Date(d), new Date(d)]
-        };
-
-        const strategy = strategies[mode];
-        if (!strategy) {
-            console.error(`Modo de calendário inválido: ${mode}`);
-            return [];
-        }
-        return strategy(date).map(d => {
-            d.setHours(0, 0, 0, 0);
-            return d.toISOString();
-        }).join(",");
-    });
-</script>
-
-<div class="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] max-h-full bg-base-100 overflow-y-auto">
-    <div class="max-sm:dropdown dropdown-open sm:row-span-2 sm:border-r border-base-content/10 col-start-1 row-start-1">
-        <button class="btn btn-square m-2 sm:hidden" onclick="this.nextElementSibling.classList.toggle('opacity-0')">
-            {% include 'icons/settings-2.svg' %}
-        </button>
-        <aside tabindex="-1"
-            class="dropdown-content menu bg-base-100 min-w-[16rem] rounded-box z-1 p-2 shadow-sm sm:shadow-none transition-opacity duration-300 opacity-0 sm:opacity-100">
-            <div class="p-4 border-base-content/10 flex flex-col max-h-[30rem] sm:max-h-full overflow-y-auto">
-                <div class="sm:hidden mb-4">
-                    {% include 'components/schedule/filter.search.html' %}
-                </div>
-                {% include 'components/schedule/filter.calendar/index.html' %}
-                <div class="divider divider-start -mx-2 text-xs">{% trans 'Filters'%}</div>
-                <div class="flex flex-col gap-4">
-                    {% include 'components/schedule/filter.resources.html' %}
-                    {% include 'components/schedule/filter.services.html' %}
-                    {% include 'components/schedule/filter.status.html' %}
-                </div>
-            </div>
-        </aside>
-    </div>
-    <header class="w-full flex justify-between p-2 pr-4 border-base-content/10 col-start-1 row-start-1 sm:col-start-2">
-        <div class="flex flex-wrap gap-4 w-full">
-            <div class="w-10 sm:hidden"></div>
-            {% include 'components/schedule/filter.calendar.mode/index.html' %}
-            <div class="hidden sm:block">
-                {% include 'components/schedule/filter.search.html' %}
-            </div>
+<section class="grid grid-cols-[auto_1fr]">
+    <aside>
+        <div class="w-[16rem]">
+            {% include 'pages/app/schedule/aside.html' %}
         </div>
-        <button class="btn btn-primary pl-2" onclick="id_add_assignment_modal.showModal()">
-            {% include 'icons/plus.svg' %}
-            {% trans 'Add' %}
-        </button>
-    </header>
-    <main
-        class="bg-base-200/30 max-h-full overflow-y-auto col-span-2 sm:col-start-2 sm:col-span-1 border-t border-base-content/10">
-        {% include 'components/schedule/view_mode/day/index.html' %}
+    </aside>
+    <main class="relative border-l border-base-content/10">
+        <div class="absolute inset-0 grid grid-rows-[auto_1fr]">
+            {% include 'pages/app/schedule/main.html' %}
+        </div>
     </main>
-</div>
+</section>
 
-<dialog id="id_add_assignment_modal" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">{% trans 'New Appointment'%}</h3>
-        <form>
-            <select name="service" required>
-                <option value="1">Option 1</option>
-            </select>
-            <select name="resources" multiple required>
-                <option value="1">Option 1</option>
-            </select>
-            <input type="date" name="date" required />
-            <input type="time" name="start_slot" step="300" required onchange="$s.set('start_slot', this.value)" />
-            <input id="id_duration_slot" type="time" name="duration_slot" step="300" required />
-            <button type="submit">
-                submit
-            </button>
-        </form>
-        <div class="modal-action">
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn">Close</button>
-            </form>
-        </div>
-    </div>
-</dialog>
-{# include 'pages/app/schedule/index.js.html' #}
 {% endpartialdef %}
 {% block section %}
 {% partial main %}
