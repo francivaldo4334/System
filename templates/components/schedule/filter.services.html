@@ -2,7 +2,7 @@
     <select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)"> </select>
     <span>{% trans 'Service' %}</span>
 </label>
-<script>
+<script is="exec-mount" type="text/template">
 $q.use(
     'services-list',
     "{% url 'services-list' %}",
