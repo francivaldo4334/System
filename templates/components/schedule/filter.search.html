@@ -12,5 +12,6 @@
             $s.set('filter.search', el.target.value);
         },300)
     }
+    $s.subscribe("filter.search", input, "value")
 }
 </script>
