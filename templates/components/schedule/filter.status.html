@@ -1,42 +1,62 @@
 {% partialdef status %}
-<label class="label flex justify-between items-center">
-    <input type="radio" class="radio radio-primary" name="filter-status" value="{{value}}"
-        onchange="$s.set('filter.status', this.value)" />
-    <span class="w-full">{{ label }}</span>
-    {% if icon_path %}
-    {% include icon_path %}
-    {% endif %}
-</label>
+<li>
+    <button class="group" data-value="{{value}}" data-label="{{label}}">
+        <span class="opacity-0 group-[.menu-active]:opacity-100">&checkmark;</span>
+        {{ label }}
+        {% if icon %}
+        {% include icon %}
+        {% endif %}
+    </button>
+</li>
 {% endpartialdef %}
-<fieldset class="fieldset mt-auto">
-    <legend class="fieldset-legend">{% trans 'Status' %}</legend>
-    {% with label=_('Show All') value="all"%}
+<label class="floating-label">
+    <button id="id_filter_status_trigger" class="select select-sm" popovertarget="id_filter_status"
+        style="anchor-name:--anchor-filter-status">
+        {%trans "Show All Status"%}
+    </button>
+    <span>
+        {%trans "Status"%}
+    </span>
+</label>
+<ul class="dropdown menu w-52 rounded-box bg-base-100 shadow-sm" popover id="id_filter_status"
+    style="position-anchor:--anchor-filter-status">
+    {% with value='all' label="Show All Status"%}
     {% partial status %}
     {% endwith %}
-    {% with value='PD' label=_('Pending') icon_path="icons/status-pendding.svg"%}
-    {%partial status%}
-    {% endwith%}
-    {% with value='CF' label=_('Confirmed') icon_path="icons/status-confirmed.svg"%}
-    {%partial status%}
-    {% endwith%}
-    {% with value='IP' label=_('In Progress') icon_path="icons/status-in-progress.svg"%}
-    {%partial status%}
-    {% endwith%}
-    {% with value='CP' label=_('Completed') icon_path="icons/status-completed.svg"%}
-    {%partial status%}
-    {% endwith%}
-    {% with value='MG' label=_('Migrated') icon_path="icons/status-migrated.svg"%}
-    {%partial status%}
-    {% endwith%}
-    {% with value='CC' label=_('Cancelled') icon_path="icons/status-cancelled.svg"%}
-    {%partial status%}
-    {% endwith%}
-    {% with value='AB' label=_('Absent') icon_path="icons/status-absent.svg"%}
-    {%partial status%}
-    {% endwith%}
-</fieldset>
+    {% with value='PD' label="Pending" icon="icons/status-pendding.svg" %}
+    {% partial status %}
+    {% endwith %}
+    {% with value='CF' label="Confirmed" icon="icons/status-confirmed.svg" %}
+    {% partial status %}
+    {% endwith %}
+    {% with value='IP' label="In Progress" icon="icons/status-in-progress.svg" %}
+    {% partial status %}
+    {% endwith %}
+    {% with value='CP' label="Completed" icon="icons/status-completed.svg" %}
+    {% partial status %}
+    {% endwith %}
+    {% with value='MG' label="Migrated" icon="icons/status-migrated.svg" %}
+    {% partial status %}
+    {% endwith %}
+    {% with value='CC' label="Cancelled" icon="icons/status-cancelled.svg" %}
+    {% partial status %}
+    {% endwith %}
+    {% with value='AB' label="Absent" icon="icons/status-absent.svg" %}
+    {% partial status %}
+    {% endwith %}
+</ul>
 <script is="exec-mount" type="text/template">
-    document.querySelectorAll("input[name='filter-status']").forEach(el => {
-        $s.subscribe("filter.status", el, 'checked', (v, el) => v === el.value)
+id_filter_status.querySelectorAll("button").forEach(el => {
+    $s.subscribe("filter.status", el, null, (v, el) => {
+        const isSelected = v === el.dataset.value
+        el.classList.toggle("menu-active", isSelected);
+        id_filter_status.hidePopover()
+        if (isSelected) {
+            id_filter_status_trigger.innerText = el.dataset.label
+        }
     })
+    el.onclick = () => {
+        $s.set("filter.status", el.dataset.value)
+    }
+})
 </script>
