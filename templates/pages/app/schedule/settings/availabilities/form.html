@@ -114,5 +114,8 @@
         )
         id_availability_form.addEventListener("submit", el => {
             el.preventDefault();
+            const formData = new FormData(id_availability_form)
+            const data = Object.fromEntries(formData.entries())
+            data.week = formData.getAll('week')
         })
 </script>
