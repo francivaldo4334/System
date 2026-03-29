@@ -44,45 +44,51 @@
         </tbody>
     </table>
 </div>
-<dialog id="id_new_availability_modal" class="modal">
+<dialog id="id_new_availability_modal" class="modal" open>
     <div class="modal-box">
         <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
         <form onreset="id_new_availability_modal.close()" class="flex flex-col gap-6 p-4">
             <fieldset class="grid grid-cols-[auto_1fr] gap-4">
-                <label class="label"> Tipo de Recurso: </label>
-                <select class="select select-sm"> </select>
-                <label class="label"> Recurso: </label>
-                <select class="select select-sm" name="resource"> </select>
+                <label class="label" for="id_resource_type"> Tipo de Recurso: </label>
+                <select class="select select-sm" id="id_resource_type" required>
+                    <option value=""> Empty </option>
+                    <option value="1"> Option 1 </option>
+                </select>
+                <label class="label" for="id_resource"> Recurso: </label>
+                <select class="select select-sm" name="resource" id="id_resource" required>
+                    <option value=""> Empty </option>
+                    <option value="1"> Option 1 </option>
+                </select>
             </fieldset>
             <fieldset class="form-continuous-inputs">
-                <label>Disponibilidade de</label>
-                <input type="date" name="start_date">
-                <label>até o dia</label>
-                <input type="date" name="until_date">
+                <label for="id_start_date">Disponibilidade de</label>
+                <input type="date" name="start_date" id="id_start_date" required />
+                <label for="id_until_date">até o dia</label>
+                <input type="date" name="until_date" id="id_until_date" disabled required>
             </fieldset>
             <fieldset class="form-continuous-inputs">
                 <label>Repetir todas as:</label>
-                <div class="join flex-wrap">
-                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Ter" />
-                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Qua" />
-                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Qui" />
-                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Sex" />
+                <div class="join flex-wrap" id="id_week">
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Seg" checked />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Ter" checked />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Qua" checked />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Qui" checked />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Sex" checked />
                     <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Sáb" />
                     <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Dom" />
                 </div>
             </fieldset>
             <fieldset class="form-continuous-inputs [&_input]:max-w-20">
-                <label>No horário das</label>
-                <input type="time" name="start_time">
-                <label>até às</label>
-                <input type="time" name="until_time">
+                <label for="id_start_time">No horário das</label>
+                <input type="time" name="start_time" id="id_start_time" step="300">
+                <label for="id_until_time">até às</label>
+                <input type="time" name="until_time" id="id_until_time" step="300">
             </fieldset>
             <fieldset class="form-continuous-inputs [&_input]:max-w-20">
-                <label>Dividir em sessões de</label>
-                <input type="time" name="duration_slot">
-                <label>com pausas de</label>
-                <input type="time" name="interfal_slot">
+                <label for="id_duration_slot">Dividir em sessões de</label>
+                <input type="time" name="duration_slot" id="id_duration_slot">
+                <label for="id_interval_slot">com pausas de</label>
+                <input type="time" name="interval_slot" id="id_interval_slot">
                 <label>entre elas.</label>
             </fieldset>
 
@@ -91,6 +97,28 @@
                 <button type="submit" class="btn btn-primary px-8">Salvar</button>
             </div>
         </form>
+        <script is="exec-mount" type="pass">
+        $s.createStore("av", {
+            resource_type: "",
+            start_date: "",
+            start_time: "",
+        })
+        id_resource_type.onchange = () => $s.set("av.resource_type", id_resource_type.value)
+        id_start_date.onchange = () => $s.set("av.start_date", id_start_date.value)
+        id_start_time.onchange = () => $s.set("av.start_time", id_start_time.value)
+        $s.subscribe("av.resource_type", id_resource, "disabled", (v) => !v)
+        $s.subscribe("av.start_date", id_until_date, "disabled", (v) => !v)
+        $s.subscribe("av.start_date", id_until_date, "min")
+        $s.subscribe("av.start_time", id_until_time, "disabled", (v) => !v)
+        $s.subscribe("av.start_time", id_until_time, "min")
+        $s.subscribe("av.start_time", id_duration_slot, "min")
+        $s.subscribe("av.start_time", id_interval_slot, "min")
+        $s.subscribe("av.until_time", id_duration_slot, "max")
+        $s.subscribe("av.until_time", id_interval_slot, "max")
+        </script>
+        <script is="exec-umount" type="pass">
+        $s.remove("av")
+        </script>
 
     </div>
 </dialog>
