@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Assignment, Resource, Service
+from schedule.models import Assignment, Availability, Resource, Service
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
@@ -58,3 +58,21 @@ class CreateAssigmentSerializer(AssignmentSerializer):
                 queryset=Resource.objects.all(),
         many=True
     )
+
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = [
+            "resource",
+            "rrule_params",
+            "duration_slot",
+
+            "valid_from",
+            "valid_until",
+            "start_slot",
+        ]
+        read_only_fields = [
+            "valid_from",
+            "valid_until",
+            "start_slot",
+        ]
