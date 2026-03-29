@@ -1,26 +1,33 @@
-<label for="id_filter_resource" class="floating-label">
-    <select class="select select-sm" id="id_filter_resource" onchange="$s.set('filter.resources', this.value)">
-    </select>
-    <span>{% trans "Resource"%}</span>
-</label>
+<div id="id_filter_resource_set" class="flex gap-4">
+</div>
 <script is="exec-mount" type="text/template">
 $q.use(
     'resources-list',
     ()=>fetch("{% url 'resources-list' %}").then(r => r.json()),
     {
         onSuccess:(data)=> {
+        debugger
             const frag = document.createDocumentFragment()
-            const options = data.results.map(it => {
-                const opt = document.createElement('option')
-                opt.value = it.id
-                opt.innerText = it.name
-                frag.appendChild(opt)
-            });
-            const opt = document.createElement('option')
-            opt.value = ""
-            opt.innerText = "{% trans 'Show All Resources' %}"
-            frag.appendChild(opt)
-            id_filter_resource.replaceChildren(frag)
+            data.results.forEach(item => {
+                const elId = `id_filter_resource_${item.code}`
+                const options = item.childrens.map(opt => `
+                    <option value="${opt.id}"> ${opt.name} </option>
+                `).join("")
+                const label = document.createElement('label')
+                label.for = elId;
+                label.classList.add('floating-label');
+                label.innerHTML = `
+                    <select class="select" id="${elId}">
+                    <option>
+                    {%trans "Show All"%}
+                    </option>
+                    ${options}
+                    </select>
+                    <span>${item.name}</span>
+                `
+                frag.appendChild(label)
+            })
+            id_filter_resource_set.replaceChildren(frag)
         }
     },
 )

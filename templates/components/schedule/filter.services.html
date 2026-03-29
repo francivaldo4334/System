@@ -1,5 +1,5 @@
 <label for="id_filter_service" class="floating-label">
-    <select class="select select-sm" id="id_filter_service" onchange="$s.set('filter.services', this.value)"> </select>
+    <select class="select" id="id_filter_service" onchange="$s.set('filter.services', this.value)"> </select>
     <span>{% trans 'Service' %}</span>
 </label>
 <script is="exec-mount" type="text/template">
@@ -9,16 +9,16 @@ $q.use(
     {
         onSuccess:(data)=> {
             const frag = document.createDocumentFragment()
+            const opt = document.createElement('option')
+            opt.value = ""
+            opt.innerText = "{% trans 'Show All' %}"
+            frag.appendChild(opt)
             const options = data.results.map(it => {
                 const opt = document.createElement('option')
                 opt.value = it.id
                 opt.innerText = it.title
                 frag.appendChild(opt)
             });
-            const opt = document.createElement('option')
-            opt.value = ""
-            opt.innerText = "{% trans 'Show All Services' %}"
-            frag.appendChild(opt)
             id_filter_service.replaceChildren(frag)
         }
     },

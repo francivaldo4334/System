@@ -2,12 +2,12 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
-from schedule.models import Assignment, ResourceSelectable, Service
+from schedule.models import Assignment, ResourceNotSelectable, ResourceSelectable, Service
 from schedule.serializers import AssignmentSerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
 
 # Create your views here.
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset =ResourceSelectable.objects.all()
+    queryset =ResourceNotSelectable.objects.all()
     serializer_class = ResourcesSerializer
 
 

@@ -10,9 +10,8 @@
 </li>
 {% endpartialdef %}
 <label class="floating-label">
-    <button id="id_filter_status_trigger" class="select select-sm" popovertarget="id_filter_status"
+    <button id="id_filter_status_trigger" class="select" popovertarget="id_filter_status"
         style="anchor-name:--anchor-filter-status">
-        {%trans "Show All Status"%}
     </button>
     <span>
         {%trans "Status"%}
@@ -20,7 +19,7 @@
 </label>
 <ul class="dropdown menu w-52 rounded-box bg-base-100 shadow-sm" popover id="id_filter_status"
     style="position-anchor:--anchor-filter-status">
-    {% with value='all' label="Show All Status"%}
+    {% with value='all' label="Show All"%}
     {% partial status %}
     {% endwith %}
     {% with value='PD' label="Pending" icon="icons/status-pendding.svg" %}
