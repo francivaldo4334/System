@@ -44,10 +44,16 @@
         </tbody>
     </table>
 </div>
-<dialog id="id_new_availability_modal" class="modal" open>
+<dialog id="id_new_availability_modal" class="modal">
     <div class="modal-box">
         <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
         <form onreset="id_new_availability_modal.close()" class="flex flex-col gap-6 p-4">
+            <fieldset class="grid grid-cols-[auto_1fr] gap-4">
+                <label class="label"> Tipo de Recurso: </label>
+                <select class="select select-sm"> </select>
+                <label class="label"> Recurso: </label>
+                <select class="select select-sm" name="resource"> </select>
+            </fieldset>
             <fieldset class="form-continuous-inputs">
                 <label>Disponibilidade de</label>
                 <input type="date" name="start_date">
@@ -57,22 +63,22 @@
             <fieldset class="form-continuous-inputs">
                 <label>Repetir todas as:</label>
                 <div class="join flex-wrap">
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Ter" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Qua" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Qui" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Sex" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Sáb" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Dom" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Ter" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Qua" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Qui" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Sex" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Sáb" />
+                    <input name="week" type="checkbox" class="btn btn-sm join-item" aria-label="Dom" />
                 </div>
             </fieldset>
-            <fieldset class="form-continuous-inputs">
+            <fieldset class="form-continuous-inputs [&_input]:max-w-20">
                 <label>No horário das</label>
                 <input type="time" name="start_time">
                 <label>até às</label>
                 <input type="time" name="until_time">
             </fieldset>
-            <fieldset class="form-continuous-inputs">
+            <fieldset class="form-continuous-inputs [&_input]:max-w-20">
                 <label>Dividir em sessões de</label>
                 <input type="time" name="duration_slot">
                 <label>com pausas de</label>
@@ -82,7 +88,7 @@
 
             <div class="modal-action mt-4">
                 <button type="reset" class="btn btn-ghost">Cancelar</button>
-                <button type="submit" class="btn btn-primary px-8">Confirmar Agenda</button>
+                <button type="submit" class="btn btn-primary px-8">Salvar</button>
             </div>
         </form>
 
