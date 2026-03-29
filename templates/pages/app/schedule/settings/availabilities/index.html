@@ -1,3 +1,103 @@
-<div>
-    hello
+<header class="pb-4 flex justify-between">
+    <label class="input">
+        {% include 'icons/search.svg' %}
+        <input type="search" placeholder="{% trans " Search" %}..." />
+    </label>
+    <button class="btn" onclick="id_new_availability_modal.showModal()">
+        {% include "icons/plus.svg" %}
+        {% trans "Add" %}
+    </button>
+</header>
+<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+    <table class="table">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Job</th>
+                <th>Favorite Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- row 1 -->
+            <tr>
+                <th>1</th>
+                <td>Cy Ganderton</td>
+                <td>Quality Control Specialist</td>
+                <td>Blue</td>
+            </tr>
+            <!-- row 2 -->
+            <tr>
+                <th>2</th>
+                <td>Hart Hagerty</td>
+                <td>Desktop Support Technician</td>
+                <td>Purple</td>
+            </tr>
+            <!-- row 3 -->
+            <tr>
+                <th>3</th>
+                <td>Brice Swyre</td>
+                <td>Tax Accountant</td>
+                <td>Red</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+<dialog id="id_new_availability_modal" class="modal" open>
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
+        <form onreset="id_new_availability_modal.close()">
+            <!-- GRANULARIDADE 1 por data-->
+            <fieldset>
+                <input type="date" class="input" name="start_date">
+                <input type="date" class="input" name="until_date">
+            </fieldset>
+            <!-- GRANULARIDADE 2 por hora no dia-->
+            <fieldset>
+                <input type="time" class="input" name="start_time">
+                <input type="time" class="input" name="until_time">
+            </fieldset>
+            <!-- GRANULARIDADE 3 por semana-->
+            <fieldset>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+                <label class="label">
+                    <input type="checkbox" class="checkbox">
+                    weekday
+                </label>
+            </fieldset>
+            <!-- GRANULARIDADE 4 por slots da hora-->
+            <fieldset>
+                <input type="time" class="input" name="duration_slot">
+                <input type="time" class="input" name="interfal_slot">
+            </fieldset>
+            <div class="modal-action">
+                <button type="reset" class="btn btn-outline btn-error">{% trans "Cancel" %}</button>
+                <button type="submit" class="btn btn-outline">{% trans "Save" %}</button>
+            </div>
+        </form>
+    </div>
+</dialog>
