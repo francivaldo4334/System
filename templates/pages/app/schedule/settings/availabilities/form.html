@@ -1,10 +1,7 @@
 <form onreset="id_new_availability_modal.close()" class="flex flex-col gap-6 p-4" id="id_availability_form">
     <fieldset class="grid grid-cols-[auto_1fr] gap-4">
         <label class="label" for="id_resource_type"> {%trans "Rsource Type"%}</label>
-        <select class="select select-sm" id="id_resource_type" required>
-            <option value=""> Empty </option>
-            <option value="1"> Option 1 </option>
-        </select>
+        <select class="select select-sm" id="id_resource_type" required> </select>
         <label class="label" for="id_resource"> {%trans "Resource"%}</label>
         <select class="select select-sm" name="resource" id="id_resource" required>
             <option value=""> Empty </option>
@@ -72,8 +69,53 @@
         $s.subscribe("av.start_time", id_interval_slot, "min")
         $s.subscribe("av.until_time", id_duration_slot, "max")
         $s.subscribe("av.until_time", id_interval_slot, "max")
+        $s.subscribe("av.resource_type", id_resource, null, (v) => {
+            if (!v) return
+            $q.use(
+                "resources-list",
+                ()=>fetch("{%url 'resources-list'%}").then(r => r.json()),
+                {
+                    onSuccess(data){
+                        const resourceType = data.results.find(it => String(it.id) === v)
+                        if (!resourceType) return;
+                        const frag = document.createDocumentFragment()
+                        const opt = document.createElement("option")
+                        opt.value = ""
+                        opt.innerText = "{%trans 'Select a item.'%}"
+                        frag.appendChild(opt)
+                        resourceType.childrens.forEach(item => {
+                            const opt = document.createElement("option")
+                            opt.value = item.id
+                            opt.innerText = item.name
+                            frag.appendChild(opt)
+                        })
+                        id_resource.replaceChildren(frag)
+                    }
+                }
+            )
+        })
+        $q.use(
+            "resources-list",
+            ()=>fetch("{%url 'resources-list'%}").then(r => r.json()),
+            {
+                onSuccess(data){
+                    const frag = document.createDocumentFragment()
+
+                    const opt = document.createElement("option")
+                    opt.value = ""
+                    opt.innerText = "{%trans 'Select a item.'%}"
+                    frag.appendChild(opt)
+                    data.results.forEach(item => {
+                        const opt = document.createElement("option")
+                        opt.value = item.id
+                        opt.innerText = item.name
+                        frag.appendChild(opt)
+                    })
+                    id_resource_type.replaceChildren(frag)
+                }
+            }
+        )
         id_availability_form.addEventListener("submit", el => {
             el.preventDefault();
-
         })
 </script>
