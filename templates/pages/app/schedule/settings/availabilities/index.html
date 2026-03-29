@@ -47,44 +47,44 @@
 <dialog id="id_new_availability_modal" class="modal" open>
     <div class="modal-box">
         <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
-        <form onreset="id_new_availability_modal.close()" class="flex flex-col gap-4">
-            <fieldset class="grid grid-cols-[auto_1fr_auto_1fr] gap-4">
-                <label class="label">De:</label>
-                <input type="date" class="input" name="start_date">
-                <label class="label">Até:</label>
-                <input type="date" class="input" name="until_date">
+        <form onreset="id_new_availability_modal.close()" class="flex flex-col gap-6 p-4">
+            <fieldset class="form-continuous-inputs">
+                <label>Disponibilidade de</label>
+                <input type="date" name="start_date">
+                <label>até o dia</label>
+                <input type="date" name="until_date">
             </fieldset>
-            <feldset class="flex gap-4">
-                <label class="label">
-                    Dias da Semana:
-                </label>
+            <fieldset class="form-continuous-inputs">
+                <label>Repetir todas as:</label>
                 <div class="join flex-wrap">
                     <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
-                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Ter" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Qua" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Qui" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Sex" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Sáb" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Dom" />
                 </div>
-            </feldset>
-            <fieldset class="grid grid-cols-[auto_1fr_auto_1fr] gap-4">
-                <label class="label"> Horarios de: </label>
-                <input type="time" class="input input-bordered" name="start_time">
-                <label class="label"> até ás: </label>
-                <input type="time" class="input input-bordered" name="until_time">
             </fieldset>
-            <fieldset class="grid grid-cols-[auto_1fr_auto_1fr] gap-4">
-                <label class="label"> Sessões de:</label>
-                <input type="time" class="input" name="duration_slot">
-                <label class="label"> Em intervalos de:</label>
-                <input type="time" class="input" name="interfal_slot">
+            <fieldset class="form-continuous-inputs">
+                <label>No horário das</label>
+                <input type="time" name="start_time">
+                <label>até às</label>
+                <input type="time" name="until_time">
+            </fieldset>
+            <fieldset class="form-continuous-inputs">
+                <label>Dividir em sessões de</label>
+                <input type="time" name="duration_slot">
+                <label>com pausas de</label>
+                <input type="time" name="interfal_slot">
+                <label>entre elas.</label>
             </fieldset>
 
-            <div class="modal-action">
+            <div class="modal-action mt-4">
                 <button type="reset" class="btn btn-ghost">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="submit" class="btn btn-primary px-8">Confirmar Agenda</button>
             </div>
         </form>
+
     </div>
 </dialog>

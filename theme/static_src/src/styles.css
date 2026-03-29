@@ -83,8 +83,8 @@
 
   .bg-pattern-paper {
     background-color: var(--color-base-100);
-    --_ts:var(--tab-space, 79px);
-    --_tsend:calc(var(--_ts) + 2px);
+    --_ts: var(--tab-space, 79px);
+    --_tsend: calc(var(--_ts) + 2px);
     --_lh: 1px;
     background-image: linear-gradient(90deg, transparent var(--_ts), var(--color-base-content) var(--_ts), var(--color-base-content) var(--_tsend), transparent var(--_tsend)),
       linear-gradient(var(--color-base-300) var(--_lh), transparent var(--_lh));
@@ -117,17 +117,15 @@
   }
 
   .appointment-slot {
-    @apply p-2 flex flex-col border border-dashed bg-primary/8 border-primary text-xs rounded-field 
-      [&>span]:text-primary
-      [&>span]:font-bold
-      [&>span]:block
-    ;
+    @apply p-2 flex flex-col border border-dashed bg-primary/8 border-primary text-xs rounded-field [&>span]:text-primary [&>span]:font-bold [&>span]:block;
   }
+
   .slot-time-label {
-    @apply
-      max-w-[var(--tab-space)]
-      label text-xs justify-center
-      flex items-start my-auto snap-start;
+    @apply max-w-[var(--tab-space)] label text-xs justify-center flex items-start my-auto snap-start;
+  }
+
+  .form-continuous-inputs {
+    @apply [&_input]:max-w-30 [&_input]:input [&_input]:input-sm [&_label]:label [&_label]:text-sm;
   }
 }
 
