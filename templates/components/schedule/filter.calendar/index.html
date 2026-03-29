@@ -1,7 +1,7 @@
 {% get_current_language as LANG_CODE %}
 <section class="flex flex-col gap-2 relative  h-[calc(8*2rem)]">
     <header class="flex items-center justify-between gap-2">
-        <span class="text-sm font-bold capitalize" id="id-filter-calendar-header"></span>
+        <span class="text-sm font-bold capitalize" id="id_filter_calendar_header"></span>
         <div class="flex gap-1">
             <button data-dir="-1" class="btn-filter-calendar btn btn-ghost btn-sm btn-square">
                 {% include 'icons/chevron-left.svg' %}
@@ -12,7 +12,7 @@
         </div>
     </header>
     <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase" id="calendar-weekdays"></div>
-    <c-days id="id-c-days" onchange="$s.set('filter.calendar.day', it)"></c-days>
+    <c-days id="id_calendar_days" onchange="$s.set('filter.calendar.day', it)"></c-days>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
         onclick="$s.set('filter.calendar.day', new Date().toISOString())">{% trans "Today" %}</button>
 </section>
@@ -28,20 +28,18 @@
         }
     })
     {
-        const ch = document.querySelector('#id-filter-calendar-header')
         const lang = '{{ LANG_CODE }}';
         const formatter = new Intl.DateTimeFormat(lang, {month: 'long', year: 'numeric'})
-        $s.subscribe('filter.calendar.day', ch, 'textContent', (v) => {
+        $s.subscribe('filter.calendar.day', id_filter_calendar_header, 'textContent', (v) => {
             const date = new Date(v)
             return formatter.format(date)
         })
         const date = new Date($s.get('filter.calendar.day'))
-        ch.textContent = formatter.format(date)
-        const days = document.getElementById('id-c-days')
-        $s.subscribe('filter.calendar.day', days, null, (v, el) => {
+        id_filter_calendar_header.textContent = formatter.format(date)
+        $s.subscribe('filter.calendar.day', id_calendar_days, null, (v, el) => {
             el.setAttribute('date', v)
         })
-        $s.subscribe('filter.calendar.range', days, null, (v, el)=>{
+        $s.subscribe('filter.calendar.range', id_calendar_days, null, (v, el)=>{
             el.setAttribute('range', v)
         })
     }

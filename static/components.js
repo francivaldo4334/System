@@ -31,6 +31,9 @@ createComponent('app-slot', {
 createComponent('c-days', {
   html: '<div class="calendar-grid"></div>',
   props: ['date', 'range', 'onchange'],
+  onMount() {
+    this._renderId = null;
+  },
   onUpdate(prop, value) {
     this.setAttribute(prop, value)
     const dateIso = this.getAttribute('date')
@@ -49,34 +52,62 @@ createComponent('c-days', {
       return start && end && d >= start && d <= end;
     }
   },
+
   render(date, startR, endR, onchange) {
     const grid = this.$('.calendar-grid');
+    if (this._renderId) cancelAnimationFrame(this._renderId);
     const year = date.getFullYear();
     const month = date.getMonth();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const firstDay = new Date(year, month, 1).getDay();
     const totalDays = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
-    const frag = document.createDocumentFragment();
+    grid.replaceChildren();
+    const fragInit = document.createDocumentFragment();
     for (let i = 0; i < firstDay; i++) {
-      frag.appendChild(document.createElement('div'));
+      fragInit.appendChild(document.createElement('div'));
     }
+    grid.appendChild(fragInit);
+    const btns = [];
+    const iterDate = new Date(year, month, 1);
     for (let day = 1; day <= totalDays; day++) {
-      const iterDate = new Date(year, month, day);
-      const btn = document.createElement('button');
-      btn.type = "button"
-      btn.textContent = day;
-      if (this._check(iterDate, null, 'range', startR, endR)) btn.dataset.type = 'range';
-      if (this._check(iterDate, today, 'same')) btn.dataset.type = 'today';
-      if (day === date.getDate()) btn.dataset.type = 'selected';
-      btn.onclick = () => {
-        new Function('it', onchange)(iterDate.toISOString())
-      };
-      frag.appendChild(btn);
+      iterDate.setDate(day);
+      let type = '';
+      if (this._check(iterDate, null, 'range', startR, endR)) type = 'range';
+      if (this._check(iterDate, today, 'same')) type = 'today';
+      if (day === date.getDate()) type = 'selected';
+      btns.push({
+        day,
+        type,
+        dateIso: iterDate.toISOString()
+      });
     }
+    const renderFrame = () => {
+      if (btns.length === 0) {
+        this._renderId = null;
+        return;
+      }
+      const fragment = document.createDocumentFragment();
+      const chunk = btns.splice(0, 7);
+      chunk.forEach(({ day, type, dateIso }) => {
+        const btn = document.createElement('button');
+        btn.type = "button";
+        btn.textContent = day;
+        if (type) btn.dataset.type = type;
+        btn.onclick = () => {
+          if (typeof onchange === 'function') onchange(dateIso);
+          else new Function('it', onchange)(dateIso);
+        };
 
-    grid.innerHTML = '';
-    grid.appendChild(frag);
-  },
+        fragment.appendChild(btn);
+      });
+
+      grid.appendChild(fragment);
+      this._renderId = requestAnimationFrame(renderFrame);
+    };
+
+    this._renderId = requestAnimationFrame(renderFrame);
+  }
 })
 createComponent('exec-mount', {
   base: HTMLScriptElement,

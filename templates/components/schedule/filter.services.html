@@ -1,5 +1,5 @@
-<label for="id-filter-services" class="floating-label">
-    <select class="select" id="id-filter-services" onchange="$s.set('filter.services', this.value)"> </select>
+<label for="id_filter_service" class="floating-label">
+    <select class="select" id="id_filter_service" onchange="$s.set('filter.services', this.value)"> </select>
     <span>{% trans 'Service' %}</span>
 </label>
 <script is="exec-mount" type="text/template">
@@ -8,11 +8,18 @@ $q.use(
     ()=>fetch("{% url 'services-list' %}").then(r =>r.json()),
     {
         onSuccess:(data)=> {
-            const el = document.getElementById('id-filter-services')
-            const options = data.results.map(it => 
-                `<option value="${it.id}">${it.title}</option>`
-            ).join('');
-            el.innerHTML = `<option value="">{% trans 'Show All Services' %}</option>` + options;
+            const frag = document.createDocumentFragment()
+            const options = data.results.map(it => {
+                const opt = document.createElement('option')
+                opt.value = it.id
+                opt.innerText = it.title
+                frag.appendChild(opt)
+            });
+            const opt = document.createElement('option')
+            opt.value = ""
+            opt.innerText = "{% trans 'Show All Services' %}"
+            frag.appendChild(opt)
+            id_filter_service.replaceChildren(frag)
         }
     },
 )

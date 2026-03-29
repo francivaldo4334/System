@@ -6,59 +6,78 @@
     </div>
 </div>
 <script is="exec-mount" type="text/template">
-    $q.use(
-        "assignment-meno-times",
-        () => new Promise((r) => {
-            const slotInterval = 5;
-            const totalSlots = 288;
-            let timelineHTML = '';
-            for (let i = 0; i < totalSlots; i++) {
-                const currentMinute = i * slotInterval;
-                const h = String(Math.floor(currentMinute / 60)).padStart(2, '0');
-                const m = String(currentMinute % 60).padStart(2, '0');        
-                timelineHTML += `<app-slot start="${i + 1}" duration="1" class="slot-time-label">${h}:${m}</app-slot>`;
-            }
+{
+    // 1. Limpeza de processos anteriores
+    if (window._timelineRafId) cancelAnimationFrame(window._timelineRafId);
+    
+    const slotInterval = 5;
+    const totalSlots = 288;
+    const slots = [];
+    
+    // Preparação rápida dos dados
+    for (let i = 0; i < totalSlots; i++) {
+        const currentMinute = i * slotInterval;
+        const h = String(Math.floor(currentMinute / 60)).padStart(2, '0');
+        const m = String(currentMinute % 60).padStart(2, '0');
+        slots.push({ start: i + 1, hour: `${h}:${m}` });
+    }
 
-            r(timelineHTML)
-        }),
-        {
-            onSuccess(timelineHTML){
-                id_schedule_timeline.innerHTML = timelineHTML;
-            }
-        
-        },
-        {
-            ttl: 30000
+    const render = () => {
+        // Correção do erro de digitação: length
+        if (slots.length === 0) {
+            window._timelineRafId = null;
+            return;
         }
-    )
-    $q.use(
-        "assignment-list",
-        ()=>fetch("{% url 'assignment-list'%}").then(r => r.json()).then(data => {
-                const frag = document.createDocumentFragment();
-                const format = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-                const appointmentsHTML = data.results.map(it => {
-                    const startMin = (it.start_slot - 1) * 5;
-                    const endMin = ((it.start_slot - 2) + it.duration_slot) * 5;
-                    return `
-                        <app-slot start="${it.start_slot}" duration="${it.duration_slot}" class="appointment-slot">
-                            <span>${it.service.title}</span>
-                            <div class="flex items-center gap-2">
-                                <span class="w-4">{% include 'icons/clock.svg' %}</span>
-                                <span>${format(startMin)} - ${format(endMin)}</span>
-                            </div>
-                        </app-slot>
-                    `;
-                }).join('');
-                return appointmentsHTML 
-        }),
-        {
-            onSuccess(appointmentsHTML){
-                id_schedule_timeline.querySelectorAll('.appointment-slot').forEach(e => e.remove());
-                id_schedule_timeline.insertAdjacentHTML('beforeend', appointmentsHTML);
-            }
-        },
-        {
-            ttl: 10000
+
+        // Renderiza em chunks de 10 para ser mais rápido sem travar
+        const chunk = slots.splice(0, 10);
+        const frag = document.createDocumentFragment();
+
+        chunk.forEach(({ start, hour }) => {
+            const slotEl = document.createElement('app-slot');
+            slotEl.setAttribute('start', start);
+            slotEl.setAttribute('duration', 1);
+            slotEl.classList.add('slot-time-label');
+            slotEl.innerText = hour;
+            frag.appendChild(slotEl);
+        });
+
+        if (id_schedule_timeline) {
+            id_schedule_timeline.appendChild(frag);
+            window._timelineRafId = requestAnimationFrame(render);
         }
-    )
+    };
+
+    window._timelineRafId = requestAnimationFrame(render);
+}
+
+// 2. Fetch com Cache Estratégico
+$q.use(
+    "assignment-list",
+    () => fetch("{% url 'assignment-list'%}")
+        .then(r => r.json())
+        .then(data => {
+            const format = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+            return data.results.map(it => {
+                const startMin = (it.start_slot - 1) * 5;
+                const endMin = ((it.start_slot - 2) + it.duration_slot) * 5;
+                return `
+                    <app-slot start="${it.start_slot}" duration="${it.duration_slot}" class="appointment-slot">
+                        <span>${it.service.title}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="w-4">{% include 'icons/clock.svg' %}</span>
+                            <span>${format(startMin)} - ${format(endMin)}</span>
+                        </div>
+                    </app-slot>`;
+            }).join('');
+        }),
+    {
+        onSuccess(appointmentsHTML) {
+            if (!id_schedule_timeline) return;
+            id_schedule_timeline.querySelectorAll('.appointment-slot').forEach(e => e.remove());
+            id_schedule_timeline.insertAdjacentHTML('beforeend', appointmentsHTML);
+        }
+    },
+    { ttl: 10000 }
+);
 </script>

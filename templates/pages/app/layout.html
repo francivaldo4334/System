@@ -58,13 +58,14 @@
                     headers: {
                         "Ajax-Request": 'true'
                     }
-                }).then(r => {
-                    history.pushState({}, "", el.dataset.url + location.search)
-                    return r.text()
-                }),
+                }).then(r => r.text()),
                 {
                     onSuccess(data) {
-                        id_app_content.innerHTML = data
+                        history.pushState({}, "", el.dataset.url + location.search)
+                        const range = document.createRange();
+                        const frag = range.createContextualFragment(data)
+                        //id_app_content.innerHTML = data
+                        id_app_content.replaceChildren(frag)
                         $s.set("app-menu.selected", el.dataset.urlName)
                     }
                 },
