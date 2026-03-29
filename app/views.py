@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
@@ -37,3 +36,18 @@ class AppScheduleView(AppView):
 
 class AppScheduleSettingsView(AppView):
     template_name = 'pages/app/schedule/settings/index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'setting_tag_selected': 'app-schedule-settings-availabilities',
+            'setting_tabs': [
+                {
+                    'label': _("Availabilities"),
+                    'url_name': 'app-schedule-settings-availabilities',
+                }
+            ]
+        })
+        return context
+
+class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
+    template_name="pages/app/schedule/settings/availabilities/index.html"

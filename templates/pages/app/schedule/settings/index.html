@@ -3,17 +3,38 @@
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
 <section class="w-full flex">
     <main class="min-w-[1080px] mx-auto">
-        <div class="tabs tabs-border p-4">
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{%trans " Availabilities"%}" />
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="item 1" />
+        <div class="tabs tabs-border p-4" id="id_schedule_settings_tabs">
+            {%for opt in setting_tabs%}
+            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{%trans " Availabilities"%}"
+                data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />
+            {%endfor%}
         </div>
         <div id="id_schedule_settings_content">
         </div>
     </main>
 </section>
+<script is="exec-mount" type="pass">
+$s.create("settings.tab", "{{setting_tag_selected}}")
+id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
+    item.onclick = () => {
+        $q.use(item.dataset.urlName, () => fetch(item.dataset.url).then(r => r.text()), {
+            onSuccess(html){
+                id_schedule_settings_content.innerHTML = html
+            }
+        })
+    }
+    $s.subscribe("settings.tab", item, "checked", (v, el) => {
+        const isSelected = v === el.dataset.urlName
+        el.disabled = isSelected
+        return isSelected
+    })
+    $q.use("{{setting_tag_selected}}", () => fetch("{%url setting_tag_selected%}").then(r => r.text()), {
+        onSuccess(html){
+            id_schedule_settings_content.innerHTML = html
+        }
+    })
+})
+</script>
 {% endpartialdef %}
 {% block section %}
 {% partial main %}
