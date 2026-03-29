@@ -1,12 +1,10 @@
-<div id="id_filter_resource_set" class="flex gap-4">
-</div>
+<div id="id_filter_resource_set" class="flex gap-4 flex-wrap"> </div>
 <script is="exec-mount" type="text/template">
 $q.use(
     'resources-list',
     ()=>fetch("{% url 'resources-list' %}").then(r => r.json()),
     {
         onSuccess:(data)=> {
-        debugger
             const frag = document.createDocumentFragment()
             data.results.forEach(item => {
                 const elId = `id_filter_resource_${item.code}`
