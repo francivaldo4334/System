@@ -47,56 +47,43 @@
 <dialog id="id_new_availability_modal" class="modal" open>
     <div class="modal-box">
         <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
-        <form onreset="id_new_availability_modal.close()">
-            <!-- GRANULARIDADE 1 por data-->
-            <fieldset>
+        <form onreset="id_new_availability_modal.close()" class="flex flex-col gap-4">
+            <fieldset class="grid grid-cols-[auto_1fr_auto_1fr] gap-4">
+                <label class="label">De:</label>
                 <input type="date" class="input" name="start_date">
+                <label class="label">Até:</label>
                 <input type="date" class="input" name="until_date">
             </fieldset>
-            <!-- GRANULARIDADE 2 por hora no dia-->
-            <fieldset>
-                <input type="time" class="input" name="start_time">
-                <input type="time" class="input" name="until_time">
+            <feldset class="flex gap-4">
+                <label class="label">
+                    Dias da Semana:
+                </label>
+                <div class="join flex-wrap">
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                    <input type="checkbox" class="btn btn-sm join-item" aria-label="Seg" />
+                </div>
+            </feldset>
+            <fieldset class="grid grid-cols-[auto_1fr_auto_1fr] gap-4">
+                <label class="label"> Horarios de: </label>
+                <input type="time" class="input input-bordered" name="start_time">
+                <label class="label"> até ás: </label>
+                <input type="time" class="input input-bordered" name="until_time">
             </fieldset>
-            <!-- GRANULARIDADE 3 por semana-->
-            <fieldset>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-                <label class="label">
-                    <input type="checkbox" class="checkbox">
-                    weekday
-                </label>
-            </fieldset>
-            <!-- GRANULARIDADE 4 por slots da hora-->
-            <fieldset>
+            <fieldset class="grid grid-cols-[auto_1fr_auto_1fr] gap-4">
+                <label class="label"> Sessões de:</label>
                 <input type="time" class="input" name="duration_slot">
+                <label class="label"> Em intervalos de:</label>
                 <input type="time" class="input" name="interfal_slot">
             </fieldset>
+
             <div class="modal-action">
-                <button type="reset" class="btn btn-outline btn-error">{% trans "Cancel" %}</button>
-                <button type="submit" class="btn btn-outline">{% trans "Save" %}</button>
+                <button type="reset" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
             </div>
         </form>
     </div>
