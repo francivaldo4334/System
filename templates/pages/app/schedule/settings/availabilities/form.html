@@ -1,117 +1,14 @@
-<form onreset="id_new_availability_modal.close()" class="flex flex-col gap-6 p-4" id="id_availability_form">
-    <fieldset class="grid grid-cols-[auto_1fr] gap-4">
-        <label class="label" for="id_resource_type"> {%trans "Rsource Type"%}</label>
-        <select class="select select-sm" id="id_resource_type" required> </select>
-        <label class="label" for="id_resource"> {%trans "Resource"%}</label>
-        <select class="select select-sm" name="resource" id="id_resource" required> </select>
-    </fieldset>
-    <fieldset class="form-continuous-inputs">
-        <label for="id_start_date">{%trans "Availability from"%}</label>
-        <input type="date" name="start_date" id="id_start_date" required value="{%now 'Y-m-d'%}" />
-        <label for="id_until_date">{%trans "to"%}</label>
-        <input type="date" name="until_date" id="id_until_date" required value="{%now 'Y-m-d'%}" min="{now 'Y-m-d'}" />
-    </fieldset>
-    <fieldset class="form-continuous-inputs">
-        <label>{%trans "Repeat every"%}</label>
-        <div class="join flex-wrap" id="id_week">
-            <input value="1" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Mon'%}"
-                checked />
-            <input value="2" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Tue'%}"
-                checked />
-            <input value="3" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Wed'%}"
-                checked />
-            <input value="4" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Thu'%}"
-                checked />
-            <input value="5" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Fri'%}"
-                checked />
-            <input value="6" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Sat'%}" />
-            <input value="7" name="week" type="checkbox" class="btn btn-sm join-item" aria-label="{%trans 'Sun'%}" />
-        </div>
-    </fieldset>
-    <fieldset class="form-continuous-inputs [&_input]:max-w-20">
-        <label for="id_start_time">{%trans "Between"%}</label>
-        <input type="time" name="start_time" id="id_start_time" step="300" required value="08:00">
-        <label for="id_until_time">{%trans "and"%}</label>
-        <input type="time" name="until_time" id="id_until_time" step="300" required value="17:00" min="08:00">
-    </fieldset>
-    <fieldset class="form-continuous-inputs [&_input]:max-w-20">
-        <label for="id_duration_slot">{%trans "Divide into sessions of"%}</label>
-        <input type="time" name="duration_slot" id="id_duration_slot" required value="00:30">
-        <label for="id_interval_slot">{%trans "with breaks of"%}</label>
-        <input type="time" name="interval_slot" id="id_interval_slot" required value="00:10">
-        <label>{%trans "between them."%}</label>
-    </fieldset>
-
+<form onreset="id_new_availability_modal.close()" class="" id="id_availability_form">
+    <section class="grid grid-cols-2">
+        {%include "pages/app/schedule/settings/availabilities/form.fields.html"%}
+        {%include "pages/app/schedule/settings/availabilities/form.preview.html"%}
+    </section>
     <div class="modal-action mt-4">
         <button type="reset" class="btn btn-ghost">{%trans "Cancel"%}</button>
         <button type="submit" class="btn btn-primary px-8">{%trans "Save"%}</button>
     </div>
 </form>
-<script is="exec-umount" type="pass">
-        $s.remove("av")
-        </script>
 <script is="exec-mount" type="pass">
-        $s.createStore("av", {
-            resource_type: "",
-            start_date: "",
-            start_time: "",
-        })
-        id_resource_type.onchange = () => $s.set("av.resource_type", id_resource_type.value)
-        id_start_date.onchange = () => $s.set("av.start_date", id_start_date.value)
-        id_start_time.onchange = () => $s.set("av.start_time", id_start_time.value)
-        $s.subscribe("av.resource_type", id_resource, "disabled", (v) => !v)
-        $s.subscribe("av.start_date", id_until_date, "min")
-        $s.subscribe("av.start_time", id_until_time, "min")
-        $s.subscribe("av.start_time", id_duration_slot, "min")
-        $s.subscribe("av.start_time", id_interval_slot, "min")
-        $s.subscribe("av.until_time", id_duration_slot, "max")
-        $s.subscribe("av.until_time", id_interval_slot, "max")
-        $s.subscribe("av.resource_type", id_resource, null, (v) => {
-            if (!v) return
-            $q.use(
-                "resources-list",
-                ()=>fetch("{%url 'resources-list'%}").then(r => r.json()),
-                {
-                    onSuccess(data){
-                        const resourceType = data.results.find(it => String(it.id) === v)
-                        if (!resourceType) return;
-                        const frag = document.createDocumentFragment()
-                        const opt = document.createElement("option")
-                        opt.value = ""
-                        opt.innerText = "{%trans 'Select a item.'%}"
-                        frag.appendChild(opt)
-                        resourceType.childrens.forEach(item => {
-                            const opt = document.createElement("option")
-                            opt.value = item.id
-                            opt.innerText = item.name
-                            frag.appendChild(opt)
-                        })
-                        id_resource.replaceChildren(frag)
-                    }
-                }
-            )
-        })
-        $q.use(
-            "resources-list",
-            ()=>fetch("{%url 'resources-list'%}").then(r => r.json()),
-            {
-                onSuccess(data){
-                    const frag = document.createDocumentFragment()
-
-                    const opt = document.createElement("option")
-                    opt.value = ""
-                    opt.innerText = "{%trans 'Select a item.'%}"
-                    frag.appendChild(opt)
-                    data.results.forEach(item => {
-                        const opt = document.createElement("option")
-                        opt.value = item.id
-                        opt.innerText = item.name
-                        frag.appendChild(opt)
-                    })
-                    id_resource_type.replaceChildren(frag)
-                }
-            }
-        )
         id_availability_form.addEventListener("submit", el => {
             el.preventDefault();
             const formData = new FormData(id_availability_form)
