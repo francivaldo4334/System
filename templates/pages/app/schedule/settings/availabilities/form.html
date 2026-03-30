@@ -21,6 +21,7 @@
                 const date = input.start_date.replace(/-/g, "");
                 const startTime = input.start_time.replace(":", "") + "00";
                 const untilTime = input.until_time.replace(":", "") + "00";
+                const description = input.description
                 const duration = getSlotOfFive(input.duration_slot)
                 const interval = getSlotOfFive(input.interval_slot)
                 const intervalRrule = (duration + interval) * 5
@@ -30,6 +31,7 @@
                     valid_until: input.until_date,
                     duration_slot: duration,
                     interval_slot: interval,
+                    description,
                 };
             }
             $q.use(

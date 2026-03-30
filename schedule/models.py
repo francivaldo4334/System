@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
 from django.db.models.functions import Concat, Substr
-from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
+from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import MINUTELY, rrulestr, rruleset
 from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
@@ -68,7 +68,7 @@ def rrule_validator(value):
     except Exception as e:
         raise ValidationError(f"Erro na regra de recorrência: {e}")
 
-class Availability(TimeStampedModel, ActivatorModel):
+class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     rrule_params = models.CharField(validators=[rrule_validator])

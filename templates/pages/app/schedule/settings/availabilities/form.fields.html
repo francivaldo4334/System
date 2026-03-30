@@ -41,7 +41,11 @@
         <input type="time" name="interval_slot" id="id_interval_slot" required value="00:10">
         <label>{%trans "between them."%}</label>
     </fieldset>
-
+    <label class="label text-sm">
+        <span>{%trans "Description"%}</span>
+        <textarea class="textarea" name="description">
+        </textarea>
+    </label>
 </section>
 <script is="exec-umount" type="pass">
         $s.remove("av")
