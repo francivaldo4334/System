@@ -21,9 +21,10 @@ const queryCacheFactory = () => {
     } = callbacks;
     const {
       ttl = 5000,
-      refetchOnFocus = false
+      refetchOnFocus = false,
+      enableRefetch = false,
     } = options;
-    if (refetchOnFocus) {
+    if (refetchOnFocus || enableRefetch) {
       _watchedQueries.set(queryKey, { queryFn, callbacks, options });
     }
 

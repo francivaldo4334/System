@@ -58,10 +58,11 @@ $q.use(
                 }
 
             }
+            id_availability_table_body.innerHTML = ""
             window._tableRafId = requestAnimationFrame(render);
         }
     },
-    { ttl: 0}
+    { ttl: 0, enableRefetch: true}
 )
 </script>
 <dialog id="id_new_availability_modal" class="modal">
