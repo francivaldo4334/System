@@ -12,6 +12,7 @@
 {% block header%}
 <script src="{% static 'state.js' %}"></script>
 <script src="{% static 'query-manager.js' %}"></script>
+<script src="{% static 'request-manager.js' %}"></script>
 {%endblock%}
 {%with app_url_name=request.resolver_match.url_name%}
 {% block body %}

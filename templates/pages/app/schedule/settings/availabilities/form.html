@@ -32,7 +32,21 @@
                     interval_slot: interval,
                 };
             }
-
-            console.log(parse(data))
+            $q.use(
+                "availabilities-create",
+                ()=>$r.post(
+                    "{%url 'availabilities-list'%}",
+                    parse(data),
+                    { "X-CSRFToken": "{{csrf_token}}" }
+                ),
+                {
+                    onSuccess(data){
+                        console.log(data)
+                    },
+                    onError(err){
+                        console.log(err)
+                    }
+                }
+            )
         })
 </script>
