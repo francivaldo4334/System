@@ -8,39 +8,61 @@
         {% trans "Add" %}
     </button>
 </header>
-<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{%trans 'Resources'%}</th>
-                <th>{%trans 'Valid From'%}</th>
-                <th>{%trans 'Valid Until'%}</th>
-                <th>{%trans 'Description'%}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-            </tr>
-            <tr>
-                <th>2</th>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-            </tr>
-            <tr>
-                <th>3</th>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<table class="table table-zebra">
+    <thead>
+        <tr>
+            <th></th>
+            <th>{%trans 'Resources'%}</th>
+            <th>{%trans 'Valid From'%}</th>
+            <th>{%trans 'Valid Until'%}</th>
+            <th>{%trans 'Description'%}</th>
+        </tr>
+    </thead>
+    <tbody id="id_availability_table_body">
+    </tbody>
+</table>
+<script is="exec-mount" type="pass">
+$q.use(
+    "availabilities-list",
+    () => $r.get("{%url 'availabilities-list'%}"),
+    {
+        onSuccess(data){
+            if (window._tableRafId) cancelAnimationFrame(window._tableRafId);
+            const items = data.results
+            const render = () => {
+                if (items.length == 0) {
+                    window._tableRafId = null;
+                    return;
+                }
+                const chunk = items.splice(0, 10);
+                const frag = document.createDocumentFragment();
+                chunk.forEach(({
+                    resource,
+                    description,
+                    valid_from,
+                    valid_until,
+                }) => {
+                    const tr = document.createElement('tr')
+                    tr.innerHTML = `
+                        <th></th>
+                        <td>${resource}</td>
+                        <td>${valid_from}</td>
+                        <td>${valid_until}</td>
+                        <td>${description || ''}</td>
+                    `;
+                    frag.appendChild(tr)
+                })
+                if (id_availability_table_body){
+                    id_availability_table_body.appendChild(frag)
+                    window._tableRafId = requestAnimationFrame(render);
+                }
+
+            }
+            window._tableRafId = requestAnimationFrame(render);
+        }
+    }    
+)
+</script>
 <dialog id="id_new_availability_modal" class="modal">
     <div class="modal-box">
         <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
