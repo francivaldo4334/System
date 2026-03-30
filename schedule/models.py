@@ -82,8 +82,8 @@ class Availability(TimeStampedModel, ActivatorModel):
         r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
         dtstart = r._dtstart
         interval_rrule = r._interval
-        print("HERE",interval_rrule, self.duration_slot, self.interval_slot)
-        if interval_rrule != self.duration_slot + self.interval_slot: # type: ignore
+        interval_in_minutes = (self.duration_slot + self.interval_slot) * 5# type: ignore
+        if interval_rrule != interval_in_minutes:
             raise ValidationError("O INTERVAL da RRULE não pode ser menor que a duração do slot.")
         self.valid_from = dtstart.date()
 
