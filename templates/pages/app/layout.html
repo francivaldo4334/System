@@ -43,7 +43,7 @@
 {% block scripts %}
 <script>
     $s.createStore('app-menu', {
-        selected: "{{ request.resolver_match.url_name|default:default_url_name }}"
+        selected: "{{ default_url_name|default:request.resolver_match.url_name }}"
     })
     document.querySelectorAll('.app-menu-option').forEach(el => {
         $s.subscribe("app-menu.selected", el, null, (value, currentEl) => {

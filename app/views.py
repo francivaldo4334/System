@@ -10,7 +10,6 @@ class AppView(LoginRequiredMixin,TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'default_url_name': 'app-schedule',
             'app_template_name_options': [
                 {
                     'url_name': 'app-schedule',
