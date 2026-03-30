@@ -1,8 +1,5 @@
 <form onreset="id_new_availability_modal.close()" class="" id="id_availability_form">
-    <section class="grid grid-cols-2">
-        {%include "pages/app/schedule/settings/availabilities/form.fields.html"%}
-        {%include "pages/app/schedule/settings/availabilities/form.preview.html"%}
-    </section>
+    {%include "pages/app/schedule/settings/availabilities/form.fields.html"%}
     <div class="modal-action mt-4">
         <button type="reset" class="btn btn-ghost">{%trans "Cancel"%}</button>
         <button type="submit" class="btn btn-primary px-8">{%trans "Save"%}</button>
