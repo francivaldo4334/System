@@ -1,73 +1,37 @@
-<header class="pb-4 flex justify-between">
-    <label class="input">
-        {% include 'icons/search.svg' %}
-        <input type="search" placeholder="{% trans " Search" %}..." />
-    </label>
-    <button class="btn" onclick="id_new_availability_modal.showModal()">
-        {% include "icons/plus.svg" %}
-        {% trans "Add" %}
-    </button>
-</header>
-<table class="table table-zebra">
-    <thead>
-        <tr>
-            <th></th>
-            <th>{%trans 'Resources'%}</th>
-            <th>{%trans 'Valid From'%}</th>
-            <th>{%trans 'Valid Until'%}</th>
-            <th>{%trans 'Description'%}</th>
-        </tr>
-    </thead>
-    <tbody id="id_availability_table_body">
-    </tbody>
-</table>
+{%extends "layouts/crud.html"%}
+{%block header%}
+<label class="input">
+    {% include 'icons/search.svg' %}
+    <input type="search" placeholder="{% trans " Search" %}..." />
+</label>
+{%endblock%}
+{%block table_thead%}
+<tr>
+    <th></th>
+    <th>{%trans 'Resources'%}</th>
+    <th>{%trans 'Valid From'%}</th>
+    <th>{%trans 'Valid Until'%}</th>
+    <th>{%trans 'Description'%}</th>
+</tr>
+{%endblock%}
+{%block modal_box%}
+<div class="modal-box">
+    <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
+    {%include "pages/app/schedule/settings/availabilities/form.html"%}
+</div>
+{%endblock%}
+{%block render_child%}
 <script is="exec-mount" type="pass">
-$q.use(
-    "availabilities-list",
-    () => $r.get("{%url 'availabilities-list'%}"),
-    {
-        onSuccess(data){
-            if (window._tableRafId) cancelAnimationFrame(window._tableRafId);
-            const items = data.results
-            const render = () => {
-                if (items.length == 0) {
-                    window._tableRafId = null;
-                    return;
-                }
-                const chunk = items.splice(0, 10);
-                const frag = document.createDocumentFragment();
-                chunk.forEach(({
-                    resource,
-                    description,
-                    valid_from,
-                    valid_until,
-                }) => {
-                    const tr = document.createElement('tr')
-                    tr.innerHTML = `
-                        <th></th>
-                        <td>${resource}</td>
-                        <td>${valid_from}</td>
-                        <td>${valid_until}</td>
-                        <td>${description || ''}</td>
-                    `;
-                    frag.appendChild(tr)
-                })
-                if (id_availability_table_body){
-                    id_availability_table_body.appendChild(frag)
-                    window._tableRafId = requestAnimationFrame(render);
-                }
-
-            }
-            id_availability_table_body.innerHTML = ""
-            window._tableRafId = requestAnimationFrame(render);
-        }
-    },
-    { ttl: 0, enableRefetch: true}
-)
+    const renderChild = () => {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+            <th></th>
+            <td>${resource}</td>
+            <td>${valid_from}</td>
+            <td>${valid_until}</td>
+            <td>${description || ''}</td>
+        `;
+        return tr
+    }
 </script>
-<dialog id="id_new_availability_modal" class="modal">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">{% trans "New Availability" %}</h3>
-        {%include "pages/app/schedule/settings/availabilities/form.html"%}
-    </div>
-</dialog>
+{%endblock%}

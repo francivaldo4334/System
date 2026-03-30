@@ -1,0 +1,12 @@
+{%extends "components/form/fields/base.html"%}
+{%block field%}
+<div class="flex flex-wrap gap-2" id="{{field.id}}" {{field.attrs}}>
+    {%for option in field.options%}
+    <label class="label">
+        <input type="checkbox" class="checkbox checkbox-primary" name="{{field.name}}" value="{{option.value}}"
+            {{option.attrs}} />
+        {{option.label}}
+    </label>
+    {%endfor%}
+</div>
+{%endblock%}

@@ -1,0 +1,4 @@
+{%extends "components/form/fields/base.html"%}
+{%block field%}
+<input type="time" step="{{field.step}}" class="input" id="{{field.id}}" name="{{field.name}}" {{field.attrs}} />
+{%endblock%}
