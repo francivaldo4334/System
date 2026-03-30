@@ -43,7 +43,8 @@
                 ),
                 {
                     onSuccess(data){
-                        console.log(data)
+                        id_new_availability_modal.close()
+                        $q.refetch('availabilities-list')
                     },
                     onError(err){
                         console.error(err)
