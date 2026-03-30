@@ -69,4 +69,8 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             "duration_slot",
             "interval_slot",
             "valid_until",
+            "valid_from",
+        ]
+        read_only_fields = [
+            "valid_from",
         ]

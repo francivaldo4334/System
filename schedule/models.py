@@ -72,7 +72,7 @@ class Availability(TimeStampedModel, ActivatorModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     rrule_params = models.CharField(validators=[rrule_validator])
-    valid_from = models.DateField(editable=False)
+    valid_from = models.DateField()
     valid_until = models.DateField(null=True, blank=True)
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
