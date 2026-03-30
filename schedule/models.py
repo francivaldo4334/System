@@ -8,7 +8,7 @@ from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
 from django.db.models.functions import Concat, Substr
 from core.models import ActivatorModel, CreatedByModel, TimeStampedModel, TitleDescriptionModel
-from dateutil.rrule import rrulestr, rruleset
+from dateutil.rrule import MINUTELY, rrulestr, rruleset
 from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
 
@@ -52,36 +52,39 @@ class ServiceResourceRelation(models.Model):
     quantity = models.PositiveIntegerField()
 
 
-    
+# pyright: reportAttributeAccessIssue=false
 def rrule_validator(value):
-    if not value:
-        return
-    if "DTSTART" not in value.upper():
-        raise ValidationError(_("Enter a valid value."))
-    if "UNTIL" not in value.upper():
-        raise ValidationError(_("Enter a valid value."))
     try:
-        rrulestr(value)
+        rule_obj = rrulestr(value)
+        r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
+        if r._freq != MINUTELY:
+            raise ValidationError("A FREQ deve ser MINUTELY.")
+        if r._dtstart.date() != r._until.date():
+            raise ValidationError("DTSTART e UNTIL devem estar no mesmo dia.")
+        if r._dtstart.minute % 5 != 0 or r._until.minute % 5 != 0:
+            raise ValidationError("Os horários devem ser múltiplos de 5 minutos.")
+        if "_interval" not in r.__dict__ or r._interval <= 1:
+             raise ValidationError("O INTERVAL deve ser definido e maior que 1 (Soma de duração + gap).")
     except Exception as e:
-        raise ValidationError(_("Enter a valid value."))
+        raise ValidationError(f"Erro na regra de recorrência: {e}")
 
 class Availability(TimeStampedModel, ActivatorModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     rrule_params = models.CharField(validators=[rrule_validator])
     valid_from = models.DateField(editable=False)
-    valid_until = models.DateField(editable=False)
-    start_slot = models.PositiveSmallIntegerField(editable=False)
+    valid_until = models.DateField(editable=False, null=True, blank=True)
     duration_slot = models.PositiveSmallIntegerField()
+    interval_slot = models.PositiveSmallIntegerField(editable=False)
 
     def save(self, *args, **kwargs):
-        rule:rruleset = rrulestr(self.rrule_params)
-        dtstart = getattr(rule,'_dtstart')
-        until = getattr(rule, '_until')
-
+        rule_obj = rrulestr(self.rrule_params)
+        r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
+        dtstart = r._dtstart
+        interval_rrule = r._interval
+        if interval_rrule != self.duration_slot + self.interval_slot: # type: ignore
+            raise ValidationError("O INTERVAL da RRULE não pode ser menor que a duração do slot.")
         self.valid_from = dtstart.date()
-        self.valid_until = until.date()
-        self.start_slot = (dtstart.hour * 60 + dtstart.minute) // 5
         return super().save(*args, **kwargs)
 
 
