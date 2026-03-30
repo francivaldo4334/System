@@ -63,6 +63,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = [
+            "id",
             "resource",
             "rrule_params",
             "duration_slot",
