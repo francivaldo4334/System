@@ -75,17 +75,17 @@ class Availability(TimeStampedModel, ActivatorModel):
     valid_from = models.DateField(editable=False)
     valid_until = models.DateField(editable=False, null=True, blank=True)
     duration_slot = models.PositiveSmallIntegerField()
-    interval_slot = models.PositiveSmallIntegerField(editable=False)
+    interval_slot = models.PositiveSmallIntegerField()
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         rule_obj = rrulestr(self.rrule_params)
         r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
         dtstart = r._dtstart
         interval_rrule = r._interval
+        print("HERE",interval_rrule, self.duration_slot, self.interval_slot)
         if interval_rrule != self.duration_slot + self.interval_slot: # type: ignore
             raise ValidationError("O INTERVAL da RRULE não pode ser menor que a duração do slot.")
         self.valid_from = dtstart.date()
-        return super().save(*args, **kwargs)
 
 
 class ResourceOccupation(models.Model):

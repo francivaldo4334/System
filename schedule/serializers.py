@@ -66,13 +66,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             "resource",
             "rrule_params",
             "duration_slot",
-
-            "valid_from",
+            "interval_slot",
             "valid_until",
-            "start_slot",
-        ]
-        read_only_fields = [
-            "valid_from",
-            "valid_until",
-            "start_slot",
         ]

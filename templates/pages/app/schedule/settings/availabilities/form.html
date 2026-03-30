@@ -15,19 +15,19 @@
                 const [hours, minutes] = value.split(":").map(Number);
                 return Math.floor(((hours * 60) + minutes)/5);
             }
-             function parse(input) {
+            const parse = (input) => {
                 const dayMap = { "1": "MO", "2": "TU", "3": "WE", "4": "TH", "5": "FR", "6": "SA", "7": "SU" };
                 const days = input.week.map(d => dayMap[d]).join(",");
-                const startDate = input.start_date.replace(/-/g, "");
-                const untilDate = input.until_date.replace(/-/g, "");
+                const date = input.start_date.replace(/-/g, "");
                 const startTime = input.start_time.replace(":", "") + "00";
                 const untilTime = input.until_time.replace(":", "") + "00";
-                const duration = getTimeInMinutes(input.duration_slot)
-                const interval = getTimeInMinutes(input.interval_slot)
+                const duration = getSlotOfFive(input.duration_slot)
+                const interval = getSlotOfFive(input.interval_slot)
                 const intervalRrule = (duration + interval) * 5
                 return {
                     resource: parseInt(input.resource, 10),
-                    rrule_params: `DTSTART:${startDate}T${startTime}\nRRULE:FREQ=MINUTELY;UNTIL=${untilDate}T${untilTime};INTERVAL=${intervalRrule};BYDAY=${days}`,
+                    rrule_params: `DTSTART:${date}T${startTime}\nRRULE:FREQ=MINUTELY;UNTIL=${date}T${untilTime};INTERVAL=${intervalRrule};BYDAY=${days}`,
+                    valid_until: input.until_date,
                     duration_slot: duration,
                     interval_slot: interval,
                 };
