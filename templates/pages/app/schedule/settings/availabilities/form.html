@@ -11,20 +11,25 @@
             const formData = new FormData(id_availability_form)
             const data = Object.fromEntries(formData.entries())
             data.week = formData.getAll('week')
-            function parse(input) {
+            const getSlotOfFive = (value) => {
+                const [hours, minutes] = value.split(":").map(Number);
+                return Math.floor(((hours * 60) + minutes)/5);
+            }
+             function parse(input) {
                 const dayMap = { "1": "MO", "2": "TU", "3": "WE", "4": "TH", "5": "FR", "6": "SA", "7": "SU" };
                 const days = input.week.map(d => dayMap[d]).join(",");
                 const startDate = input.start_date.replace(/-/g, "");
                 const untilDate = input.until_date.replace(/-/g, "");
                 const startTime = input.start_time.replace(":", "") + "00";
                 const untilTime = input.until_time.replace(":", "") + "00";
-                const [hours, minutes] = input.duration_slot.split(":").map(Number);
-                const totalMinutes = (hours * 60) + minutes;
-                const slotsOfFive = Math.floor(totalMinutes / 5);
+                const duration = getTimeInMinutes(input.duration_slot)
+                const interval = getTimeInMinutes(input.interval_slot)
+                const intervalRrule = (duration + interval) * 5
                 return {
                     resource: parseInt(input.resource, 10),
-                    rrule_params: `DTSTART:${startDate}T${startTime}\nRRULE:FREQ=WEEKLY;BYDAY=${days};UNTIL=${untilDate}T${untilTime}`,
-                    duration_slot: slotsOfFive
+                    rrule_params: `DTSTART:${startDate}T${startTime}\nRRULE:FREQ=MINUTELY;UNTIL=${untilDate}T${untilTime};INTERVAL=${intervalRrule};BYDAY=${days}`,
+                    duration_slot: duration,
+                    interval_slot: interval,
                 };
             }
 
