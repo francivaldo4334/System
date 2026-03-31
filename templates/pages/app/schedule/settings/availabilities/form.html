@@ -13,13 +13,29 @@
     })
     Array.from(id_availability_form.elements).forEach(el => {
         const state = $s.get(`av.${el.name}`)
-        if (!state) return;
-        el.onchange = () => { $s.set(`av.${el.name}`, el.value) }
+        if (state == null) return;
+        el.onchange = () => {
+            $s.set(`av.${el.name}`, el.value)
+        }
     })
     const FieldStrategies = {
         resource_type: (value, state) => {
-            console.log("ok")
-        }
+            $q.use( "resources-list", ()=> $r.get("{% url 'resources-list' %}"), {
+                onSuccess(data){
+                    if (!id_resource_type.value) return
+                    const items = data.results.find(it => String(it.id) === id_resource_type.value)?.childrens;
+                    $u.renderList("{{id}}",id_resource, [
+                        {id:"", label: "{%trans 'Select a value.'%}"},
+                        ...items
+                    ], (it)=>{
+                        const opt = document.createElement("option")
+                        opt.value = it.id;
+                        opt.innerText = it.label||"";
+                        return opt
+                    })
+                    id_resource.disabled = false
+                }
+        } ) }
     }
     $s.subscribe("av.*", null, null, (value,_,name) => {
         const field = name.split(".")[1]
