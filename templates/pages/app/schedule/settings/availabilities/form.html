@@ -1,7 +1,7 @@
 {%include 'components/form/index.html'%}
 <div class="modal-action mt-4">
     <button class="btn btn-ghost" onclick="id_availability_form.reset();availabilities_modal.close()">{%trans "Cancel"%}</button>
-    <button class="btn btn-primary px-8" onclick="id_availability_form.submit()">{%trans "Save"%}</button>
+    <button class="btn btn-primary px-8" onclick="id_availability_form.requestSubmit()">{%trans "Save"%}</button>
 </div>
 
 <script is="exec-umount" type="pass">
@@ -45,7 +45,7 @@
     })
 }</script>
 <script is="exec-mount" type="pass">
-        id_availability_form.addEventListener("submit", el => {
+        availabilities_form.addEventListener("submit", el => {
             el.preventDefault();
             const formData = new FormData(id_availability_form)
             const data = Object.fromEntries(formData.entries())
