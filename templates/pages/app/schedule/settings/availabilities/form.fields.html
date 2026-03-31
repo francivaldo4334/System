@@ -1,73 +1,21 @@
 <section class="grid grid-cols-[auto_1fr] gap-3 p-3">
-    {% for field in form.fields %}
-    {% with template_path="components/form/fields/"|add:field.type|add:".html" %}
-    {% include template_path with field=field %}
-    {% endwith %}
-    {% endfor %}
 </section>
 <script is="exec-umount" type="pass">
         $s.remove("av")
-        </script>
-<script is="exec-mount" type="pass">
-        $s.createStore("av", {
-            resource_type: "",
-            start_date: "",
-            start_time: "",
-        })
-        id_resource_type.onchange = () => $s.set("av.resource_type", id_resource_type.value)
-        id_start_date.onchange = () => $s.set("av.start_date", id_start_date.value)
-        id_start_time.onchange = () => $s.set("av.start_time", id_start_time.value)
-        $s.subscribe("av.resource_type", id_resource, "disabled", (v) => !v)
-        $s.subscribe("av.start_date", id_until_date, "min")
-        $s.subscribe("av.start_time", id_until_time, "min")
-        $s.subscribe("av.start_time", id_duration_slot, "min")
-        $s.subscribe("av.start_time", id_interval_slot, "min")
-        $s.subscribe("av.until_time", id_duration_slot, "max")
-        $s.subscribe("av.until_time", id_interval_slot, "max")
-        $s.subscribe("av.resource_type", id_resource, null, (v) => {
-            if (!v) return
-            $q.use(
-                "resources-list",
-                ()=>fetch("{%url 'resources-list'%}").then(r => r.json()),
-                {
-                    onSuccess(data){
-                        const resourceType = data.results.find(it => String(it.id) === v)
-                        if (!resourceType) return;
-                        const frag = document.createDocumentFragment()
-                        const opt = document.createElement("option")
-                        opt.value = ""
-                        opt.innerText = "{%trans 'Select a item.'%}"
-                        frag.appendChild(opt)
-                        resourceType.childrens.forEach(item => {
-                            const opt = document.createElement("option")
-                            opt.value = item.id
-                            opt.innerText = item.name
-                            frag.appendChild(opt)
-                        })
-                        id_resource.replaceChildren(frag)
-                    }
-                }
-            )
-        })
-        $q.use(
-            "resources-list",
-            ()=>fetch("{%url 'resources-list'%}").then(r => r.json()),
-            {
-                onSuccess(data){
-                    const frag = document.createDocumentFragment()
-
-                    const opt = document.createElement("option")
-                    opt.value = ""
-                    opt.innerText = "{%trans 'Select a item.'%}"
-                    frag.appendChild(opt)
-                    data.results.forEach(item => {
-                        const opt = document.createElement("option")
-                        opt.value = item.id
-                        opt.innerText = item.name
-                        frag.appendChild(opt)
-                    })
-                    id_resource_type.replaceChildren(frag)
-                }
-            }
-        )
 </script>
+<script is="exec-mount" type="pass"> {
+    $s.createStore("av", {
+        resource_type: "",
+    })
+    const FieldStrategies = {
+        resource_type: (value, state) => {
+        console.log("ok")
+        }
+    }
+    $s.subscribe("av.*", null, null, (value,_,name) => {
+        const field = name.split(".")[1]
+        if (FieldStrategies[field]) {
+            FieldStrategies[field](value, $s.get("av"));
+        }
+    })
+}</script>

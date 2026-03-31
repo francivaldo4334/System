@@ -14,9 +14,6 @@
     <tbody id="{{key}}_table_tbody">
     </tbody>
 </table>
-<script is="exec-umount" type="pass">
-    delete renderChild;
-</script>
 {%block render_child%}
 {%endblock%}
 <script is="exec-mount" type="pass">
@@ -27,7 +24,7 @@ $q.use(
     onSuccess(data){
         const items = data.results;
         const el = document.getElementById("{{key}}_table_tbody")
-        $u.renderList("{{key}}_render", el, items, renderChild);
+        //$u.renderList("{{key}}_render", el, items, renderChild);
     }
 },
 { ttl: 0, enableRefetch: true}

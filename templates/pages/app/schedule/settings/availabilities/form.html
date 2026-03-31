@@ -1,10 +1,8 @@
-<form onreset="id_new_availability_modal.close()" class="" id="id_availability_form">
-    {%include "pages/app/schedule/settings/availabilities/form.fields.html"%}
+    {%include 'components/form/index.html'%}
     <div class="modal-action mt-4">
         <button type="reset" class="btn btn-ghost">{%trans "Cancel"%}</button>
         <button type="submit" class="btn btn-primary px-8">{%trans "Save"%}</button>
     </div>
-</form>
 <script is="exec-mount" type="pass">
         id_availability_form.addEventListener("submit", el => {
             el.preventDefault();

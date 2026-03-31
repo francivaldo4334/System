@@ -5,9 +5,9 @@ function createStateManager() {
 
   const _getState = (name) => states.get(name);
 
-  const _notify = (state, value) => {
+  const _notify = (state, value, name) => {
     state.observers.forEach(obs => {
-      const content = obs.transform(value, obs.el);
+      const content = obs.transform(value, obs.el, name);
       // Atribuição segura: só altera se houver atributo e conteúdo
       if (obs.at !== null && content !== undefined) {
         obs.el[obs.at] = content;
@@ -21,6 +21,27 @@ function createStateManager() {
       key === searchKey || key.startsWith(`${searchKey}.`)
     );
   };
+
+  const _subscribe = (name, element, attribute = 'textContent', transform = (v) => v) => {
+      // if (!element) throw new Error(`Subscription failed: Element for "${name}" is null.`);
+
+      const state = _getState(name);
+      if (!state) return () => { };
+
+      const observer = { el: element, at: attribute, transform };
+      state.observers.push(observer);
+
+      // Execução imediata (Sync inicial)
+      const initialContent = transform(state.value, element, name);
+      if (attribute !== null && !!initialContent) {
+        element[attribute] = initialContent;
+      }
+
+      // Retorna função de limpeza (Unsubscribe)
+      return () => {
+        state.observers = state.observers.filter(obs => obs !== observer);
+      };
+  }
 
   // --- API Pública ---
 
@@ -42,7 +63,7 @@ function createStateManager() {
       const state = _getState(name);
       if (!state) return;
       state.value = newValue;
-      _notify(state, newValue);
+      _notify(state, newValue, name);
     },
 
     get: (name) => {
@@ -57,24 +78,14 @@ function createStateManager() {
     },
 
     subscribe: (name, element, attribute = 'textContent', transform = (v) => v) => {
-      if (!element) throw new Error(`Subscription failed: Element for "${name}" is null.`);
-
-      const state = _getState(name);
-      if (!state) return () => { };
-
-      const observer = { el: element, at: attribute, transform };
-      state.observers.push(observer);
-
-      // Execução imediata (Sync inicial)
-      const initialContent = transform(state.value, element);
-      if (attribute !== null && !!initialContent) {
-        element[attribute] = initialContent;
+      if (name.endsWith(".*")) {
+        const key = name.split(".")[0]
+        const states = _findEntries(key)
+        return states.map(([name]) => {
+          return _subscribe(name, element, attribute, transform)
+        })
       }
-
-      // Retorna função de limpeza (Unsubscribe)
-      return () => {
-        state.observers = state.observers.filter(obs => obs !== observer);
-      };
+      return _subscribe(name, element, attribute, transform)
     },
 
     compute: (name, dependencies, formula) => {
@@ -92,7 +103,7 @@ function createStateManager() {
         } else {
           const state = _getState(name);
           state.value = newValue;
-          _notify(state, newValue);
+          _notify(state, newValue, name);
         }
       };
 

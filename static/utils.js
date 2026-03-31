@@ -15,8 +15,8 @@ function utilsManager() {
       const chunk = items.splice(0, 10);
       const frag = document.createDocumentFragment();
       chunk.forEach(it => {
-        const child = buildChild(it)
-        frag.appendChild(child)
+        const child = buildChild?.(it)
+        if (child) frag.appendChild(child)
       })
       if (el) {
         el.appendChild(frag)

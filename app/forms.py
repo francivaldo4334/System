@@ -46,7 +46,11 @@ class Form:
 
 # forms
 from django.utils.translation import gettext_lazy as _
-availability_form = Form(
+class AvailabilityForm:
+    @property
+    def fields(self):
+        return self._form.fields
+    _form = Form(
         fields=[
             SelectField(
                 name="resource_type",
