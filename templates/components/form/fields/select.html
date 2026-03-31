@@ -1,6 +1,6 @@
 {%extends "components/form/fields/base.html"%}
 {%block field%}
-<select class="select validator" id="{{field.id}}" name="{{field.name}}" {{field.attrs}}></select>
+<select class="select" id="{{field.id}}" name="{{field.name}}" {{field.attrs}}></select>
 {%if field.url_name%}
 <script is="exec-mount" type="pass">
 $q.use(
@@ -10,12 +10,10 @@ $q.use(
         onSuccess(data){
             const items = data.results;
             const el = document.getElementById("{{field.id}}")
-            const opt = document.createElement("option")
-            opt.value = "";
-            opt.innerText = "{% trans 'Select a value.'%}";
-            el.appendChild(opt)
-
-            $u.renderList("{{id}}",el, items, (it)=>{
+            $u.renderList("{{id}}",el, [
+                {id:"", label: "{%trans 'Select a value.'%}"},
+                ...items
+            ], (it)=>{
                 const opt = document.createElement("option")
                 opt.value = it.id;
                 opt.innerText = it.label||"";

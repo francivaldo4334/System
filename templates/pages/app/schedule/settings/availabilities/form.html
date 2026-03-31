@@ -11,9 +11,14 @@
     $s.createStore("av", {
         resource_type: "",
     })
+    Array.from(id_availability_form.elements).forEach(el => {
+        const state = $s.get(`av.${el.name}`)
+        if (!state) return;
+        el.onchange = () => { $s.set(`av.${el.name}`, el.value) }
+    })
     const FieldStrategies = {
         resource_type: (value, state) => {
-        console.log("ok")
+            console.log("ok")
         }
     }
     $s.subscribe("av.*", null, null, (value,_,name) => {
