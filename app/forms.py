@@ -47,6 +47,7 @@ class Form:
 # forms
 from django.utils.translation import gettext_lazy as _
 class AvailabilityForm:
+    key = "availability"
     @property
     def fields(self):
         return self._form.fields

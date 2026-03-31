@@ -1,8 +1,8 @@
-    {%include 'components/form/index.html'%}
-    <div class="modal-action mt-4">
-        <button type="reset" class="btn btn-ghost">{%trans "Cancel"%}</button>
-        <button type="submit" class="btn btn-primary px-8">{%trans "Save"%}</button>
-    </div>
+{%include 'components/form/index.html'%}
+<div class="modal-action mt-4">
+    <button class="btn btn-ghost" onclick="id_availability_form.reset();availabilities_modal.close()">{%trans "Cancel"%}</button>
+    <button class="btn btn-primary px-8" onclick="id_availability_form.submit()">{%trans "Save"%}</button>
+</div>
 <script is="exec-mount" type="pass">
         id_availability_form.addEventListener("submit", el => {
             el.preventDefault();
