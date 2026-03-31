@@ -45,7 +45,7 @@
     })
 }</script>
 <script is="exec-mount" type="pass">
-        availabilities_form.addEventListener("submit", el => {
+        id_availability_form.addEventListener("submit", el => {
             el.preventDefault();
             const formData = new FormData(id_availability_form)
             const data = Object.fromEntries(formData.entries())
@@ -57,12 +57,12 @@
             const parse = (input) => {
                 const dayMap = { "1": "MO", "2": "TU", "3": "WE", "4": "TH", "5": "FR", "6": "SA", "7": "SU" };
                 const days = input.week.map(d => dayMap[d]).join(",");
-                const date = input.start_date.replace(/-/g, "");
-                const startTime = input.start_time.replace(":", "") + "00";
-                const untilTime = input.until_time.replace(":", "") + "00";
+                const date = input.valid_from.replace(/-/g, "");
+                const startTime = input.time_from.replace(":", "") + "00";
+                const untilTime = input.time_until.replace(":", "") + "00";
                 const description = input.description
-                const duration = getSlotOfFive(input.duration_slot)
-                const interval = getSlotOfFive(input.interval_slot)
+                const duration = getSlotOfFive(input.duration)
+                const interval = getSlotOfFive(input.interval)
                 const intervalRrule = (duration + interval) * 5
                 return {
                     resource: parseInt(input.resource, 10),
