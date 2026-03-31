@@ -1,0 +1,110 @@
+from dataclasses import dataclass, field
+from typing import Any, List
+
+@dataclass
+class Field:
+    label: Any;
+    name: str;
+    id: str = field(init=False);
+    attrs: str = "";
+    type: str = "input";
+
+    def __post_init__(self):
+        self.id = f"id_{self.name}";
+    
+@dataclass
+class SelectField(Field):
+    url_name: str = "";
+    type:str = "select"
+
+@dataclass
+class DateField(Field):
+    type:str = "date"
+
+@dataclass
+class CheckboxesField(Field):
+    @dataclass
+    class Option:
+        value:str;
+        label:Any;
+        attrs:str = "";
+    type:str = "checkboxes";
+    options: List[Option] = field(default_factory=list);
+
+@dataclass
+class TimeField(Field):
+    type:str = "time"
+    step:str = "300"
+
+@dataclass
+class TextareaField(Field):
+    type:str = "textaria"
+
+@dataclass
+class Form:
+    fields:List
+
+# forms
+from django.utils.translation import gettext_lazy as _
+availability_form = Form(
+        fields=[
+            SelectField(
+                name="resource_type",
+                label=_("Resource Type"),
+                url_name="resources",
+                attrs="required",
+            ),
+            SelectField(
+                name="resource",
+                label=_("Resource"),
+                attrs="required disabled",
+            ),
+            DateField(
+                name="valid_from",
+                label=_("Valid From"),
+                attrs="required",
+            ),
+            DateField(
+                name="valid_until",
+                label=_("Valid Until"),
+                attrs="required",
+            ),
+            CheckboxesField(
+                name="week",
+                label=_("Weekdays"),
+                options=[
+                    CheckboxesField.Option(value="1", label=_("Mon"), attrs="checked"),
+                    CheckboxesField.Option(value="2", label=_("Tue"), attrs="checked" ),
+                    CheckboxesField.Option(value="3", label=_("Wed"), attrs="checked" ),
+                    CheckboxesField.Option(value="4", label=_("Thu"), attrs="checked" ),
+                    CheckboxesField.Option(value="5", label=_("Fri"), attrs="checked" ),
+                    CheckboxesField.Option(value="6", label=_("Sat") ),
+                    CheckboxesField.Option(value="7", label=_("Sun") ),
+                ]
+            ),
+            TimeField(
+                name="time_from",
+                label=_("Time From"),
+                attrs="required",
+            ),
+            TimeField(
+                name="time_until",
+                label=_("Time Until"),
+                attrs="required",
+            ),
+            TimeField(
+                name="duration",
+                label=_("Duration"),
+                attrs="required",
+            ),
+            TimeField(
+                name="interval",
+                label=_("Interval"),
+                attrs="required",
+            ),
+            TextareaField(
+                name="description",
+                label=_("Description")
+            )
+        ]
+    )

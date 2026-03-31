@@ -4,11 +4,12 @@ from schedule.models import Assignment, Availability, Resource, Service
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
+    label = serializers.CharField(source="name")
     class Meta:
         model = Resource
         fields = [
             'id',
-            'name',
+            'label',
             'code',
             'is_selectable',
             'parent_id',

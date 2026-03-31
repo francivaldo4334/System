@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from app.forms import AvailabilityForm
 
 
 class AppView(LoginRequiredMixin,TemplateView):
@@ -52,89 +53,5 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
     template_name="pages/app/schedule/settings/availabilities/index.html"
     extra_context={
         "key": "availabilities",
-        "form_fields": [
-            {
-                "type": "select",
-                "id": "id_resource_type",
-                "label": _("Resource Type"),
-                "name": "resource_type",
-                "attrs": "required",
-                "url_name": "resources",
-            },
-            {
-                "type": "select",
-                "id": "id_resource",
-                "label": _("Resource"),
-                "name": "resource",
-                "attrs": "required disabled",
-            },
-            {
-                "type": "date",
-                "id": "id_valid_from",
-                "label": _("Valid From"),
-                "name": "valid_from",
-                "attrs": 'required type="date"',
-            },
-            {
-                "type": "date",
-                "id": "id_valid_until",
-                "label": _("Valid Until"),
-                "name": "valid_until",
-                "attrs": 'required type="date"',
-            },
-            {
-                "type": "checkboxes",
-                "id": "id_week",
-                "label": _("Weekdays"),
-                "name": "week",
-                'options': [
-                    { "value": '1', "label": _("Mon"), "attrs": "checked"},
-                    { "value": '2', "label": _("Tue"), "attrs": "checked" },
-                    { "value": '3', "label": _("Wed"), "attrs": "checked" },
-                    { "value": '4', "label": _("Thu"), "attrs": "checked" },
-                    { "value": '5', "label": _("Fri"), "attrs": "checked" },
-                    { "value": '6', "label": _("Sat") },
-                    { "value": '7', "label": _("Sun") },
-                ]
-            },
-            {
-                "type": "time",
-                "id": "id_start_time",
-                "label": _("Start Time"),
-                "name": "start_time",
-                "attrs": 'required',
-                "step": "300",
-            },
-            {
-                "type": "time",
-                "id": "id_end_time",
-                "label": _("End Time"),
-                "name": "end_time",
-                "attrs": 'required',
-                "step": "300",
-            },
-
-            {
-                "type": "time",
-                "id": "id_duration",
-                "label": _("Duration"),
-                "name": "duration",
-                "attrs": 'required',
-                "step": "300",
-            },
-            {
-                "type": "time",
-                "id": "id_interval",
-                "label": _("Interval"),
-                "name": "interval",
-                "attrs": 'required',
-                "step": "300",
-            },
-            {
-                "type": "textaria",
-                "id": "id_description",
-                "label": _("Description"),
-                "name": "description",
-            },
-        ]
+        "form": AvailabilityForm
     }
