@@ -3,6 +3,26 @@
     <button class="btn btn-ghost" onclick="id_availability_form.reset();availabilities_modal.close()">{%trans "Cancel"%}</button>
     <button class="btn btn-primary px-8" onclick="id_availability_form.submit()">{%trans "Save"%}</button>
 </div>
+
+<script is="exec-umount" type="pass">
+        $s.remove("av")
+</script>
+<script is="exec-mount" type="pass"> {
+    $s.createStore("av", {
+        resource_type: "",
+    })
+    const FieldStrategies = {
+        resource_type: (value, state) => {
+        console.log("ok")
+        }
+    }
+    $s.subscribe("av.*", null, null, (value,_,name) => {
+        const field = name.split(".")[1]
+        if (FieldStrategies[field]) {
+            FieldStrategies[field](value, $s.get("av"));
+        }
+    })
+}</script>
 <script is="exec-mount" type="pass">
         id_availability_form.addEventListener("submit", el => {
             el.preventDefault();
