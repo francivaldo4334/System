@@ -60,7 +60,7 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
         },
         "list": {
             "table": Table(
-                list_url_name="",
+                list_url_name="availabilities-list",
                 header=Header(
                     options=[
                         HeaderOption(

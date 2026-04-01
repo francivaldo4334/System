@@ -6,4 +6,25 @@
       {% endfor %}
     </tr>
   </thead>
+  <tbody id="id_{{key}}_table">
+  </tbody>
 </table>
+<script is="exec-umount" type="pass">
+$s.remove("{{list.table.list_url_name}}.data")
+</script>
+<script is="exec-mount" type="pass">
+$s.compute("{{list.table.list_url_name}}.data", [
+  "{{key}}.filters.search",
+], ([search]) => {
+console.log("V", search)
+  $q.use(
+    "{{list.table.list_url_name}}",
+    ()=>$r.get("{% url list.table.list_url_name %}"),
+    {
+      onSuccess(){
+        console.log("here")
+      }
+    }
+  )
+})
+</script>
