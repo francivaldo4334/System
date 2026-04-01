@@ -61,13 +61,14 @@
                 const startTime = input.time_from.replace(":", "") + "00";
                 const untilTime = input.time_until.replace(":", "") + "00";
                 const description = input.description
+                const valid_until = input.valid_until;
                 const duration = getSlotOfFive(input.duration)
                 const interval = getSlotOfFive(input.interval)
                 const intervalRrule = (duration + interval) * 5
                 return {
                     resource: parseInt(input.resource, 10),
                     rrule_params: `DTSTART:${date}T${startTime}\nRRULE:FREQ=MINUTELY;UNTIL=${date}T${untilTime};INTERVAL=${intervalRrule};BYDAY=${days}`,
-                    valid_until: input.until_date,
+                    valid_until,
                     duration_slot: duration,
                     interval_slot: interval,
                     description,
