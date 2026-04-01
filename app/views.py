@@ -55,6 +55,8 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
     template_name="layouts/crud/index.html"
     extra_context={
         "key": "availabilities",
-        "form": AvailabilityForm,
         "table": AvailabilityTable,
+        "create": {
+            "form": AvailabilityForm
+        }
     }

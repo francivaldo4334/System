@@ -6,7 +6,9 @@
     </section>
     <section class="max-sm:fab">
         {% block btn_add %}
-        <div class="w-40 h-10 bg-pattern-diagonal"> </div>
+        {% if create %}
+        {% include "layouts/crud/btn_add.html" %}
+        {% endif %}
         {% endblock %}
     </section>
     <section class="col-span-2">

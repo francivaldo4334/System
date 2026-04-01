@@ -1,4 +1,4 @@
-<form id="id_{{form.key}}_form" class="grid grid-cols-[auto_1fr] gap-3 py-4">
+<form id="{{id}}" class="grid grid-cols-[auto_1fr] gap-3 py-4">
     {% for field in form.fields %}
     {% with template_path="components/form/fields/"|add:field.type|add:".html" %}
     {% include template_path with field=field %}

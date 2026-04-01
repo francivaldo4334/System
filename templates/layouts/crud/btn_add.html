@@ -1,0 +1,35 @@
+<button class="btn" onclick="id_{{key}}_btn_add_modal.showModal()">
+{% include "icons/plus.svg" %}
+{% trans "Add" %}
+</button>
+<dialog id="id_{{key}}_btn_add_modal" class="modal">
+  <div class="modal-box">
+    {% with form=create.form id="id_"|add:key|add:"_create_form" %}
+    {% include "components/form/index.html" %}
+    {% endwith %}
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn btn-ghost" onclick="id_{{key}}_create_form.reset()">
+          {% trans "Cancel" %}
+        </button>
+      </form>
+      <button class="btn btn-primary" onclick="id_{{key}}_create_form.requestSubmit()">
+        {% trans "Save" %}
+      </button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button></button>
+  </form>
+</dialog>
+<script is="exec-umount" type="pass">
+  id_{{key}}_create_form.removeEventListener("submit", handlerSubmitCreateEvent)
+  handlerSubmitCreateEvent = null
+</script>
+<script is="exec-mount" type="pass">
+  let handlerSubmitCreateEvent = (event) => {
+    event.preventDefault();
+    console.log("here")
+  }
+  id_{{key}}_create_form.addEventListener("submit", handlerSubmitCreateEvent)
+</script>
