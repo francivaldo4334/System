@@ -1,0 +1,16 @@
+<label class="input">
+  {% include "icons/search.svg" %}
+  <input type="search" placeholder="{% trans 'Search' %}..." id="id_{{key}}_filter_search"/>
+</label>
+<script is="exec-mount" type="pass">
+$s.createStore("{{key}}.filters", {
+  "search": "",
+})
+let {{key}}_filter_search_d_id = null
+id_{{key}}_filter_search.oninput = (event) => {
+  clearTimeout({{key}}_filter_search_d_id)
+  {{key}}_filter_search_d_id = setTimeout(()=>{
+    $s.set("{{key}}.filters.search", event.target.value)
+  }, 300)
+}
+</script>
