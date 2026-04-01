@@ -64,6 +64,17 @@ class CreateAssigmentSerializer(AssignmentSerializer):
     )
 
 class AvailabilitySerializer(serializers.ModelSerializer):
+    rrule_params = serializers.RegexField(
+        regex=r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z,]+$"
+    )
+    default_error_messages = {
+        "not_match_interval": {
+            "rrule_params":"O INTERVAL da RRULE corresponde a soma dos parametros interval e duration"
+        },
+        "valid_until_gt_valid_from": {
+            "valid_until": "Data final não pode ser menor que a data de inicio"
+        }
+    }
     class Meta:
         model = Availability
         fields = [
@@ -79,3 +90,15 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         read_only_fields = [
             "valid_from",
         ]
+    def validate(self, attrs):
+        from dateutil.rrule import rrulestr,rruleset
+        rule_obj = rrulestr(attrs["rrule_params"])
+        r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
+        dtstart = r._dtstart
+        interval_rrule = r._interval
+        interval_in_minutes = (attrs["duration_slot"] + attrs["interval_slot"]) * 5
+        if interval_rrule != interval_in_minutes:
+            self.fail("not_match_interval")
+        if attrs.get("valid_until", None) and dtstart.date() > attrs["valid_until"]:
+            self.fail("valid_until_gt_valid_from")
+        return attrs

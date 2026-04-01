@@ -55,40 +55,38 @@ class ServiceResourceRelation(models.Model):
 # pyright: reportAttributeAccessIssue=false
 def rrule_validator(value):
     try:
-        rule_obj = rrulestr(value)
-        r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
-        if r._freq != MINUTELY:
-            raise ValidationError("A FREQ deve ser MINUTELY.")
-        if r._dtstart.date() != r._until.date():
-            raise ValidationError("DTSTART e UNTIL devem estar no mesmo dia.")
-        if r._dtstart.minute % 5 != 0 or r._until.minute % 5 != 0:
-            raise ValidationError("Os horários devem ser múltiplos de 5 minutos.")
-        if "_interval" not in r.__dict__ or r._interval <= 1:
-             raise ValidationError("O INTERVAL deve ser definido e maior que 1 (Soma de duração + gap).")
+        rrulestr(value)
     except Exception as e:
         raise ValidationError(f"Erro na regra de recorrência: {e}")
 
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
-    rrule_params = models.CharField(validators=[rrule_validator])
+    rrule_params = models.CharField(validators=[
+        RegexValidator(r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
+        rrule_validator,
+    ])
     valid_from = models.DateField()
     valid_until = models.DateField(null=True, blank=True)
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
 
-    def save(self, *args, **kwargs):
+    def _get_rrule(self):
         rule_obj = rrulestr(self.rrule_params)
-        r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
-        dtstart = r._dtstart
-        interval_rrule = r._interval
-        interval_in_minutes = (self.duration_slot + self.interval_slot) * 5# type: ignore
-        if interval_rrule != interval_in_minutes:
+        return rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
+        
+
+    def save(self, *args, **kwargs):
+        rrule = self._get_rrule()
+        r_dtstart = rrule._dtstart
+        r_interval = rrule._interval
+        total_duration = (self.duration_slot + self.interval_slot) * 5# type: ignore
+        if r_interval != total_duration:
             raise ValidationError({
-                "rrule_params":"O INTERVAL da RRULE não pode ser menor que a duração do slot."
+                "rrule_params":"O INTERVAL da RRULE corresponde a soma dos parametros interval e duration"
             })
-        self.valid_from = dtstart.date()
-        if self.valid_from > self.valid_until:
+        self.valid_from = r_dtstart.date()
+        if self.valid_until and self.valid_from > self.valid_until:
             raise ValidationError({
                 "valid_until": "Data final não pode ser menor que a data de inicio"
             })
