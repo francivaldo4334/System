@@ -63,7 +63,8 @@ class AvailabilityForm:
             SelectField(
                 name="resource",
                 label=_("Resource"),
-                attrs="required disabled",
+                url_name="resources",
+                attrs="required",
             ),
             DateField(
                 name="valid_from",

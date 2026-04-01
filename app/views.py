@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from app.forms import AvailabilityForm
-from app.tables import AvailabilityTable
+from app.tables import Header, HeaderOption, RowData, Table
 
 
 class AppView(LoginRequiredMixin,TemplateView):
@@ -55,8 +55,23 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
     template_name="layouts/crud/index.html"
     extra_context={
         "key": "availabilities",
-        "table": AvailabilityTable,
         "create": {
-            "form": AvailabilityForm
+            "form": AvailabilityForm,
+        },
+        "list": {
+            "table": Table(
+                list_url_name="",
+                header=Header(
+                    options=[
+                        HeaderOption(
+                            label=_("Description")
+                        )
+                    ]
+                ),
+                row_data=RowData(
+                    key="",
+                    type="",
+                )
+            ),
         }
     }
