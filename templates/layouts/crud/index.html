@@ -1,0 +1,17 @@
+<section class="max-w-[1080px] min-h-full grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] gap-4 p-4">
+    <section class="col-span-2 sm:col-span-1">
+        {% block filters %}
+        <div class="w-full h-10 bg-pattern-diagonal"> </div>
+        {% endblock %}
+    </section>
+    <section class="max-sm:fab">
+        {% block btn_add %}
+        <div class="w-40 h-10 bg-pattern-diagonal"> </div>
+        {% endblock %}
+    </section>
+    <section class="col-span-2">
+        {% block table %}
+        <div class="w-full h-full bg-pattern-diagonal"> </div>
+        {% endblock %}
+    </section>
+</section>

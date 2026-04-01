@@ -2,8 +2,8 @@
 {% partialdef main %}
 {% include 'components/appbar.html' with title=_('RSA Agenda') %}
 <section class="w-full flex">
-    <main class="min-w-[1080px] mx-auto">
-        <div class="tabs tabs-border p-4" id="id_schedule_settings_tabs">
+    <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr]">
+        <div class="tabs tabs-border px-2" id="id_schedule_settings_tabs">
             {%for opt in setting_tabs%}
             <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{%trans " Availabilities"%}"
                 data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />

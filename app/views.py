@@ -3,6 +3,7 @@ from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from app.forms import AvailabilityForm
+from app.tables import AvailabilityTable
 
 
 class AppView(LoginRequiredMixin,TemplateView):
@@ -50,8 +51,10 @@ class AppScheduleSettingsView(AppView):
         return context
 
 class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
-    template_name="pages/app/schedule/settings/availabilities/index.html"
+    # template_name="pages/app/schedule/settings/availabilities/index.html"
+    template_name="layouts/crud/index.html"
     extra_context={
         "key": "availabilities",
-        "form": AvailabilityForm
+        "form": AvailabilityForm,
+        "table": AvailabilityTable,
     }
