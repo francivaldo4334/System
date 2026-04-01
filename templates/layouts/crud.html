@@ -16,20 +16,6 @@
 </table>
 {%block render_child%}
 {%endblock%}
-<script is="exec-mount" type="pass">
-$q.use(
-"{{key|add:'-list'}}",
-()=>$r.get("{%url key|add:'-list'%}"),
-{
-    onSuccess(data){
-        const items = data.results;
-        const el = document.getElementById("{{key}}_table_tbody")
-        //$u.renderList("{{key}}_render", el, items, renderChild);
-    }
-},
-{ ttl: 0, enableRefetch: true}
-)
-</script>
 <dialog id="{{key}}_modal" class="modal">
     {%block modal_box%}
     {%endblock%}

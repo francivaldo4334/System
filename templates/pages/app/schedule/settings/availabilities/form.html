@@ -83,7 +83,8 @@
                 ),
                 {
                     onSuccess(data){
-                        id_new_availability_modal.close()
+                        const modal = document.getElementById("{{key}}_modal")
+                        modal.close()
                         $q.refetch('availabilities-list')
                     },
                     onError(err){
