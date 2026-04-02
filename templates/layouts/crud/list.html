@@ -16,7 +16,6 @@ $s.remove("{{list.table.list_url_name}}.data")
 $s.compute("{{list.table.list_url_name}}.data", [
   "{{key}}.filters.search",
 ], ([search]) => {
-console.log("V", search)
   $q.use(
     "{{list.table.list_url_name}}",
     ()=>$r.get("{% url list.table.list_url_name %}"),

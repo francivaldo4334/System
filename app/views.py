@@ -68,10 +68,12 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
                         )
                     ]
                 ),
-                row_data=RowData(
-                    key="",
-                    type="",
-                )
+                row_data=[
+                    RowData(
+                        key="",
+                        type="",
+                    ),
+                ]
             ),
         }
     }

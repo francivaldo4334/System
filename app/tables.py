@@ -15,4 +15,4 @@ class RowData:
 class Table:
     list_url_name: str
     header:Header
-    row_data:RowData
+    row_data:List[RowData]
