@@ -20,8 +20,15 @@ $s.compute("{{list.table.list_url_name}}.data", [
     "{{list.table.list_url_name}}",
     ()=>$r.get("{% url list.table.list_url_name %}"),
     {
-      onSuccess(){
-        console.log("here")
+      onSuccess(data){
+        const items = data.results
+        $u.renderList("{{key}}_render_list", id_{{key}}_table, items, (item) => {
+          const tr = document.createElement("tr")
+          const td = document.createElement("td")
+          td.innerText = "helo"
+          tr.appendChild(td)
+          return tr;
+        })
       }
     }
   )
