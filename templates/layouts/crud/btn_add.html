@@ -43,8 +43,8 @@
                 $q.refetch("{{list.table.list_url_name}}")
             {% endif %}
             id_{{key}}_btn_add_modal.close()
+            id_{{key}}_create_form.reset()
         },
-        onError(){ console.log("error") },
     })
   }
   id_{{key}}_create_form.addEventListener("submit", handlerSubmitCreateEvent)

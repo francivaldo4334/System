@@ -9,18 +9,53 @@
     </thead>
     <tbody id="id_{{key}}_table">
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="{{list.table.header.options|length}}">
+                <div class="flex justify-between">
+                    <span>
+                        Showing <strong id="id_page_range"></strong> of <strong id="id_page_count"></strong> items
+                    </span>
+                    <div class="flex gap-3">
+                        <button class="btn btn-sm" title="Previous Page" id="id_page_prev">
+                            &laquo; Anterior
+                        </button>
+                        <button class="btn btn-sm btn-primary" title="Next Page" id="id_page_next">
+                            Next &raquo;
+                        </button>
+                    </div>
+
+                </div>
+            </th>
+        </tr>
+    </tfoot>
 </table>
 <script is="exec-umount" type="pass">
 $s.remove("{{list.table.list_url_name}}.data")
+$s.remove("{{key}}.page")
 </script>
 {{list.table.row_data.get_object_data|json_script:'id_row_map_types'}}
 <script is="exec-mount" type="pass">
+$s.createStore("{{key}}.page", {
+  count: "0",
+  limit: "2",
+  offset: "0",
+  next: null,
+  previous: null,
+})
+$s.compute("{{key}}.page.range", [
+    "{{key}}.page.offset",
+    "{{key}}.page.limit",
+    "{{key}}.page.count",
+], (offset, limit, count) => `${Number(offset) + 1} - ${Math.min(Number(offset) + Number(limit), Number(count))}`)
 $s.compute("{{list.table.list_url_name}}.data", [
-  "{{key}}.filters.search",
-], ([search]) => {
+    "{{key}}.filters.search",
+    "{{key}}.page.offset",
+    "{{key}}.page.limit",
+], (search, offset, limit) => {
   $q.use(
     "{{list.table.list_url_name}}",
-    ()=>$r.get("{% url list.table.list_url_name %}"),
+    ()=>$r.get(`{% url list.table.list_url_name %}?limit=${limit}&offset=${offset}&search=${search}`),
     {
       onSuccess(data){
         const items = data.results
@@ -38,9 +73,26 @@ $s.compute("{{list.table.list_url_name}}.data", [
           })
           return tr;
         })
+        $s.set("{{key}}.page.previous", data.previous)
+        $s.set("{{key}}.page.next", data.next)
+        $s.set("{{key}}.page.count", data.count)
       }
     },
-    {enableRefetch:true}
+    {enableRefetch:true, ttl:0}
   )
 })
+$s.subscribe("{{key}}.page.count", id_page_count, "textContent")
+$s.subscribe("{{key}}.page.range", id_page_range, "textContent")
+$s.subscribe("{{key}}.page.previous", id_page_prev, "disabled", v => !v)
+$s.subscribe("{{key}}.page.next", id_page_next, "disabled", v => !v)
+id_page_next.onclick = () => {
+    const offset = Number($s.get("{{key}}.page.offset"));
+    const limit = Number($s.get("{{key}}.page.limit"));
+    $s.set("{{key}}.page.offset", offset + limit)
+}
+id_page_prev.onclick = () => {
+    const offset = Number($s.get("{{key}}.page.offset"));
+    const limit = Number($s.get("{{key}}.page.limit"));
+    $s.set("{{key}}.page.offset", offset - limit)
+}
 </script>
