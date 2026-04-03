@@ -77,13 +77,14 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     time_until = serializers.TimeField(write_only=True)
     duration = serializers.TimeField(write_only=True)
     interval = serializers.TimeField(write_only=True)
+    resource_label = serializers.CharField(source="resource.name", read_only=True)
 
     class Meta:
         model = Availability
         fields = [
             "id", "description", "resource", "valid_from", "valid_until",
             "week", "time_from", "time_until", "duration", "interval",
-            "rrule_params", "duration_slot", "interval_slot"
+            "rrule_params", "duration_slot", "interval_slot", "resource_label"
         ]
         extra_kwargs = {
             'rrule_params': {'read_only': True},
@@ -121,44 +122,4 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         for field in ['week', 'time_from', 'time_until', 'duration', 'interval']:
             attrs.pop(field, None)
 
-        return attrs
-
-class _AvailabilitySerializer(serializers.ModelSerializer):
-    rrule_params = serializers.RegexField(
-        regex=r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z,]+$"
-    )
-    default_error_messages = {
-        "not_match_interval": {
-            "rrule_params":"O INTERVAL da RRULE corresponde a soma dos parametros interval e duration"
-        },
-        "valid_until_gt_valid_from": {
-            "valid_until": "Data final não pode ser menor que a data de inicio"
-        }
-    }
-    class Meta:
-        model = Availability
-        fields = [
-            "id",
-            "description",
-            "resource",
-            "rrule_params",
-            "duration_slot",
-            "interval_slot",
-            "valid_until",
-            "valid_from",
-        ]
-        read_only_fields = [
-            "valid_from",
-        ]
-    def validate(self, attrs):
-        from dateutil.rrule import rrulestr,rruleset
-        rule_obj = rrulestr(attrs["rrule_params"])
-        r = rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
-        dtstart = r._dtstart
-        interval_rrule = r._interval
-        interval_in_minutes = (attrs["duration_slot"] + attrs["interval_slot"]) * 5
-        if interval_rrule != interval_in_minutes:
-            self.fail("not_match_interval")
-        if attrs.get("valid_until", None) and dtstart.date() > attrs["valid_until"]:
-            self.fail("valid_until_gt_valid_from")
         return attrs

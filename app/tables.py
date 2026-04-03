@@ -6,13 +6,20 @@ class HeaderOption:
 @dataclass
 class Header:
     options:List[HeaderOption]
+
 @dataclass
-class RowData:
+class RowDataOption:
     key:str
     type:str
+@dataclass
+class RowData:
+    options:List[RowDataOption]
+
+    def get_object_data(self):
+        return {opt.key:opt.type for opt in self.options}
 
 @dataclass
 class Table:
     list_url_name: str
     header:Header
-    row_data:List[RowData]
+    row_data:RowData

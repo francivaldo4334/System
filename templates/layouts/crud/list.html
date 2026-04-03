@@ -1,3 +1,4 @@
+{% get_current_language as LANG %}
 <table class="table table-zebra">
     <thead>
         <tr>
@@ -12,6 +13,7 @@
 <script is="exec-umount" type="pass">
 $s.remove("{{list.table.list_url_name}}.data")
 </script>
+{{list.table.row_data.get_object_data|json_script:'id_row_map_types'}}
 <script is="exec-mount" type="pass">
 $s.compute("{{list.table.list_url_name}}.data", [
   "{{key}}.filters.search",
@@ -22,11 +24,18 @@ $s.compute("{{list.table.list_url_name}}.data", [
     {
       onSuccess(data){
         const items = data.results
+        const type_map = JSON.parse(id_row_map_types.textContent)
+        const map = {
+          "text": (v) => v,
+          "date": (v) => new Date(v).toLocaleDateString("{{LANG}}"),
+        }
         $u.renderList("{{key}}_render_list", id_{{key}}_table, items, (item) => {
           const tr = document.createElement("tr")
-          const td = document.createElement("td")
-          td.innerText = "helo"
-          tr.appendChild(td)
+          Object.entries(type_map).forEach(([key, value]) => {
+            const td = document.createElement("td")
+            td.innerText = map[value](item[key])
+            tr.appendChild(td)
+          })
           return tr;
         })
       }
