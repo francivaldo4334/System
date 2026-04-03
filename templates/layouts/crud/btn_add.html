@@ -35,18 +35,12 @@
         if (value.length === 1) value = value[0]
         return [key,value]
     }))
-    console.log(data)
-    $q.use(
-        "{{create.post_url_name}}",
-        () => $r.post("{% url create.post_url_name %}", data, {
-            "X-CSRFToken": "{{csrf_token}}"
-        }),
-        {
-            onSuccess(){ console.log("success") },
-            onError(){ console.log("error") },
-        }
-    )
-    console.log("Send Post Request", Object.fromEntries(formData.entries()))
+    $q.use( "{{create.post_url_name}}",
+    () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
+    {
+        onSuccess(){ console.log("success") },
+        onError(){ console.log("error") },
+    })
   }
   id_{{key}}_create_form.addEventListener("submit", handlerSubmitCreateEvent)
 </script>
