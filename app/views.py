@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from app.forms import AvailabilityForm
-from app.tables import Header, HeaderOption, RowData, RowDataOption, Table
+from app.tables import AvailabilityTable
 
 
 class AppView(LoginRequiredMixin,TemplateView):
@@ -60,36 +60,6 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
             "post_url_name": "availabilities-list",
         },
         "list": {
-            "table": Table(
-                list_url_name="availabilities-list",
-                header=Header(
-                    options=[
-                        HeaderOption(label=_("Resource")),
-                        HeaderOption(label=_("Valid From")),
-                        HeaderOption(label=_("Valid Until")),
-                        HeaderOption(label=_("Description"))
-                    ]
-                ),
-                row_data=RowData(
-                    options=[
-                        RowDataOption(
-                            key="resource_label",
-                            type="text"
-                        ),
-                        RowDataOption(
-                            key="valid_from",
-                            type="date",
-                        ),
-                        RowDataOption(
-                            key="valid_until",
-                            type="date",
-                        ),
-                        RowDataOption(
-                            key="description",
-                            type="text",
-                        ),                        
-                    ]
-                )
-            ),
+            "table": AvailabilityTable,
         }
     }
