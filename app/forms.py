@@ -57,12 +57,6 @@ class AvailabilityForm:
     _form = Form(
         fields=[
             SelectField(
-                name="resource_type",
-                label=_("Resource Type"),
-                url_name="resources",
-                attrs="required",
-            ),
-            SelectField(
                 name="resource",
                 label=_("Resource"),
                 url_name="resources",
