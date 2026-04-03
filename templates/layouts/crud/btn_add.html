@@ -1,26 +1,26 @@
 <button class="btn" onclick="id_{{key}}_btn_add_modal.showModal()">
-{% include "icons/plus.svg" %}
-{% trans "Add" %}
+    {% include "icons/plus.svg" %}
+    {% trans "Add" %}
 </button>
 <dialog id="id_{{key}}_btn_add_modal" class="modal">
-  <div class="modal-box">
-    {% with form=create.form id="id_"|add:key|add:"_create_form" %}
-    {% include "components/form/index.html" %}
-    {% endwith %}
-    <div class="modal-action">
-      <form method="dialog">
-        <button class="btn btn-ghost" onclick="id_{{key}}_create_form.reset()">
-          {% trans "Cancel" %}
-        </button>
-      </form>
-      <button class="btn btn-primary" onclick="id_{{key}}_create_form.requestSubmit()">
-        {% trans "Save" %}
-      </button>
+    <div class="modal-box">
+        {% with form=create.form id="id_"|add:key|add:"_create_form" %}
+        {% include "components/form/index.html" %}
+        {% endwith %}
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost" onclick="id_{{key}}_create_form.reset()">
+                    {% trans "Cancel" %}
+                </button>
+            </form>
+            <button class="btn btn-primary" onclick="id_{{key}}_create_form.requestSubmit()">
+                {% trans "Save" %}
+            </button>
+        </div>
     </div>
-  </div>
-  <form method="dialog" class="modal-backdrop">
-    <button></button>
-  </form>
+    <form method="dialog" class="modal-backdrop">
+        <button></button>
+    </form>
 </dialog>
 <script is="exec-umount" type="pass">
   id_{{key}}_create_form.removeEventListener("submit", handlerSubmitCreateEvent)
@@ -29,7 +29,24 @@
 <script is="exec-mount" type="pass">
   let handlerSubmitCreateEvent = (event) => {
     event.preventDefault();
-    console.log("Send Post Request")
+    const formData = new FormData(event.target)
+    const data = Object.fromEntries(formData.keys().map(key => {
+        let value = formData.getAll(key) 
+        if (value.length === 1) value = value[0]
+        return [key,value]
+    }))
+    console.log(data)
+    $q.use(
+        "{{create.post_url_name}}",
+        () => $r.post("{% url create.post_url_name %}", data, {
+            "X-CSRFToken": "{{csrf_token}}"
+        }),
+        {
+            onSuccess(){ console.log("success") },
+            onError(){ console.log("error") },
+        }
+    )
+    console.log("Send Post Request", Object.fromEntries(formData.entries()))
   }
   id_{{key}}_create_form.addEventListener("submit", handlerSubmitCreateEvent)
 </script>

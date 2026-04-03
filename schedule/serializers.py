@@ -63,7 +63,57 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         many=True
     )
 
+# {
+#     "resource_type": "1",
+#     "resource": "1",
+#     "valid_from": "2026-04-03",
+#     "valid_until": "2026-04-03",
+#     "week": "5",
+#     "time_from": "08:00",
+#     "time_until": "17:00",
+#     "duration": "00:30",
+#     "interval": "00:10",
+#     "description": " teste"
+# }
+#
 class AvailabilitySerializer(serializers.ModelSerializer):
+    week = serializers.ListField(
+        child=serializers.ChoiceField(
+            choices=[
+                ("1","MO"),
+                ("2","TU"),
+                ("3","WE"),
+                ("4","TH"),
+                ("5","FR"),
+                ("6","SA"),
+                ("7","SU"),
+            ],
+            write_only=True,
+        )
+    )
+    time_from = serializers.TimeField(write_only=True)
+    time_until = serializers.TimeField(write_only=True)
+    duration = serializers.TimeField(write_only=True)
+    interval = serializers.TimeField(write_only=True)
+    def validate(self, attrs):
+        print("attrs[]")
+        return super().validate(attrs)
+    class Meta:
+        model = Availability
+        fields = [
+            "id",
+            "description",
+            "resource",
+            "valid_from",
+            "valid_until",
+            "week",
+            "time_from",
+            "time_until",
+            "duration",
+            "interval",
+        ]
+
+class _AvailabilitySerializer(serializers.ModelSerializer):
     rrule_params = serializers.RegexField(
         regex=r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z,]+$"
     )

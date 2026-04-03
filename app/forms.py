@@ -8,6 +8,7 @@ class Field:
     id: str = field(init=False);
     attrs: str = "";
     type: str = "input";
+    value:str = "";
 
     def __post_init__(self):
         self.id = f"id_{self.name}";
@@ -45,6 +46,7 @@ class Form:
     fields:List
 
 # forms
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 class AvailabilityForm:
     key = "availability"
@@ -70,11 +72,13 @@ class AvailabilityForm:
                 name="valid_from",
                 label=_("Valid From"),
                 attrs="required",
+                value=timezone.localtime(timezone.now()).date().isoformat(),
             ),
             DateField(
                 name="valid_until",
                 label=_("Valid Until"),
                 attrs="required",
+                value=timezone.localtime(timezone.now()).date().isoformat(),
             ),
             CheckboxesField(
                 name="week",
@@ -93,21 +97,25 @@ class AvailabilityForm:
                 name="time_from",
                 label=_("Time From"),
                 attrs="required",
+                value="08:00",
             ),
             TimeField(
                 name="time_until",
                 label=_("Time Until"),
                 attrs="required",
+                value="17:00",
             ),
             TimeField(
                 name="duration",
                 label=_("Duration"),
                 attrs="required",
+                value="00:30",
             ),
             TimeField(
                 name="interval",
                 label=_("Interval"),
                 attrs="required",
+                value="00:10",
             ),
             TextareaField(
                 name="description",

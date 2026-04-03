@@ -57,6 +57,7 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
         "key": "availabilities",
         "create": {
             "form": AvailabilityForm,
+            "post_url_name": "availabilities-list",
         },
         "list": {
             "table": Table(
