@@ -64,13 +64,18 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
                 list_url_name="availabilities-list",
                 header=Header(
                     options=[
-                        HeaderOption(
-                            label=_("Description")
-                        )
+                        HeaderOption(label=_("Resource")),
+                        HeaderOption(label=_("Valid From")),
+                        HeaderOption(label=_("Valid Until")),
+                        HeaderOption(label=_("Description"))
                     ]
                 ),
                 row_data=RowData(
                     options=[
+                        RowDataOption(
+                            key="resource_label",
+                            type="text"
+                        ),
                         RowDataOption(
                             key="valid_from",
                             type="date",
@@ -78,10 +83,6 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
                         RowDataOption(
                             key="valid_until",
                             type="date",
-                        ),
-                        RowDataOption(
-                            key="resource_label",
-                            type="text"
                         ),
                         RowDataOption(
                             key="description",
