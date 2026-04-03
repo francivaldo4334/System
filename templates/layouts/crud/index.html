@@ -19,5 +19,8 @@
         {% include "layouts/crud/list.html" %}
         {% endif %}
         {% endblock %}
+        {% if delete %}
+        {% include "layouts/crud/delete.html" %}
+        {% endif %}
     </section>
 </section>

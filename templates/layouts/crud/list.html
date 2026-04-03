@@ -5,13 +5,16 @@
             {% for option in list.table.header.options %}
             <th>{{option.label}}</th>
             {% endfor %}
+            <th>
+                {% trans "Actions" %}
+            </th>
         </tr>
     </thead>
     <tbody id="id_{{key}}_table">
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="{{list.table.header.options|length}}">
+            <th colspan="{{list.table.header.options|length|add:1}}">
                 <div class="flex justify-between">
                     <span>
                         Showing <strong id="id_page_range"></strong> of <strong id="id_page_count"></strong> items
@@ -71,6 +74,12 @@ $s.compute("{{list.table.list_url_name}}.data", [
             td.innerText = map[value](item[key])
             tr.appendChild(td)
           })
+          const th = document.createElement("th")
+          {% if delete %}
+              const btnCancel = id_template_btn_delete.content.cloneNode(true)
+              th.appendChild(btnCancel)
+          {% endif %}
+          tr.appendChild(th)
           return tr;
         })
         $s.set("{{key}}.page.previous", data.previous)

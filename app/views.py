@@ -61,5 +61,6 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
         },
         "list": {
             "table": AvailabilityTable,
-        }
+        },
+        "delete": True,
     }
