@@ -1,13 +1,13 @@
 <table class="table table-zebra">
-  <thead>
-    <tr>
-      {% for option in list.table.header.options %}
-        <th>{{option.label}}</th>
-      {% endfor %}
-    </tr>
-  </thead>
-  <tbody id="id_{{key}}_table">
-  </tbody>
+    <thead>
+        <tr>
+            {% for option in list.table.header.options %}
+            <th>{{option.label}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody id="id_{{key}}_table">
+    </tbody>
 </table>
 <script is="exec-umount" type="pass">
 $s.remove("{{list.table.list_url_name}}.data")
@@ -30,7 +30,8 @@ $s.compute("{{list.table.list_url_name}}.data", [
           return tr;
         })
       }
-    }
+    },
+    {enableRefetch:true}
   )
 })
 </script>

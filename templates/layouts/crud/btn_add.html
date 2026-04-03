@@ -38,7 +38,12 @@
     $q.use( "{{create.post_url_name}}",
     () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
     {
-        onSuccess(){ console.log("success") },
+        onSuccess(){
+            {% if list %}
+                $q.refetch("{{list.table.list_url_name}}")
+            {% endif %}
+            id_{{key}}_btn_add_modal.close()
+        },
         onError(){ console.log("error") },
     })
   }

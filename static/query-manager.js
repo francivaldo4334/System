@@ -4,6 +4,7 @@ const queryCacheFactory = () => {
   const refetch = async (queryKey) => {
     const config = _watchedQueries.get(queryKey);
     if (!config) return;
+    _internalCache.delete(queryKey)
     return await useQueryCache(queryKey, config.queryFn, config.callbacks, config.options);
   };
   window.addEventListener('focus', () => {
