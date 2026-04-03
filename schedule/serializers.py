@@ -63,55 +63,65 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         many=True
     )
 
-# {
-#     "resource_type": "1",
-#     "resource": "1",
-#     "valid_from": "2026-04-03",
-#     "valid_until": "2026-04-03",
-#     "week": "5",
-#     "time_from": "08:00",
-#     "time_until": "17:00",
-#     "duration": "00:30",
-#     "interval": "00:10",
-#     "description": " teste"
-# }
-#
 class AvailabilitySerializer(serializers.ModelSerializer):
     week = serializers.ListField(
         child=serializers.ChoiceField(
             choices=[
-                ("1","MO"),
-                ("2","TU"),
-                ("3","WE"),
-                ("4","TH"),
-                ("5","FR"),
-                ("6","SA"),
-                ("7","SU"),
+                ("1", "MO"), ("2", "TU"), ("3", "WE"), ("4", "TH"),
+                ("5", "FR"), ("6", "SA"), ("7", "SU"),
             ],
-            write_only=True,
-        )
+        ),
+        write_only=True
     )
     time_from = serializers.TimeField(write_only=True)
     time_until = serializers.TimeField(write_only=True)
     duration = serializers.TimeField(write_only=True)
     interval = serializers.TimeField(write_only=True)
-    def validate(self, attrs):
-        print("attrs[]")
-        return super().validate(attrs)
+
     class Meta:
         model = Availability
         fields = [
-            "id",
-            "description",
-            "resource",
-            "valid_from",
-            "valid_until",
-            "week",
-            "time_from",
-            "time_until",
-            "duration",
-            "interval",
+            "id", "description", "resource", "valid_from", "valid_until",
+            "week", "time_from", "time_until", "duration", "interval",
+            "rrule_params", "duration_slot", "interval_slot"
         ]
+        extra_kwargs = {
+            'rrule_params': {'read_only': True},
+            'duration_slot': {'read_only': True},
+            'interval_slot': {'read_only': True},
+        }
+
+    def validate(self, attrs):
+        from datetime import datetime
+
+        week_days = attrs.get('week')
+        time_from = attrs.get('time_from')
+        time_until = attrs.get('time_until')
+        valid_from = attrs.get('valid_from')
+        duration_time = attrs.get('duration')
+        interval_time = attrs.get('interval')
+        def get_slots(t):
+            return (t.hour * 60 + t.minute) // 5
+        duration_slots = get_slots(duration_time)
+        interval_slots = get_slots(interval_time)
+        total_interval_minutes = (duration_slots + interval_slots) * 5
+        day_map = {"1": "MO", "2": "TU", "3": "WE", "4": "TH", "5": "FR", "6": "SA", "7": "SU"}
+        days_str = ",".join([day_map[d] for d in week_days])
+        
+        dt_start = datetime.combine(valid_from, time_from).strftime("%Y%m%dT%H%M%S")
+        until_str = datetime.combine(valid_from, time_until).strftime("%Y%m%dT%H%M%S")
+        rrule_string = (
+            f"DTSTART:{dt_start}\n"
+            f"RRULE:FREQ=MINUTELY;UNTIL={until_str};"
+            f"INTERVAL={total_interval_minutes};BYDAY={days_str}"
+        )
+        attrs['rrule_params'] = rrule_string
+        attrs['duration_slot'] = duration_slots
+        attrs['interval_slot'] = interval_slots
+        for field in ['week', 'time_from', 'time_until', 'duration', 'interval']:
+            attrs.pop(field, None)
+
+        return attrs
 
 class _AvailabilitySerializer(serializers.ModelSerializer):
     rrule_params = serializers.RegexField(

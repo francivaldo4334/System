@@ -7,7 +7,7 @@ from schedule.serializers import AssignmentSerializer, AvailabilitySerializer, C
 
 # Create your views here.
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset =ResourceNotSelectable.objects.all()
+    queryset =ResourceSelectable.objects.all()
     serializer_class = ResourcesSerializer
 
 
