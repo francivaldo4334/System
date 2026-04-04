@@ -17,3 +17,7 @@ class AvailabilityFilterSet(filters.FilterSet):
             Q(description__icontains=value) | 
             Q(resource__name__icontains=value)
         ).distinct()
+
+
+class AvailabilityPresentationFilterSet(filters.FilterSet):
+    date = filters.DateTimeFromToRangeFilter()

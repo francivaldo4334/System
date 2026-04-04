@@ -1,10 +1,11 @@
 # pyright: reportAttributeAccessIssue=false
-from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 
 from schedule.filters import AvailabilityFilterSet
-from schedule.models import Assignment, Availability, ResourceNotSelectable, ResourceSelectable, Service
-from schedule.serializers import AssignmentSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
+from schedule.models import Assignment, Availability, ResourceSelectable, Service
+from schedule.serializers import AssignmentSerializer, AvailabilityPresentationSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
 
 # Create your views here.
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
@@ -34,4 +35,22 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
 class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    filterset_class = AvailabilityFilterSet
+    @property
+    def filterset_class(self):
+        return AvailabilityFilterSet
+
+    def get_serializer_class(self):
+        if self.action == "presentation":
+            return AvailabilityPresentationSerializer
+        return super().get_serializer_class()
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "presentation":
+            resource = get_object_or_404(ResourceSelectable, pk=self.kwargs.get("pk", None))
+            return queryset.filter(resource=resource)
+
+        return queryset
+    @action(["GET"], True)
+    def presentation(self, request, pk):
+        return super().list(request, pk)
