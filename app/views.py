@@ -62,5 +62,7 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
         "list": {
             "table": AvailabilityTable,
         },
-        "delete": True,
+        "delete": {
+            "delete_url_name": "availabilities-detail"
+        },
     }

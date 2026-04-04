@@ -76,7 +76,9 @@ $s.compute("{{list.table.list_url_name}}.data", [
           })
           const th = document.createElement("th")
           {% if delete %}
-              const btnCancel = id_template_btn_delete.content.cloneNode(true)
+              const node = id_template_btn_delete.content.cloneNode(true)
+              const btnCancel = node.querySelector("button")
+              btnCancel.dataset.id=item.id
               th.appendChild(btnCancel)
           {% endif %}
           tr.appendChild(th)
