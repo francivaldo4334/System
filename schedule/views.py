@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
+from schedule.filters import AvailabilityFilterSet
 from schedule.models import Assignment, Availability, ResourceNotSelectable, ResourceSelectable, Service
 from schedule.serializers import AssignmentSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
 
@@ -33,3 +34,4 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
 class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
+    filterset_class = AvailabilityFilterSet
