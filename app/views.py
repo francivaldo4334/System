@@ -51,7 +51,6 @@ class AppScheduleSettingsView(AppView):
         return context
 
 class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
-    # template_name="pages/app/schedule/settings/availabilities/index.html"
     template_name="layouts/crud/index.html"
     extra_context={
         "key": "availabilities",
