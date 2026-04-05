@@ -76,13 +76,13 @@ class AvailabilityForm:
                 name="week",
                 label=_("Weekdays"),
                 options=[
-                    CheckboxesField.Option(value="1", label=_("Mon"), attrs="checked"),
-                    CheckboxesField.Option(value="2", label=_("Tue"), attrs="checked" ),
-                    CheckboxesField.Option(value="3", label=_("Wed"), attrs="checked" ),
-                    CheckboxesField.Option(value="4", label=_("Thu"), attrs="checked" ),
-                    CheckboxesField.Option(value="5", label=_("Fri"), attrs="checked" ),
-                    CheckboxesField.Option(value="6", label=_("Sat") ),
-                    CheckboxesField.Option(value="7", label=_("Sun") ),
+                    CheckboxesField.Option(value="0", label=_("Mon"), attrs="checked"),
+                    CheckboxesField.Option(value="1", label=_("Tue"), attrs="checked" ),
+                    CheckboxesField.Option(value="2", label=_("Wed"), attrs="checked" ),
+                    CheckboxesField.Option(value="3", label=_("Thu"), attrs="checked" ),
+                    CheckboxesField.Option(value="4", label=_("Fri"), attrs="checked" ),
+                    CheckboxesField.Option(value="5", label=_("Sat") ),
+                    CheckboxesField.Option(value="6", label=_("Sun") ),
                 ]
             ),
             TimeField(
