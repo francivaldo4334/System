@@ -145,10 +145,12 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
         fields = ["id", "occurrences"]
 
     def get_occurrences(self, obj):
+        from datetime import datetime
         request = self.context.get("request", None)
         if not request:
             return None
-        start = request.query_params.get("start_date")
-        end = request.query_params.get("end_date")
-
-        return obj.get_presentation(start, end)
+        start = request.query_params.get("date_start")
+        end = request.query_params.get("date_end")
+        date_start = datetime.fromisoformat(start)
+        date_end = datetime.fromisoformat(end)
+        return obj.get_presentation(date_start, date_end)

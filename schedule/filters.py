@@ -19,30 +19,28 @@ class AvailabilityFilterSet(filters.FilterSet):
         ).distinct()
 
 class AvailabilityPresentationFilterSet(filters.FilterSet):
-    start_date = filters.DateTimeFilter(method='filter_date_range', required=True)
-    end_date = filters.DateTimeFilter(method='filter_date_range', required=True)
+    # Definimos como 'method' para assumir o controle da query
+    date_start = filters.DateFilter(method='filter_date_start', required=True)
+    date_end = filters.DateFilter(method='filter_date_end', required=True)
 
     class Meta:
         model = Availability
-        fields = ['resource']
+        # Remova 'date_start' e 'date_end' de fields se eles não existem no model,
+        # ou deixe vazio se só for usar esses dois filtros customizados.
+        fields = []
 
-    def filter_date_range(self, queryset, name, value):
-        data = self.form.cleaned_data
-        start_search = data.get('start_date')
-        end_search = data.get('end_date')
+    def filter_date_start(self, queryset, name, value):
+        """
+        Retorna itens onde o início da vigência é menor ou igual à data pesquisada.
+        (O item começou antes ou no dia da pesquisa).
+        """
+        return queryset.filter(valid_from__lte=value)
 
-        if not start_search and not end_search:
-            return queryset
-
-        q_objects = Q()
-
-        if start_search:
-            start_date_val = start_search.date()
-            q_objects &= Q(valid_until__isnull=True) | Q(valid_until__gte=start_date_val)
-
-        if end_search:
-            end_date_val = end_search.date()
-            # O início da disponibilidade deve ser antes ou igual ao fim do período buscado
-            q_objects &= Q(valid_from__lte=end_date_val)
-
-        return queryset.filter(q_objects).distinct()
+    def filter_date_end(self, queryset, name, value):
+        """
+        Retorna itens onde o fim da vigência é maior ou igual à data pesquisada
+        OU o fim da vigência é nulo (vigência aberta).
+        """
+        return queryset.filter(
+            Q(valid_until__gte=value) | Q(valid_until__isnull=True)
+        )

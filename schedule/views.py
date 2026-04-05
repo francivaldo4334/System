@@ -38,3 +38,4 @@ class AvailabilityPresentationAPIView(ListAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilityPresentationSerializer
     filterset_class = AvailabilityPresentationFilterSet
+    pagination_class = None

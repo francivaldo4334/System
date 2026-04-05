@@ -72,10 +72,10 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
 
-    def get_presentation(self):
+    def get_presentation(self, init, end):
         rrule = rrulestr(self.rrule_params)
-        start = datetime.combine(self.valid_from, time.min)
-        end = datetime.combine(self.valid_from, time.max)
+        start = datetime.combine(init, time.min)
+        end = datetime.combine(end, time.max)
         return rrule.between(start, end, inc=True)
 
 
