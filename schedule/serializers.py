@@ -66,16 +66,13 @@ class CreateAssigmentSerializer(AssignmentSerializer):
 class AvailabilitySerializer(serializers.ModelSerializer):
     week = serializers.ListField(
         child=serializers.ChoiceField(
-            choices=[
-                ("1", "MO"), ("2", "TU"), ("3", "WE"), ("4", "TH"),
-                ("5", "FR"), ("6", "SA"), ("7", "SU"),
-            ],
+            choices=[(i, str(i)) for i in range(7)],
         ),
         write_only=True,
         required=True
     )
     time_from = serializers.TimeField(write_only=True, required=True)
-    time_until = serializers.TimeField(write_only=True, required=True)
+    time_until = serializers.TimeField(write_only=True, required=False)
     duration = serializers.TimeField(write_only=True, required=True)
     interval = serializers.TimeField(write_only=True, required=True)
     resource_label = serializers.CharField(source="resource.name", read_only=True)
@@ -93,34 +90,47 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             'interval_slot': {'read_only': True},
         }
 
+    def _get_slot_count(self, init:int, end:int, duration: int, interval:int):
+        return (end - init + interval) // (duration + interval)
+
     def validate(self, attrs):
         from datetime import datetime
+        from dateutil.rrule import rrule
+
+        def get_slots(t):
+            return (t.hour * 60 + t.minute) // 5
 
         week_days = attrs.get('week')
         time_from = attrs.get('time_from')
         time_until = attrs.get('time_until')
         valid_from = attrs.get('valid_from')
+        valid_until = attrs.get('valid_until', None)
         duration_time = attrs.get('duration')
         interval_time = attrs.get('interval')
-        def get_slots(t):
-            return (t.hour * 60 + t.minute) // 5
-        duration_slots = get_slots(duration_time)
-        interval_slots = get_slots(interval_time)
-        total_interval_minutes = (duration_slots + interval_slots) * 5
-        day_map = {"1": "MO", "2": "TU", "3": "WE", "4": "TH", "5": "FR", "6": "SA", "7": "SU"}
-        days_str = ",".join([day_map[d] for d in week_days])
-        
-        dt_start = datetime.combine(valid_from, time_from).strftime("%Y%m%dT%H%M%S")
-        until_str = datetime.combine(valid_from, time_until).strftime("%Y%m%dT%H%M%S")
-        print(dt_start, until_str)
-        rrule_string = (
-            f"DTSTART:{dt_start}\n"
-            f"RRULE:FREQ=MINUTELY;UNTIL={until_str};"
-            f"INTERVAL={total_interval_minutes};BYDAY={days_str}"
+
+        slot_from = get_slots(time_from)
+        slot_until = get_slots(time_until)
+        slot_duration = get_slots(duration_time)
+        slot_interval = get_slots(interval_time)
+
+        rrule_count = self._get_slot_count(slot_from, slot_until, slot_duration, slot_interval)
+        rrule_weekdays = list(set(week_days))
+        rrule_ststart = datetime.combine(valid_from, time_from)
+        rrule_until = datetime.combine(valid_from, time_until) if valid_until else None
+        rrule_interval = slot_duration + slot_interval
+        rrule_instance = rrule(
+              dtstart=rrule_ststart,
+              until=rrule_until,
+              count=rrule_count,
+              byweekday=rrule_weekdays,
+              interval=rrule_interval,
+              freq=5,
         )
-        attrs['rrule_params'] = rrule_string
-        attrs['duration_slot'] = duration_slots
-        attrs['interval_slot'] = interval_slots
+
+        attrs['rrule_params'] = str(rrule_instance)
+        attrs['duration_slot'] = slot_duration
+        attrs['interval_slot'] = slot_interval
+
         for field in ['week', 'time_from', 'time_until', 'duration', 'interval']:
             attrs.pop(field, None)
 

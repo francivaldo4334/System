@@ -64,7 +64,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     rrule_params = models.CharField(validators=[
-        RegexValidator(r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
+        # RegexValidator(r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
         rrule_validator,
     ])
     valid_from = models.DateField()
@@ -77,22 +77,6 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
         start = datetime.combine(self.valid_from, time.min)
         end = datetime.combine(self.valid_from, time.max)
         return rrule.between(start, end, inc=True)
-
-    def save(self, *args, **kwargs):
-        rrule = rrulestr(self.rrule_params)
-        r_dtstart = rrule._dtstart
-        r_interval = rrule._interval
-        total_duration = (self.duration_slot + self.interval_slot) * 5# type: ignore
-        if r_interval != total_duration:
-            raise ValidationError({
-                "rrule_params":"O INTERVAL da RRULE corresponde a soma dos parametros interval e duration"
-            })
-        self.valid_from = r_dtstart.date()
-        if self.valid_until and self.valid_from > self.valid_until:
-            raise ValidationError({
-                "valid_until": "Data final não pode ser menor que a data de inicio"
-            })
-        return super().save(*args, **kwargs)
 
 
 class ResourceOccupation(models.Model):
