@@ -71,12 +71,13 @@ class AvailabilitySerializer(serializers.ModelSerializer):
                 ("5", "FR"), ("6", "SA"), ("7", "SU"),
             ],
         ),
-        write_only=True
+        write_only=True,
+        required=True
     )
-    time_from = serializers.TimeField(write_only=True)
-    time_until = serializers.TimeField(write_only=True)
-    duration = serializers.TimeField(write_only=True)
-    interval = serializers.TimeField(write_only=True)
+    time_from = serializers.TimeField(write_only=True, required=True)
+    time_until = serializers.TimeField(write_only=True, required=True)
+    duration = serializers.TimeField(write_only=True, required=True)
+    interval = serializers.TimeField(write_only=True, required=True)
     resource_label = serializers.CharField(source="resource.name", read_only=True)
 
     class Meta:
@@ -111,6 +112,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         
         dt_start = datetime.combine(valid_from, time_from).strftime("%Y%m%dT%H%M%S")
         until_str = datetime.combine(valid_from, time_until).strftime("%Y%m%dT%H%M%S")
+        print(dt_start, until_str)
         rrule_string = (
             f"DTSTART:{dt_start}\n"
             f"RRULE:FREQ=MINUTELY;UNTIL={until_str};"
