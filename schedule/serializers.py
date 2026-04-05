@@ -125,9 +125,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         return attrs
 
 
-from dateutil.rrule import rrulestr
-from django.utils import timezone
-
 class AvailabilityPresentationSerializer(serializers.ModelSerializer):
     occurrences = serializers.SerializerMethodField()
 
@@ -136,12 +133,10 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
         fields = ["id", "occurrences"]
 
     def get_occurrences(self, obj):
-        if not obj.rrule_params:
-            return []
-        try:
-            rrule = rrulestr(obj.rrule_params)
-            # occurrences = rrule.between(start_period, end_period, inc=True)            
-            occurrences = list(rrule)
-            return [dt.isoformat() for dt in occurrences]
-        except Exception as e:
-            return []
+        request = self.context.get("request", None)
+        if not request:
+            return None
+        start = request.query_params.get("start_date")
+        end = request.query_params.get("end_date")
+
+        return obj.get_presentation(start, end)

@@ -45,6 +45,9 @@
             id_{{key}}_btn_add_modal.close()
             id_{{key}}_create_form.reset()
         },
+        onError(error){
+            console.log(error.data)
+        }
     })
   }
   id_{{key}}_create_form.addEventListener("submit", handlerSubmitCreateEvent)

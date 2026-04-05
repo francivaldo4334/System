@@ -11,6 +11,7 @@ from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeSt
 from dateutil.rrule import MINUTELY, rrulestr, rruleset
 from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
+from datetime import datetime
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -71,10 +72,9 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
 
-    def _get_rrule(self):
-        rule_obj = rrulestr(self.rrule_params)
-        return rule_obj._rrule[0] if isinstance(rule_obj, rruleset) else rule_obj
-        
+    def get_presentation(self, start:datetime, end:datetime):
+        rrule = rrulestr(self.rrule_params)
+        return rrule.between(start, end, inc=True)
 
     def save(self, *args, **kwargs):
         rrule = self._get_rrule()

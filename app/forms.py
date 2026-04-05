@@ -71,8 +71,6 @@ class AvailabilityForm:
             DateField(
                 name="valid_until",
                 label=_("Valid Until"),
-                attrs="required",
-                value=timezone.localtime(timezone.now()).date().isoformat(),
             ),
             CheckboxesField(
                 name="week",
