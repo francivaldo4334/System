@@ -77,7 +77,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
         return rrule.between(start, end, inc=True)
 
     def save(self, *args, **kwargs):
-        rrule = self._get_rrule()
+        rrule = rrulestr(self.rrule_params)
         r_dtstart = rrule._dtstart
         r_interval = rrule._interval
         total_duration = (self.duration_slot + self.interval_slot) * 5# type: ignore
