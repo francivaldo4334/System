@@ -116,7 +116,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         rrule_count = self._get_slot_count(slot_from, slot_until, slot_duration, slot_interval)
         rrule_weekdays = list(set(week_days))
         rrule_ststart = datetime.combine(valid_from, time_from)
-        rrule_until = datetime.combine(valid_from, time_until) if valid_until else None
+        rrule_until = datetime.combine(valid_until, time_until) if valid_until else None
         rrule_interval = slot_duration + slot_interval
         rrule_instance = rrule(
               dtstart=rrule_ststart,
