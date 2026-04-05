@@ -33,7 +33,7 @@
     const data = Object.fromEntries(formData.keys().map(key => {
         let value = formData.getAll(key) 
         if (value.length === 1) value = value[0]
-        return [key,value]
+        return [key,value || undefined]
     }))
     $q.use( "{{create.post_url_name}}",
     () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
@@ -46,7 +46,9 @@
             id_{{key}}_create_form.reset()
         },
         onError(error){
-            console.log(error.data)
+            if (error.status === 400){
+                toastError(Object.entries(error.data).map(([key, value]) => `${key}:${value}`).join("\n"))
+            }
         }
     })
   }
