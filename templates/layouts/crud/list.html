@@ -65,7 +65,7 @@ $s.compute("{{list.table.list_url_name}}.data", [
         const type_map = JSON.parse(id_row_map_types.textContent)
         const map = {
           "text": (v) => v,
-          "date": (v) => new Date(v).toLocaleDateString("{{LANG}}"),
+          "date": (v) => new Date(`${v}T00:00`).toLocaleDateString("{{LANG}}"),
         }
         $u.renderList("{{key}}_render_list", id_{{key}}_table, items, (item) => {
           const tr = document.createElement("tr")
