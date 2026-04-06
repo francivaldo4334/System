@@ -64,7 +64,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
     rrule_params = models.CharField(validators=[
-        # RegexValidator(r"^DTSTART:\d{8}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL=\d{8}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
+        RegexValidator(r"^DTSTART:{%DATE%}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL={%DATE%}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
         rrule_validator,
     ])
     valid_from = models.DateField()

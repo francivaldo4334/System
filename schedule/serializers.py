@@ -95,7 +95,8 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         from datetime import datetime
-        from dateutil.rrule import rrule
+        from dateutil.rrule import rrule, MINUTELY
+        import re
 
         def get_slots(t):
             return (t.hour * 60 + t.minute) // 5
@@ -115,20 +116,20 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
         rrule_count = self._get_slot_count(slot_from, slot_until, slot_duration, slot_interval)
         rrule_weekdays = list(set(week_days))
-        rrule_ststart = datetime.combine(valid_from, time_from)
+        rrule_dtstart = datetime.combine(valid_from, time_from)
         rrule_until = datetime.combine(valid_until, time_until) if valid_until else None
         rrule_interval = (slot_duration + slot_interval) * 5
 
         rrule_instance = rrule(
-              dtstart=rrule_ststart,
+              dtstart=rrule_dtstart,
               until=rrule_until,
               count=rrule_count,
               byweekday=rrule_weekdays,
               interval=rrule_interval,
-              freq=5,
+              freq=MINUTELY,
         )
 
-        attrs['rrule_params'] = str(rrule_instance)
+        attrs['rrule_params'] = re.sub(r"(DTSTART:|UNTIL=)\d{8}T", r"\1{%DATE%}T", str(rrule_instance))
         attrs['duration_slot'] = slot_duration
         attrs['interval_slot'] = slot_interval
 
