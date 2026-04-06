@@ -7,6 +7,24 @@
 </div>
 {%include "components/schedule/view_mode/day/loadtimeinfo.js.html" with id_timeline="id_schedule_timeline"%}
 <script is="exec-mount" type="pass">
+$s.subscribe("filter.calendar.range", null, null, (range) => {
+    $q.use(
+        "availabilities_presentation",
+        () => {
+            const [init, end] = range.split(",").map(it => it.split("T")[0])
+            return fetch(`{% url 'availabilities_presentation'%}?date_start=${init}&date_end=${end}`)
+                .then(r => r.json())
+                .then(data => {
+                    console.log(data)
+                })
+        },
+        {
+            onSuccess(data) {
+            }
+        },
+        { ttl: 0 }
+    );
+})
 $q.use(
     "assignment-list",
     () => fetch("{% url 'assignment-list'%}")
