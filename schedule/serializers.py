@@ -153,6 +153,6 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
             return None
         start = request.query_params.get("date_start")
         end = request.query_params.get("date_end")
-        date_start = datetime.fromisoformat(start)
-        date_end = datetime.fromisoformat(end)
+        date_start = datetime.fromisoformat(start).date()
+        date_end = datetime.fromisoformat(end).date()
         return obj.get_presentation(date_start, date_end)

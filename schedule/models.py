@@ -8,10 +8,10 @@ from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
 from django.db.models.functions import Concat, Substr
 from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
-from dateutil.rrule import MINUTELY, rrulestr, rruleset
+from dateutil.rrule import rrulestr
 from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -53,13 +53,11 @@ class ServiceResourceRelation(models.Model):
     quantity = models.PositiveIntegerField()
 
 
-# pyright: reportAttributeAccessIssue=false
 def rrule_validator(value):
     try:
         rrulestr(value)
     except Exception as e:
         raise ValidationError(f"Erro na regra de recorrência: {e}")
-
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
@@ -71,12 +69,20 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     valid_until = models.DateField(null=True, blank=True)
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
-
-    def get_presentation(self, init, end):
-        rrule = rrulestr(self.rrule_params)
-        start = datetime.combine(init, time.min)
-        end = datetime.combine(end, time.max)
-        return rrule.between(start, end, inc=True)
+    def get_presentation(self, init: datetime.date, end: datetime.date):
+        if self.valid_until and (init > self.valid_until or end < self.valid_from):
+            return []
+        results = []
+        search_start = datetime.combine(init, time.min)
+        search_end = datetime.combine(end, time.max)
+    
+        current_date:datetime = init
+        while current_date <= end:
+            rrule = rrulestr(str(self.rrule_params).replace("{%DATE%}", current_date.strftime("%Y%m%d")))
+            occurrences = rrule.between(search_start, search_end, inc=True)
+            results.extend(occurrences)
+            current_date += timedelta(days=1)
+        return list(set(results))
 
 
 class ResourceOccupation(models.Model):
