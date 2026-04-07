@@ -70,19 +70,21 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
     def get_presentation(self, init: datetime.date, end: datetime.date):
-        if self.valid_until and (init > self.valid_until or end < self.valid_from):
-            return []
+        if init < self.valid_from:
+            init = self.valid_from
+        if self.valid_until and end > self.valid_until:
+            end = self.valid_until;
         results = []
         search_start = datetime.combine(init, time.min)
         search_end = datetime.combine(end, time.max)
     
-        current_date:datetime = init
-        while current_date <= end:
+        current_date:datetime = search_start
+        while current_date <= search_end :
             rrule = rrulestr(str(self.rrule_params).replace("{%DATE%}", current_date.strftime("%Y%m%d")))
-            occurrences = rrule.between(search_start, search_end, inc=True)
+            occurrences = rrule.between(search_start, search_end, True)
             results.extend(occurrences)
             current_date += timedelta(days=1)
-        return list(set(results))
+        return sorted(list(set(results)))
 
 
 class ResourceOccupation(models.Model):
