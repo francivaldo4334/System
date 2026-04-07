@@ -23,9 +23,11 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
         const items = []
         data?.forEach(av => {
             av?.occurrences?.forEach(iso => {
+                console.log(av)
                 items.push({
                     start:isoToSlot(iso),
                     duration:av.duration_slot,
+                    description:av.description,
                 });
             })
         })
@@ -35,6 +37,7 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
           const slot = clone.querySelector('app-slot');
           slot.setAttribute('start', it.start);
           slot.setAttribute('duration', it.duration);
+          slot.innerText = it.description
           return clone;
         })
       }
