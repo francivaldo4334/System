@@ -35,7 +35,13 @@ $s.subscribe("filter.calendar.range", null, null, (range) => {
           slot.setAttribute('duration', it.duration);
           return clone;
         }, () => {
-            document.querySelector(".preview-slot").scrollIntoView({behavior:"smooth", block:"start"})
+            const firstSlot = id_timeline_preview.querySelector(".preview-slot");
+            if (firstSlot) {
+                id_timeline_content.scrollTo({
+                    top: firstSlot.offsetTop,
+                    behavior: "smooth"
+                });
+            }
         })
       }
   }, { ttl: 0 });
