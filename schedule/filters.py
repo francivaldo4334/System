@@ -26,4 +26,7 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
         fields = []
 
     def filter_date(self, queryset, name, value):
-        return queryset
+        return queryset.filter(
+            Q(valid_until__isnull=True) | Q(valid_until__gte=value),
+            valid_from__lte=value,
+        )
