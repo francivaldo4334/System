@@ -24,9 +24,7 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
 
     class Meta:
         model = Availability
-        fields = {
-            "resource": ["in"]
-        }
+        fields = []
 
     def filter_date_start(self, queryset, name, value):
         return queryset

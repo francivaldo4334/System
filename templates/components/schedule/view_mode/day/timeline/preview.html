@@ -2,6 +2,8 @@
 </app-timeline>
 <template id="tmpl_empty_slot">
     <app-slot class="preview-slot">
+        <button class="w-full h-full">
+        </button>
     </app-slot>
 </template>
 <script is="exec-mount" type="pass">
@@ -23,7 +25,7 @@ $s.subscribe("filter.calendar.range", null, null, (range) => {
             av?.occurrences?.forEach(iso => {
                 items.push({
                     start:isoToSlot(iso),
-                    duration:av.duration_slot
+                    duration:av.duration_slot,
                 });
             })
         })

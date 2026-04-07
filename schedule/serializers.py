@@ -75,14 +75,13 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     time_until = serializers.TimeField(write_only=True, required=False)
     duration = serializers.TimeField(write_only=True, required=True)
     interval = serializers.TimeField(write_only=True, required=True)
-    resource_label = serializers.CharField(source="resource.name", read_only=True)
 
     class Meta:
         model = Availability
         fields = [
-            "id", "description", "resource", "valid_from", "valid_until",
+            "id", "description", "valid_from", "valid_until",
             "week", "time_from", "time_until", "duration", "interval",
-            "rrule_params", "duration_slot", "interval_slot", "resource_label"
+            "rrule_params", "duration_slot", "interval_slot"
         ]
         extra_kwargs = {
             'rrule_params': {'read_only': True},
@@ -144,7 +143,7 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ["id", "resource", "valid_from", "valid_until", "occurrences", "duration_slot"]
+        fields = ["id", "valid_from", "valid_until", "occurrences", "duration_slot"]
 
     def get_occurrences(self, obj):
         from datetime import datetime
