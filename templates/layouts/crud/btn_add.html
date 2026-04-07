@@ -23,10 +23,11 @@
     </form>
 </dialog>
 <script is="exec-umount" type="pass">
-  id_{{key}}_create_form.removeEventListener("submit", handlerSubmitCreateEvent)
+  document.getElementById("id_{{key}}_create_form")?.removeEventListener("submit", handlerSubmitCreateEvent)
   handlerSubmitCreateEvent = null
 </script>
 <script is="exec-mount" type="pass">
+console.log("here")
   let handlerSubmitCreateEvent = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target)

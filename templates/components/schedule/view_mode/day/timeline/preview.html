@@ -23,7 +23,6 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
         const items = []
         data?.forEach(av => {
             av?.occurrences?.forEach(iso => {
-                console.log(av)
                 items.push({
                     start:isoToSlot(iso),
                     duration:av.duration_slot,

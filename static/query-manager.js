@@ -21,7 +21,7 @@ const queryCacheFactory = () => {
       onFinally,
     } = callbacks;
     const {
-      ttl = 5000,
+      ttl = 0,
       refetchOnFocus = false,
       enableRefetch = false,
     } = options;
