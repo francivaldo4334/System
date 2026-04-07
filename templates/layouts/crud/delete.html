@@ -4,7 +4,7 @@
         {% include "icons/trash-2.svg" %} </button>
 </template>
 
-<dialog id="id_delete_modal" class="modal">
+<dialog id="id_delete_modal" class="modal" onclose="$s.set('delete.modal.id', '')">
     <form class="modal-box border-t-4 border-error">
         <h3 class="font-bold text-lg flex items-center gap-2">
             {% trans "Confirm Exclusion" %}
@@ -30,39 +30,44 @@
     </form>
 </dialog>
 <script is="exec-umount" type="pass">
-    $s.remove("delete.modal.id")
-    document.getElementById("id_delete_modal")?.removeEventListener("close", handlerCloseCancelModal)
-    handlerCloseCancelModal = null
-    deleteForm.removeEventListener("submit", handlerDeleteForm)
-    deleteForm = null
+{
+    $s.remove("delete.modal.id");
+    const deleteForm = document.querySelector("#id_delete_modal form");    
+    if (deleteForm && deleteForm._handlerDeleteForm) {
+        deleteForm.removeEventListener("submit", deleteForm._handlerDeleteForm);
+        deleteForm._handlerDeleteForm = null;
+    }
+}
 </script>
 <script is="exec-mount" type="pass">
-    $s.create("delete.modal.id", "")
-    let handlerCloseCancelModal = () => {
-        $s.set("delete.modal.id", "")
-    }
-    id_delete_modal.addEventListener("close", handlerCloseCancelModal)
-    let deleteForm = id_delete_modal.querySelector("form")
-    let handlerDeleteForm = (event)=>{
-        event.preventDefault();
-        $q.use(
-            "{{delete.delete_url_name}}",
-            () => $r.delete(
-                "{% url delete.delete_url_name 0 %}".replace("0", $s.get("delete.modal.id")),
+{
+    $s.create("delete.modal.id", "");
+    const modal = document.getElementById("id_delete_modal");
+    const deleteForm = modal?.querySelector("form");
+    if (deleteForm) {
+        deleteForm._handlerDeleteForm = (event) => {
+            event.preventDefault();            
+            const currentId = $s.get("delete.modal.id");
+            if (!currentId) return;
+            $q.use(
+                "{{delete.delete_url_name}}",
+                () => $r.delete(
+                    "{% url delete.delete_url_name 0 %}".replace("0", currentId),
+                    { "X-CSRFToken": "{{csrf_token}}" }
+                ),
                 {
-                    "X-CSRFToken": "{{csrf_token}}"
-                }
-            ),
-            {
-                onSuccess(){
-                    {%if list%}
-                    $q.refetch("{{list.table.list_url_name}}")
-                    {%endif%}
-                    id_delete_modal.close()
-                }
-            },
-            {ttl:0}
-        )
+                    onSuccess() {
+                        {% if list %}
+                        $q.refetch("{{list.table.list_url_name}}");
+                        {% endif %}
+                        modal.close();
+                    }
+                },
+                { ttl: 0 }
+            );
+        };
+
+        deleteForm.addEventListener("submit", deleteForm._handlerDeleteForm);
     }
-    deleteForm.addEventListener("submit", handlerDeleteForm)
+}
 </script>

@@ -22,36 +22,48 @@
         <button></button>
     </form>
 </dialog>
-<script is="exec-umount" type="pass">
-  document.getElementById("id_{{key}}_create_form")?.removeEventListener("submit", handlerSubmitCreateEvent)
-  handlerSubmitCreateEvent = null
-</script>
 <script is="exec-mount" type="pass">
-console.log("here")
-  let handlerSubmitCreateEvent = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target)
-    const data = Object.fromEntries(formData.keys().map(key => {
-        let value = formData.getAll(key) 
-        if (value.length === 1) value = value[0]
-        return [key,value || undefined]
-    }))
-    $q.use( "{{create.post_url_name}}",
-    () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
-    {
-        onSuccess(){
-            {% if list %}
-                $q.refetch("{{list.table.list_url_name}}")
-            {% endif %}
-            id_{{key}}_btn_add_modal.close()
-            id_{{key}}_create_form.reset()
-        },
-        onError(error){
-            if (error.status === 400){
-                toastError(Object.entries(error.data).map(([key, value]) => `${key}:${value}`).join("\n"))
-            }
-        }
-    })
-  }
-  id_{{key}}_create_form.addEventListener("submit", handlerSubmitCreateEvent)
+{
+    const form = document.getElementById("id_{{key}}_create_form");
+    if (form) {
+        form._handlerCreate = (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(Array.from(formData.keys()).map(key => {
+                let value = formData.getAll(key);
+                if (value.length === 1) value = value[0];
+                return [key, value || undefined];
+            }));
+            $q.use("{{create.post_url_name}}",
+                () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
+                {
+                    onSuccess() {
+                        {% if list %}
+                            $q.refetch("{{list.table.list_url_name}}");
+                        {% endif %}
+                        document.getElementById("id_{{key}}_btn_add_modal")?.close();
+                        form.reset();
+                    },
+                    onError(error) {
+                        if (error.status === 400) {
+                            toastError(Object.entries(error.data)
+                                .map(([k, v]) => `${k}: ${v}`).join("\n"));
+                        }
+                    }
+                }
+            );
+        };
+
+        form.addEventListener("submit", form._handlerCreate);
+    }
+}
+</script>
+<script is="exec-umount" type="pass">
+{
+    const form = document.getElementById("id_{{key}}_create_form");
+    if (form && form._handlerCreate) {
+        form.removeEventListener("submit", form._handlerCreate);
+        delete form._handlerCreate; // Limpeza completa da propriedade
+    }
+}
 </script>
