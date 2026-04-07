@@ -9,11 +9,14 @@ $s.remove("{{key}}.filters")
 $s.createStore("{{key}}.filters", {
   "search": "",
 })
-let {{key}}_filter_search_d_id = null
-id_{{key}}_filter_search.oninput = (event) => {
-  clearTimeout({{key}}_filter_search_d_id)
-  {{key}}_filter_search_d_id = setTimeout(()=>{
-    $s.set("{{key}}.filters.search", event.target.value)
-  }, 300)
+{
+  let {{key}}_filter_search_id = null
+  document.getElementById("id_{{key}}_filter_search").oninput = (event) => {
+    clearTimeout({{key}}_filter_search_id)
+    {{key}}_filter_search_id = setTimeout(()=>{
+      $s.set("{{key}}.filters.search", event.target.value)
+    }, 300)
+  }
+  
 }
 </script>
