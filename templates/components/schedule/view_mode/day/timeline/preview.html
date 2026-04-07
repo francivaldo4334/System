@@ -1,7 +1,7 @@
 <app-timeline id="id_timeline_preview">
 </app-timeline>
 <template id="tmpl_empty_slot">
-    <app-slot class="appointment-slot">
+    <app-slot class="preview-slot">
     </app-slot>
 </template>
 <script is="exec-mount" type="pass">
@@ -34,6 +34,8 @@ $s.subscribe("filter.calendar.range", null, null, (range) => {
           slot.setAttribute('start', it.start);
           slot.setAttribute('duration', it.duration);
           return clone;
+        }, () => {
+            document.querySelector(".preview-slot").scrollIntoView({behavior:"smooth", block:"start"})
         })
       }
   }, { ttl: 0 });

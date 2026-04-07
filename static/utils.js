@@ -4,12 +4,14 @@ function utilsManager() {
     el,
     items,
     buildChild,
+    onFinished,
   ) {
     const rafId = `_${key}_raf_id`
     if (!window[rafId]) cancelAnimationFrame(window[rafId]);
     const render = () => {
       if (items.length === 0) {
         window[rafId] = null;
+        onFinished?.()
         return;
       }
       const chunk = items.splice(0, 10);
