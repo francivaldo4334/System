@@ -40,7 +40,7 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
           return clone;
         })
       }
-  }, { ttl: 0 });
+  }, { ttl: 10000 });
 })
 setTimeout(() => {
     const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
