@@ -14,6 +14,11 @@
         </div>
     </app-slot>
 </template>
+
+<template id="tmpl-empty-slot">
+    <app-slot class="appointment-slot">
+    </app-slot>
+</template>
 {%include "components/schedule/view_mode/day/loadtimeinfo.js.html" with id_timeline="id_schedule_timeline"%}
 <script is="exec-umount" type="pass">
 TimeUtils = null
@@ -26,6 +31,17 @@ let TimeUtils = {
         const start = (startSlot - 1) * TimeUtils.SLOT_DURATION_MIN;
         const end = (startSlot - 1 + duration) * TimeUtils.SLOT_DURATION_MIN;
         return `${TimeUtils.format(start)} - ${TimeUtils.format(end)}`;
+    },
+    getSlotFromISO: (isoString) => {
+        try {
+            const date = new Date(isoString);
+            if (isNaN(date.getTime())) throw new Error("Data inválida");
+            const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
+            return Math.floor(minutesSinceStartOfDay / TimeUtils.SLOT_DURATION_MIN) + 1;
+        } catch (e) {
+            console.error("TimeUtils.getSlotFromISO Error:", e);
+            return null;
+        }
     }
 };
 
@@ -34,7 +50,29 @@ $s.subscribe("filter.calendar.range", null, null, (range) => {
     $q.use("availabilities_presentation", () => {
         const [init, end] = range.split(",").map(it => it.split("T")[0]);
         return $r.get(`{% url 'availabilities_presentation'%}?date_start=${init}&date_end=${end}`);
-    }, {}, { ttl: 0 });
+    }, {
+        onSuccess(data){
+            const timeline = document.getElementById('id_schedule_timeline');
+            const template = document.getElementById('tmpl-empty-slot');
+            const items = []
+            data?.forEach(av => {
+                av?.occurrences?.forEach(iso => {
+                    items.push({
+                        start:TimeUtils.getSlotFromISO(iso),
+                        duration:av.duration_slot
+                    });
+                })
+            })
+            $u.renderList("empty_slots", timeline, items, (it)=>{
+                const clone = template.content.cloneNode(true);
+                const slot = clone.querySelector('app-slot');
+                console.log(it)
+                slot.setAttribute('start', it.start);
+                slot.setAttribute('duration', it.duration);
+                return clone;
+            })
+        }
+    }, { ttl: 0 });
 });
 
 $q.use(
@@ -60,7 +98,7 @@ $q.use(
         }
     },
     {
-        onSuccess(appointmentsHTML) {
+        onSuccess(nodes) {
             const timeline = document.getElementById('id_schedule_timeline');
             if (!timeline) return;
             timeline.querySelectorAll('.appointment-slot').forEach(n => n.remove());

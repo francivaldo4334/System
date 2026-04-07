@@ -144,7 +144,7 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ["id", "resource", "valid_from", "valid_until", "occurrences"]
+        fields = ["id", "resource", "valid_from", "valid_until", "occurrences", "duration_slot"]
 
     def get_occurrences(self, obj):
         from datetime import datetime
