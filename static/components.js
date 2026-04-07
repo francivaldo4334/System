@@ -3,8 +3,7 @@ createComponent('app-timeline', {
   scoped: true,
   css: `:host {
     display: grid;
-    grid-auto-columns: var(--tab-space) 1fr;
-    gap: 0 0.2rem;
+    grid-auto-columns: 1fr;
     grid-auto-rows: var(--slotunit);
     position: relative; 
   }`,

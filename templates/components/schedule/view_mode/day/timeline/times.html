@@ -1,0 +1,23 @@
+<app-timeline id="id_timeline_times">
+</app-timeline>
+<script is="exec-mount" type="pass">
+{
+  const slotInterval = 5;
+  const totalSlots = 288;
+  const slots = [];
+  for (let i = 0; i < totalSlots; i++) {
+      const currentMinute = i * slotInterval;
+      const h = String(Math.floor(currentMinute / 60)).padStart(2, '0');
+      const m = String(currentMinute % 60).padStart(2, '0');
+      slots.push({ start: i + 1, hour: `${h}:${m}` });
+  }
+  $u.renderList("timeline_times", id_timeline_times, slots, ({start, hour})=>{
+          const slotEl = document.createElement('app-slot');
+          slotEl.setAttribute('start', start);
+          slotEl.setAttribute('duration', 1);
+          slotEl.classList.add('slot-time-label');
+          slotEl.innerText = hour;
+          return slotEl 
+  })
+}
+</script>
