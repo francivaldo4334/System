@@ -1,8 +1,12 @@
 <div
-  class="overflow-y-auto max-h-full grid grid-cols-[var(--timeline_times_space)_1fr] bg-pattern-paper gap-2"
-  style="--timeline_times_space: 4rem; --tab-space: var(--timeline_times_space); --slotunit:1rem">
-  {% include "components/schedule/view_mode/day/timeline/times.html" %}
-  <div class="relative">
-    {% include "components/schedule/view_mode/day/timeline/preview.html" %}
+  class="overflow-y-auto max-h-full"
+>
+  <div
+    class="grid grid-cols-[var(--timeline_times_space)_1fr] bg-pattern-paper gap-2"
+    style="--timeline_times_space: 4rem; --tab-space: var(--timeline_times_space); --slotunit:1rem">
+    {% include "components/schedule/view_mode/day/timeline/times.html" %}
+    <div class="relative">
+      {% include "components/schedule/view_mode/day/timeline/preview.html" %}
+    </div>
   </div>
 </div>
