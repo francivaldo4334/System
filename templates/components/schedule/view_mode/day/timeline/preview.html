@@ -7,11 +7,11 @@
     </app-slot>
 </template>
 <script is="exec-mount" type="pass">
-$s.subscribe("filter.calendar.range", null, null, (range) => {
-  if (!range) return;
+$s.subscribe("filter.calendar.day", null, null, (_day) => {
+  if (!_day)return;
+  const day = _day.split("T")[0]
   $q.use("availabilities_presentation", () => {
-      const [init, end] = range.split(",").map(it => it.split("T")[0]);
-      return $r.get(`{% url 'availabilities_presentation'%}?date_start=${init}&date_end=${end}`);
+      return $r.get(`{% url 'availabilities_presentation'%}?date=${day}`);
   }, {
       onSuccess(data){
         const isoToSlot = (isoString) => {

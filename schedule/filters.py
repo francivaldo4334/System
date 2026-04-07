@@ -19,15 +19,11 @@ class AvailabilityFilterSet(filters.FilterSet):
         ).distinct()
 
 class AvailabilityPresentationFilterSet(filters.FilterSet):
-    date_start = filters.DateFilter(method='filter_date_start', required=True)
-    date_end = filters.DateFilter(method='filter_date_end', required=True)
+    date = filters.DateFilter(method='filter_date', required=True)
 
     class Meta:
         model = Availability
         fields = []
 
-    def filter_date_start(self, queryset, name, value):
-        return queryset
-
-    def filter_date_end(self, queryset, name, value):
+    def filter_date(self, queryset, name, value):
         return queryset
