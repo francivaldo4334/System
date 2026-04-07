@@ -36,7 +36,7 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
           const slot = clone.querySelector('app-slot');
           slot.setAttribute('start', it.start);
           slot.setAttribute('duration', it.duration);
-          slot.innerText = it.description
+          slot.querySelector("button").innerText = it.description
           return clone;
         })
       }
