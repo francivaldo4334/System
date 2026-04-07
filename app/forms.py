@@ -56,12 +56,6 @@ class AvailabilityForm:
         return self._form.fields
     _form = Form(
         fields=[
-            SelectField(
-                name="resource",
-                label=_("Resource"),
-                url_name="resources",
-                attrs="required",
-            ),
             DateField(
                 name="valid_from",
                 label=_("Valid From"),

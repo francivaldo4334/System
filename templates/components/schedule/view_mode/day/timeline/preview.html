@@ -36,17 +36,22 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
           slot.setAttribute('start', it.start);
           slot.setAttribute('duration', it.duration);
           return clone;
-        }, () => {
-            const firstSlot = id_timeline_preview.querySelector(".preview-slot");
-            if (firstSlot) {
-                id_timeline_content.scrollTo({
-                    top: firstSlot.offsetTop,
-                    behavior: "smooth"
-                });
-            }
         })
       }
   }, { ttl: 0 });
 })
+setTimeout(() => {
+    const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
+        const orderA = parseInt(a.getAttribute("start"))
+        const orderB = parseInt(b.getAttribute("start"))
+        return orderA - orderB
+    })?.[0];
+    if (firstSlot) {
+        id_timeline_content.scrollTo({
+            top: firstSlot.offsetTop,
+            behavior: "smooth"
+        });
+    }
+}, 300)
 </script>
 
