@@ -1,0 +1,14 @@
+<template id="id_template_btn_update">
+    <button class="btn btn-ghost btn-square tooltip"
+        onclick="id_update_modal.showModal()" data-tip="{% trans 'Edit' %}">
+        {% include "icons/square-pen.svg" %} </button>
+</template>
+<dialog id="id_update_modal" class="modal">
+    <div class="modal-box">
+        <div class="modal-action">
+        </div>
+    </div>
+    <form class="modal-backdrop" method="dialog">
+        <button></button>
+    </form>
+</dialog>

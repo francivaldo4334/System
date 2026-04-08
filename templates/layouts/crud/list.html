@@ -75,9 +75,15 @@ $s.compute("{{list.table.list_url_name}}.data", [
             tr.appendChild(td)
           })
           const th = document.createElement("th")
+          {% if update %}
+              const nodeUpdate = id_template_btn_update.content.cloneNode(true)
+              const btnUpdate = nodeUpdate.querySelector("button")
+              btnUpdate.dataset.id=item.id
+              th.appendChild(btnUpdate)
+          {% endif %}
           {% if delete %}
-              const node = id_template_btn_delete.content.cloneNode(true)
-              const btnCancel = node.querySelector("button")
+              const nodeDelete = id_template_btn_delete.content.cloneNode(true)
+              const btnCancel = nodeDelete.querySelector("button")
               btnCancel.dataset.id=item.id
               th.appendChild(btnCancel)
           {% endif %}
