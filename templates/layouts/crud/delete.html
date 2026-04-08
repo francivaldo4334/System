@@ -1,6 +1,6 @@
 <template id="id_template_btn_delete">
-    <button class="btn btn-xs btn-error btn-square *:w-4"
-        onclick="$s.set('delete.modal.id', this.dataset.id);id_delete_modal.showModal()">
+    <button class="btn btn-ghost btn-square tooltip"
+        onclick="$s.set('delete.modal.id', this.dataset.id);id_delete_modal.showModal()" data-tip="{% trans 'Delete' %}">
         {% include "icons/trash-2.svg" %} </button>
 </template>
 
