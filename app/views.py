@@ -64,5 +64,8 @@ class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
         "delete": {
             "delete_url_name": "availabilities-detail"
         },
-        "update": True,
+        "update": {
+            "form": AvailabilityForm,
+            "update_url_name": "availabilities-detail"
+        },
     }

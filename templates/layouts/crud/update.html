@@ -1,14 +1,51 @@
 <template id="id_template_btn_update">
     <button class="btn btn-ghost btn-square tooltip"
-        onclick="id_update_modal.showModal()" data-tip="{% trans 'Edit' %}">
+        onclick="$s.set('update.modal.id', this.dataset.id);id_update_modal.showModal()" data-tip="{% trans 'Edit' %}">
         {% include "icons/square-pen.svg" %} </button>
 </template>
 <dialog id="id_update_modal" class="modal">
     <div class="modal-box">
+        {% with form=create.form id="id_"|add:key|add:"_update_form" %}
+        {% include "components/form/index.html" %}
+        {% endwith %}
         <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost" onclick="id_{{key}}_create_form.reset()">
+                    {% trans "Cancel" %}
+                </button>
+            </form>
+            <button class="btn btn-primary" onclick="id_{{key}}_create_form.requestSubmit()">
+                {% trans "Save" %}
+            </button>
         </div>
     </div>
     <form class="modal-backdrop" method="dialog">
         <button></button>
     </form>
 </dialog>
+<script is="exec-mount" type="pass">
+{
+    $s.create("update.modal.id", "")
+    $s.subscribe("update.modal.id", null, null, (value,el) => {
+        if (!value) return
+        const form = document.getElementById("id_{{key}}_update_form")
+        $q.use("{{update.update_url_name}}", () => $r.get("{% url update.update_url_name 0 %}".replace("0", value)), {
+            onSuccess(data){
+                Object.keys(data).forEach( key => {
+                    const field = form.elements[key];
+                    if (field){
+                        const fieldGroup = Array.from(field)
+                        if (fieldGroup.length) {
+                            fieldGroup.forEach(field => {
+                                field.checked = data[key].map(String).includes(field.value)
+                            })
+                        } else {
+                            field.value = data[key];
+                        }
+                    }
+                })
+            }
+        })
+    })
+}
+</script>
