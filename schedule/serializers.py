@@ -143,6 +143,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     
         try:
             rrule_str = str(data.get("rrule_params", ""))
+            print("rrule", rrule_str)
             formatted_date = instance.valid_from.strftime("%Y%m%d")
             rule = rrulestr(rrule_str.replace("{%DATE%}", formatted_date))
             data["time_from"] = rule._dtstart.time()
