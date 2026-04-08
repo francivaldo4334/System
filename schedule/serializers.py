@@ -71,8 +71,8 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         write_only=True,
         required=True
     )
-    time_from = serializers.TimeField(write_only=True, required=True)
-    time_until = serializers.TimeField(write_only=True, required=False)
+    time_from = serializers.TimeField(required=True)
+    time_until = serializers.TimeField(required=False)
     duration = serializers.TimeField(write_only=True, required=True)
     interval = serializers.TimeField(write_only=True, required=True)
 
@@ -132,7 +132,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         attrs['duration_slot'] = slot_duration
         attrs['interval_slot'] = slot_interval
 
-        for field in ['week', 'time_from', 'time_until', 'duration', 'interval']:
+        for field in ['week', 'duration', 'interval']:
             attrs.pop(field, None)
 
         return attrs
@@ -146,9 +146,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             print("rrule", rrule_str)
             formatted_date = instance.valid_from.strftime("%Y%m%d")
             rule = rrulestr(rrule_str.replace("{%DATE%}", formatted_date))
-            data["time_from"] = rule._dtstart.time()
-            until_dt = getattr(rule, '_until', None)
-            data["time_until"] = until_dt.time() if until_dt else None
             if hasattr(rule, '_byweekday'):
                 data["week"] = list(set(rule._byweekday))
             total_minutes_dur = instance.duration_slot * 5

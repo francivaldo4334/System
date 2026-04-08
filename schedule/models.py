@@ -53,19 +53,15 @@ class ServiceResourceRelation(models.Model):
     quantity = models.PositiveIntegerField()
 
 
-def rrule_validator(value):
-    try:
-        rrulestr(value)
-    except Exception as e:
-        raise ValidationError(f"Erro na regra de recorrência: {e}")
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     rrule_params = models.CharField(validators=[
         RegexValidator(r"^DTSTART:{%DATE%}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL={%DATE%}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
-        rrule_validator,
     ])
     valid_from = models.DateField()
     valid_until = models.DateField(null=True, blank=True)
+    time_from = models.TimeField()
+    time_until = models.TimeField()
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
     def get_presentation(self, init: datetime.date, end: datetime.date):
