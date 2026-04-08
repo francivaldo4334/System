@@ -29,7 +29,6 @@ AvailabilityTable = Table(
         list_url_name="availabilities-list",
         header=Header(
             options=[
-                HeaderOption(label=_("Resource")),
                 HeaderOption(label=_("Valid From")),
                 HeaderOption(label=_("Valid Until")),
                 HeaderOption(label=_("Description"))
@@ -37,10 +36,6 @@ AvailabilityTable = Table(
         ),
         row_data=RowData(
             options=[
-                RowDataOption(
-                    key="resource_label",
-                    type="text"
-                ),
                 RowDataOption(
                     key="valid_from",
                     type="date",
