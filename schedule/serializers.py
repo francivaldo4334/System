@@ -91,14 +91,14 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
     def _get_slot_count(self, init:int, end:int, duration: int, interval:int):
         return (end - init + interval) // (duration + interval)
+    def _get_slots(self,t):
+        return (t.hour * 60 + t.minute) // 5
 
     def validate(self, attrs):
         from datetime import datetime
         from dateutil.rrule import rrule, MINUTELY
         import re
 
-        def get_slots(t):
-            return (t.hour * 60 + t.minute) // 5
 
         week_days = attrs.get('week')
         time_from = attrs.get('time_from')
@@ -108,10 +108,10 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         duration_time = attrs.get('duration')
         interval_time = attrs.get('interval')
 
-        slot_from = get_slots(time_from)
-        slot_until = get_slots(time_until)
-        slot_duration = get_slots(duration_time)
-        slot_interval = get_slots(interval_time)
+        slot_from = self._get_slots(time_from)
+        slot_until = self._get_slots(time_until)
+        slot_duration = self._get_slots(duration_time)
+        slot_interval = self._get_slots(interval_time)
 
         rrule_count = self._get_slot_count(slot_from, slot_until, slot_duration, slot_interval)
         rrule_weekdays = list(set(week_days))
@@ -137,6 +137,27 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
         return attrs
 
+    def to_representation(self, instance):
+        from dateutil.rrule import rrulestr
+        data = super().to_representation(instance)
+    
+        try:
+            rrule_str = str(data.get("rrule_params", ""))
+            formatted_date = instance.valid_from.strftime("%Y%m%d")
+            rule = rrulestr(rrule_str.replace("{%DATE%}", formatted_date))
+            data["time_from"] = rule._dtstart.time()
+            until_dt = getattr(rule, '_until', None)
+            data["time_until"] = until_dt.time() if until_dt else None
+            if hasattr(rule, '_byweekday'):
+                data["week"] = list(set(rule._byweekday))
+            total_minutes_dur = instance.duration_slot * 5
+            total_minutes_int = instance.interval_slot * 5        
+            data["duration"] = f"{total_minutes_dur // 60:02d}:{total_minutes_dur % 60:02d}"
+            data["interval"] = f"{total_minutes_int // 60:02d}:{total_minutes_int % 60:02d}"
+
+        except Exception as e:
+            data["_conversion_error"] = str(e)        
+        return data
 
 class AvailabilityPresentationSerializer(serializers.ModelSerializer):
     occurrences = serializers.SerializerMethodField()
