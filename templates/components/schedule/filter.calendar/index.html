@@ -11,7 +11,15 @@
             </button>
         </div>
     </header>
-    <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase" id="calendar-weekdays"></div>
+    <div class="grid grid-cols-7 text-center text-xs font-bold opacity-50 uppercase">
+        <span>{%trans 'Sun'%}</span>
+        <span>{%trans 'Mon'%}</span>
+        <span>{%trans 'Tue'%}</span>
+        <span>{%trans 'Wed'%}</span>
+        <span>{%trans 'Thu'%}</span>
+        <span>{%trans 'Fri'%}</span>
+        <span>{%trans 'Sat'%}</span>
+    </div>
     <c-days id="id_calendar_days" onchange="$s.set('filter.calendar.day', it)"></c-days>
     <button class="btn btn-neutral btn-xs absolute bottom-2 right-0"
         onclick="$s.set('filter.calendar.day', new Date().toISOString())">{% trans "Today" %}</button>
