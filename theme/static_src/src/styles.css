@@ -119,8 +119,9 @@
   .appointment-slot {
     @apply p-2 flex flex-col border border-dashed bg-primary/8 border-primary text-xs rounded-field [&>span]:text-primary [&>span]:font-bold [&>span]:block;
   }
+
   .preview-slot {
-    @apply border border-dashed bg-neutral/8 border-neutral rounded-field px-4 text-neutral/50;
+    @apply border border-dashed bg-neutral/8 border-neutral rounded-field text-neutral/50;
   }
 
   .slot-time-label {

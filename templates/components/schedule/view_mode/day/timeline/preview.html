@@ -7,54 +7,58 @@
     </app-slot>
 </template>
 <script is="exec-mount" type="pass">
-$s.subscribe("filter.calendar.day", null, null, (_day) => {
-  if (!_day)return;
-  const day = _day.split("T")[0]
-  let timeoutid = null;
-  $q.use("availabilities_presentation", () => {
-      return $r.get(`{% url 'availabilities_presentation'%}?date=${day}`);
-  }, {
-      onSuccess(data){
-        const isoToSlot = (isoString) => {
-            const date = new Date(isoString);
-            if (isNaN(date.getTime())) throw new Error("Data inválida");
-            const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
-            return Math.floor(minutesSinceStartOfDay / 5) + 1;
-        }
-        const items = []
-        data?.forEach(av => {
-            av?.occurrences?.forEach(iso => {
-                items.push({
-                    start:isoToSlot(iso),
-                    duration:av.duration_slot,
-                    description:av.description,
-                });
-            })
-        })
-        id_timeline_preview.innerHTML=""
-        $u.renderList("empty_slots", id_timeline_preview, items, (it)=>{
-          const clone = tmpl_empty_slot.content.cloneNode(true);
-          const slot = clone.querySelector('app-slot');
-          slot.setAttribute('start', it.start);
-          slot.setAttribute('duration', it.duration);
-          slot.querySelector("button").innerText = it.description
-          return clone;
-        })
-        clearTimeout(timeoutid);
-        timeoutid = setTimeout(() => {
-            const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
-                const orderA = parseInt(a.getAttribute("start"))
-                const orderB = parseInt(b.getAttribute("start"))
-                return orderA - orderB
-            })?.[0];
-            if (firstSlot) {
-                id_timeline_content.scrollTo({
-                    top: firstSlot.offsetTop,
-                    behavior: "smooth"
-                });
+    $s.subscribe("filter.calendar.day", null, null, (_day) => {
+        if (!_day) return;
+        const day = _day.split("T")[0]
+        let timeoutid = null;
+        $q.use("availabilities_presentation", () => {
+            return $r.get(`{% url 'availabilities_presentation'%}?date=${day}`);
+        }, {
+            onSuccess(data) {
+                const isoToSlot = (isoString) => {
+                    const date = new Date(isoString);
+                    if (isNaN(date.getTime())) throw new Error("Data inválida");
+                    const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
+                    return Math.floor(minutesSinceStartOfDay / 5) + 1;
+                }
+                const items = []
+                data?.forEach(av => {
+                    av?.occurrences?.forEach(iso => {
+                        items.push({
+                            start: isoToSlot(iso),
+                            duration: av.duration_slot,
+                            description: av.description,
+                        });
+                    })
+                })
+                id_timeline_preview.innerHTML = ""
+                $u.renderList("empty_slots", id_timeline_preview, items, (it) => {
+                    const clone = tmpl_empty_slot.content.cloneNode(true);
+                    const slot = clone.querySelector('app-slot');
+                    slot.setAttribute('start', it.start);
+                    slot.setAttribute('duration', it.duration);
+                    const btn = slot.querySelector("button");
+                    btn.innerText = it.description
+                    btn.onclick = () => {
+                        id_new_schedule_modal?.showModal();
+                    }
+                    return clone;
+                })
+                clearTimeout(timeoutid);
+                timeoutid = setTimeout(() => {
+                    const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
+                        const orderA = parseInt(a.getAttribute("start"))
+                        const orderB = parseInt(b.getAttribute("start"))
+                        return orderA - orderB
+                    })?.[0];
+                    if (firstSlot) {
+                        id_timeline_content.scrollTo({
+                            top: firstSlot.offsetTop,
+                            behavior: "smooth"
+                        });
+                    }
+                }, 300)
             }
-        }, 300)
-      }
-  });
-})
+        });
+    })
 </script>
