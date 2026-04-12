@@ -48,6 +48,8 @@
                         if (error.status === 400) {
                             toastError(Object.entries(error.data)
                                 .map(([k, v]) => `${k}: ${v}`).join("\n"));
+                        } else {
+                            toastError("{%trans 'Error'%}!");
                         }
                     }
                 }
