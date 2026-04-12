@@ -10,6 +10,7 @@
 $s.subscribe("filter.calendar.day", null, null, (_day) => {
   if (!_day)return;
   const day = _day.split("T")[0]
+  let timeoutid = null;
   $q.use("availabilities_presentation", () => {
       return $r.get(`{% url 'availabilities_presentation'%}?date=${day}`);
   }, {
@@ -39,21 +40,21 @@ $s.subscribe("filter.calendar.day", null, null, (_day) => {
           slot.querySelector("button").innerText = it.description
           return clone;
         })
+        clearTimeout(timeoutid);
+        timeoutid = setTimeout(() => {
+            const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
+                const orderA = parseInt(a.getAttribute("start"))
+                const orderB = parseInt(b.getAttribute("start"))
+                return orderA - orderB
+            })?.[0];
+            if (firstSlot) {
+                id_timeline_content.scrollTo({
+                    top: firstSlot.offsetTop,
+                    behavior: "smooth"
+                });
+            }
+        }, 300)
       }
-  }, { ttl: 10000 });
+  });
 })
-setTimeout(() => {
-    const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
-        const orderA = parseInt(a.getAttribute("start"))
-        const orderB = parseInt(b.getAttribute("start"))
-        return orderA - orderB
-    })?.[0];
-    if (firstSlot) {
-        id_timeline_content.scrollTo({
-            top: firstSlot.offsetTop,
-            behavior: "smooth"
-        });
-    }
-}, 300)
 </script>
-
