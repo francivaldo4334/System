@@ -115,6 +115,10 @@ class AvailabilityForm(BaseForm):
         )
     ]
 
+class ResourceForm(BaseForm):
+    key = 'resources'
+    form_fields = [
+    ]
 
 class AssignmentForm(BaseForm):
     key = 'assignment'

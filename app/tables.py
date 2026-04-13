@@ -68,3 +68,15 @@ class AvailabilityTable(BaseTable):
         ('valid_until', 'date'),
         ('description', 'text'),
     ]
+class ResourcesTable(BaseTable):
+    key = 'resources'
+    thead = [
+        _("Valid From"),
+        _("Valid Until"),
+        _("Description"),
+    ]
+    tr = [
+        ('valid_from', 'date'),
+        ('valid_until', 'date'),
+        ('description', 'text'),
+    ]

@@ -6,8 +6,8 @@ from schedule.models import Assignment, Availability, ResourceSelectable, Servic
 from schedule.serializers import AssignmentSerializer, AvailabilityPresentationSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
 
 # Create your views here.
-class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset =ResourceSelectable.objects.all()
+class ResourceViewSet(viewsets.ModelViewSet):
+    queryset = ResourceSelectable.objects.all()
     serializer_class = ResourcesSerializer
 
 
