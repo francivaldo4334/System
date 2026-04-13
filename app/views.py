@@ -34,6 +34,9 @@ class AppView(LoginRequiredMixin,TemplateView):
 
 class AppScheduleView(AppView):
     template_name = 'pages/app/schedule/index.html'
+    extra_context = {
+        'assignment_form': ...
+    }
 
 class AppScheduleSettingsView(AppView):
     template_name = 'pages/app/schedule/settings/index.html'

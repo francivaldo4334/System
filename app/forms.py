@@ -45,17 +45,22 @@ class TextareaField(Field):
 class Form:
     fields:List
 
-# forms
-from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
-class AvailabilityForm:
-    key = "availability"
-    post_url_name = ""
+class BaseForm:
+    def __init__(self, key: str, fields: List[Field] = []) -> None:
+        self.key = key;
+        self._form = Form(
+            fields=fields
+        );
     @property
     def fields(self):
         return self._form.fields
-    _form = Form(
-        fields=[
+
+# forms
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+class AvailabilityForm(BaseForm):
+    def __init__(self) -> None:
+        super().__init__('availability', [
             DateField(
                 name="valid_from",
                 label=_("Valid From"),
@@ -107,5 +112,4 @@ class AvailabilityForm:
                 name="description",
                 label=_("Description")
             )
-        ]
-    )
+        ])

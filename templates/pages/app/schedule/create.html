@@ -3,14 +3,24 @@ $s.remove("form_schedule")
 </script>
 <script is="exec-mount" type="pass">
 $s.createStore("form_schedule", {
-    
+    'service': 0,
+    'resources': [],
+    'date': null,
+    'start_slot': 0,
+    'duration_slot': 0,
 })
 </script>
 <dialog id="id_new_schedule_modal" class="modal">
   <div class="modal-box">
+    {% with id='' form=assignment_form %}
+      {% include 'components/form/index.html' %}
+    {% endwith %}
     <div class="modal-action">
       <button class="btn btn-primary">{% trans 'Save' %}</button>
     </div>
   </div>
+  <form class="modal-backdrop" method="dialog">
+    <button></button>
+  </form>
 </dialog>
 
