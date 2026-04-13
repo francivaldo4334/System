@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AvailabilityForm
+from app.forms import AssignmentForm, AvailabilityForm
 from app.tables import AvailabilityTable
 
 
@@ -35,7 +35,7 @@ class AppView(LoginRequiredMixin,TemplateView):
 class AppScheduleView(AppView):
     template_name = 'pages/app/schedule/index.html'
     extra_context = {
-        'assignment_form': ...
+        'assignment_form': AssignmentForm
     }
 
 class AppScheduleSettingsView(AppView):
