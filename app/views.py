@@ -49,7 +49,11 @@ class AppScheduleSettingsView(AppView):
                 {
                     'label': _("Availabilities"),
                     'url_name': 'app-schedule-settings-availabilities',
-                }
+                },
+                {
+                    'label': _("Resources"),
+                    'url_name': 'app-schedule-settings-resources',
+                },
             ]
         })
         return context
@@ -86,5 +90,10 @@ class CrudView(LoginRequiredMixin, TemplateView):
 
 class ScheduleSettingsAvailabilitiesView(CrudView):
     key = 'availabilities'
+    form = AvailabilityForm
+    table = AvailabilityTable
+
+class ScheduleSettingsResourceView(CrudView):
+    key = 'resources'
     form = AvailabilityForm
     table = AvailabilityTable

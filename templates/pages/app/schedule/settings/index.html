@@ -5,7 +5,7 @@
     <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr]">
         <div class="tabs tabs-border px-2" id="id_schedule_settings_tabs">
             {%for opt in setting_tabs%}
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{%trans " Availabilities"%}"
+            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
                 data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />
             {%endfor%}
         </div>
