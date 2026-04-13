@@ -49,7 +49,7 @@ class BaseTable:
         return self._table.list_url_name;
 
     @property
-    def headers(self):
+    def header(self):
         return self._table.header;
 
     @property
