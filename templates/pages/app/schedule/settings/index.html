@@ -16,9 +16,10 @@
 <script is="exec-mount" type="pass">
 $s.create("settings.tab", "{{setting_tag_selected}}")
 id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
-    item.onclick = () => {
+    item.onclick = (event) => {
         $q.use(item.dataset.urlName, () => fetch(item.dataset.url).then(r => r.text()), {
             onSuccess(html){
+                $s.set('settings.tab',event.target.dataset.urlName)
                 id_schedule_settings_content.innerHTML = html
             }
         })
