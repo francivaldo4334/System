@@ -17,16 +17,7 @@
         </div>
     </main>
 </section>
-<script is="exec-umount" type="pass">
-$s.remove("form_schedule")
-</script>
-<script is="exec-mount" type="pass">
-$s.createStore("form_schedule", {
-    
-})
-</script>
-<dialog id="id_new_schedule_modal">
-</dialog>
+{% include 'pages/app/schedule/create.html' %}
 {% endpartialdef %}
 {% block section %}
 {% partial main %}

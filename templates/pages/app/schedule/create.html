@@ -1,0 +1,16 @@
+<script is="exec-umount" type="pass">
+$s.remove("form_schedule")
+</script>
+<script is="exec-mount" type="pass">
+$s.createStore("form_schedule", {
+    
+})
+</script>
+<dialog id="id_new_schedule_modal" class="modal">
+  <div class="modal-box">
+    <div class="modal-action">
+      <button class="btn btn-primary">{% trans 'Save' %}</button>
+    </div>
+  </div>
+</dialog>
+
