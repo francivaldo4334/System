@@ -113,3 +113,16 @@ class AvailabilityForm(BaseForm):
                 label=_("Description")
             )
         ])
+
+
+class AssignmentForm(BaseForm):
+    def __init__(self) -> None:
+        super().__init__(
+            "assignment",
+            [
+                SelectField(
+                    label="Serviço",
+                    name="service",
+                )
+            ]
+        )
