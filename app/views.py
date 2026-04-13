@@ -1,9 +1,10 @@
+from typing import Type
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm
-from app.tables import AvailabilityTable
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm
+from app.tables import AvailabilityTable, BaseTable, Table
 
 
 class AppView(LoginRequiredMixin,TemplateView):
@@ -53,22 +54,37 @@ class AppScheduleSettingsView(AppView):
         })
         return context
 
-class ScheduleSettingsAvailabilitiesView(LoginRequiredMixin, TemplateView):
-    template_name="layouts/crud/index.html"
-    extra_context={
-        "key": "availabilities",
-        "create": {
-            "form": AvailabilityForm,
-            "post_url_name": "availabilities-list",
-        },
-        "list": {
-            "table": AvailabilityTable,
-        },
-        "delete": {
-            "delete_url_name": "availabilities-detail"
-        },
-        "update": {
-            "form": AvailabilityForm,
-            "update_url_name": "availabilities-detail"
-        },
-    }
+class CrudView(LoginRequiredMixin, TemplateView):
+    template_name = 'layouts/crud/index.html'
+    key: str
+    form: Type[BaseForm]
+    table: Type[BaseTable]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        form_instance = self.form()
+        
+        context.update({
+            'key': self.key,
+            'create': {
+                'form': form_instance,
+                'post_url_name': f'{self.key}-list',
+            },
+            'list': {
+                'table': self.table,
+            },
+            'delete': {
+                'delete_url_name': f'{self.key}-detail',
+            },
+            'update': {
+                'form': form_instance,
+                'update_url_name': f'{self.key}-detail'
+            },
+        })
+        return context
+
+class ScheduleSettingsAvailabilitiesView(CrudView):
+    key = 'availabilities'
+    form = AvailabilityForm
+    table = AvailabilityTable

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from django.utils.translation import gettext_lazy as _
-from typing import Any, List
+from typing import Any, List, Tuple
 @dataclass
 class HeaderOption:
     label:Any
@@ -24,30 +24,47 @@ class Table:
     list_url_name: str
     header:Header
     row_data:RowData
-# tables
-AvailabilityTable = Table(
-        list_url_name="availabilities-list",
-        header=Header(
-            options=[
-                HeaderOption(label=_("Valid From")),
-                HeaderOption(label=_("Valid Until")),
-                HeaderOption(label=_("Description"))
-            ]
-        ),
-        row_data=RowData(
-            options=[
-                RowDataOption(
-                    key="valid_from",
-                    type="date",
-                ),
-                RowDataOption(
-                    key="valid_until",
-                    type="date",
-                ),
-                RowDataOption(
-                    key="description",
-                    type="text",
-                ),                        
-            ]
+
+class BaseTable:
+    key: str
+    thead: list
+    tr: List[Tuple[str, str]]
+
+    def __init__(self) -> None:
+        self._table = Table(
+            list_url_name=f'{self.key}-list',
+            header=Header(
+                options=[HeaderOption(label=it) for it in self.thead]
+            ),
+            row_data=RowData(
+                options=[RowDataOption(
+                    key=key,
+                    type=type
+                ) for key, type in self.tr]
+            )
         )
-    )
+
+    @property
+    def list_url_name(self):
+        return self._table.list_url_name;
+
+    @property
+    def headers(self):
+        return self._table.header;
+
+    @property
+    def row_data(self):
+        return self._table.row_data;
+# tables
+class AvailabilityTable(BaseTable):
+    key = 'availabilities'
+    thead = [
+        _("Valid From"),
+        _("Valid Until"),
+        _("Description"),
+    ]
+    tr = [
+        ('valid_from', 'date'),
+        ('valid_until', 'date'),
+        ('description', 'text'),
+    ]
