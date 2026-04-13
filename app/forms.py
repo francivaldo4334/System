@@ -123,6 +123,7 @@ class AssignmentForm(BaseForm):
                 SelectField(
                     label="Serviço",
                     name="service",
+                    url_name="assignment",
                 )
             ]
         )

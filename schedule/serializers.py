@@ -22,11 +22,12 @@ class ResourcesSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
+    label = serializers.CharField(source="title")
     class Meta:
         model = Service
         fields = [
             'id',
-            'title',
+            'label',
         ]
 
 
