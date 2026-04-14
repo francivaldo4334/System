@@ -38,7 +38,7 @@ $s.remove("update.modal.id")
                     const field = form.elements[key];
                     if (field){
                         const fieldGroup = Array.from(field)
-                        if (fieldGroup.length) {
+                        if (fieldGroup.length && field.tagName !== "SELECT") {
                             fieldGroup.forEach(field => {
                                 field.checked = data[key].map(String).includes(field.value)
                             })
