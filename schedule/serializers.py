@@ -35,6 +35,11 @@ class ResourcesSerializer(serializers.ModelSerializer):
             self.fail('required')
         return not value
 
+    def to_representation(self, instance):
+        representation =  super().to_representation(instance)
+        representation['use_as_category'] = not instance.is_selectable
+        return representation
+
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
