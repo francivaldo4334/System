@@ -13,6 +13,7 @@ class ResourcesSerializer(serializers.ModelSerializer):
             'required': _("Enter a valid value.")
         }
     )
+    parent_label = serializers.CharField(source='parent.name', allow_null=True)
     class Meta:
         model = Resource
         fields = [
@@ -21,9 +22,12 @@ class ResourcesSerializer(serializers.ModelSerializer):
             'code',
             'use_as_category',
             'parent',
+            'parent_label',
+            'is_selectable'
         ]
         read_only_fields = [
             'code',
+            'is_selectable'
         ]
     def validate_use_as_category(self, value):
         parent = self.initial_data.get('parent')

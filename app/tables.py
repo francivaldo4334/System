@@ -71,12 +71,12 @@ class AvailabilityTable(BaseTable):
 class ResourcesTable(BaseTable):
     key = 'resources'
     thead = [
-        _("Valid From"),
-        _("Valid Until"),
-        _("Description"),
+        _('Resource Name'),
+        _('Is Selectable'),
+        _('Resource Type'),
     ]
     tr = [
-        ('valid_from', 'date'),
-        ('valid_until', 'date'),
-        ('description', 'text'),
+        ('label', 'text'),
+        ('is_selectable', 'checked'),
+        ('parent_label', 'text'),
     ]
