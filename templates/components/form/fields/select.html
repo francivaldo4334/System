@@ -1,15 +1,15 @@
 {%extends "components/form/fields/base.html"%}
 {%block field%}
-<select class="select" id="{{field.id}}" name="{{field.name}}" data-url-name="{{field.url_name}}-{{field.id}}" {{field.attrs}}></select>
+<select class="select" id="{{key}}_{{field.id}}" name="{{field.name}}" data-url-name="{{field.url_name}}" {{field.attrs}}></select>
 {%if field.url_name%}
 <script is="exec-mount" type="pass">
 $q.use(
-    "{{field.url_name}}-{{field.id}}",
+    "{{field.url_name}}",
     ()=> $r.get("{% url field.url_name|add:'-list' %}"),
     {
         onSuccess(data){
             const items = data.results;
-            const el = document.getElementById("{{field.id}}")
+            const el = document.getElementById("{{key}}_{{field.id}}")
             $u.renderList("{{id}}",el, [
                 {id:"", label: "{%trans 'Select a value.'%}"},
                 ...items
