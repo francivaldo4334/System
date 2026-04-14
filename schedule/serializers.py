@@ -1,19 +1,35 @@
 from rest_framework import serializers
 
 from schedule.models import Assignment, Availability, Resource, Service
+from django.utils.translation import gettext_lazy as _
 
 
 class ResourcesSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="name")
+    use_as_category = serializers.BooleanField(
+        source="is_selectable",
+        default=False,
+        error_messages = {
+            'required': _("Enter a valid value.")
+        }
+    )
     class Meta:
         model = Resource
         fields = [
             'id',
             'label',
             'code',
-            'is_selectable',
-            'parent_id',
+            'use_as_category',
+            'parent',
         ]
+        read_only_fields = [
+            'code',
+        ]
+    def validate_use_as_category(self, value):
+        parent = self.initial_data.get('parent')
+        if not value and not parent:
+            self.fail('required')
+        return not value
 
 
 class ServiceSerializer(serializers.ModelSerializer):

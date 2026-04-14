@@ -31,9 +31,6 @@ class CheckboxesField(Field):
         attrs:str = "";
     type:str = "checkboxes";
     options: List[Option] = field(default_factory=list);
-@dataclass
-class CheckboxField(Field):
-    type:str = "checkbox";
 
 @dataclass
 class TimeField(Field):
@@ -122,7 +119,7 @@ class ResourceForm(BaseForm):
     key = 'resources'
     form_fields = [
         Field(
-            name="name",
+            name="label",
             label=_('Name'),
             attrs="required",
         ),
@@ -131,10 +128,12 @@ class ResourceForm(BaseForm):
             label=_('Resource category'),
             url_name='resources',
         ),
-        CheckboxField(
-            name="is_selectable",
-            label=_('Use as category.'),
-            attrs="required",
+        CheckboxesField(
+            name="use_as_category",
+            label="",
+            options=[
+                CheckboxesField.Option(value='true', label=_('Use as category.')),
+            ],
         ),
     ]
 
