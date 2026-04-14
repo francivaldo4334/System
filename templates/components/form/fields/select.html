@@ -1,10 +1,10 @@
 {%extends "components/form/fields/base.html"%}
 {%block field%}
-<select class="select" id="{{field.id}}" name="{{field.name}}" {{field.attrs}}></select>
+<select class="select" id="{{field.id}}" name="{{field.name}}" data-url-name="{{field.url_name}}-{{field.id}}" {{field.attrs}}></select>
 {%if field.url_name%}
 <script is="exec-mount" type="pass">
 $q.use(
-    "{{field.url_name}}",
+    "{{field.url_name}}-{{field.id}}",
     ()=> $r.get("{% url field.url_name|add:'-list' %}"),
     {
         onSuccess(data){
@@ -20,6 +20,9 @@ $q.use(
                 return opt
             })
         }
+    },
+    {
+        enableRefetch:true,
     }
 )
 </script>
