@@ -66,7 +66,7 @@
                 }).then(r => r.text()),
                 {
                     onSuccess(data) {
-                        history.pushState({}, "", el.dataset.url + location.search)
+                        history.pushState({}, "", el.dataset.url)
                         const range = document.createRange();
                         const frag = range.createContextualFragment(data)
                         //id_app_content.innerHTML = data
