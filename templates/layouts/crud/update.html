@@ -34,7 +34,7 @@ $s.remove("update.modal.id")
         const form = document.getElementById("id_{{key}}_update_form")
         $q.use("{{update.update_url_name}}", () => $r.get("{% url update.update_url_name 0 %}".replace("0", value)), {
             onSuccess(data){
-                Object.keys(data).forEach( key => {
+                Object.keys(data).forEach(key => {
                     const field = form.elements[key];
                     if (field){
                         const fieldGroup = Array.from(field)
@@ -42,6 +42,8 @@ $s.remove("update.modal.id")
                             fieldGroup.forEach(field => {
                                 field.checked = data[key].map(String).includes(field.value)
                             })
+                        } else if (field.type === "checkbox") {
+                            field.checked = data[key];
                         } else {
                             field.value = data[key];
                         }
