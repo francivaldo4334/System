@@ -14,7 +14,7 @@
     </main>
 </section>
 <script is="exec-mount" type="pass">
-$s.create("settings.tab", "{{setting_tag_selected}}")
+$s.create("settings.tab", "{{request.GET.tab|default:setting_tag_selected}}")
 id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
     item.onclick = (event) => {
         $s.set('settings.tab',event.target.dataset.urlName)
@@ -26,6 +26,7 @@ id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
             $q.use(el.dataset.urlName, () => fetch(item.dataset.url).then(r => r.text()), {
                 onSuccess(html){
                     id_schedule_settings_content.innerHTML = html
+                    history.pushState({}, "", location.pathname + `?tab=${el.dataset.urlName}`)
                 }
             })
         }
