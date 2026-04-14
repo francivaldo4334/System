@@ -50,7 +50,7 @@ $s.compute("{{key}}.page.range", [
     "{{key}}.page.offset",
     "{{key}}.page.limit",
     "{{key}}.page.count",
-], (offset, limit, count) => `${Number(offset) + 1} - ${Math.min(Number(offset) + Number(limit), Number(count))}`)
+], (offset, limit, count) => `${count ? (Number(offset) + 1) : 0} - ${Math.min(Number(offset) + Number(limit), Number(count))}`)
 $s.compute("{{list.table.list_url_name}}.data", [
     "{{key}}.filters.search",
     "{{key}}.page.offset",

@@ -1,13 +1,13 @@
 # pyright: reportAttributeAccessIssue=false
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
-from schedule.filters import AvailabilityFilterSet, AvailabilityPresentationFilterSet
-from schedule.models import Assignment, Availability, ResourceSelectable, Service
+from schedule.filters import AvailabilityPresentationFilterSet
+from schedule.models import Assignment, Availability, Resource, Service
 from schedule.serializers import AssignmentSerializer, AvailabilityPresentationSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
 
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
-    queryset = ResourceSelectable.objects.all()
+    queryset = Resource.objects.all()
     serializer_class = ResourcesSerializer
 
 
