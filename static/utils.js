@@ -28,8 +28,19 @@ function utilsManager() {
     el.innerHTML = "";
     window[rafId] = requestAnimationFrame(render)
   }
+
+  function getDataByForm(formElement){
+    const formData = new FormData(formElement);
+    const data = Object.fromEntries(Array.from(formData.keys()).map(key => {
+        let value = formData.getAll(key);
+        if (value.length === 1) value = value[0];
+        return [key, value || undefined];
+    }));
+    return data
+  }
   return {
     renderList,
+    getDataByForm,
   }
 }
 const $u = utilsManager()

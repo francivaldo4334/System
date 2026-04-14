@@ -28,12 +28,7 @@
     if (form) {
         form._handlerCreate = (event) => {
             event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(Array.from(formData.keys()).map(key => {
-                let value = formData.getAll(key);
-                if (value.length === 1) value = value[0];
-                return [key, value || undefined];
-            }));
+            const data = $u.getDataByForm(event.target);
             $q.use("{{create.post_url_name}}",
                 () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
                 {
