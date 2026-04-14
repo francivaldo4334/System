@@ -1,6 +1,6 @@
 import django_filters as filters
 
-from schedule.models import Availability
+from schedule.models import Availability, Resource
 from django.db.models import Q
 
 
@@ -30,3 +30,16 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
             Q(valid_until__isnull=True) | Q(valid_until__gte=value),
             valid_from__lte=value,
         )
+
+class ResourceFilterSet(filters.FilterSet):
+    use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
+    search = filters.CharFilter(method='filter_search')
+    class Meta:
+        model = Resource
+        fields = []
+    def filter_search(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(
+            Q(name__icontains=value)
+        ).distinct()

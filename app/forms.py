@@ -16,6 +16,7 @@ class Field:
 @dataclass
 class SelectField(Field):
     url_name: str = "";
+    url_query_params: str = "";
     type:str = "select"
 
 @dataclass
@@ -127,6 +128,7 @@ class ResourceForm(BaseForm):
             name='parent',
             label=_('Resource category'),
             url_name='resources',
+            url_query_params="?use_as_category=true"
         ),
         CheckboxesField(
             name="use_as_category",

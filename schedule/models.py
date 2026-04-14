@@ -32,7 +32,8 @@ class Resource(TimeStampedModel, ActivatorModel):
             self.code = self.get_next_code();
         return super().save(*args, **kwargs)
     def get_next_code(self):
-        last_id = self.__class__.objects.order_by('-id').first() or 0
+        last = self.__class__.objects.order_by('-id').first()
+        last_id = last.id if last else 0
         return f'{self.parent.code}.{last_id + 1}'
 
 class ResourceNotSelectable(Resource):
