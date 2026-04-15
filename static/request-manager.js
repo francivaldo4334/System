@@ -34,6 +34,9 @@ const requestFactory = () => {
       
     patch: (url, body, headers = {}) => 
       send(url, { method: 'PATCH', body: JSON.stringify(body), headers }),
+
+    put: (url, body, headers = {}) => 
+      send(url, { method: 'PUT', body: JSON.stringify(body), headers }),
       
     delete: (url, headers = {}) => 
       send(url, { method: 'DELETE', headers }),

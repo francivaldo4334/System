@@ -64,7 +64,7 @@ if (form && form._handlerUpdate) {
             const data = $u.getDataByForm(event.target);
             $q.use(
                 '{{update.update_url_name}}',
-                () => $r.patch(
+                () => $r.put(
                     '{% url update.update_url_name 0 %}'.replace(
                         "0",
                         $s.get('update.modal.id'),
