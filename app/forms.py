@@ -164,8 +164,9 @@ class ServiceForm(BaseForm):
         ),
         SelectField(
             name='serviceresourcerelation_set',
-            label=_('Resources'),
+            label=_('Resource Types'),
             url_name='resources',
-            url_query_params="?is_selectable=true"
+            url_query_params="?use_as_category=true",
+            attrs="multiple",
         ),
     ]

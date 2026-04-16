@@ -33,7 +33,8 @@ function utilsManager() {
     const formData = new FormData(formElement);
     const data = Object.fromEntries(Array.from(formData.keys()).map(key => {
         let value = formData.getAll(key);
-        if (value.length === 1) value = value[0];
+        const field = formElement.elements[key];
+        if (field.tagName !== 'SELECT' && !field.multiple && value.length === 1) value = value[0];
         return [key, value || undefined];
     }));
     return data

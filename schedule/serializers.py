@@ -59,6 +59,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             'id',
             'label',
             'description',
+            'serviceresourcerelation_set',
             'resources_label',
         ]
     def get_resources_label(self, obj):
