@@ -24,7 +24,6 @@
     </form>
 </dialog>
 <script is="exec-umount" type="pass">
-$s.remove("update.modal.id")
 const form = document.getElementById("id_{{key}}_update_form");
 if (form && form._handlerUpdate) {
     form.removeEventListener("submit", form._handlerUpdate);
@@ -33,6 +32,7 @@ if (form && form._handlerUpdate) {
 </script>
 <script is="exec-mount" type="pass">
 {
+    $s.remove("update.modal.id")
     $s.create("update.modal.id", null)
     $s.subscribe("update.modal.id", null, null, (value,el) => {
         if (!value) return
