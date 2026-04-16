@@ -64,9 +64,14 @@ $s.compute("{{list.table.list_url_name}}.data", [
         const items = data.results
         const type_map = JSON.parse(id_row_map_types.textContent)
         const map = {
-          "text": (v) => v,
-          "date": (v) => new Date(`${v}T00:00`).toLocaleDateString("{{LANG}}"),
-          "checked": (v) => v ? '\u2714' : '',
+            "text": (v) => v,
+            "date": (v) => {
+                const date = new Date(`${v}T00:00`)
+                if (isNaN(date))
+                    return "{%trans 'Undefined'%}"
+                return date.toLocaleDateString("{{LANG}}")
+            },
+            "checked": (v) => v ? '\u2714' : '',
         }
         id_{{key}}_table.innerHTML = '';
         $u.renderList("{{key}}_render_list", id_{{key}}_table, items, (item) => {

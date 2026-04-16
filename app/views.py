@@ -3,8 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm, BaseForm, ResourceForm, ServiceForm
-from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServicesTable, Table
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm, ResourceForm, ServiceForm, ServiceRequirementsForm
+from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
 
 
 class AppView(LoginRequiredMixin,TemplateView):
@@ -58,6 +58,10 @@ class AppScheduleSettingsView(AppView):
                     'label': _("Services"),
                     'url_name': 'app-schedule-settings-services',
                 },
+                {
+                    'label': _("Service Requirements"),
+                    'url_name': 'app-schedule-settings-service-requirements',
+                },
             ]
         })
         return context
@@ -106,3 +110,8 @@ class ScheduleSettingsServiceView(CrudView):
     key = 'services'
     form = ServiceForm
     table = ServicesTable
+
+class ScheduleSettingsServiceRequirementsView(CrudView):
+    key = 'service_requirements'
+    form = ServiceRequirementsForm
+    table = ServiceRequirementsTable

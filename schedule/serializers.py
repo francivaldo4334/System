@@ -50,6 +50,8 @@ class ResourceSerializer(serializers.ModelSerializer):
         return representation
 
 class ServiceResourceRelationSerializer(serializers.ModelSerializer):
+    service_label = serializers.ReadOnlyField(source='service.title')
+    resource_type_label = serializers.ReadOnlyField(source='resource_type.name')
     class Meta:
         model = ServiceResourceRelation
         fields = [
@@ -57,6 +59,8 @@ class ServiceResourceRelationSerializer(serializers.ModelSerializer):
             'service',
             'resource_type',
             'quantity',
+            'service_label',
+            'resource_type_label',
         ]
 
 class ServiceSerializer(serializers.ModelSerializer):

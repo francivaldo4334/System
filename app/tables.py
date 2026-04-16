@@ -92,3 +92,15 @@ class ServicesTable(BaseTable):
         ('description', 'text'),
         ('resources_label', 'text'),
     ]
+class ServiceRequirementsTable(BaseTable):
+    key = 'service_requirements'
+    thead = [
+        _('Service'),
+        _('Resource Type'),
+        _('Quantity'),
+    ]
+    tr = [
+        ('service_label', 'text'),
+        ('resource_type_label', 'text'),
+        ('quantity', 'text'),
+    ]

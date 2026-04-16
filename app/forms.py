@@ -162,11 +162,28 @@ class ServiceForm(BaseForm):
             label=_('Description'),
             attrs="required",
         ),
+    ]
+
+class ServiceRequirementsForm(BaseForm):
+    key = 'service_requirements'
+    form_fields = [
         SelectField(
-            name='serviceresourcerelation_set',
-            label=_('Resource Types'),
-            url_name='resources',
-            url_query_params="?use_as_category=true",
-            attrs="multiple required min='1'",
+            name='service',
+            url_name='services',
+            label=_('Service'),
+            attrs='required'
         ),
+        SelectField(
+            name='resource_type',
+            url_name='resources',
+            label=_('Resource Type'),
+            url_query_params='?use_as_category=true',
+            attrs='required'
+        ),
+        Field(
+            name='quantity',
+            label=_('Quantity'),
+            attrs='required min="1" step="1"'
+        )
+        
     ]
