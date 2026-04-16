@@ -24,10 +24,12 @@
     </form>
 </dialog>
 <script is="exec-umount" type="pass">
-const form = document.getElementById("id_{{key}}_update_form");
-if (form && form._handlerUpdate) {
-    form.removeEventListener("submit", form._handlerUpdate);
-    delete form._handlerUpdate;
+{
+    const form = document.getElementById("id_{{key}}_update_form");
+    if (form && form?._handlerUpdate) {
+        form.removeEventListener("submit", form._handlerUpdate);
+        delete form._handlerUpdate;
+    }    
 }
 </script>
 <script is="exec-mount" type="pass">
