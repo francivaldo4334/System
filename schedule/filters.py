@@ -33,6 +33,7 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
 
 class ResourceFilterSet(filters.FilterSet):
     use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
+    is_selectable = filters.BooleanFilter('is_selectable')
     search = filters.CharFilter(method='filter_search')
     class Meta:
         model = Resource

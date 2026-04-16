@@ -12,7 +12,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
     filterset_class = ResourceFilterSet
 
 
-class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
+class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 

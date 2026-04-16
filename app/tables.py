@@ -80,3 +80,15 @@ class ResourcesTable(BaseTable):
         ('is_selectable', 'checked'),
         ('parent_label', 'text'),
     ]
+class ServicesTable(BaseTable):
+    key = 'services'
+    thead = [
+        _('Name'),
+        _('Description'),
+        _('Resources'),
+    ]
+    tr = [
+        ('label', 'text'),
+        ('description', 'text'),
+        ('resources_label', 'text'),
+    ]

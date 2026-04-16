@@ -148,3 +148,24 @@ class AssignmentForm(BaseForm):
             url_name="assignment",
         )
     ]
+
+class ServiceForm(BaseForm):
+    key = 'services'
+    form_fields = [
+        Field(
+            name="label",
+            label=_('Name'),
+            attrs="required",
+        ),
+        TextareaField(
+            name="description",
+            label=_('Description'),
+            attrs="required",
+        ),
+        SelectField(
+            name='serviceresourcerelation_set',
+            label=_('Resources'),
+            url_name='resources',
+            url_query_params="?is_selectable=true"
+        ),
+    ]

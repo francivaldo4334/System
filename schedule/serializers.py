@@ -52,12 +52,20 @@ class ResourcesSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
+    resources_label = serializers.SerializerMethodField()
     class Meta:
         model = Service
         fields = [
             'id',
             'label',
+            'description',
+            'resources_label',
         ]
+    def get_resources_label(self, obj):
+        if not hasattr(obj, 'serviceresourcerelation_set'):
+            return None;
+        resource_labels = obj.serviceresourcerelation_set.values_list('resource_type__name', flat=True)
+        return ','.join(resource_labels)
 
 
 class AssignmentSerializer(serializers.ModelSerializer):

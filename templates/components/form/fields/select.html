@@ -5,7 +5,7 @@
 <script is="exec-mount" type="pass">
 $q.use(
     "{{field.url_name}}",
-    ()=> $r.get("{% url field.url_name|add:'-list' %}"),
+    ()=> $r.get("{% url field.url_name|add:'-list' %}{{field.url_query_params}}"),
     {
         onSuccess(data){
             const items = data.results;
