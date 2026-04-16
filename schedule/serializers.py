@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Assignment, Availability, Resource, Service
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, Service
 from django.utils.translation import gettext_lazy as _
 
 
@@ -9,13 +9,17 @@ class ResourcesSerializer(serializers.ModelSerializer):
     use_as_category = serializers.BooleanField(
         source="is_selectable",
         default=False,
-        error_messages = {
-            'required': _("Enter a valid value.")
-        },
     )
     parent_label = serializers.CharField(source='parent.name',
                                          allow_null=True,
                                          read_only=True)
+    parent = serializers.PrimaryKeyRelatedField(
+        queryset=ResourceNotSelectable.objects.all(),
+        required=False,
+        error_messages={
+            'required': _('Enter a valid value.')
+        }
+    )
     class Meta:
         model = Resource
         fields = [
@@ -31,10 +35,13 @@ class ResourcesSerializer(serializers.ModelSerializer):
             'code',
             'is_selectable',
         ]
-    def validate_use_as_category(self, value):
-        parent = self.initial_data.get('parent')
-        if not value and not parent:
+    def validate_parent(self, value):
+        use_as_category = self.initial_data.get('use_as_category')
+        print('here',use_as_category, value)
+        if not value and not use_as_category:
             self.fail('required')
+        return value
+    def validate_use_as_category(self, value):
         return not value
 
     def to_representation(self, instance):
