@@ -68,6 +68,7 @@ $s.compute("{{list.table.list_url_name}}.data", [
           "date": (v) => new Date(`${v}T00:00`).toLocaleDateString("{{LANG}}"),
           "checked": (v) => v ? '\u2714' : '',
         }
+        id_{{key}}_table.innerHTML = '';
         $u.renderList("{{key}}_render_list", id_{{key}}_table, items, (item) => {
           const tr = document.createElement("tr")
           Object.entries(type_map).forEach(([key, value]) => {
