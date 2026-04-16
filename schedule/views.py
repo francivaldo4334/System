@@ -3,13 +3,13 @@ from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from schedule.filters import AvailabilityPresentationFilterSet, ResourceFilterSet
-from schedule.models import Assignment, Availability, Resource, Service
-from schedule.serializers import AssignmentSerializer, AvailabilityPresentationSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourcesSerializer, ServiceSerializer
+from schedule.models import Assignment, Availability, Resource, Service, ServiceResourceRelation
+from schedule.serializers import AssignmentSerializer, AvailabilityPresentationSerializer, AvailabilitySerializer, CreateAssigmentSerializer, ResourceSerializer, ServiceResourceRelationSerializer, ServiceSerializer
 
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
-    serializer_class = ResourcesSerializer
+    serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
 
@@ -17,13 +17,9 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
-    @transaction.atomic()
-    def perform_create(self, serializer):
-        return super().perform_create(serializer)
-
-    @transaction.atomic()
-    def perform_update(self, serializer):
-        return super().perform_update(serializer)
+class ServiceRequirementsViewSet(viewsets.ModelViewSet):
+    queryset = ServiceResourceRelation.objects.all()
+    serializer_class = ServiceResourceRelationSerializer
 
 # pyright:reportIncompatibleMethodOverride=false
 class AssignmentViewSet(viewsets.mixins.ListModelMixin,
