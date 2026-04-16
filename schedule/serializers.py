@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, Service
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
 
 
@@ -49,17 +49,26 @@ class ResourcesSerializer(serializers.ModelSerializer):
         representation['use_as_category'] = not instance.is_selectable
         return representation
 
+class ServiceResourceRelationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceResourceRelation
+        fields = [
+            'service',
+            'resource_type',
+            'quantity',
+        ]
+
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
     resources_label = serializers.SerializerMethodField()
+    resources_relations = ServiceResourceRelationSerializer(many=True)
     class Meta:
         model = Service
         fields = [
             'id',
             'label',
             'description',
-            'serviceresourcerelation_set',
             'resources_label',
         ]
     def get_resources_label(self, obj):
