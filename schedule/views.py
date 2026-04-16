@@ -1,4 +1,5 @@
 # pyright: reportAttributeAccessIssue=false
+from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from schedule.filters import AvailabilityPresentationFilterSet, ResourceFilterSet
@@ -16,6 +17,13 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
 
 # pyright:reportIncompatibleMethodOverride=false
 class AssignmentViewSet(viewsets.mixins.ListModelMixin,

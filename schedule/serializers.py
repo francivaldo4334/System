@@ -52,27 +52,46 @@ class ServiceResourceRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceResourceRelation
         fields = [
+            'id',
             'service',
             'resource_type',
             'quantity',
         ]
+        read_only_fields=[
+            'service',
+        ]
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
-    resources_label = serializers.SerializerMethodField()
+    required_resources_label = serializers.SerializerMethodField()
+    resources = ServiceResourceRelationSerializer(many=True, source="serviceresourcerelation_set")
     class Meta:
         model = Service
         fields = [
             'id',
             'label',
             'description',
-            'resources_label',
+            'required_resources_label',
+            'resources',
         ]
-    def get_resources_label(self, obj):
-        if not hasattr(obj, 'serviceresourcerelation_set'):
+    def get_required_resources_label(self, obj):
+        if not hasattr(obj, 'required_resources'):
             return None;
-        resource_labels = obj.serviceresourcerelation_set.values_list('resource_type__name', flat=True)
+        resource_labels = obj.required_resources.values_list('name', flat=True)
         return ','.join(resource_labels)
+
+    def save(self, **kwargs):
+        relations = self.validated_data.pop('resources', []) if self.validated_data else []
+        instance = super().save(**kwargs)
+        instance.required_resources.clear()
+        for relation in relations:
+            resource_type = relation.pop('resource_type')
+            instance.required_resources.add(
+               resource_type,
+               through_defaults=relation 
+            )
+        return instance;
+
 
 class AssignmentSerializer(serializers.ModelSerializer):
     class ServiceSerializer(serializers.ModelSerializer):
