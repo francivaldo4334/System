@@ -64,7 +64,7 @@ $s.compute("{{list.table.list_url_name}}.data", [
         const items = data.results
         const type_map = JSON.parse(id_row_map_types.textContent)
         const map = {
-            "text": (v) => v,
+            "text": (v) => v ?? '',
             "date": (v) => {
                 const date = new Date(`${v}T00:00`)
                 if (isNaN(date))

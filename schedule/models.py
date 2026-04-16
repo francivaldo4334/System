@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
 from django.db.models.functions import Concat, Substr
+from rest_framework.fields import MinValueValidator
 from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import rrulestr
 from django.utils.translation import gettext_lazy as _
@@ -58,7 +59,7 @@ class Service(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
 class ServiceResourceRelation(models.Model):
     service = models.ForeignKey(Service, models.CASCADE)
     resource_type = models.ForeignKey(ResourceNotSelectable, models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
 
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
