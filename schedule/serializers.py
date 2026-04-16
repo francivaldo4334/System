@@ -49,20 +49,18 @@ class ResourcesSerializer(serializers.ModelSerializer):
         representation['use_as_category'] = not instance.is_selectable
         return representation
 
-class ServiceResourceRelationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceResourceRelation
-        fields = [
-            'service',
-            'resource_type',
-            'quantity',
-        ]
-
-
 class ServiceSerializer(serializers.ModelSerializer):
+    class ResourceRelationSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = ServiceResourceRelation
+            fields = [
+                'service',
+                'resource_type',
+                'quantity',
+            ]
     label = serializers.CharField(source="title")
     resources_label = serializers.SerializerMethodField()
-    resources_relations = ServiceResourceRelationSerializer(many=True)
+    resources_relations = ResourceRelationSerializer(many=True)
     class Meta:
         model = Service
         fields = [
@@ -70,12 +68,18 @@ class ServiceSerializer(serializers.ModelSerializer):
             'label',
             'description',
             'resources_label',
+            'resources_relations',
         ]
     def get_resources_label(self, obj):
         if not hasattr(obj, 'serviceresourcerelation_set'):
             return None;
         resource_labels = obj.serviceresourcerelation_set.values_list('resource_type__name', flat=True)
         return ','.join(resource_labels)
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)
+    def to_internal_value(self, data):
+        return super().to_internal_value(data)
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
