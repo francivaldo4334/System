@@ -167,6 +167,6 @@ class ServiceForm(BaseForm):
             label=_('Resource Types'),
             url_name='resources',
             url_query_params="?use_as_category=true",
-            attrs="multiple",
+            attrs="multiple required min='1'",
         ),
     ]

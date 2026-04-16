@@ -10,8 +10,12 @@ $q.use(
         onSuccess(data){
             const items = data.results;
             const el = document.getElementById("{{key}}_{{field.id}}")
+            const defaultItems = []
+            if (!el?.multiple) {
+                defaultItems.push({id:"", label: "{%trans 'Select a value.'%}"})
+            }
             $u.renderList("{{id}}",el, [
-                {id:"", label: "{%trans 'Select a value.'%}"},
+                ...defaultItems,
                 ...items
             ], (it)=>{
                 const opt = document.createElement("option")
