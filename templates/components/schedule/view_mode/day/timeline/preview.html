@@ -40,6 +40,8 @@
                     const btn = slot.querySelector("button");
                     btn.innerText = it.description
                     btn.onclick = () => {
+                        $s.set('form_assignment.start_slot', it.start)
+                        $s.set('form_assignment.duration_slot', it.duration)
                         id_new_schedule_modal?.showModal();
                     }
                     return clone;
