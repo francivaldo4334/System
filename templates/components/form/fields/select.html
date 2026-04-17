@@ -8,7 +8,6 @@ $q.use(
     ()=> $r.get("{% url field.url_name|add:'-list' %}{{field.url_query_params}}"),
     {
         onSuccess(data){
-            console.log("OKe", data)
             const items = data.results;
             const el = document.getElementById("{{key}}_{{field.id}}")
             const defaultItems = []
