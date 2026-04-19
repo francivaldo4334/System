@@ -60,13 +60,18 @@ const queryCacheFactory = () => {
   const _fetchingQueries = new Map();
   const _watchedQueries = new Map();
 
-  const refetch = async (queryKey) => {
+  const _refetchOnlyQuery = async (queryKey) => {
     const config = _watchedQueries.get(queryKey);
     if (!config) return;
-
-    // Limpamos o cache físico para forçar a nova busca
     _internalCache.delete(queryKey);
     return await useQueryCache(queryKey, config.queryFn, config.callbacks, config.options);
+  }
+
+  const refetch = async (queryKey) => {
+    const queryKeys = Array.from(_watchedQueries.keys()).filter(k => {
+      return String(k).startsWith(queryKey)
+    })
+    return await Promise.all(queryKeys.map(_refetchOnlyQuery))
   };
 
   window.addEventListener('focus', () => {

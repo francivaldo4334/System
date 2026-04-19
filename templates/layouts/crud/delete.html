@@ -59,7 +59,7 @@
                 {
                     onSuccess() {
                         {% if list %}
-                        $q.refetch("crud_{{list.table.list_url_name}}");
+                        $q.refetch("{{list.table.list_url_name}}");
                         {% endif %}
                         modal.close();
                     }
