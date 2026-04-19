@@ -21,6 +21,10 @@ class SelectField(Field):
     type:str = "select"
 
 @dataclass
+class NumberField(Field):
+    type:str = 'number'
+
+@dataclass
 class DateField(Field):
     type:str = "date"
 
@@ -184,7 +188,7 @@ class ServiceRequirementsForm(BaseForm):
             url_query_params='?use_as_category=true',
             attrs='required'
         ),
-        Field(
+        NumberField(
             name='quantity',
             label=_('Quantity'),
             attrs='required min="1" step="1"'

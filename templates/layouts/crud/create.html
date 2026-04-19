@@ -66,6 +66,13 @@
 
             form.addEventListener("submit", form._handlerCreate);
         }
+        //Mdoal
+        const modal = document.getElementById('id_{{key}}_btn_add_modal');
+        if (modal) {
+            modal.onclose = () => {
+                form.reset();
+            }
+        }
     }
 </script>
 <script is="exec-umount" type="pass">

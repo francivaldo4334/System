@@ -33,66 +33,79 @@
 }
 </script>
 <script is="exec-mount" type="pass">
-{
-    $s.remove("update.modal.id")
-    $s.create("update.modal.id", null)
-    $s.subscribe("update.modal.id", null, null, (value,el) => {
-        if (!value) return
-        const form = document.getElementById("id_{{key}}_update_form")
-        $q.use("{{update.update_url_name}}", () => $r.get("{% url update.update_url_name 0 %}".replace("0", value)), {
-            onSuccess(data){
-                Object.keys(data).forEach(key => {
-                    const field = form.elements[key];
-                    if (field){
-                        const fieldGroup = Array.from(field)
-                        if (fieldGroup.length && field.tagName !== "SELECT") {
-                            fieldGroup.forEach(field => {
-                                field.checked = data[key].map(String).includes(field.value)
-                            })
-                        } else if (field.type === "checkbox") {
-                            field.checked = data[key];
-                        } else {
-                            field.value = data[key];
+    {
+        $s.remove("update.modal.id")
+        $s.create("update.modal.id", null)
+        $s.subscribe("update.modal.id", null, null, (value, el) => {
+            if (!value) return
+            const form = document.getElementById("id_{{key}}_update_form")
+            $q.use("{{update.update_url_name}}", () => $r.get("{% url update.update_url_name 0 %}".replace("0", value)), {
+                onSuccess(data) {
+                    Object.keys(data).forEach(key => {
+                        const field = form.elements[key];
+                        if (field) {
+                            const fieldGroup = Array.from(field)
+                            if (fieldGroup.length && field.tagName !== "SELECT") {
+                                fieldGroup.forEach(field => {
+                                    field.checked = data[key].map(String).includes(field.value)
+                                })
+                            } else if (field.type === "checkbox") {
+                                field.checked = data[key];
+                            } else {
+                                field.value = data[key];
+                            }
+                        }
+                    })
+                }
+            })
+        })
+        const form = document.getElementById("id_{{key}}_update_form");
+        if (form) {
+            form._handlerUpdate = (event) => {
+                event.preventDefault();
+                const data = $u.getDataByForm(event.target);
+                $q.use(
+                    '{{update.update_url_name}}',
+                    () => $r.put(
+                        '{% url update.update_url_name 0 %}'.replace(
+                            "0",
+                            $s.get('update.modal.id'),
+                        ),
+                        data,
+                        {'X-CSRFToken': '{{csrf_token}}'}
+                    ),
+                    {
+                        onSuccess() {
+                            {% if list %}
+                            $q.refetch('{{list.table.list_url_name}}');
+                            {% endif %}
+                            document.getElementById('id_update_modal')?.close();
+                        },
+                        onError(error) {
+                            if (error.status === 400) {
+                                Object.entries(error.data).forEach(([key, value]) => {
+                                    const field = form.elements[key];
+                                    if (field) {
+                                        const message = Array.isArray(value) ? value.join(', ') : value;
+
+                                        field.setCustomValidity(message);
+                                        field.reportValidity();
+
+                                        field.addEventListener('input', () => {
+                                            field.setCustomValidity('');
+                                        }, {once: true});
+                                    } else {
+                                        toastError(value);
+                                    }
+                                });
+                            } else {
+                                toastError("{% trans 'Error' %}!");
+                            }
                         }
                     }
-                })
-            }
-        })
-    })
-    const form = document.getElementById("id_{{key}}_update_form");
-    if (form){
-        form._handlerUpdate = (event) => {            
-            event.preventDefault();
-            const data = $u.getDataByForm(event.target);
-            $q.use(
-                '{{update.update_url_name}}',
-                () => $r.put(
-                    '{% url update.update_url_name 0 %}'.replace(
-                        "0",
-                        $s.get('update.modal.id'),
-                    ),
-                    data,
-                    {'X-CSRFToken': '{{csrf_token}}'}
-                ),
-                {
-                    onSuccess(){
-                        {% if list %}
-                            $q.refetch('{{list.table.list_url_name}}');
-                        {% endif %}
-                        document.getElementById('id_update_modal')?.close();
-                    },
-                    onError(error){
-                        if (error.status === 400) {
-                            toastError(Object.entries(error.data)
-                                .map(([k, v]) => `${k}: ${v}`).join("\n"));
-                        } else {
-                            toastError("{%trans 'Error'%}!");
-                        }                        
-                    }
-                }
-            )
-        };
-        form.addEventListener('submit', form._handlerUpdate);
+                )
+            };
+            form.addEventListener('submit', form._handlerUpdate);
+        }
     }
-}
 </script>
