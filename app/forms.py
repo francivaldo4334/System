@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import timedelta
 from typing import Any, List
 
 @dataclass
@@ -72,6 +73,8 @@ class AvailabilityForm(BaseForm):
         DateField(
             name="valid_until",
             label=_("Valid Until"),
+            attrs="required",
+            value=timezone.localtime(timezone.now() + timedelta(days=90)).date().isoformat(),
         ),
         CheckboxesField(
             name="week",
