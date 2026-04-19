@@ -6,7 +6,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
-from django.db.models.functions import Concat, Substr
+from django.db.models.functions import Coalesce, Concat, Substr
 from rest_framework.fields import MinValueValidator
 from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import rrulestr
@@ -73,6 +73,18 @@ class ServiceResourceRelation(models.Model):
 
 
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
+    class QuerySet(models.QuerySet):
+        def filter_date_colision(self, start: datetime.date, end:datetime.date):
+            return self.filter(
+                models.Q(valid_until__isnull=True) | models.Q(valid_until__gte=start),
+                valid_from__lte=end,
+            )
+        def filter_time_colision(self, start:datetime.time, end: datetime.time):
+            return self.filter(
+                time_from__lte=end,
+                time_until__gte=start,
+            )
+    objects = QuerySet.as_manager()
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
     rrule_params = models.CharField(validators=[
         RegexValidator(r"^DTSTART:{%DATE%}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL={%DATE%}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
@@ -83,6 +95,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     time_until = models.TimeField()
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
+
     def get_presentation(self, init: datetime.date, end: datetime.date):
         if init < self.valid_from:
             init = self.valid_from
