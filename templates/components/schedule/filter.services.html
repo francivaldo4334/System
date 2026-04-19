@@ -16,7 +16,7 @@ $q.use(
             const options = data.results.map(it => {
                 const opt = document.createElement('option')
                 opt.value = it.id
-                opt.innerText = it.title
+                opt.innerText = it.label
                 frag.appendChild(opt)
             });
             id_filter_service.replaceChildren(frag)
