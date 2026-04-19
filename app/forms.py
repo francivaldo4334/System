@@ -115,7 +115,8 @@ class AvailabilityForm(BaseForm):
         ),
         TextareaField(
             name="description",
-            label=_("Description")
+            label=_("Description"),
+            attrs='required'
         )
     ]
 

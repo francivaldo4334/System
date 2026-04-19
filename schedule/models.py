@@ -141,7 +141,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
         ).filter_time_colision(
             self.time_from,
             self.time_until,
-        )):
+        ).exclude(pk=self.pk)):
             date = datetime.combine(self.valid_from, time.min)
             end = datetime.combine(self.valid_until, time.max)
             while date <= end:
