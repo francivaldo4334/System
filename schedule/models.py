@@ -68,6 +68,9 @@ class ServiceResourceRelation(models.Model):
     resource_type = models.ForeignKey(ResourceNotSelectable, models.CASCADE)
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
+    class Meta:
+        unique_together = ('service', 'resource_type')
+
 
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     # RULE | UMA UNIDADE DE SLOT REPRESENTA 5 MINUTOS
