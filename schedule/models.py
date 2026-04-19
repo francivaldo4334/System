@@ -113,6 +113,17 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
             current_date += timedelta(days=1)
         return sorted(list(set(results)))
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.filter_date_colision(
+            self.valid_from,
+            self.valid_until or datetime.max
+        ).filter_time_colision(
+            self.time_from,
+            self.time_until,
+        ).exists():
+            raise ValidationError(_('Availability in conflit.'))
+        return super().save(*args, **kwargs)
+
 
 class ResourceOccupation(models.Model):
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
