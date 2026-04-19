@@ -23,37 +23,50 @@
     </form>
 </dialog>
 <script is="exec-mount" type="pass">
-{
-    const form = document.getElementById("id_{{key}}_create_form");
-    if (form) {
-        form._handlerCreate = (event) => {
-            event.preventDefault();
-            const data = $u.getDataByForm(event.target);
-            $q.use("{{create.post_url_name}}",
-                () => $r.post("{% url create.post_url_name %}", data, { "X-CSRFToken": "{{csrf_token}}" }),
-                {
-                    onSuccess() {
-                        {% if list %}
+    {
+        const form = document.getElementById("id_{{key}}_create_form");
+        if (form) {
+            form._handlerCreate = (event) => {
+                event.preventDefault();
+                const data = $u.getDataByForm(event.target);
+                $q.use("{{create.post_url_name}}",
+                    () => $r.post("{% url create.post_url_name %}", data, {"X-CSRFToken": "{{csrf_token}}"}),
+                    {
+                        onSuccess() {
+                            {% if list %}
                             $q.refetch("{{list.table.list_url_name}}");
-                        {% endif %}
-                        document.getElementById("id_{{key}}_btn_add_modal")?.close();
-                        form.reset();
-                    },
-                    onError(error) {
-                        if (error.status === 400) {
-                            toastError(Object.entries(error.data)
-                                .map(([k, v]) => `${k}: ${v}`).join("\n"));
-                        } else {
-                            toastError("{%trans 'Error'%}!");
+                            {% endif %}
+                            document.getElementById("id_{{key}}_btn_add_modal")?.close();
+                            form.reset();
+                        },
+                        onError(error) {
+                            if (error.status === 400) {
+                                Object.entries(error.data).forEach(([key, value]) => {
+                                    const field = form.elements[key];
+                                    if (field) {
+                                        const message = Array.isArray(value) ? value.join(', ') : value;
+
+                                        field.setCustomValidity(message);
+                                        field.reportValidity();
+
+                                        field.addEventListener('input', () => {
+                                            field.setCustomValidity('');
+                                        }, {once: true});
+                                    } else {
+                                        toastError(value);
+                                    }
+                                });
+                            } else {
+                                toastError("{% trans 'Error' %}!");
+                            }
                         }
                     }
-                }
-            );
-        };
+                );
+            };
 
-        form.addEventListener("submit", form._handlerCreate);
+            form.addEventListener("submit", form._handlerCreate);
+        }
     }
-}
 </script>
 <script is="exec-umount" type="pass">
 {
