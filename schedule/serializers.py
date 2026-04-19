@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.utils.field_mapping import UniqueValidator
 
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
@@ -63,6 +64,14 @@ class ServiceResourceRelationSerializer(serializers.ModelSerializer):
             'service_label',
             'resource_type_label',
         ]
+        validators = [
+            serializers.UniqueTogetherValidator(
+                queryset=ServiceResourceRelation.objects.all(),
+                fields=['service', 'resource_type'],
+                message=_('A rule already exists between this Service and this Resource.')
+            )
+        ]
+
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
