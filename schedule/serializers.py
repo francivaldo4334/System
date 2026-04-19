@@ -188,18 +188,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         for field in ['week', 'duration', 'interval']:
             attrs.pop(field, None)
 
-        
-        if Availability.objects.filter_date_colision(
-            valid_from,
-            valid_until or datetime.max
-        ).filter_time_colision(
-            time_from,
-            time_until,
-        ).exists():
-            raise serializers.ValidationError({
-                'non_field_erros':_("There is a schedule conflict for the selected date and time range."),
-            })
-
         return attrs
 
     def to_representation(self, instance):
@@ -220,6 +208,17 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         except Exception as e:
             data["_conversion_error"] = str(e)        
         return data
+    def save(self, **kwargs):
+        try:
+            return super().save(**kwargs)
+        except Availability.MaxValidError:
+            raise serializers.ValidationError({
+                'valid_until': _('There cannot be an availability period greater than 90 days.')
+            })
+        except Availability.ConflitError:
+            raise serializers.ValidationError({
+                'non_field_erros':_("There is a schedule conflict for the selected date and time range."),
+            })
 
 class AvailabilityPresentationSerializer(serializers.ModelSerializer):
     occurrences = serializers.SerializerMethodField()

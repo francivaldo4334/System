@@ -3,6 +3,7 @@
 # pyright: reportArgumentType=false
 # pyright: reportCallIssue=false
 # pyright: reportGeneralTypeIssues=false
+from typing import List, cast
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
@@ -73,10 +74,18 @@ class ServiceResourceRelation(models.Model):
 
 
 class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
+    class ConflitError(ValidationError):
+        def __init__(self):
+            super().__init__(_('There is a schedule conflict for the selected date and time range.'))
+
+    class MaxValidError(ValidationError):
+        def __init__(self):
+            super().__init__(_('There cannot be an availability period greater than 90 days.'))
+
     class QuerySet(models.QuerySet):
         def filter_date_colision(self, start: datetime.date, end:datetime.date):
             return self.filter(
-                models.Q(valid_until__isnull=True) | models.Q(valid_until__gte=start),
+                valid_until__gte=start,
                 valid_from__lte=end,
             )
         def filter_time_colision(self, start:datetime.time, end: datetime.time):
@@ -90,7 +99,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
         RegexValidator(r"^DTSTART:{%DATE%}T\d{6}\nRRULE:FREQ=MINUTELY;UNTIL={%DATE%}T\d{6}Z?;INTERVAL=\d+;BYDAY=[A-Z]{2}(?:,[A-Z]{2})*Z"),
     ])
     valid_from = models.DateField()
-    valid_until = models.DateField(null=True, blank=True)
+    valid_until = models.DateField()
     time_from = models.TimeField()
     time_until = models.TimeField()
     duration_slot = models.PositiveSmallIntegerField()
@@ -112,16 +121,39 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
             results.extend(occurrences)
             current_date += timedelta(days=1)
         return sorted(list(set(results)))
+    def get_map(self, date: datetime.date):
+        occurrences:List[datetime]  = self.get_occurrences(date, date)
+        map = [0] * 288
+        for occ in occurrences:
+            start_slot = ((occ.hour * 60) + occ.minute) // 5
+            map[start_slot] = 1
+            for occuped_slot in range(self.duration_slot):
+                map[start_slot + occuped_slot] = 1
+        return map
 
     def save(self, *args, **kwargs):
-        if self.__class__.objects.filter_date_colision(
+        if self.valid_until > self.valid_from + timedelta(days=90): # type: ignore
+            raise Availability.MaxValidError()
+        
+        if avs_with_conflit := list(self.__class__.objects.filter_date_colision(
             self.valid_from,
             self.valid_until or datetime.max
         ).filter_time_colision(
             self.time_from,
             self.time_until,
-        ).exists():
-            raise ValidationError(_('Availability in conflit.'))
+        )):
+            date = datetime.combine(self.valid_from, time.min)
+            end = datetime.combine(self.valid_until, time.max)
+            while date <= end:
+                curr_map = self.get_map(date.date())
+                curr_indexes = [i for i, v in enumerate(curr_map) if v == 1]
+                for _av in avs_with_conflit:
+                    av = cast('Availability', _av)
+                    other_map = av.get_map(date.date())
+                    other_indexes = [i for i, v in enumerate(other_map) if v == 1]
+                    if any(n in curr_indexes  for n in other_indexes):
+                        raise Availability.ConflitError()
+                date += timedelta(days=1)
         return super().save(*args, **kwargs)
 
 
