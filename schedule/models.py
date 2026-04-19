@@ -33,6 +33,8 @@ class Resource(TimeStampedModel, ActivatorModel):
             self.code = self.get_next_code();
         return super().save(*args, **kwargs)
     def get_next_code(self):
+        if not self.parent:
+            raise ValidationError({'parent': _('Enter a valid value.')})
         last = self.__class__.objects.order_by('-id').first()
         last_id = last.id if last else 0
         return f'{self.parent.code}.{last_id + 1}'

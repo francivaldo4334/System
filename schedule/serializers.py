@@ -16,9 +16,6 @@ class ResourceSerializer(serializers.ModelSerializer):
     parent = serializers.PrimaryKeyRelatedField(
         queryset=ResourceNotSelectable.objects.all(),
         required=False,
-        error_messages={
-            'required': _('Enter a valid value.')
-        }
     )
     class Meta:
         model = Resource
@@ -35,12 +32,16 @@ class ResourceSerializer(serializers.ModelSerializer):
             'code',
             'is_selectable',
         ]
-    def validate_parent(self, value):
-        use_as_category = self.initial_data.get('use_as_category')
-        print('here',use_as_category, value)
-        if not value and not use_as_category:
-            self.fail('required')
-        return value
+
+    def validate(self, attrs):
+        use_as_category = attrs.get('use_as_category', False)
+        parent = attrs.get('parent', None)
+        if not parent and not use_as_category:
+            raise serializers.ValidationError(
+                {'parent': _('This field is required.')}
+            )
+        return super().validate(attrs)
+
     def validate_use_as_category(self, value):
         return not value
 

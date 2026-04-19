@@ -2,10 +2,10 @@
     <select class="select" id="id_filter_service" onchange="$s.set('filter.services', this.value)"> </select>
     <span>{% trans 'Service' %}</span>
 </label>
-<script is="exec-mount" type="text/template">
+<script is="exec-mount" type="pass">
 $q.use(
     'services-list',
-    ()=>fetch("{% url 'services-list' %}").then(r =>r.json()),
+    ()=>$r.get("{% url 'services-list' %}"),
     {
         onSuccess:(data)=> {
             const frag = document.createDocumentFragment()
