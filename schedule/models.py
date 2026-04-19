@@ -29,15 +29,20 @@ class Resource(TimeStampedModel, ActivatorModel):
         if self.is_selectable and str(self.code).endswith('.'):
             raise ValidationError({'code': _('Enter a valid value.')})
     def save(self, *args, **kwargs):
-        if self._state.adding and self.is_selectable:
+        if self._state.adding:
             self.code = self.get_next_code();
         return super().save(*args, **kwargs)
+
     def get_next_code(self):
-        if not self.parent:
-            raise ValidationError({'parent': _('Enter a valid value.')})
         last = self.__class__.objects.order_by('-id').first()
         last_id = last.id if last else 0
-        return f'{self.parent.code}.{last_id + 1}'
+
+        if self.is_selectable:
+            if not self.parent:
+                raise ValidationError({'parent': _('Enter a valid value.')})
+            return f'{self.parent.code}.{last_id + 1}'
+
+        return last_id + 1;
 
 class ResourceNotSelectable(Resource):
     class Manager(models.Manager):

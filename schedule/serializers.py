@@ -34,9 +34,9 @@ class ResourceSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        use_as_category = attrs.get('use_as_category', False)
+        is_selectable = attrs.get('is_selectable', False)
         parent = attrs.get('parent', None)
-        if not parent and not use_as_category:
+        if not parent and is_selectable:
             raise serializers.ValidationError(
                 {'parent': _('This field is required.')}
             )
