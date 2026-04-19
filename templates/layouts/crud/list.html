@@ -57,7 +57,7 @@ $s.compute("{{list.table.list_url_name}}.data", [
     "{{key}}.page.limit",
 ], (search, offset, limit) => {
   $q.use(
-    "{{list.table.list_url_name}}",
+    "crud_{{list.table.list_url_name}}",
     ()=>$r.get(`{% url list.table.list_url_name %}?limit=${limit}&offset=${offset}&search=${search}`),
     {
       onSuccess(data){

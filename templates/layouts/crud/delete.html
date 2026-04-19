@@ -1,6 +1,7 @@
 <template id="id_template_btn_delete">
     <button class="btn btn-ghost btn-square tooltip"
-        onclick="$s.set('delete.modal.id', this.dataset.id);id_delete_modal.showModal()" data-tip="{% trans 'Delete' %}">
+        onclick="$s.set('delete.modal.id', this.dataset.id);id_delete_modal.showModal()"
+        data-tip="{% trans 'Delete' %}">
         {% include "icons/trash-2.svg" %} </button>
 </template>
 
@@ -58,7 +59,7 @@
                 {
                     onSuccess() {
                         {% if list %}
-                        $q.refetch("{{list.table.list_url_name}}");
+                        $q.refetch("crud_{{list.table.list_url_name}}");
                         {% endif %}
                         modal.close();
                     }
