@@ -39,7 +39,7 @@ class ResourceFilterSet(filters.FilterSet):
     search = filters.CharFilter(method='filter_search')
     class Meta:
         model = Resource
-        fields = []
+        fields = ['parent']
     def filter_search(self, queryset, name, value):
         if not value:
             return queryset

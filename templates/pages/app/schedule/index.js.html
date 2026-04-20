@@ -1,8 +1,9 @@
 <script is="exec-mount" type="text/template">
     $s.createStore('filter', {
         "search": "{{ request.GET.search|default:'' }}",
-        "services": "{{ request.GET.services|default:'' }}",
-        "resources": "{{ request.GET.resources|default:'' }}",
+        "services": "{{ request.GET.service|default:'' }}",
+        "resource": "{{ request.GET.resource|default:'' }}",
+        "resource_type": "{{ request.GET.resource_type|default:'' }}",
         "status": "{{request.GET.status|default:'all'}}",
     })
     $s.createStore('filter.calendar', {
