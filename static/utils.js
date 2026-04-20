@@ -34,8 +34,13 @@ function utilsManager() {
     const data = Object.fromEntries(Array.from(formData.keys()).map(key => {
         let value = formData.getAll(key);
         const field = formElement.elements[key];
-        if (field.tagName !== 'SELECT' && !field.multiple && value.length === 1) value = value[0];
-        if (field.tagName === 'SELECT') {
+        if (field instanceof RadioNodeList) {
+          value = value
+        }
+        else if (field.tagName !== 'SELECT' && !field.multiple && value.length === 1) {
+          value = value[0]
+        }
+        else if (field.tagName === 'SELECT') {
           if (field.multiple)
             value = value.map(parseInt)
           else
