@@ -13,6 +13,9 @@
         </div>
     </main>
 </section>
+<script is="exec-umount" type="pass">
+$s.remove("settings.tab")
+</script>
 <script is="exec-mount" type="pass">
 $s.create("settings.tab", "{{request.GET.tab|default:setting_tag_selected}}")
 id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
@@ -23,7 +26,9 @@ id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
         const isSelected = v === el.dataset.urlName
         el.disabled = isSelected
         if (isSelected) {
-            $q.use([el.dataset.urlName], () => $r.get(item.dataset.url), {
+            $q.use([el.dataset.urlName], () => {
+                return $r.get(item.dataset.url)
+            }, {
                 onSuccess(html){
                     id_schedule_settings_content.innerHTML = html;
                     history.pushState({}, "", location.pathname + `?tab=${el.dataset.urlName}`)
