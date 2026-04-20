@@ -1,6 +1,6 @@
 import django_filters as filters
 
-from schedule.models import Availability, Resource
+from schedule.models import Availability, Resource, Service, ServiceResourceRelation
 from django.db.models import Q
 
 
@@ -14,8 +14,7 @@ class AvailabilityFilterSet(filters.FilterSet):
         if not value:
             return queryset
         return queryset.filter(
-            Q(description__icontains=value) | 
-            Q(resource__name__icontains=value)
+            Q(description__icontains=value)
         ).distinct()
 
 class AvailabilityPresentationFilterSet(filters.FilterSet):
@@ -46,4 +45,35 @@ class ResourceFilterSet(filters.FilterSet):
             return queryset
         return queryset.filter(
             Q(name__icontains=value)
+        ).distinct()
+
+class ServiceFilterSet(filters.FilterSet):
+    search = filters.CharFilter(method='filter_search')
+    class Meta:
+        model = Service
+        fields = []
+
+    def filter_search(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(
+            Q(title__icontains=value) |
+            Q(description__icontains=value)
+        ).distinct()
+
+class ServiceRequirementsFilterSet(filters.FilterSet):
+    search = filters.CharFilter(method='filter_search')
+    class Meta:
+        model = ServiceResourceRelation
+        fields = []
+
+    def filter_search(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(
+            Q(
+                Q(service__title__icontains=value) |
+                Q(service__description__icontains=value)
+            ) |
+            Q(resource_type__name__icontains=value)
         ).distinct()

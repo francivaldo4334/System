@@ -3,7 +3,7 @@ from django.db.models.deletion import ProtectedError
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
-from schedule.filters import AvailabilityPresentationFilterSet, ResourceFilterSet
+from schedule.filters import AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
@@ -33,10 +33,12 @@ class ResourceViewSet(viewsets.ModelViewSet):
 class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
+    filterset_class = ServiceFilterSet
 
 class ServiceRequirementsViewSet(viewsets.ModelViewSet):
     queryset = ServiceResourceRelation.objects.all()
     serializer_class = ServiceResourceRelationSerializer
+    filterset_class = ServiceRequirementsFilterSet
 
 # pyright:reportIncompatibleMethodOverride=false
 class AssignmentViewSet(viewsets.mixins.ListModelMixin,
@@ -55,6 +57,7 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
 class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
+    filterset_class = AvailabilityFilterSet
 
 class AvailabilityPresentationAPIView(ListAPIView):
     queryset = Availability.objects.all()
