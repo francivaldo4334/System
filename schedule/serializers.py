@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ResourceSerializer(serializers.ModelSerializer):
-    label = serializers.CharField(source="name")
+    label = serializers.SerializerMethodField()
     use_as_category = serializers.BooleanField(
         source="is_selectable",
         default=False,
@@ -33,6 +33,11 @@ class ResourceSerializer(serializers.ModelSerializer):
             'code',
             'is_selectable',
         ]
+    def get_label(self, obj: Resource):
+        if obj.parent:
+            prefix = self.get_label(obj.parent) # type:ignore
+            return  f'{prefix} / {obj.name}'
+        return obj.name
 
     def validate(self, attrs):
         is_selectable = attrs.get('is_selectable', False)
