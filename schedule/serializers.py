@@ -94,6 +94,10 @@ class ServiceSerializer(serializers.ModelSerializer):
 class AssignmentSerializer(serializers.ModelSerializer):
     service = ServiceSerializer()
     resources = ResourceSerializer(many=True)
+    availability = serializers.PrimaryKeyRelatedField(
+        queryset=Availability.objects.all(),
+        write_only=True,
+    )
     class Meta:
         model = Assignment
         fields = [
@@ -102,10 +106,14 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'resources',
             'date',
             'start_slot',
-            'duration_slot',
-            'customer'
+            'customer',
+            'availability',
         ]
         # depth = 1
+    def create(self, validated_data):
+        av = validated_data.pop('availability')
+        instance = super().create(validated_data)
+        return instance;
 
 # pyright: reportAttributeAccessIssue=false
 class CreateAssigmentSerializer(AssignmentSerializer):
