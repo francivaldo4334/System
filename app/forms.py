@@ -150,10 +150,35 @@ class ResourceForm(BaseForm):
 class AssignmentForm(BaseForm):
     key = 'assignment'
     form_fields = [
+        DateField(
+            label=_('Date'),
+            name='date',
+        ),
         SelectField(
-            label="Serviço",
+            label=_('Customer'),
+            name='customer',
+        ),
+        SelectField(
+            label=_('Service'),
             name="service",
             url_name="assignment",
+        ),
+        SelectField(
+            label=_('Resources'),
+            name="resources",
+            url_name="resources",
+            url_query_params='?is_selectable=true',
+            attrs="multiple",
+        ),
+        NumberField(
+            label='',
+            name='availability',
+            attrs='hidden'
+        ),
+        NumberField(
+            label='',
+            name='start_slot',
+            attrs='hidden'
         )
     ]
 

@@ -12,13 +12,11 @@ $s.createStore("form_assignment", {
 </script>
 <dialog id="id_new_schedule_modal" class="modal">
   <div class="modal-box">
-    {% with id='' form=assignment_form %}
+    {% with id='id_assignment_form' form=assignment_form %}
       {% include 'components/form/index.html' %}
     {% endwith %}
     <div class="modal-action">
-      <form method="dialog">
-        <button class="btn btn-ghost" >{% trans 'Cancel' %}</button>
-      </form>
+      <button class="btn btn-ghost" onclick="id_new_schedule_modal.close();id_assignment_form.reset()">{% trans 'Cancel' %}</button>
       <button class="btn btn-primary">{% trans 'Save' %}</button>
     </div>
   </div>
