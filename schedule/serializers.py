@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.utils.field_mapping import UniqueValidator
+from django.conf import settings
 
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
@@ -103,6 +103,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'date',
             'start_slot',
             'duration_slot',
+            'customer'
         ]
         # depth = 1
 
