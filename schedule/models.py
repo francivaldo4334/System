@@ -1,5 +1,6 @@
 # pyright: reportIncompatibleVariableOverride=false
 # pyright: reportAssignmentType=false
+# pyright: reportAttributeAccessIssue=false
 # pyright: reportArgumentType=false
 # pyright: reportCallIssue=false
 # pyright: reportGeneralTypeIssues=false
