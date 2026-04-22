@@ -14,9 +14,9 @@
       <button class="btn btn-ghost" onclick="id_modal_confirm_logout.close()">
         {% trans 'Cancel' %}
       </button>
-      <form class="btn btn-error text-white" action="{% url 'logout' %}" method="POST">
+      <form action="{% url 'logout' %}" method="POST">
         {% csrf_token %}
-        <button>
+        <button class="btn btn-error" >
           {% trans 'Log out' %}
         </button>
       </form>

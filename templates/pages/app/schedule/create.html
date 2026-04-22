@@ -16,6 +16,9 @@ $s.createStore("form_assignment", {
       {% include 'components/form/index.html' %}
     {% endwith %}
     <div class="modal-action">
+      <form method="dialog">
+        <button class="btn btn-ghost" >{% trans 'Cancel' %}</button>
+      </form>
       <button class="btn btn-primary">{% trans 'Save' %}</button>
     </div>
   </div>
