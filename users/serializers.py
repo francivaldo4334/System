@@ -7,5 +7,5 @@ class ClientBadgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientBadge
         fields = [
-            'user'
+            'id'
         ]
