@@ -15,7 +15,6 @@ from dateutil.rrule import rrulestr
 from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
 from datetime import datetime, time, timedelta
-from django.conf import settings
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -218,8 +217,8 @@ class Assignment(TimeStampedModel, CreatedByModel):
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.PENDING.value)
-    customer = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+    customer_uri = models.ForeignKey(
+        'uri.URIModel',
         on_delete=models.CASCADE,
         related_name="assignments",
         null=True,
