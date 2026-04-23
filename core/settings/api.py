@@ -4,8 +4,8 @@ INSTALLED_APPS += [
     'django_filters',
     'uri',
     'schedule',
-    'sale',
-    'stock',
+    # 'sale',
+    # 'stock',
     'users',
 ]
 # Django Restframework
