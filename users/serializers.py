@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from users.models import ClientBadge
+from users.models import CustomerBadge
 
 
-class ClientBadgeSerializer(serializers.ModelSerializer):
+class BadgeSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='user.full_name')
     class Meta:
-        model = ClientBadge
+        model = CustomerBadge
         fields = [
             'full_name'
         ]

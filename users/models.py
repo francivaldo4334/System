@@ -14,5 +14,9 @@ class Badge(TimeStampedModel, ActivatorModel):
         unique_together=('user', 'company_slug')
         abstract=True
 
-class ClientBadge(Badge):
+class CustomerBadge(Badge):
+    pass
+
+
+class TeamBadge(Badge):
     pass
