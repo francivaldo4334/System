@@ -91,7 +91,7 @@ class AppScheduleSettingsView(AppView):
                 'label': _("Services"),
                 'url_name': 'app-schedule-settings-services',
             })
-        if user.has_perm('schedule.view_servicerequirements'):
+        if user.has_perm('schedule.view_serviceresourcerelation'):
             setting_tabs.append({
                 'label': _("Service Requirements"),
                 'url_name': 'app-schedule-settings-service-requirements',
@@ -169,6 +169,6 @@ class ScheduleSettingsServiceView(CrudView):
 
 class ScheduleSettingsServiceRequirementsView(CrudView):
     key = 'service_requirements'
-    model_name = 'servicerequirements'
+    model_name = 'serviceresourcerelation'
     form = ServiceRequirementsForm
     table = ServiceRequirementsTable
