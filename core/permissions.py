@@ -1,6 +1,17 @@
 from rest_framework import permissions
-from rest_framework.permissions import DjangoModelPermissions
 
-class FullModelPermissions(DjangoModelPermissions):
+class FullModelPermissions(permissions.DjangoModelPermissions):
     def __init__(self):
         self.perms_map['GET'] = ['%(app_label)s.view_%(model_name)s']
+
+class IsOwner(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name='OWNER').exists()
+
+class IsFrontDesk(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name='FRONT_DESK').exists()
+
+class IsProfessional(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name='PROFESSIONAL').exists()

@@ -1,14 +1,24 @@
 from typing import Type
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from app.forms import AssignmentForm, AvailabilityForm, BaseForm, ResourceForm, ServiceForm, ServiceRequirementsForm
 from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
+from core.permissions import IsFrontDesk, IsOwner, IsProfessional
 
 
-class AppView(LoginRequiredMixin,TemplateView):
+class AppView(PermissionRequiredMixin,
+              LoginRequiredMixin,
+              TemplateView):
     template_name = "pages/app/index.html"
+    def has_permission(self):
+        allowed = (
+            IsOwner().has_permission(self.request, None) or\
+            IsFrontDesk().has_permission(self.request, None) or\
+            IsProfessional().has_permission(self.request, None)
+        )
+        return allowed 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
