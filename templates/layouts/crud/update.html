@@ -5,7 +5,7 @@
 </template>
 <dialog id="id_update_modal" class="modal">
     <div class="modal-box">
-        {% with form=create.form id="id_"|add:key|add:"_update_form" %}
+        {% with form=update.form id="id_"|add:key|add:"_update_form" %}
         {% include "components/form/index.html" %}
         {% endwith %}
         <div class="modal-action">

@@ -9,6 +9,18 @@ PERMISSION_GROUPS = {
         'view_assignment',
         'view_service',
         'view_serviceresourcerelation',
+
+        'change_resource',
+        'change_availability',
+        'change_assignment',
+        'change_service',
+        'change_serviceresourcerelation',
+
+        'add_resource',
+        'add_availability',
+        'add_assignment',
+        'add_service',
+        'add_serviceresourcerelation',
     ],
     'FRONT_DESK': [],
     'PROFESSIONAL': [],

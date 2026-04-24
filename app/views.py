@@ -133,7 +133,7 @@ class CrudView(LoginRequiredMixin, TemplateView):
                 },
             })
 
-        if user.has_perm(f'schedule.create_{self.model_name}'):
+        if user.has_perm(f'schedule.add_{self.model_name}'):
             context.update({
                 'create': {
                     'form': form_instance,
