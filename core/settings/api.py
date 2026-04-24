@@ -6,7 +6,6 @@ INSTALLED_APPS += [
     'schedule',
     # 'sale',
     # 'stock',
-    'users',
 ]
 # Django Restframework
 REST_FRAMEWORK = {
