@@ -12,29 +12,44 @@ class AppView(PermissionRequiredMixin,
               LoginRequiredMixin,
               TemplateView):
     template_name = "pages/app/index.html"
+
+    def is_owner(self):
+        return IsOwner().has_permission(self.request, None)
+
+    def is_front_desk(self):
+        return IsFrontDesk().has_permission(self.request, None)
+
+    def is_professinal(self):
+        return IsProfessional().has_permission(self.request, None)
+
     def has_permission(self):
         allowed = (
-            IsOwner().has_permission(self.request, None) or\
-            IsFrontDesk().has_permission(self.request, None) or\
-            IsProfessional().has_permission(self.request, None)
+            self.is_owner() or\
+            self.is_front_desk() or\
+            self.is_professinal()
         )
         return allowed 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        app_template_name_options = []
+
+        if self.is_owner() or self.is_front_desk() or self.is_professinal():
+            app_template_name_options.append({
+                'url_name': 'app-schedule',
+                'title': _('Agenda'),
+                'icon_template_name': 'icons/calendar.svg'
+            })
+        if self.is_owner():
+            app_template_name_options.append({
+                'url_name': 'app-schedule-settings',
+                'title': _('Agenda Settings'),
+                'icon_template_name': 'icons/calendar-cog.svg'
+            })
+            
+
         context.update({
-            'app_template_name_options': [
-                {
-                    'url_name': 'app-schedule',
-                    'title': _('Agenda'),
-                    'icon_template_name': 'icons/calendar.svg'
-                },
-                {
-                    'url_name': 'app-schedule-settings',
-                    'title': _('Agenda Settings'),
-                    'icon_template_name': 'icons/calendar-cog.svg'
-                },
-            ],
+            'app_template_name_options': app_template_name_options,
             'today': f'{timezone.localtime(timezone.now()).date().isoformat()}T00:00:00',
         })
         return context
