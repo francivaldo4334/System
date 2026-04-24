@@ -44,25 +44,35 @@ class AppScheduleSettingsView(AppView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'setting_tag_selected': 'app-schedule-settings-availabilities',
-            'setting_tabs': [
-                {
-                    'label': _("Availabilities"),
-                    'url_name': 'app-schedule-settings-availabilities',
-                },
-                {
-                    'label': _("Resources"),
-                    'url_name': 'app-schedule-settings-resources',
-                },
-                {
-                    'label': _("Services"),
-                    'url_name': 'app-schedule-settings-services',
-                },
-                {
-                    'label': _("Service Requirements"),
-                    'url_name': 'app-schedule-settings-service-requirements',
-                },
-            ]
+            'setting_tag_selected': '',
+        })
+        user = self.request.user
+        setting_tabs = []
+        if user.has_perm('view_availability'):
+            setting_tabs.append({
+                'label': _("Availabilities"),
+                'url_name': 'app-schedule-settings-availabilities',
+            })
+            context.update({
+                'setting_tag_selected': 'app-schedule-settings-availabilities',
+            })
+        if user.has_perm('view_resource'):
+            setting_tabs.append({
+                'label': _("Resources"),
+                'url_name': 'app-schedule-settings-resources',
+            })
+        if user.has_perm('view_service'):
+            setting_tabs.append({
+                'label': _("Services"),
+                'url_name': 'app-schedule-settings-services',
+            })
+        if user.has_perm('view_servicerequirements'):
+            setting_tabs.append({
+                'label': _("Service Requirements"),
+                'url_name': 'app-schedule-settings-service-requirements',
+            })
+        context.update({
+            'setting_tabs': setting_tabs
         })
         return context
 
@@ -71,6 +81,7 @@ class CrudView(LoginRequiredMixin, TemplateView):
     key: str
     form: Type[BaseForm]
     table: Type[BaseTable]
+    model_name: str = ''
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -79,21 +90,38 @@ class CrudView(LoginRequiredMixin, TemplateView):
         
         context.update({
             'key': self.key,
-            'create': {
-                'form': form_instance,
-                'post_url_name': f'{self.key}-list',
-            },
-            'list': {
-                'table': self.table,
-            },
-            'delete': {
-                'delete_url_name': f'{self.key}-detail',
-            },
-            'update': {
-                'form': form_instance,
-                'update_url_name': f'{self.key}-detail'
-            },
         })
+        user = self.request.user
+
+        if user.has_perm(f'view_{self.model_name}'):
+            context.update({
+               'list': {
+                   'table': self.table,
+                }
+            })
+
+        if user.has_perm(f'change_{self.model_name}'):
+            context.update({
+               'update': {
+                    'form': form_instance,
+                    'update_url_name': f'{self.key}-detail'
+                },
+            })
+
+        if user.has_perm(f'create_{self.model_name}'):
+            context.update({
+                'create': {
+                    'form': form_instance,
+                    'post_url_name': f'{self.key}-list',
+                },
+            })
+
+        if user.has_perm(f'delete_{self.model_name}'):
+            context.update({
+                'delete': {
+                    'delete_url_name': f'{self.key}-detail',
+                },
+            })
         return context
 
 class ScheduleSettingsAvailabilitiesView(CrudView):
