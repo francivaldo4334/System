@@ -28,7 +28,12 @@ PERMISSION_GROUPS = {
         'delete_service',
         'delete_serviceresourcerelation',
     ],
-    'FRONT_DESK': [],
+    'FRONT_DESK': [        
+        'view_resource',
+        'view_availability',
+        'view_assignment',
+        'view_service',
+    ],
     'PROFESSIONAL': [],
 }
 
