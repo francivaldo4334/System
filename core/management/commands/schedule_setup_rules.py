@@ -3,7 +3,12 @@ from django.contrib.auth.models import Group, Permission
 from django.db.transaction import atomic
 
 PERMISSION_GROUPS = {
-    'OWNER': [],
+    'OWNER': [
+        'view_resource',
+        'view_availability',
+        'view_assignment',
+        'view_service',
+    ],
     'FRONT_DESK': [],
     'PROFESSIONAL': [],
 }
