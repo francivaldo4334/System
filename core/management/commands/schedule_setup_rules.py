@@ -21,6 +21,12 @@ PERMISSION_GROUPS = {
         'add_assignment',
         'add_service',
         'add_serviceresourcerelation',
+
+        'delete_resource',
+        'delete_availability',
+        'delete_assignment',
+        'delete_service',
+        'delete_serviceresourcerelation',
     ],
     'FRONT_DESK': [],
     'PROFESSIONAL': [],
