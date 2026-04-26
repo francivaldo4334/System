@@ -53,14 +53,24 @@
         search,
         service,
         resource,
-        resource_type,
+        resource_category,
         status,
     ) => ({
         search,
         service,
         resource,
-        resource_type,
+        resource_category,
         status,
+    }))
+    $s.subscribe('filter_query_params', null, null, (queryparams) => {
+        const params = new URLSearchParams();
+        Object.entries(queryparams).forEach(([key, value]) => {
+            if (value){
+                params.append(key, value)
+            }
+        })
+        const newRelativePathQuery = `${window.location.pathname}?${params.toString()}`
+        history.pushState(null, '', newRelativePathQuery);
     })
 </script>
 <script is="exec-umount" type="text/template">
