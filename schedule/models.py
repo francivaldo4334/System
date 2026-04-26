@@ -217,14 +217,6 @@ class Assignment(TimeStampedModel, CreatedByModel):
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.PENDING.value)
-    customer_uri = models.ForeignKey(
-        'uri.URIModel',
-        on_delete=models.CASCADE,
-        related_name="assignments",
-        null=True,
-        blank=True,
-    )
-
 
     @property
     def state(self) -> AssignmentState:

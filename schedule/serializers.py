@@ -110,7 +110,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'resources',
             'date',
             'start_slot',
-            'customer_uri',
             'availability',
         ]
         # depth = 1
