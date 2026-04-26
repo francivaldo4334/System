@@ -4,10 +4,13 @@ from django.db import transaction
 from django.db.models import QuerySet
 from typing import List, cast
 
+from schedule.utils import AssignmentUtil
+
 
 class AssignmentState:
     def __init__(self, instance) -> None:
         from schedule.models import Assignment
+        self.util = AssignmentUtil()
         self.instance = cast(Assignment, instance)
 
     def confirm(self):
@@ -43,7 +46,6 @@ class AssignmentStatePeding(AssignmentState):
             resource_occupation_qs = cast(ResourceOccupation.QuerySet, ResourceOccupation.objects)
             instance_resource_parent_id_quantity_map = Counter([it['parent_id'] for it in instance_resource_paret_id_and_id])
             # 1.2 validar resources requiridos de acordo com o tipo de resource do serviço
-            print(instance_resource_parent_id_quantity_map, service_required_resource_quantity_map)
             for id, qty in service_required_resource_quantity_map.items():
                 if id not in instance_resource_parent_id_quantity_map.keys():
                     raise self.ResourceNotAllowed()
