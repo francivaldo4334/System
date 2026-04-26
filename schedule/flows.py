@@ -30,11 +30,10 @@ class AssignmentStatePeding(AssignmentState):
             rules = utils.AssignmentUtil(self.instance)
             try:
                 rules.checkServiceRequirements()
-            except utils.ServiceIsRequired:
+            except utils.ServiceIsRequired: pass
+            finally:
                 rules.checkResourceOccupations()
-            except Exception as e:
-                raise e
-            rules.occupyTimeSlot()
+                rules.occupyTimeSlot()
             self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
             self.instance.save()
             
