@@ -85,8 +85,11 @@ class AssignmentStateMigrated(AssignmentStateConfirmed):
 
 class AssignmentStateInProgress(AssignmentState):
     def cancel(self):
-        self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
-        self.instance.save(update_fields=['status'])
+        rules = utils.AssignmentUtil(self.instance)
+        with transaction.atomic():
+            rules.vacateTimeSlot()
+            self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
+            self.instance.save(update_fields=['status'])
 
     def finish(self):
         self.instance.status = self.instance.Status.COMPLETED.value # type: ignore
