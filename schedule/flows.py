@@ -9,6 +9,9 @@ class AssignmentState:
         from schedule.models import Assignment
         self.instance = cast(Assignment,instance)
 
+    def rescue(self):
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
+
     def confirm(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
@@ -18,13 +21,14 @@ class AssignmentState:
     def finish(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
-    def migrate(self, star_slot, duration_slot):
+    def migrate(self, start_slot, duration_slot):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
     def cancel(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
     
 class AssignmentStatePeding(AssignmentState):
+    ## Esse estado é para que futuramente seja implementado um sistema de concorrencia
     def confirm(self):
         rules = utils.AssignmentUtil(self.instance)
         with transaction.atomic():
@@ -41,18 +45,63 @@ class AssignmentStatePeding(AssignmentState):
         self.instance.delete()
             
 class AssignmentStateConfirmed(AssignmentState):
-    pass
+    def cancel(self):
+        rules = utils.AssignmentUtil(self.instance)
+        with transaction.atomic():
+            rules.vacateTimeSlot()
+            self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
+            self.instance.save(update_fields=['status'])
+
+    def migrate(self, start_slot, duration_slot):
+        from schedule.models import Assignment
+
+        rules = utils.AssignmentUtil(self.instance)
+        with transaction.atomic():
+            rules.vacateTimeSlot()
+            self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
+            self.instance.save(update_fields=['status'])
+
+            new_assigment = Assignment.objects.create(# type: ignore
+                resources=self.instance.resources,
+                date=self.instance.date,
+                service=self.instance.service,
+                start_slot=start_slot,
+                duration_slot=duration_slot,
+                status=self.instance.Status.MIGRATED.value
+            )
+
+            new_rules = utils.AssignmentUtil(new_assigment)
+            new_rules.checkResourceOccupations()
+            new_rules.occupyTimeSlot()
+
+    def start(self):
+        self.instance.status = self.instance.Status.IN_PROGRESS.value # type: ignore
+        self.instance.save(update_fields=['status'])
+
+            
+
+class AssignmentStateMigrated(AssignmentStateConfirmed):
+    pass # Mesmas ações do estado de Confirmado
 
 class AssignmentStateInProgress(AssignmentState):
-    pass
+    def cancel(self):
+        self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
+        self.instance.save(update_fields=['status'])
 
-class AssignmentStateCompleted(AssignmentState):
-    pass
-
-class AssignmentStateMigrated(AssignmentState):
-    pass
+    def finish(self):
+        self.instance.status = self.instance.Status.COMPLETED.value # type: ignore
+        self.instance.save(update_fields=['status'])
 
 class AssignmentStateCancelled(AssignmentState):
+    def rescue(self):
+        rules = utils.AssignmentUtil(self.instance)
+        with transaction.atomic():
+            rules.checkResourceOccupations()
+            rules.occupyTimeSlot()
+            self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
+            self.instance.save(update_fields=['status'])
+
+class AssignmentStateCompleted(AssignmentState):
     pass
 
 class NotStateError(Exception):
