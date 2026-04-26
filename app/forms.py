@@ -155,10 +155,6 @@ class AssignmentForm(BaseForm):
             name='date',
         ),
         SelectField(
-            label=_('Customer'),
-            name='customer',
-        ),
-        SelectField(
             label=_('Service'),
             name="service",
             url_name="assignment",
