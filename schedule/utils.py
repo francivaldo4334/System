@@ -26,13 +26,12 @@ class AssignmentUtil:
     def checkServiceRequirements(self):
         from schedule.models import Service, ServiceResourceRelation, ResourceSelectable
 
-        if isinstance(self.assignment.service, Service):
+        if not isinstance(self.assignment.service, Service):
             raise ServiceIsRequired();
 
         service: Service = self.assignment.service
-        service_requirements: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter( service=service ))
+        service_requirements: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service))
         resources:List[ResourceSelectable] = list(self.assignment.resources.all())
-
         for service_requirement in service_requirements:
             resource_count = len([it for it in resources if it.parent_id == service_requirement.resource_type_id])
             if resource_count != service_requirement.quantity:
@@ -47,7 +46,7 @@ class AssignmentUtil:
     def checkResourceOccupations(self):
         from schedule.models import ResourceSelectable, ResourceOccupation
 
-        resources:List[ResourceSelectable] = list(self.assignment.resources)
+        resources:List[ResourceSelectable] = list(self.assignment.resources.all())
 
         for resource in resources:
             occupation, _ = ResourceOccupation.objects.get_or_create(
