@@ -150,10 +150,6 @@ class ResourceForm(BaseForm):
 class AssignmentForm(BaseForm):
     key = 'assignment'
     form_fields = [
-        DateField(
-            label=_('Date'),
-            name='date',
-        ),
         SelectField(
             label=_('Service'),
             name="service",
@@ -175,7 +171,12 @@ class AssignmentForm(BaseForm):
             label='',
             name='start_slot',
             attrs='hidden'
-        )
+        ),
+        DateField(
+            label='',
+            name='date',
+            attrs='hidden'
+        ),
     ]
 
 class ServiceForm(BaseForm):

@@ -11,17 +11,17 @@ $s.createStore("form_assignment", {
 })
 </script>
 <dialog id="id_new_schedule_modal" class="modal">
-  <div class="modal-box">
-    {% with id='id_assignment_form' form=assignment_form %}
-      {% include 'components/form/index.html' %}
-    {% endwith %}
-    <div class="modal-action">
-      <button class="btn btn-ghost" onclick="id_new_schedule_modal.close();id_assignment_form.reset()">{% trans 'Cancel' %}</button>
-      <button class="btn btn-primary">{% trans 'Save' %}</button>
+    <div class="modal-box">
+        {% with id='id_assignment_form' form=assignment_form %}
+        {% include 'components/form/index.html' %}
+        {% endwith %}
+        <div class="modal-action">
+            <button class="btn btn-ghost" onclick="id_new_schedule_modal.close();id_assignment_form.reset()">{% trans
+                'Cancel' %}</button>
+            <button class="btn btn-primary">{% trans 'Save' %}</button>
+        </div>
     </div>
-  </div>
-  <form class="modal-backdrop" method="dialog">
-    <button></button>
-  </form>
+    <form class="modal-backdrop" method="dialog">
+        <button></button>
+    </form>
 </dialog>
-
