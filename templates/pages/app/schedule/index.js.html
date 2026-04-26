@@ -1,7 +1,7 @@
 <script is="exec-mount" type="text/template">
     $s.createStore('filter', {
         "search": "{{ request.GET.search|default:'' }}",
-        "services": "{{ request.GET.service|default:'' }}",
+        "service": "{{ request.GET.service|default:'' }}",
         "resource": "{{ request.GET.resource|default:'' }}",
         "resource_type": "{{ request.GET.resource_type|default:'' }}",
         "status": "{{request.GET.status|default:'all'}}",
@@ -43,6 +43,25 @@
             return d.toISOString();
         }).join(",");
     });
+    $s.compute('filter_query_params', [
+        "filter.search",
+        "filter.service",
+        "filter.resource",
+        "filter.resource_type",
+        "filter.status",
+    ], (
+        search,
+        service,
+        resource,
+        resource_type,
+        status,
+    ) => ({
+        search,
+        service,
+        resource,
+        resource_type,
+        status,
+    })
 </script>
 <script is="exec-umount" type="text/template">
 $s.remove('filter')
