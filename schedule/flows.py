@@ -26,13 +26,6 @@ class AssignmentState:
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
     
 class AssignmentStatePeding(AssignmentState):
-    class ResourceNotAllowed(Exception):
-        pass
-    class ReourceQuantityNotEguals(Exception):
-        pass
-    class ResourceOcuppied(Exception):
-        pass
-
     def confirm(self):
         from schedule.models import ResourceOccupation, Resource, Service, ServiceResourceRelation
 
