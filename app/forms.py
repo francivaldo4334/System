@@ -128,7 +128,7 @@ class ResourceForm(BaseForm):
     key = 'resources'
     form_fields = [
         Field(
-            name="label",
+            name="name",
             label=_('Name'),
             attrs="required",
         ),

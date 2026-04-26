@@ -22,11 +22,15 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'label',
+            'name',
             'code',
             'use_as_category',
             'parent',
             'parent_label',
             'is_selectable'
+        ]
+        write_only_fields = [
+            'name',
         ]
         read_only_fields = [
             'code',

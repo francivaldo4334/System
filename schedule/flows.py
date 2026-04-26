@@ -1,12 +1,13 @@
 # pyright: reportGeneralTypeIssues=false
+from typing import cast
 from django.db import transaction
 from schedule import utils
 
 
 class AssignmentState:
-    from schedule.models import Assignment
-    def __init__(self, instance:Assignment) -> None:
-        self.instance = instance
+    def __init__(self, instance) -> None:
+        from schedule.models import Assignment
+        self.instance = cast(Assignment,instance)
 
     def confirm(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore

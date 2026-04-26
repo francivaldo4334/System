@@ -19,10 +19,9 @@ class ServiceIsRequired(Exception):
     pass
 # Utils
 class AssignmentUtil:
-    from schedule.models import Assignment
-
-    def __init__(self, assigment: Assignment) -> None:
-        self.assignment = assigment;
+    def __init__(self, assigment) -> None:
+        from schedule.models import Assignment
+        self.assignment = cast(Assignment,assigment);
 
     def checkServiceRequirements(self):
         from schedule.models import Service, ServiceResourceRelation, ResourceSelectable
