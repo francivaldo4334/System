@@ -74,7 +74,8 @@ $s.compute("{{list.table.list_url_name}}.data", [
             "checked": (v) => v ? '\u2714' : '',
         }
         id_{{key}}_table.innerHTML = ''
-        $u.renderList("{{key}}_render_list", id_{{key}}_table, items, (item) => {
+        const frag = document.createDocumentFragment();
+        for (const item of items) {
           const tr = document.createElement("tr")
           Object.entries(type_map).forEach(([key, value]) => {
             const td = document.createElement("td")
@@ -95,8 +96,9 @@ $s.compute("{{list.table.list_url_name}}.data", [
               th.appendChild(btnCancel)
           {% endif %}
           tr.appendChild(th)
-          return tr;
-        })
+          frag.appendChild(tr)
+        }
+        id_{{key}}_table.replaceChildren(frag);
         $s.set("{{key}}.page.previous", data.previous)
         $s.set("{{key}}.page.next", data.next)
         $s.set("{{key}}.page.count", data.count)
