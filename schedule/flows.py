@@ -36,6 +36,9 @@ class AssignmentStatePeding(AssignmentState):
             rules.occupyTimeSlot()
             self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
             self.instance.save(update_fields=['status'])
+    def cancel(self):
+        #Caso seja cancelado antes de confirmar ele é deletado
+        self.instance.delete()
             
 class AssignmentStateConfirmed(AssignmentState):
     pass
