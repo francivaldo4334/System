@@ -26,16 +26,16 @@ class AssignmentState:
     
 class AssignmentStatePeding(AssignmentState):
     def confirm(self):
+        rules = utils.AssignmentUtil(self.instance)
         with transaction.atomic():
-            rules = utils.AssignmentUtil(self.instance)
             try:
                 rules.checkServiceRequirements()
-            except utils.ServiceIsRequired: pass
-            finally:
-                rules.checkResourceOccupations()
-                rules.occupyTimeSlot()
+            except utils.ServiceIsRequired:
+                pass
+            rules.checkResourceOccupations()
+            rules.occupyTimeSlot()
             self.instance.status = self.instance.Status.CONFIRMED.value # type: ignore
-            self.instance.save()
+            self.instance.save(update_fields=['status'])
             
 class AssignmentStateConfirmed(AssignmentState):
     pass
