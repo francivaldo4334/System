@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
 
 
@@ -100,12 +100,15 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    service = ServiceSerializer()
-    resources = ResourceSerializer(many=True)
     availability = serializers.PrimaryKeyRelatedField(
         queryset=Availability.objects.all(),
         write_only=True,
     )
+    resources = serializers.PrimaryKeyRelatedField(
+        queryset=ResourceSelectable.objects.all(), 
+        many=True
+    )
+
     class Meta:
         model = Assignment
         fields = [
@@ -116,10 +119,15 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'start_slot',
             'availability',
         ]
-        # depth = 1
+
     def create(self, validated_data):
-        av = validated_data.pop('availability')
-        instance = super().create(validated_data)
+        request = self.context.get('request')
+        availability = validated_data.pop('availability')
+        validated_data['duration_slot'] = availability.duration_slot        
+        validated_data['created_by'] = getattr(request,'user')
+        resources = validated_data.pop('resources')
+        instance =  Assignment.objects.create(**validated_data)
+        instance.resources.set([r.pk for r in resources]) 
         return instance;
 
 # pyright: reportAttributeAccessIssue=false
