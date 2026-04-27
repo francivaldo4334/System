@@ -1,38 +1,40 @@
 {% get_current_language as LANG %}
-<table class="table table-zebra">
-    <thead>
-        <tr>
-            {% for option in list.table.header.options %}
-            <th>{{option.label}}</th>
-            {% endfor %}
-            <th>
-                {% trans "Actions" %}
-            </th>
-        </tr>
-    </thead>
-    <tbody id="id_{{key}}_table">
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="{{list.table.header.options|length|add:1}}">
-                <div class="flex justify-between">
-                    <span>
-                        Showing <strong id="id_page_range"></strong> of <strong id="id_page_count"></strong> items
-                    </span>
-                    <div class="flex gap-3">
-                        <button class="btn btn-sm" title="Previous Page" id="id_page_prev">
-                            &laquo; Anterior
-                        </button>
-                        <button class="btn btn-sm btn-primary" title="Next Page" id="id_page_next">
-                            Next &raquo;
-                        </button>
-                    </div>
+<div class="overflow-x-auto">
+    <table class="table table-zebra">
+        <thead>
+            <tr>
+                {% for option in list.table.header.options %}
+                <th>{{option.label}}</th>
+                {% endfor %}
+                <th>
+                    {% trans "Actions" %}
+                </th>
+            </tr>
+        </thead>
+        <tbody id="id_{{key}}_table">
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="{{list.table.header.options|length|add:1}}">
+                    <div class="flex justify-between">
+                        <span>
+                            Showing <strong id="id_page_range"></strong> of <strong id="id_page_count"></strong> items
+                        </span>
+                        <div class="flex gap-3">
+                            <button class="btn btn-sm" title="Previous Page" id="id_page_prev">
+                                &laquo; Anterior
+                            </button>
+                            <button class="btn btn-sm btn-primary" title="Next Page" id="id_page_next">
+                                Next &raquo;
+                            </button>
+                        </div>
 
-                </div>
-            </th>
-        </tr>
-    </tfoot>
-</table>
+                    </div>
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
 <script is="exec-umount" type="pass">
 $s.remove("{{list.table.list_url_name}}.data")
 $s.remove("{{key}}.page")
