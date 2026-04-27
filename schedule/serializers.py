@@ -143,10 +143,10 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         many=True
     )
     default_error_messages = {
-        'resourcenotallowed': 'Um ou mais recursos selecionados não são permitidos para este tipo de serviço.',
-        'reourcequantitynoteguals': 'A quantidade de recursos fornecida não corresponde ao necessário para este serviço.',
-        'resourceocuppied': 'Um ou mais recursos selecionados já estão ocupados no horário solicitado.',
-        'serviceisrequired': 'O serviço é obrigatório para a criação desta atribuição.',
+        'resource_not_allowed': _('One or more selected resources are not allowed for this service type.'),
+        'resource_quantity_mismatch': _('The provided resource quantity does not match the requirement for this service.'),
+        'resource_occupied': _('One or more selected resources are already occupied at the requested time.'),
+        'service_required': _('Service is required for creating this assignment.'),
     }
     @transaction.atomic()
     def create(self, validated_data):
