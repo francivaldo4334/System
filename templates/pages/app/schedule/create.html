@@ -16,8 +16,12 @@ $s.createStore("form_assignment", {
         {% include 'components/form/index.html' %}
         {% endwith %}
         <div class="modal-action">
-            <button class="btn btn-ghost" onclick="id_new_schedule_modal.close();id_assignment_form.reset()">{% trans
-                'Cancel' %}</button>
+            <button
+                class="btn btn-ghost"
+                onclick="id_new_schedule_modal.close();id_assignment_form.reset()"
+            >
+                {% trans 'Cancel' %}
+            </button>
             <button class="btn btn-primary">{% trans 'Save' %}</button>
         </div>
     </div>
