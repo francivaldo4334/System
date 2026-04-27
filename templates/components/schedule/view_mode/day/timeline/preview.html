@@ -28,6 +28,7 @@
                             start: isoToSlot(iso),
                             duration: av.duration_slot,
                             description: av.description,
+                            id: av.id,
                         });
                     })
                 })
@@ -42,6 +43,7 @@
                     btn.onclick = () => {
                         $s.set('form_assignment.start_slot', it.start)
                         $s.set('form_assignment.duration_slot', it.duration)
+                        $s.set('form_assignment.availability_id', it.id)
                         id_new_schedule_modal?.showModal();
                     }
                     return clone;
