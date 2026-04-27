@@ -19,7 +19,7 @@
 </label>
 <ul class="dropdown menu w-52 rounded-box bg-base-100 shadow-sm" popover id="id_filter_status"
     style="position-anchor:--anchor-filter-status">
-    {% with value='all' label="Show All"%}
+    {% with value='' label="Show All"%}
     {% partial status %}
     {% endwith %}
     {% with value='PD' label="Pending" icon="icons/status-pendding.svg" %}

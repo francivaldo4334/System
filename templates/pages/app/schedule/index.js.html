@@ -4,7 +4,7 @@
         "service": "{{ request.GET.service|default:'' }}",
         "resource": "{{ request.GET.resource|default:'' }}",
         "resource_type": "{{ request.GET.resource_type|default:'' }}",
-        "status": "{{request.GET.status|default:'all'}}",
+        "status": "{{request.GET.status|default:''}}",
     })
     $s.createStore('filter.calendar', {
         "day": "{{ request.GET.day|default:today }}",
