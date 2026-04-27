@@ -90,5 +90,11 @@
         }
         form.addEventListener('submit', form._handlerSubmit);
     }
+    const modal = document.getElementById('id_new_schedule_modal')
+    if (modal){
+        modal.onclose = () => {
+            form.reset();
+        }
+    }
 }
 </script>
