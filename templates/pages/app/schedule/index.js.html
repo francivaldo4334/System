@@ -3,7 +3,7 @@
         "search": "{{ request.GET.search|default:'' }}",
         "service": "{{ request.GET.service|default:'' }}",
         "resource": "{{ request.GET.resource|default:'' }}",
-        "resource_type": "{{ request.GET.resource_type|default:'' }}",
+        "resource_type": "{{ request.GET.resource_category|default:'' }}",
         "status": "{{request.GET.status|default:''}}",
     })
     $s.createStore('filter.calendar', {
@@ -49,18 +49,21 @@
         "filter.resource",
         "filter.resource_type",
         "filter.status",
+        "filter.calendar.day",
     ], (
         search,
         service,
         resource,
         resource_category,
         status,
+        day,
     ) => ({
         search,
         service,
         resource,
         resource_category,
         status,
+        day,
     }))
     $s.subscribe('filter_query_params', null, null, (queryparams) => {
         const params = new URLSearchParams();
