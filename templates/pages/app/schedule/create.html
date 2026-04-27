@@ -35,9 +35,7 @@
 <script is="exec-mount" type="pass">
 {
     $s.createStore("form_assignment", {
-        'service': 0,
-        'resources': [],
-        'date': null,
+        'availability_id': 0,
         'start_slot': 0,
         'duration_slot': 0,
     })
@@ -46,6 +44,12 @@
         form._handlerSubmit = (event) => {
             event.preventDefault();
             const data = $u.getDataByForm(event.target);
+            const storeData = $s.get('form_assignment')
+            const date = $.get("filter.calendar.day")
+            data.duration_slot = storeData.duration_slot;
+            data.start_slot = storeData.start_slot;
+            data.availability = storeData.availability_id;
+            data.date = date;
             $q.use(
                 ['post-assignment'],
                 () => $r.post("{% url 'assignment-list' %}", data, {

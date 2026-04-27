@@ -42,7 +42,7 @@ function utilsManager() {
         }
         else if (field.tagName === 'SELECT') {
           if (field.multiple)
-            value = value.map(parseInt)
+            value = value.map(Number)
           else
             value = parseInt(value)
         }
