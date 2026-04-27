@@ -1,15 +1,3 @@
-<script is="exec-umount" type="pass">
-$s.remove("form_assignment")
-</script>
-<script is="exec-mount" type="pass">
-$s.createStore("form_assignment", {
-    'service': 0,
-    'resources': [],
-    'date': null,
-    'start_slot': 0,
-    'duration_slot': 0,
-})
-</script>
 <dialog id="id_new_schedule_modal" class="modal">
     <div class="modal-box">
         {% with id='id_assignment_form' form=assignment_form %}
@@ -34,3 +22,67 @@ $s.createStore("form_assignment", {
         <button></button>
     </form>
 </dialog>
+<script is="exec-umount" type="pass">
+{
+    $s.remove("form_assignment")
+    const form = document.getElementById('id_assignment_form')
+    if (form && form._handlerSubmit) {
+        form.removeEventListener("submit", form._handlerSubmit);
+        delete form._handlerSubmit;
+    }
+}
+</script>
+<script is="exec-mount" type="pass">
+{
+    $s.createStore("form_assignment", {
+        'service': 0,
+        'resources': [],
+        'date': null,
+        'start_slot': 0,
+        'duration_slot': 0,
+    })
+    const form = document.getElementById('id_assignment_form')
+    if (form){
+        form._handlerSubmit = (event) => {
+            event.preventDefault();
+            const data = $u.getDataByForm(event.target);
+            $q.use(
+                ['post-assignment'],
+                () => $r.post("{% url 'assignment-list' %}", data, {
+                    "X-CSRFToken": "{{csrf_token}}"
+                }),
+                {
+                    onSuccess(error){
+                        $q.refetch("assignment-list")
+                        form.reset();
+                    },
+                    onError(error){
+                        if (error.status !== 400) {
+                            toastError("{% trans 'Error' %}!");
+                            return
+                        }
+
+                        Object.entries(error.data).forEach(([key, value]) => {
+                            const field = form.elements[key];
+                            if (!field) {
+                                toastError(value);
+                            }
+                            else {
+                                const message = Array.isArray(value) ? value.join(', ') : value;
+
+                                field.setCustomValidity(message);
+                                field.reportValidity();
+
+                                field.addEventListener('input', () => {
+                                    field.setCustomValidity('');
+                                }, {once: true});
+                            }
+                        });
+                    }
+                }
+            )
+        }
+        form.addEventListener('submit', form._handlerSubmit);
+    }
+}
+</script>
