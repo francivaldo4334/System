@@ -64,3 +64,11 @@ class AvailabilityPresentationAPIView(ListAPIView):
     serializer_class = AvailabilityPresentationSerializer
     filterset_class = AvailabilityPresentationFilterSet
     pagination_class = None
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        date = self.request.query_params.get('date')
+        context.update({
+            'assignments': Assignment.objects.filter(date=date)
+        })
+        return context;

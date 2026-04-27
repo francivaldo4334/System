@@ -108,7 +108,7 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
     duration_slot = models.PositiveSmallIntegerField()
     interval_slot = models.PositiveSmallIntegerField()
 
-    def get_occurrences(self, init: datetime.date, end: datetime.date):
+    def get_occurrences(self, init: datetime.date, end: datetime.date) -> List[datetime]:
         if init < self.valid_from:
             init = self.valid_from
         if self.valid_until and end > self.valid_until:
