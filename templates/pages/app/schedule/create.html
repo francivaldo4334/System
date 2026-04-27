@@ -22,7 +22,12 @@ $s.createStore("form_assignment", {
             >
                 {% trans 'Cancel' %}
             </button>
-            <button class="btn btn-primary">{% trans 'Save' %}</button>
+            <button
+                class="btn btn-primary"
+                onclick="id_assignment_form.requestSubmit();"
+            >
+                {% trans 'Save' %}
+            </button>
         </div>
     </div>
     <form class="modal-backdrop" method="dialog">
