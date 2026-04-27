@@ -1,7 +1,10 @@
+from django.db import transaction
 from rest_framework import serializers
 
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
+
+from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, ResourceOcuppied, ServiceIsRequired
 
 
 class ResourceSerializer(serializers.ModelSerializer):
@@ -139,6 +142,27 @@ class CreateAssigmentSerializer(AssignmentSerializer):
                 queryset=Resource.objects.all(),
         many=True
     )
+    default_error_messages = {
+        'resourcenotallowed': 'Um ou mais recursos selecionados não são permitidos para este tipo de serviço.',
+        'reourcequantitynoteguals': 'A quantidade de recursos fornecida não corresponde ao necessário para este serviço.',
+        'resourceocuppied': 'Um ou mais recursos selecionados já estão ocupados no horário solicitado.',
+        'serviceisrequired': 'O serviço é obrigatório para a criação desta atribuição.',
+    }
+    @transaction.atomic()
+    def create(self, validated_data):
+        try:
+            instance:Assignment = super().create(validated_data)
+            instance.state.confirm()
+            return instance
+        except ResourceNotAllowed:
+            raise self.fail('resourcenotallowed')
+        except ReourceQuantityNotEguals:
+            raise self.fail('reourcequantitynoteguals')
+        except ResourceOcuppied:
+            raise self.fail('resourceocuppied')
+        except ServiceIsRequired:
+            raise self.fail('serviceisrequired')
+        
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     week = serializers.ListField(
