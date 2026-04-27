@@ -20,6 +20,9 @@ $q.use(
                 frag.appendChild(opt)
             });
             id_filter_service.replaceChildren(frag)
+        },
+        onFinally(){
+            $s.subscribe('filter.service',id_filter_service, 'value')
         }
     },
 )
