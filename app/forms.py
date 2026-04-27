@@ -153,7 +153,7 @@ class AssignmentForm(BaseForm):
         SelectField(
             label=_('Service'),
             name="service",
-            url_name="assignment",
+            url_name="services",
         ),
         SelectField(
             label=_('Resources'),
