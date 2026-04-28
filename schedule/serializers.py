@@ -158,10 +158,10 @@ class CreateAssigmentSerializer(AssignmentSerializer):
             instance:Assignment = super().create(validated_data)
             instance.state.confirm()
             return instance
-        except ResourceNotAllowed:
-            raise self.fail('resourcenotallowed')
         except ReourceQuantityNotEguals:
             raise self.fail('reourcequantitynoteguals')
+        except ResourceNotAllowed:
+            raise self.fail('resourcenotallowed')
         except ResourceOcuppied:
             raise self.fail('resourceocuppied')
         except ServiceIsRequired:
