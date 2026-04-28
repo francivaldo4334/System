@@ -7,12 +7,13 @@
         "status": "{{request.GET.status|default:''}}",
     })
     $s.createStore('filter.calendar', {
-        "day": "{{ request.GET.day|default:today }}",
+        "day": "{{ request.GET.day|default:today }}T00:00:00",
         "mode": 'd',
         //"mode": "{{ request.GET.mode|default:'w' }}",
     })
     $s.compute('filter.calendar.range', ['filter.calendar.day', 'filter.calendar.mode'], (isoDay, mode) => {
         if (!isoDay || !mode) return [];
+        console.log("ok", isoDay)
         const date = new Date(isoDay);
         date.setHours(0, 0, 0, 0);
         const strategies = {
@@ -63,7 +64,7 @@
         resource,
         resource_category,
         status,
-        day,
+        day: day?.split('T')?.[0],
     }))
     $s.subscribe('filter_query_params', null, null, (queryparams) => {
         const params = new URLSearchParams();
