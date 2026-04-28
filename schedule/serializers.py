@@ -161,7 +161,6 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         except ReourceQuantityNotEguals:
             raise self.fail('reourcequantitynoteguals')
         except ResourceNotAllowed:
-            print('HERE')
             raise self.fail('resourcenotallowed')
         except ResourceOcuppied:
             raise self.fail('resourceocuppied')
