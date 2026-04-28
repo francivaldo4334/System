@@ -69,7 +69,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
-                slot.setAttribute('start', item.start);
+                slot.setAttribute('start', item.start + 1);
                 slot.setAttribute('duration', item.duration);
                 const btn = slot.querySelector("button");
                 if (btn){
