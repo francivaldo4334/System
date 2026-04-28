@@ -299,7 +299,6 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
         date_str = request.query_params.get("date")
         target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         occurences = obj.get_occurrences(target_date, target_date)
-        print(occurences, exclude_times)
         return [
             it for it in occurences
             if it.strftime('%H:%M') not in exclude_times
