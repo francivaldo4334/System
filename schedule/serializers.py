@@ -120,7 +120,11 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'resources',
             'date',
             'start_slot',
+            'duration_slot',
             'availability',
+        ]
+        read_only_fields = [
+            'duration_slot',
         ]
 
     def create(self, validated_data):

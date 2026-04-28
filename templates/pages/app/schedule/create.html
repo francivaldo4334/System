@@ -79,9 +79,9 @@
                                 field.setCustomValidity(message);
                                 field.reportValidity();
 
-                                field.addEventListener('input', () => {
+                                setTimeout(() => {
                                     field.setCustomValidity('');
-                                }, {once: true});
+                                }, 300);
                             }
                         });
                     }

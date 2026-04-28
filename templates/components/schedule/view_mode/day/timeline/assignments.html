@@ -7,61 +7,31 @@
 
 <script is="exec-mount" type="pass">
     $s.subscribe("filter_query_params", null, null, (queryparams) => {
-        //let timeoutid = null;
         $q.use(["assignments-list", queryparams], () => {
             return $r.get(`{% url 'assignment-list'%}?${queryparams}`);
         }, {
             onSuccess(data) {
-                //const isoToSlot = (isoString) => {
-                //    const date = new Date(isoString);
-                //    if (isNaN(date.getTime())) throw new Error("Data inválida");
-                //    const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
-                //    return Math.floor(minutesSinceStartOfDay / 5) + 1;
-                //}
                 const items = []
                 data?.results?.forEach(av => {
-                    /**av?.occurrences?.forEach(iso => {
-                        items.push({
-                            start: isoToSlot(iso),
-                            duration: av.duration_slot,
-                            description: av.description,
-                            id: av.id,
-                        });
-                    })**/
+                    items.push({
+                        start: av.start_slot,
+                        duration: av.duration_slot,
+                    })
                 })
-                id_timeline_preview.innerHTML = ""
-                $u.renderList("empty_slots", id_timeline_preview, items, (it) => {
-                    const clone = tmpl_empty_slot.content.cloneNode(true);
+                $u.renderList("assignment_slots", id_timeline_preview, items, (it) => {
+                    const clone = tmpl_assignment_slot.content.cloneNode(true);
                     const slot = clone.querySelector('app-slot');
                     slot.setAttribute('start', it.start);
                     slot.setAttribute('duration', it.duration);
                     const btn = slot.querySelector("button");
-                    btn.innerText = it.description
-                    btn.onclick = () => {
-                        $s.set('form_assignment.start_slot', it.start)
-                        $s.set('form_assignment.duration_slot', it.duration)
-                        $s.set('form_assignment.availability_id', it.id)
-                        id_new_schedule_modal?.showModal();
-                    }
+                    //btn.innerText = it.description
+                    btn.innerText = "ok"
                     return clone;
                 })
-                //clearTimeout(timeoutid);
-                /**timeoutid = setTimeout(() => {
-                    const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
-                        const orderA = parseInt(a.getAttribute("start"))
-                        const orderB = parseInt(b.getAttribute("start"))
-                        return orderA - orderB
-                    })?.[0];
-                    if (firstSlot) {
-                        id_timeline_content.scrollTo({
-                            top: firstSlot.offsetTop,
-                            behavior: "smooth"
-                        });
-                    }
-                }, 300)**/
             }
         }, {
             enableRefetch: true,
+            ttl:0,
         });
     })
 </script>

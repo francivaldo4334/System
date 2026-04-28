@@ -11,7 +11,7 @@
         if (!_day) return;
         const day = _day.split("T")[0]
         let timeoutid = null;
-        $q.use("availabilities_presentation", () => {
+        $q.use(["availabilities_presentation", day], () => {
             return $r.get(`{% url 'availabilities_presentation'%}?date=${day}`);
         }, {
             onSuccess(data) {

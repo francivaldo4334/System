@@ -7,13 +7,12 @@
         "status": "{{request.GET.status|default:''}}",
     })
     $s.createStore('filter.calendar', {
-        "day": "{{ request.GET.day|default:today }}T00:00:00",
+        "day": "{%if request.GET.day%}{{request.GET.day|add:'T00:00:00'}}{%else%}{{today}}{%endif%}",
         "mode": 'd',
         //"mode": "{{ request.GET.mode|default:'w' }}",
     })
     $s.compute('filter.calendar.range', ['filter.calendar.day', 'filter.calendar.mode'], (isoDay, mode) => {
         if (!isoDay || !mode) return [];
-        console.log("ok", isoDay)
         const date = new Date(isoDay);
         date.setHours(0, 0, 0, 0);
         const strategies = {
@@ -40,8 +39,8 @@
             return [];
         }
         return strategy(date).map(d => {
-            d.setHours(0, 0, 0, 0);
-            return d.toISOString();
+            d?.setHours(0, 0, 0, 0);
+            return d?.toISOString();
         }).join(",");
     });
     $s.compute('filter_query_params', [
