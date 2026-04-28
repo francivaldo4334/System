@@ -39,7 +39,7 @@ class AssignmentUtil:
 
         total_required_resources = sum([it.quantity for it in service_requirements]);
         total_resources = len(resources)
-        if total_required_resources  != total_resources:
+        if total_required_resources != total_resources:
             raise ResourceNotAllowed()
         
     def checkResourceOccupations(self):
