@@ -58,18 +58,18 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
     }),
     {
       onSuccess(data){
-        id_timeline_slots?.innerHTML = ''
+        const timelineSlots = document.getElementById('id_timeline_slots')
         $u.renderList(
           'slots',
-          id_timeline_slots,
+          timelineSlots,
           data,
           (item) => {
             let clone = null
             if (item.type === 'empty') {
-              clone = tmpl_empty_slot?.content.closeNode(true)
+              clone = tmpl_empty_slot?.content.cloneNode(true)
             }
             else if (item.type === 'assignment') {
-              clone = tmpl_assignment_slot?.content.closeNode(true)
+              clone = tmpl_assignment_slot?.content.cloneNode(true)
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
