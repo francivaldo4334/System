@@ -49,7 +49,7 @@
                     return clone;
                 })
                 clearTimeout(timeoutid);
-                timeoutid = setTimeout(() => {
+                /**timeoutid = setTimeout(() => {
                     const firstSlot = Array.from(id_timeline_preview.querySelectorAll(".preview-slot")).sort((a, b) => {
                         const orderA = parseInt(a.getAttribute("start"))
                         const orderB = parseInt(b.getAttribute("start"))
@@ -61,7 +61,7 @@
                             behavior: "smooth"
                         });
                     }
-                }, 300)
+                }, 300)**/
             }
         }, {
             enableRefetch: true,
