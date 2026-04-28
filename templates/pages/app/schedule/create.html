@@ -74,13 +74,13 @@
                             }
                             else {
                                 const message = Array.isArray(value) ? value.join(', ') : value;
+                                toastError(message)
+                                //field.setCustomValidity(message);
+                                //field.reportValidity();
 
-                                field.setCustomValidity(message);
-                                field.reportValidity();
-
-                                field.addEventListener('change',() => {
-                                    field.setCustomValidity('');
-                                }, {once: true});
+                                //field.addEventListener('change',() => {
+                                //    field.setCustomValidity('');
+                                //}, {once: true});
                             }
                         });
                     }
