@@ -3,7 +3,7 @@ from django.db.models.deletion import ProtectedError
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
-from schedule.filters import AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
@@ -46,7 +46,7 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
                         viewsets.GenericViewSet):
     queryset = Assignment.objects.all().select_related('service').prefetch_related('resources')
     serializer_class = AssignmentSerializer
-    # filterset_class = AssignmentSlotFilterSet
+    filterset_class = AssignmentFilterSet
 
     def get_serializer_class(self):
         if self.action == 'create':

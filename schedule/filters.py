@@ -1,6 +1,6 @@
 import django_filters as filters
 
-from schedule.models import Availability, Resource, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation
 from django.db.models import Q
 
 
@@ -76,4 +76,34 @@ class ServiceRequirementsFilterSet(filters.FilterSet):
                 Q(service__description__icontains=value)
             ) |
             Q(resource_type__name__icontains=value)
+        ).distinct()
+
+
+class AssignmentFilterSet(filters.FilterSet):
+    search = filters.CharFilter(method='filter_search')
+    resource = filters.ModelChoiceFilter(
+        'resources',
+        queryset=ResourceSelectable.objects.all(),
+    )
+    resource_category = filters.ModelChoiceFilter(
+        'resources__parent',
+        queryset=ResourceNotSelectable.objects.all(),
+    )
+    day = filters.DateFilter('date')
+    class Meta:
+        model = Assignment
+        fields = [
+            'service',
+            'status'
+        ]
+
+    def filter_search(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(
+            Q(
+                Q(service__title__icontains=value) |
+                Q(service__description__icontains=value)
+            ) |
+            Q(resources__name__icontains=value)
         ).distinct()
