@@ -55,6 +55,8 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
       return items
     }),
     {
+      ttl: 0,
+      enableRefetch:true,
       onSuccess(data){
         const timelineSlots = document.getElementById('id_timeline_slots')
         $u.renderList(

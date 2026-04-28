@@ -57,8 +57,7 @@
                 }),
                 {
                     onSuccess(error){
-                        $q.refetch("assignment-list")
-                        $q.refetch("availabilities_presentation")
+                        $q.refetch("slots")
                         form.reset();
                         id_new_schedule_modal.close();
                     },
