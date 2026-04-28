@@ -30,7 +30,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
           const date = new Date(isoString);
           if (isNaN(date.getTime())) throw new Error("Data inválida");
           const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
-          return Math.floor(minutesSinceStartOfDay / 5) + 1;
+          return Math.floor(minutesSinceStartOfDay / 5);
       }
 
       dataPreview?.forEach(av => {
@@ -55,15 +55,11 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
       return items
     }),
     {
-      ttl: 0,
-      enableRefetch:true,
       onSuccess(data){
         const timelineSlots = document.getElementById('id_timeline_slots')
-        $u.renderList(
-          'slots',
-          timelineSlots,
-          data,
-          (item) => {
+        timelineSlots.innerHTML = ''
+        const frag = document.createDocumentFragment()
+        data.forEach(item => {
             let clone = null
             if (item.type === 'empty') {
               clone = tmpl_empty_slot?.content.cloneNode(true)
@@ -86,10 +82,14 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
                     }
                 }
             }
-            return clone
-          }
-        )
+            frag.appendChild(clone)
+        });
+        timelineSlots.replaceChildren(frag)
       }
+    },
+    {
+      ttl: 0,
+      enableRefetch:true,
     }
   )
 })
