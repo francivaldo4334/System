@@ -11,17 +11,3 @@
     </div>
   </div>
 </div>
-<script is="exec-mount" type="passs">
-setTimeout(()=>{
-  $s.subscribe('filter.calendar.day', id_timeline_content, null, (iso, el)=> {
-    const date = new Date(iso);
-    const index = Math.floor((date.getHours() * 60 + date.getMinutes()) / 5)
-    const targetChild = id_timeline_times.children[index]
-    if (!targetChild) return;
-    targetChild.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-    })
-  })
-}, 300)
-</script>
