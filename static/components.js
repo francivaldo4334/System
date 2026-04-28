@@ -19,7 +19,7 @@ createComponent('app-slot', {
   props: ['start', 'duration'],
   css: ` :host { display: block; } `,
   onUpdate(prop, value) {
-    const val = parseInt(value) || 1;
+    const val = (parseInt(value) || 0);
     if (prop === 'start')
       this.style.gridRowStart = val;
     if (prop === 'duration')

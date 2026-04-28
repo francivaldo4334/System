@@ -75,7 +75,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
                 if (btn){
                     btn.innerText = item.description
                     btn.onclick = () => {
-                        $s.set('form_assignment.start_slot', item.start)
+                        $s.set('form_assignment.start_slot', item.start - 1)
                         $s.set('form_assignment.duration_slot', item.duration)
                         $s.set('form_assignment.availability_id', item.id)
                         id_new_schedule_modal?.showModal();
