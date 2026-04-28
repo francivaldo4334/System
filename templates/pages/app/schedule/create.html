@@ -47,7 +47,7 @@
             const storeData = $s.get('form_assignment')
             const date = $s.get("filter.calendar.day")
             data.duration_slot = storeData.duration_slot;
-            data.start_slot = storeData.start_slot - 1;
+            data.start_slot = storeData.start_slot;
             data.availability = storeData.availability_id;
             data.date = date?.split('T')?.[0];
             $q.use(

@@ -30,7 +30,8 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
           const date = new Date(isoString);
           if (isNaN(date.getTime())) throw new Error("Data inválida");
           const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
-          return Math.floor(minutesSinceStartOfDay / 5);
+          const result = Math.floor(minutesSinceStartOfDay / 5);
+          return result;
       }
 
       dataPreview?.forEach(av => {
@@ -69,13 +70,13 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
-                slot.setAttribute('start', item.start + 1);
+                slot.setAttribute('start', item.start);
                 slot.setAttribute('duration', item.duration);
                 const btn = slot.querySelector("button");
                 if (btn){
                     btn.innerText = item.description
                     btn.onclick = () => {
-                        $s.set('form_assignment.start_slot', item.start - 1)
+                        $s.set('form_assignment.start_slot', item.start)
                         $s.set('form_assignment.duration_slot', item.duration)
                         $s.set('form_assignment.availability_id', item.id)
                         id_new_schedule_modal?.showModal();
