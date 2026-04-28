@@ -1,0 +1,96 @@
+<app-timeline id="id_timeline_slots"></app-timeline>
+<template id="tmpl_empty_slot">
+    <app-slot class="preview-slot">
+        <button class="w-full h-full"></button>
+    </app-slot>
+</template>
+<template id="tmpl_assignment_slot">
+    <app-slot class="preview-slot">
+        <button class="w-full h-full"></button>
+    </app-slot>
+</template>
+<script is="exec-mount" type="pass">
+$s.subscribe('filter_query_params', null, null, (queryparams)=>{
+  const params = new URLSearchParams();
+  Object.entries(queryparams).forEach(([key, value]) => {
+    if (value) params.append(key, value)
+  })
+  const queryString = params.toString();
+  $q.use(
+    ['slots', queryString],
+    () => Promise.all([
+      $r.get(`{% url 'availabilities_presentation'%}?date=${queryparams.day}`),
+      $r.get(`{% url 'assignment-list'%}?${queryString}`),
+    ]).then(dataList => {
+      const dataPreview = dataList[0]
+      const dataAssignment = dataList[1]
+
+      const items = []
+
+      
+      const isoToSlot = (isoString) => {
+          const date = new Date(isoString);
+          if (isNaN(date.getTime())) throw new Error("Data inválida");
+          const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
+          return Math.floor(minutesSinceStartOfDay / 5) + 1;
+      }
+
+      dataPreview?.forEach(av => {
+          av?.occurrences?.forEach(iso => {
+              items.push({
+                  start: isoToSlot(iso),
+                  duration: av.duration_slot,
+                  type: 'empty',
+                  description: av.description,
+                  id: av.id,
+              });
+          })
+      })
+      dataAssignment?.results?.forEach(as => {
+          items.push({
+              start: as.start_slot,
+              duration: as.duration_slot,
+              type: 'assignment',
+              assignmentId: as.id,
+          })
+      })
+      return items
+    }),
+    {
+      onSuccess(data){
+        id_timeline_slots?.innerHTML = ''
+        $u.renderList(
+          'slots',
+          id_timeline_slots,
+          data,
+          (item) => {
+            let clone = null
+            if (item.type === 'empty') {
+              clone = tmpl_empty_slot?.content.closeNode(true)
+            }
+            else if (item.type === 'assignment') {
+              clone = tmpl_assignment_slot?.content.closeNode(true)
+            }
+            if (clone){
+                const slot = clone.querySelector('app-slot');
+                slot.setAttribute('start', item.start);
+                slot.setAttribute('duration', item.duration);
+                const btn = slot.querySelector("button");
+                if (btn){
+                    btn.innerText = item.description
+                    btn.onclick = () => {
+                        $s.set('form_assignment.start_slot', item.start)
+                        $s.set('form_assignment.duration_slot', item.duration)
+                        $s.set('form_assignment.availability_id', item.id)
+                        id_new_schedule_modal?.showModal();
+                    }
+                }
+            }
+            return clone
+          }
+        )
+      }
+    }
+  )
+})
+</script>
