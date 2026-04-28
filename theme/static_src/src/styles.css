@@ -124,6 +124,10 @@
     @apply border border-dashed bg-neutral/8 border-neutral rounded-field text-neutral/50;
   }
 
+  .assignment-slot {
+    @apply border border-dashed bg-primary/8 border-primary rounded-field text-primary/50;
+  }
+
   .slot-time-label {
     @apply max-w-[var(--tab-space)] label text-xs justify-center flex items-start my-auto snap-start;
   }
