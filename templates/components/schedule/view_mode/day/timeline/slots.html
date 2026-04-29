@@ -77,11 +77,16 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
             }
             else if (item.type === 'assignment') {
               clone = tmpl_assignment_slot?.content.cloneNode(true)
+              const assignment = clone.querySelector('app-assignment');
+              assignment.setAttribute('date', item.date)
+              assignment.setAttribute('resourcenames', item.resource_names)
+              assignment.setAttribute('servicename', item.service_name)
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
                 slot.setAttribute('start', item.start + 1);
                 slot.setAttribute('duration', item.duration);
+
                 const btn = slot.querySelector("button");
                 if (btn){
                     btn.innerText = item.description
