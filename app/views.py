@@ -43,7 +43,7 @@ class AppView(PermissionRequiredMixin,
         if self.is_owner():
             app_template_name_options.append({
                 'url_name': 'app-schedule-settings',
-                'title': _('Agenda Settings'),
+                'title': _('Settings'),
                 'icon_template_name': 'icons/calendar-cog.svg'
             })
             
