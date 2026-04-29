@@ -102,6 +102,16 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
             let clone = null
             if (item.type === 'empty') {
               clone = tmpl_empty_slot?.content.cloneNode(true)
+              const btn = clone.querySelector("app-slot > button");
+              if (btn){
+                  btn.innerText = item.description
+                  btn.onclick = () => {
+                      $s.set('form_assignment.start_slot', item.start)
+                      $s.set('form_assignment.duration_slot', item.duration)
+                      $s.set('form_assignment.availability_id', item.id)
+                      id_new_schedule_modal?.showModal();
+                  }
+              }
             }
             else if (item.type === 'assignment') {
               clone = tmpl_assignment_slot?.content.cloneNode(true)
@@ -116,17 +126,6 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
                 const slot = clone.querySelector('app-slot');
                 slot.setAttribute('start', item.start + 1);
                 slot.setAttribute('duration', item.duration);
-
-                const btn = slot.querySelector("button");
-                if (btn){
-                    btn.innerText = item.description
-                    btn.onclick = () => {
-                        $s.set('form_assignment.start_slot', item.start)
-                        $s.set('form_assignment.duration_slot', item.duration)
-                        $s.set('form_assignment.availability_id', item.id)
-                        id_new_schedule_modal?.showModal();
-                    }
-                }
             }
             frag.appendChild(clone)
         });
