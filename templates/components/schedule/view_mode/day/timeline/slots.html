@@ -6,11 +6,13 @@
 </template>
 <template id="tmpl_assignment_slot">
     <app-slot class="assignment-slot">
-      <app-assignment
-        date="2025-01-20"
-        resourcenames="Anur, Francivaldo"
-        servicename="Corte de Cabelo"
-      ></app-assignment>
+      <button class="w-full h-full">
+        <app-assignment
+          date="2025-01-20"
+          resourcenames="Anur, Francivaldo"
+          servicename="Corte de Cabelo"
+        ></app-assignment>
+      </button>
     </app-slot>
 </template>
 {% partialdef status %}
@@ -121,6 +123,8 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               assignment.setAttribute('servicename', item.service_name)
               const statusTmp = document.getElementById(`id_status_${item.status}`)
               assignment.setAttribute('status', statusTmp.innerHTML)
+              const btn = clone.querySelector('button')
+              console.log(btn)
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
