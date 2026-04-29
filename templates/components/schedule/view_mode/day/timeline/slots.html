@@ -5,7 +5,14 @@
     </app-slot>
 </template>
 <template id="tmpl_assignment_slot">
-    <app-slot class="assignment-slot"></app-slot>
+    <app-slot class="assignment-slot">
+      <app-assignment
+        date="ok"
+        resourcesnames="ok"
+        servicename="ok"
+        status="ok"
+      ></app-assignment>
+    </app-slot>
 </template>
 <script is="exec-mount" type="pass">
 $s.subscribe('filter_query_params', null, null, (queryparams)=>{

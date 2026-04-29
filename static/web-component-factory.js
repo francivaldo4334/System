@@ -8,8 +8,8 @@ export function createComponent(tagName, {
 }) {
   const template = document.createElement('template')
   template.innerHTML = `
-    <style>${css}</style>
-    ${html}
+    ${css ? '<style>' + css + '</style>' : ''}
+    ${html ?? ''}
   `
   class CustomElement extends base {
     constructor() {

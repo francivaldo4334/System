@@ -130,3 +130,31 @@ createComponent('exec-umount', {
     document.head.removeChild(runner);
   }
 })
+createComponent('app-assignment', {
+  props: [
+    'date',
+    'servicename',
+    'resourcenames',
+    'status',
+  ],
+  html: `
+   <div class="flex flex-col">
+     <span id="date"></span>
+     <span id="service_name"></span>
+     <span id="resource_names"></span>
+     <span id="status"></span>
+   </div> 
+  `,
+  onMount() {
+    const {
+      date,
+      servicename,
+      resourcenames,
+      status
+    } = this.getProps();
+    this.$('#date').innerText = date;
+    this.$('#service_name').innerText = servicename;
+    this.$('#resource_names').innerText = resourcenames;
+    this.$('#status').innerText = status;
+  }
+})
