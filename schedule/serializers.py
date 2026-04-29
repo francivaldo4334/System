@@ -111,7 +111,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         queryset=ResourceSelectable.objects.all(), 
         many=True
     )
-    service_name = serializers.CharField(source="service.title")
+    service_name = serializers.ReadOnlyField(source="service.title")
     resource_names = serializers.SerializerMethodField()
 
     class Meta:
@@ -126,6 +126,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'availability',
             'service_name',
             'resource_names',
+            'status',
         ]
         read_only_fields = [
             'duration_slot',

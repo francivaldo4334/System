@@ -142,7 +142,7 @@ createComponent('app-assignment', {
      <span class="font-bold" id="date"></span> /
      <span class="font-bold" id="service_name"></span>
      <p id="resource_names"></p>
-     <slot></slot>
+     <div class="flex gap-2 mt-1 items-center" id="status-target"></div>
    </div> 
   `,
   onMount() {
@@ -150,9 +150,14 @@ createComponent('app-assignment', {
       date,
       servicename,
       resourcenames,
+      status,
     } = this.getProps();
     this.$('#date').innerText = date;
     this.$('#service_name').innerText = servicename;
     this.$('#resource_names').innerText = resourcenames;
+    this.$('#status-target').innerHTML = status;
+  },
+  setStatusCentent(){
+    
   }
 })

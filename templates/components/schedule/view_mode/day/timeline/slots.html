@@ -13,6 +13,34 @@
       ></app-assignment>
     </app-slot>
 </template>
+{% partialdef status %}
+<template id="id_status_{{value}}">
+  {% include icon %}
+  <span>{{label}}</span>
+</template>
+{% endpartialdef %}
+
+{% with value='PD' label="Pending" icon="icons/status-pendding.svg" %}
+{% partial status %}
+{% endwith %}
+{% with value='CF' label="Confirmed" icon="icons/status-confirmed.svg" %}
+{% partial status %}
+{% endwith %}
+{% with value='IP' label="In Progress" icon="icons/status-in-progress.svg" %}
+{% partial status %}
+{% endwith %}
+{% with value='CP' label="Completed" icon="icons/status-completed.svg" %}
+{% partial status %}
+{% endwith %}
+{% with value='MG' label="Migrated" icon="icons/status-migrated.svg" %}
+{% partial status %}
+{% endwith %}
+{% with value='CC' label="Cancelled" icon="icons/status-cancelled.svg" %}
+{% partial status %}
+{% endwith %}
+{% with value='AB' label="Absent" icon="icons/status-absent.svg" %}
+{% partial status %}
+{% endwith %}
 <script is="exec-mount" type="pass">
 $s.subscribe('filter_query_params', null, null, (queryparams)=>{
   const params = new URLSearchParams();
@@ -60,7 +88,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               service_name: as.service_name,
               resource_names: as.resource_names,
               date: as.date,
-
+              status:as.status,
           })
       })
       return items
@@ -81,6 +109,8 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               assignment.setAttribute('date', item.date)
               assignment.setAttribute('resourcenames', item.resource_names)
               assignment.setAttribute('servicename', item.service_name)
+              const statusTmp = document.getElementById(`id_status_${item.status}`)
+              assignment.setAttribute('status', statusTmp.innerHTML)
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
