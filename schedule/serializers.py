@@ -111,6 +111,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
         queryset=ResourceSelectable.objects.all(), 
         many=True
     )
+    service_name = serializers.CharField(source="service.title")
+    resource_names = serializers.SerializerMethodField()
 
     class Meta:
         model = Assignment
@@ -122,10 +124,15 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'start_slot',
             'duration_slot',
             'availability',
+            'service_name',
+            'resource_names',
         ]
         read_only_fields = [
             'duration_slot',
         ]
+
+    def get_resource_names(self, obj):
+        return [f'{r.parent.name}/{r.name}' for r in obj.resources.all()]
 
     def create(self, validated_data):
         request = self.context.get('request')
