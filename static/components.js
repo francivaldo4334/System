@@ -138,11 +138,11 @@ createComponent('app-assignment', {
     'status',
   ],
   html: `
-   <div class="flex flex-col">
-     <span id="date"></span>
-     <span id="service_name"></span>
-     <span id="resource_names"></span>
-     <span id="status"></span>
+   <div class="text-base-content px-4 py-2">
+     <span class="font-bold" id="date"></span> /
+     <span class="font-bold" id="service_name"></span>
+     <p id="resource_names"></p>
+     <slot></slot>
    </div> 
   `,
   onMount() {
@@ -150,11 +150,9 @@ createComponent('app-assignment', {
       date,
       servicename,
       resourcenames,
-      status
     } = this.getProps();
     this.$('#date').innerText = date;
     this.$('#service_name').innerText = servicename;
     this.$('#resource_names').innerText = resourcenames;
-    this.$('#status').innerText = status;
   }
 })
