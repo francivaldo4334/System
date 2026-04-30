@@ -124,6 +124,9 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               const statusTmp = document.getElementById(`id_status_${item.status}`)
               assignment.setAttribute('status', statusTmp.innerHTML)
               const btn = clone.querySelector('button')
+              btn.onclick = () => {
+                id_modal_assignment_action?.showModal()
+              }
             }
             if (clone){
                 const slot = clone.querySelector('app-slot');
