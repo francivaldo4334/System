@@ -3,6 +3,7 @@ from django.db.models.deletion import ProtectedError
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, Service, ServiceResourceRelation
 from schedule.serializers import (
@@ -15,6 +16,7 @@ from schedule.serializers import (
         ServiceSerializer
     )
 from django.utils.translation import gettext_lazy as _
+from rest_framework.decorators import action
 
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
@@ -48,10 +50,52 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
     serializer_class = AssignmentSerializer
     filterset_class = AssignmentFilterSet
 
+    def handle_exception(self, exc):
+        try:
+            return super().handle_exception(exc)
+        except NotImplementedError as e:
+            return Response(e.args, 422)
+
     def get_serializer_class(self):
         if self.action == 'create':
             return CreateAssigmentSerializer
         return super().get_serializer_class()
+
+    @action(['POST'], True)
+    def rescue(self, request, pk):
+        obj = self.get_object()
+        obj.state.rescue()
+        return Response(self.get_serializer(obj).data)
+
+    @action(['POST'], True)
+    def confirm(self, request, pk):
+        obj = self.get_object()
+        obj.state.confirm()
+        return Response(self.get_serializer(obj).data)
+
+    @action(['POST'], True)
+    def start(self, request, pk):
+        obj = self.get_object()
+        obj.state.start()
+        return Response(self.get_serializer(obj).data)
+
+    @action(['POST'], True)
+    def finish(self, request, pk):
+        obj = self.get_object()
+        obj.state.finish()
+        return Response(self.get_serializer(obj).data)
+
+    @action(['POST'], True)
+    def migrate(self, request, pk):
+        obj = self.get_object()
+        obj.state.migrate()
+        return Response(self.get_serializer(obj).data)
+
+    @action(['POST'], True)
+    def cancel(self, request, pk):
+        obj = self.get_object()
+        obj.state.cancel()
+        return Response(self.get_serializer(obj).data)
 
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
