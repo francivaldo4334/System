@@ -11,10 +11,10 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
     <button
         class="btn btn-soft w-full btn-assignment-action"
         onclick="(() => {
-            $s.set('action_is_fetching', true)
+            $s.set('action_is_fetching', true);
             $q.use(
                 ['assignment_action'],
-                () => $r.post('{% url 'schedule_assignment_'|add:choice|add:'_create'),
+                () => $r.post('{% url 'assignment-'|add:choice|add:'-create' %}'),
                 {
                     onSuccess(){
                         toastSuccess('{% trans 'Success'%}')
