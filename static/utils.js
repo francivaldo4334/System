@@ -70,3 +70,16 @@ function toastError(message) {
   }, 3000)
   id_app_toast.appendChild(div)
 }
+function toastSuccess(message) {
+  const newToastId = id_app_toast.childElementCount + 1
+  const div = document.createElement("div")
+  div.classList.add("alert")
+  div.classList.add("alert-success")
+  div.setAttribute("rule", "alert")
+  div.textContent = message
+  div.id = `id_toast_success_${newToastId}`
+  setTimeout(() => {
+    document.getElementById(`id_toast_success_${newToastId}`).remove()
+  }, 3000)
+  id_app_toast.appendChild(div)
+}

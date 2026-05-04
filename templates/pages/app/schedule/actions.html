@@ -1,5 +1,38 @@
+<script is="exec-mount" type="pass">
+$s.create({
+    'assignment_id': 0,
+    'action_is_fetching': false,
+})
+document.querySelectorAll('.btn-assignment-action').forEach(el => {
+    $s.subscribe('action_is_fetching', el, 'disabled')
+})
+</script>
 {% partialdef btn_action %}
-    <button class="btn btn-soft w-full">{{text}}</button>
+    <button
+        class="btn btn-soft w-full btn-assignment-action"
+        onclick="(() => {
+            $s.set('action_is_fetching', true)
+            $q.use(
+                ['assignment_action'],
+                () => $r.post('{% url 'schedule_assignment_'|add:choice|add:'_create'),
+                {
+                    onSuccess(){
+                        toastSuccess('{% trans 'Success'%}')
+                    },
+                    onError(){
+                        toastSuccess('{% trans 'Error'%}')
+                    },
+                    onFinally(){
+                        $s.set('action_is_fetching', false)
+                    }
+                },
+                {
+                    ttl: 0,
+                }
+            )
+        })()
+        "
+    >{{text}}</button>
 {% endpartialdef %}
 {% partialdef modal %}
 <dialog class="modal" id="id_modal_assignment_action_{{status}}">
