@@ -53,3 +53,15 @@
 {% with status='CF' has_cancel=True has_migrate=True has_start=True %}
     {% partial modal %}
 {% endwith %}
+{% with status='MG' has_cancel=True has_migrate=True has_start=True %}
+    {% partial modal %}
+{% endwith %}
+{% with status='IP' has_cancel=True has_finish=True %}
+    {% partial modal %}
+{% endwith %}
+{% with status='CC' has_rescue=True %}
+    {% partial modal %}
+{% endwith %}
+{% with status='CP' has_rescue=True %}
+    {% partial modal %}
+{% endwith %}
