@@ -6,32 +6,32 @@
     <div class="modal-box">
         <div class="flex flex-col gap-3">
             {% if has_rescue %}
-                {% with text=_('Rescue appointment')%}
+                {% with text=_('Rescue appointment') choice='rescue'%}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
             {% if has_confirm %}
-                {% with text=_('Confirm new appointment')%}
+                {% with text=_('Confirm new appointment') choice='confirm'%}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
             {% if has_start %}
-                {% with text=_('Start service')%}
+                {% with text=_('Start service') choice='start' %}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
             {% if has_finish %}
-                {% with text=_('Finish service')%}
+                {% with text=_('Finish service') choice='finish' %}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
             {% if has_migrate %}
-                {% with text=_('Migrate appointment')%}
+                {% with text=_('Migrate appointment') choice='migrate' %}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
             {% if has_cancel %}
-                {% with text=_('Cancel appointment')%}
+                {% with text=_('Cancel appointment') choice='cancel' %}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
