@@ -124,8 +124,6 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               assignment.setAttribute('date', item.date)
               assignment.setAttribute('resourcenames', item.resource_names)
               assignment.setAttribute('servicename', item.service_name)
-              //const statusTmp = document.getElementById(`id_status_${item.status}`)
-              //assignment.setAttribute('status', statusTmp.innerHTML)
               const btn = clone.querySelector('button')
               btn.onclick = () => {
                 id_modal_assignment_action?.showModal()

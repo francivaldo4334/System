@@ -155,6 +155,10 @@ createComponent('app-assignment', {
       gap: 0.25rem;
       align-items: center;
     }
+    .resource {
+      padding: 0;
+      margin: 0;
+    }
   `,
   html: `
    <div class="content">
@@ -162,7 +166,7 @@ createComponent('app-assignment', {
        <span class="date" id="date"></span> /
        <span class="service" id="service_name"></span>
      </div>
-     <p id="resource_names"></p>
+     <p id="resource_names" class="resource"></p>
      <div class="status">
        <slot></slot>
      </div>
