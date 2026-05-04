@@ -1,9 +1,11 @@
-<dialog class="modal" id="id_modal_assignment_action">
+{% partialdef btn_action %}
+    <button class="btn">{{text}}</button>
+{% endpartialdef %}
+{% partialdef modal %}
+<dialog class="modal" id="id_modal_assignment_action_{{status}}">
     <div class="modal-box">
-        <button class="btn">
-        </button>
         <div class="modal-action">
-            <button class="btn btn-outline" onclick="id_modal_assignment_action.close();">
+            <button class="btn btn-outline" onclick="id_modal_assignment_action_{{status}}.close();">
                 {% trans 'Close' %}
             </button>
         </div>
@@ -12,3 +14,10 @@
         <button></button>
     </form>
 </dialog>
+{% endpartialdef %}
+{% with status='PD' %}
+    {% partial modal %}
+{% endwith %}
+{% with status='CF' %}
+    {% partial modal %}
+{% endwith %}
