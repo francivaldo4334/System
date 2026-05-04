@@ -4,36 +4,38 @@
 {% partialdef modal %}
 <dialog class="modal" id="id_modal_assignment_action_{{status}}">
     <div class="modal-box">
-        {% if has_rescue %}
-            {% with text="Reativar Agendamento"%}
-                {% partial btn_action%}
-            {% endwith %}
-        {% endif %}
-        {% if has_confirm %}
-            {% with text="Confirmar Criação de Agendamento"%}
-                {% partial btn_action%}
-            {% endwith %}
-        {% endif %}
-        {% if has_start %}
-            {% with text="Iniciar Atendimento"%}
-                {% partial btn_action%}
-            {% endwith %}
-        {% endif %}
-        {% if has_finish %}
-            {% with text="Finalizar Atendimento"%}
-                {% partial btn_action%}
-            {% endwith %}
-        {% endif %}
-        {% if has_migrate %}
-            {% with text="Remarcar Agendamento"%}
-                {% partial btn_action%}
-            {% endwith %}
-        {% endif %}
-        {% if has_cancel %}
-            {% with text="Cancelar Agendamento"%}
-                {% partial btn_action%}
-            {% endwith %}
-        {% endif %}
+        <div class="flex flex-col gap-3">
+            {% if has_rescue %}
+                {% with text="Reativar Agendamento"%}
+                    {% partial btn_action%}
+                {% endwith %}
+            {% endif %}
+            {% if has_confirm %}
+                {% with text="Confirmar Criação de Agendamento"%}
+                    {% partial btn_action%}
+                {% endwith %}
+            {% endif %}
+            {% if has_start %}
+                {% with text="Iniciar Atendimento"%}
+                    {% partial btn_action%}
+                {% endwith %}
+            {% endif %}
+            {% if has_finish %}
+                {% with text="Finalizar Atendimento"%}
+                    {% partial btn_action%}
+                {% endwith %}
+            {% endif %}
+            {% if has_migrate %}
+                {% with text="Remarcar Agendamento"%}
+                    {% partial btn_action%}
+                {% endwith %}
+            {% endif %}
+            {% if has_cancel %}
+                {% with text="Cancelar Agendamento"%}
+                    {% partial btn_action%}
+                {% endwith %}
+            {% endif %}
+        </div>
         <div class="modal-action">
             <button class="btn btn-outline" onclick="id_modal_assignment_action_{{status}}.close();">
                 {% trans 'Close' %}
@@ -45,9 +47,9 @@
     </form>
 </dialog>
 {% endpartialdef %}
-{% with status='PD' %}
+{% with status='PD' has_confirm=True has_cancel=True%}
     {% partial modal %}
 {% endwith %}
-{% with status='CF' has_rescue=True %}
+{% with status='CF' has_cancel=True has_migrate=True has_start=True %}
     {% partial modal %}
 {% endwith %}
