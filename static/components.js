@@ -137,12 +137,35 @@ createComponent('app-assignment', {
     'resourcenames',
     'status',
   ],
+  scoped: true,
+  css: `
+    .content {
+      display: flex;
+      flex-direction: column;
+      color: currentColor;
+      padding-inline: 1rem;
+      padding-block: 0.5rem;
+    }
+    .date, .service {
+      font-weight: bold;
+    }
+    .status {
+      position: absolute;
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+  `,
   html: `
-   <div class="text-base-content px-4 py-2">
-     <span class="font-bold" id="date"></span> /
-     <span class="font-bold" id="service_name"></span>
+   <div class="content">
+     <div>
+       <span class="date" id="date"></span> /
+       <span class="service" id="service_name"></span>
+     </div>
      <p id="resource_names"></p>
-     <div class="flex gap-2 mt-1 items-center" id="status-target"></div>
+     <div class="status">
+       <slot></slot>
+     </div>
    </div> 
   `,
   onMount() {
@@ -150,12 +173,12 @@ createComponent('app-assignment', {
       date,
       servicename,
       resourcenames,
-      status,
+      //status,
     } = this.getProps();
     this.$('#date').innerText = date;
     this.$('#service_name').innerText = servicename;
     this.$('#resource_names').innerText = resourcenames;
-    this.$('#status-target').innerHTML = status;
+    //this.$('#status-target').innerHTML = status;
   },
   setStatusCentent(){
     

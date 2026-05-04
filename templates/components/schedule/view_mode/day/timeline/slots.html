@@ -4,18 +4,23 @@
         <button class="w-full h-full"></button>
     </app-slot>
 </template>
-<template id="tmpl_assignment_slot">
+{% partialdef status %}
+<template id="tmpl_assignment_slot_{{value}}">
     <app-slot class="assignment-slot">
-        <button class="w-full h-full">
-            <app-assignment date="2025-01-20" resourcenames="Anur, Francivaldo"
-                servicename="Corte de Cabelo"></app-assignment>
+        <button
+            class="w-full h-full"
+            data-status="{{value}}"
+        >
+            <app-assignment
+                date=""
+                resourcenames=""
+                servicename=""
+            >
+                {% include icon %}
+                <span>{{label}}</span>
+            </app-assignment>
         </button>
     </app-slot>
-</template>
-{% partialdef status %}
-<template id="id_status_{{value}}">
-    {% include icon %}
-    <span>{{label}}</span>
 </template>
 {% endpartialdef %}
 
@@ -113,13 +118,14 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               }
             }
             else if (item.type === 'assignment') {
+              tmpl_assignment_slot = document.getElementById(`tmpl_assignment_slot_${item.status}`)
               clone = tmpl_assignment_slot?.content.cloneNode(true)
               const assignment = clone.querySelector('app-assignment');
               assignment.setAttribute('date', item.date)
               assignment.setAttribute('resourcenames', item.resource_names)
               assignment.setAttribute('servicename', item.service_name)
-              const statusTmp = document.getElementById(`id_status_${item.status}`)
-              assignment.setAttribute('status', statusTmp.innerHTML)
+              //const statusTmp = document.getElementById(`id_status_${item.status}`)
+              //assignment.setAttribute('status', statusTmp.innerHTML)
               const btn = clone.querySelector('button')
               btn.onclick = () => {
                 id_modal_assignment_action?.showModal()

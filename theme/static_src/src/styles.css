@@ -125,7 +125,7 @@
   }
 
   .assignment-slot {
-    @apply border border-dashed bg-info/20 border-info border-2 rounded-field text-info/50 hover:bg-info/60 active:bg-info;
+    @apply border border-dashed bg-info/20 border-info border-2 rounded-field text-base-content hover:bg-info/60 active:bg-info;
   }
 
   .slot-time-label {
