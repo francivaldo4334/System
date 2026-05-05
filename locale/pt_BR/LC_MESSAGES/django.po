@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-05 13:11+0000\n"
+"POT-Creation-Date: 2026-05-05 13:42+0000\n"
 "PO-Revision-Date: 2026-05-05 10:00-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -233,7 +233,6 @@ msgstr "Tem certeza que deseja encerrar sua sessão atual?"
 
 #: templates/components/logout.html:15 templates/layouts/crud/create.html:76
 #: templates/layouts/crud/delete.html:20 templates/layouts/crud/update.html:14
-#: templates/pages/app/schedule/create.html:11
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -282,12 +281,11 @@ msgstr "Adicionar"
 
 #: templates/layouts/crud/create.html:40 templates/layouts/crud/update.html:102
 #: templates/pages/app/schedule/actions.html:28
-#: templates/pages/app/schedule/create.html:66
+#: templates/pages/app/schedule/create.html:76
 msgid "Error"
 msgstr "Erro"
 
 #: templates/layouts/crud/create.html:80 templates/layouts/crud/update.html:18
-#: templates/pages/app/schedule/create.html:17
 msgid "Save"
 msgstr "Salvar"
 
@@ -368,6 +366,26 @@ msgstr "Cancelar agendamento"
 #: templates/pages/app/schedule/actions.html:79
 msgid "Close"
 msgstr "Fechar"
+
+#: templates/pages/app/schedule/create.html:7
+msgid "Create appointment"
+msgstr "Criar agendamento"
+
+#: templates/pages/app/schedule/create.html:8
+msgid "Select a professional or resource available"
+msgstr "Selecione um profissional ou recurso disponivel"
+
+#: templates/pages/app/schedule/create.html:26
+#, fuzzy
+#| msgid "Cancel"
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#: templates/pages/app/schedule/create.html:29
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Confirmar"
+msgstr "Confirmado"
 
 #: templates/pages/app/schedule/index.html:5
 #: templates/pages/app/schedule/settings/index.html:3
