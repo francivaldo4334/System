@@ -126,6 +126,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
               assignment.setAttribute('servicename', item.service_name)
               const btn = clone.querySelector('button')
               btn.onclick = () => {
+                $s.set('assignment_id', item.assignmentId)
                 document.getElementById(`id_modal_assignment_action_${btn.dataset.status}`)
                 ?.showModal()
               }

@@ -1,5 +1,5 @@
 <script is="exec-mount" type="pass">
-$s.create({
+$s.createStore({
     'assignment_id': 0,
     'action_is_fetching': false,
 })
@@ -12,15 +12,19 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
         class="btn btn-soft w-full btn-assignment-action"
         onclick="(() => {
             $s.set('action_is_fetching', true);
+            const assignmentId = $s.get('assignment_id')
             $q.use(
                 ['assignment_action'],
-                () => $r.post('{% url 'assignment-'|add:choice 0 %}'),
+                () => $r.post('{% url 'assignment-'|add:choice 0 %}'.replace('0',assignmentId), {}, {
+                    'X-CSRFToken': '{{csrf_token}}'
+                }),
                 {
                     onSuccess(){
                         toastSuccess('{% trans 'Success'%}')
+                        $q.refetch('slots')
                     },
                     onError(){
-                        toastSuccess('{% trans 'Error'%}')
+                        toastError('{% trans 'Error'%}')
                     },
                     onFinally(){
                         $s.set('action_is_fetching', false)
