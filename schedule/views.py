@@ -46,7 +46,9 @@ class ServiceRequirementsViewSet(viewsets.ModelViewSet):
 class AssignmentViewSet(viewsets.mixins.ListModelMixin,
                         viewsets.mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
-    queryset = Assignment.objects.all().select_related('service').prefetch_related('resources')
+    queryset = Assignment.objects.all().exclude(
+        status=Assignment.Status.CANCELLED.value,
+    ).select_related('service').prefetch_related('resources')
     serializer_class = AssignmentSerializer
     filterset_class = AssignmentFilterSet
 
@@ -113,6 +115,8 @@ class AvailabilityPresentationAPIView(ListAPIView):
         context = super().get_serializer_context()
         date = self.request.query_params.get('date')
         context.update({
-            'assignments': Assignment.objects.filter(date=date)
+            'assignments': Assignment.objects.filter(date=date).exclude(
+                status=Assignment.Status.CANCELLED.value,
+            )
         })
         return context;
