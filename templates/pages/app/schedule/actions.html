@@ -14,7 +14,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
             $s.set('action_is_fetching', true);
             $q.use(
                 ['assignment_action'],
-                () => $r.post('{% url 'assignment-'|add:choice|add:'-create' %}'),
+                () => $r.post('{% url 'assignment-'|add:choice 0 %}'),
                 {
                     onSuccess(){
                         toastSuccess('{% trans 'Success'%}')
