@@ -57,9 +57,9 @@
                 }),
                 {
                     onSuccess(error){
-                        $q.refetch("slots")
                         form.reset();
                         id_new_schedule_modal.close();
+                        $q.refetch("slots")
                     },
                     onError(error){
                         if (error.status !== 400) {

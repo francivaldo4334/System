@@ -53,7 +53,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams)=>{
   })
   const queryString = params.toString();
   $q.use(
-    ['slots', queryString],
+    'slots',
     () => Promise.all([
       $r.get(`{% url 'availabilities_presentation'%}?date=${queryparams.day}`),
       $r.get(`{% url 'assignment-list'%}?${queryString}`),
