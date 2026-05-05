@@ -2,7 +2,7 @@
 <li>
     <button class="group" data-value="{{value}}" data-label="{{label}}">
         <span class="opacity-0 group-[.menu-active]:opacity-100">&checkmark;</span>
-        {{ label }}
+        {% trans label %}
         {% if icon %}
         {% include icon %}
         {% endif %}
@@ -19,7 +19,7 @@
 </label>
 <ul class="dropdown menu w-52 rounded-box bg-base-100 shadow-sm" popover id="id_filter_status"
     style="position-anchor:--anchor-filter-status">
-    {% with value='' label="Show All"%}
+    {% with value='' label=_("Show All")%}
     {% partial status %}
     {% endwith %}
     {% with value='PD' label="Pending" icon="icons/status-pendding.svg" %}

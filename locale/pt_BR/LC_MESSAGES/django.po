@@ -1,52 +1,356 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2026
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-21 12:39+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2026-05-05 12:49+0000\n"
+"PO-Revision-Date: 2026-05-05 10:00-0300\n"
+"Last-Translator: Gemini AI\n"
+"Language-Team: pt_BR\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: app/forms.py:73 app/tables.py:62
+#: templates/pages/app/schedule/settings/availabilities/index.html:12
+msgid "Valid From"
+msgstr "Válido de"
+
+#: app/forms.py:79 app/tables.py:63
+#: templates/pages/app/schedule/settings/availabilities/index.html:13
+msgid "Valid Until"
+msgstr "Válido até"
+
+#: app/forms.py:85
+msgid "Weekdays"
+msgstr "Dias da semana"
+
+#: app/forms.py:87 templates/components/schedule/filter.calendar/index.html:16
+msgid "Mon"
+msgstr "Seg"
+
+#: app/forms.py:88 templates/components/schedule/filter.calendar/index.html:17
+msgid "Tue"
+msgstr "Ter"
+
+#: app/forms.py:89 templates/components/schedule/filter.calendar/index.html:18
+msgid "Wed"
+msgstr "Qua"
+
+#: app/forms.py:90 templates/components/schedule/filter.calendar/index.html:19
+msgid "Thu"
+msgstr "Qui"
+
+#: app/forms.py:91 templates/components/schedule/filter.calendar/index.html:20
+msgid "Fri"
+msgstr "Sex"
+
+#: app/forms.py:92 templates/components/schedule/filter.calendar/index.html:21
+msgid "Sat"
+msgstr "Sáb"
+
+#: app/forms.py:93 templates/components/schedule/filter.calendar/index.html:15
+msgid "Sun"
+msgstr "Dom"
+
+#: app/forms.py:98
+msgid "Time From"
+msgstr "Hora de início"
+
+#: app/forms.py:104
+msgid "Time Until"
+msgstr "Hora de término"
+
+#: app/forms.py:110
+msgid "Duration"
+msgstr "Duração"
+
+#: app/forms.py:116
+msgid "Interval"
+msgstr "Intervalo"
+
+#: app/forms.py:122 app/forms.py:192 app/tables.py:64 app/tables.py:87
+#: templates/pages/app/schedule/settings/availabilities/index.html:14
+msgid "Description"
+msgstr "Descrição"
+
+#: app/forms.py:132 app/forms.py:187 app/tables.py:86
+msgid "Name"
+msgstr "Nome"
+
+#: app/forms.py:137
+msgid "Resource category"
+msgstr "Categoria de recurso"
+
+#: app/forms.py:145
+msgid "Use as category."
+msgstr "Usar como categoria."
+
+#: app/forms.py:154 app/forms.py:203 app/tables.py:98
+#: templates/components/schedule/filter.services.html:3
+msgid "Service"
+msgstr "Serviço"
+
+#: app/forms.py:159 app/tables.py:88 app/views.py:86
+#: templates/pages/app/schedule/settings/availabilities/index.html:11
+msgid "Resources"
+msgstr "Recursos"
+
+#: app/forms.py:209 app/tables.py:76 app/tables.py:99
+msgid "Resource Type"
+msgstr "Tipo de recurso"
+
+#: app/forms.py:215 app/tables.py:100
+msgid "Quantity"
+msgstr "Quantidade"
+
+#: app/tables.py:74
+msgid "Resource Name"
+msgstr "Nome do recurso"
+
+#: app/tables.py:75
+msgid "Is Selectable"
+msgstr "É selecionável"
+
+#: app/views.py:40
+msgid "Agenda"
+msgstr "Agenda"
+
+#: app/views.py:46
+msgid "Settings"
+msgstr "Configurações"
+
+#: app/views.py:78
+msgid "Availabilities"
+msgstr "Disponibilidades"
+
+#: app/views.py:91
+msgid "Services"
+msgstr "Serviços"
+
+#: app/views.py:96
+msgid "Service Requirements"
+msgstr "Requisitos do serviço"
+
 #: schedule/models.py:30 schedule/models.py:32 schedule/models.py:34
-#: schedule/models.py:66 schedule/models.py:68 schedule/models.py:72
+#: schedule/models.py:46
 msgid "Enter a valid value."
 msgstr "Insira um valor válido."
+
+#: schedule/models.py:82 schedule/serializers.py:280
+msgid "There is a schedule conflict for the selected date and time range."
+msgstr "Existe um conflito de horários para a data e intervalo selecionados."
+
+#: schedule/models.py:86 schedule/serializers.py:276
+msgid "There cannot be an availability period greater than 90 days."
+msgstr "Não pode haver um período de disponibilidade superior a 90 dias."
+
+#: schedule/models.py:204
+msgid "Pending"
+msgstr "Pendente"
+
+#: schedule/models.py:205
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#: schedule/models.py:206
+msgid "Migrated"
+msgstr "Migrado"
+
+#: schedule/models.py:207
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#: schedule/models.py:208
+msgid "Absent"
+msgstr "Faltou"
+
+#: schedule/models.py:209
+msgid "In Progress"
+msgstr "Em andamento"
+
+#: schedule/models.py:210
+msgid "Completed"
+msgstr "Concluído"
+
+#: schedule/serializers.py:53
+msgid "This field is required."
+msgstr "Este campo é obrigatório."
+
+#: schedule/serializers.py:82
+msgid "A rule already exists between this Service and this Resource."
+msgstr "Já existe uma regra entre este Serviço e este Recurso."
+
+#: schedule/serializers.py:158
+msgid "One or more selected resources are not allowed for this service type."
+msgstr "Um ou mais recursos selecionados não são permitidos para este tipo de serviço."
+
+#: schedule/serializers.py:159
+msgid ""
+"The provided resource quantity does not match the requirement for this "
+"service."
+msgstr "A quantidade de recurso fornecida não corresponde ao requisito para este serviço."
+
+#: schedule/serializers.py:160
+msgid ""
+"One or more selected resources are already occupied at the requested time."
+msgstr "Um ou mais recursos selecionados já estão ocupados no horário solicitado."
+
+#: schedule/serializers.py:161
+msgid "Service is required for creating this assignment."
+msgstr "O serviço é obrigatório para criar esta atribuição."
+
+#: schedule/views.py:31
+#, python-format
+msgid "Deletion of %(name)s failed"
+msgstr "Falha ao excluir %(name)s"
 
 #: stock/models.py:172
 msgid "This specific stock move already exists."
 msgstr "Esta movimentação de estoque específica já existe."
 
-#: templates/app.html:42
-msgid "Agio"
-msgstr "Ágio"
+#: templates/components/form/fields/select.html:16
+msgid "Select a value."
+msgstr "Selecione um valor."
 
-#: templates/app.html:45
-msgid "Agenda"
-msgstr "Agenda"
+#: templates/components/logout.html:8
+msgid "Log out of your account?"
+msgstr "Sair da sua conta?"
 
-#: templates/components/filter-calendar.html:23
+#: templates/components/logout.html:11
+msgid "Are you sure you want to end your current session?"
+msgstr "Tem certeza que deseja encerrar sua sessão atual?"
+
+#: templates/components/logout.html:15 templates/layouts/crud/create.html:76
+#: templates/layouts/crud/delete.html:20 templates/layouts/crud/update.html:14
+#: templates/pages/app/schedule/create.html:11
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/components/logout.html:20
+msgid "Log out"
+msgstr "Sair"
+
+#: templates/components/schedule/filter.calendar/index.html:25
 msgid "Today"
 msgstr "Hoje"
 
-#: templates/schedule.html:3
+#: templates/components/schedule/filter.resources.html:2
+msgid "Resource Category"
+msgstr "Categoria de Recurso"
+
+#: templates/components/schedule/filter.resources.html:7
+msgid "Resource"
+msgstr "Recurso"
+
+#: templates/components/schedule/filter.resources.html:22
+#: templates/components/schedule/filter.resources.html:46
+msgid "Sholl All"
+msgstr "Mostrar Todos"
+
+#: templates/components/schedule/filter.search.html:3
+#: templates/layouts/crud/filters.html:3
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/components/schedule/filter.services.html:14
+msgid "Show All"
+msgstr "Mostrar Todos"
+
+#: templates/components/schedule/filter.status.html:17
+msgid "Status"
+msgstr "Status"
+
+#: templates/layouts/base.html:8 templates/pages/app/layout.html:34
+msgid "Agio"
+msgstr "Ágio"
+
+#: templates/layouts/crud/create.html:3
+msgid "Add"
+msgstr "Adicionar"
+
+#: templates/layouts/crud/create.html:40 templates/layouts/crud/update.html:102
+#: templates/pages/app/schedule/actions.html:28
+#: templates/pages/app/schedule/create.html:66
+msgid "Error"
+msgstr "Erro"
+
+#: templates/layouts/crud/create.html:80 templates/layouts/crud/update.html:18
+#: templates/pages/app/schedule/create.html:17
+msgid "Save"
+msgstr "Salvar"
+
+#: templates/layouts/crud/delete.html:4 templates/layouts/crud/delete.html:24
+msgid "Delete"
+msgstr "Excluir"
+
+#: templates/layouts/crud/delete.html:11
+msgid "Confirm Exclusion"
+msgstr "Confirmar Exclusão"
+
+#: templates/layouts/crud/delete.html:15
+msgid ""
+"This action cannot be undone. Are you sure you want to delete this item?"
+msgstr "Esta ação não pode ser desfeita. Tem certeza de que deseja excluir este item?"
+
+#: templates/layouts/crud/list.html:10
+msgid "Actions"
+msgstr "Ações"
+
+#: templates/layouts/crud/list.html:73
+msgid "Undefined"
+msgstr "Indefinido"
+
+#: templates/layouts/crud/update.html:3
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/pages/app/schedule/actions.html:23
+msgid "Success"
+msgstr "Sucesso"
+
+#: templates/pages/app/schedule/actions.html:47
+msgid "Rescue appointment"
+msgstr "Recuperar agendamento"
+
+#: templates/pages/app/schedule/actions.html:52
+msgid "Confirm new appointment"
+msgstr "Confirmar novo agendamento"
+
+#: templates/pages/app/schedule/actions.html:57
+msgid "Start service"
+msgstr "Iniciar atendimento"
+
+#: templates/pages/app/schedule/actions.html:62
+msgid "Finish service"
+msgstr "Finalizar atendimento"
+
+#: templates/pages/app/schedule/actions.html:67
+msgid "Migrate appointment"
+msgstr "Migrar agendamento"
+
+#: templates/pages/app/schedule/actions.html:72
+msgid "Cancel appointment"
+msgstr "Cancelar agendamento"
+
+#: templates/pages/app/schedule/actions.html:79
+msgid "Close"
+msgstr "Fechar"
+
+#: templates/pages/app/schedule/index.html:5
+#: templates/pages/app/schedule/settings/index.html:3
 msgid "RSA Agenda"
 msgstr "Agenda RSA"
 
-#: templates/schedule.html:15
-msgid "Resources"
-msgstr "Recursos"
+#: templates/pages/app/schedule/settings/availabilities/index.html:5
+msgid " Search"
+msgstr " Buscar"
 
-#: templates/schedule.html:18
-msgid "Services"
-msgstr "Serviços"
+#: templates/pages/app/schedule/settings/availabilities/index.html:19
+msgid "New Availability"
+msgstr "Nova Disponibilidade"
