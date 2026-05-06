@@ -117,27 +117,12 @@ class AvailabilityPresentationAPIView(ListAPIView):
     filterset_class = AvailabilityPresentationFilterSet
     pagination_class = None
 
-    class AssignmentFilterSetError(Exception):
-        pass
-
-    def handle_exception(self, exc):
-        try:
-            return super().handle_exception(exc)
-        except AvailabilityPresentationAPIView.AssignmentFilterSetError as e:
-            return Response(e.args[0], 400)
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
         date = self.request.query_params.get('date')
-        assignments_filterset = AvailabilityPresentationAssignmentsFilterSet(
-            self.request.GET,
-            Assignment.objects.filter(date=date).exclude(
+        context.update({
+            'assignments': Assignment.objects.filter(date=date).exclude(
                 status=Assignment.Status.CANCELLED.value,
             )
-        )
-        if not assignments_filterset.is_valid():
-            raise AvailabilityPresentationAPIView.AssignmentFilterSetError(assignments_filterset.errors)
-        context.update({
-            'assignments': assignments_filterset.qs
         })
         return context;
