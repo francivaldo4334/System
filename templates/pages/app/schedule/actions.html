@@ -74,7 +74,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                 {% endwith %}
             {% endif %}
             {% if has_absent %}
-                {% with text=_('Mark as absent') choice='cancel' %}
+                {% with text=_('Mark as absent') choice='absent' %}
                     {% partial btn_action%}
                 {% endwith %}
             {% endif %}
