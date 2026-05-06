@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-05 13:42+0000\n"
+"POT-Creation-Date: 2026-05-06 11:41+0000\n"
 "PO-Revision-Date: 2026-05-05 10:00-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -363,7 +363,11 @@ msgstr "Migrar agendamento"
 msgid "Cancel appointment"
 msgstr "Cancelar agendamento"
 
-#: templates/pages/app/schedule/actions.html:79
+#: templates/pages/app/schedule/actions.html:77
+msgid "Mark as absent"
+msgstr "Marcar como ausente"
+
+#: templates/pages/app/schedule/actions.html:84
 msgid "Close"
 msgstr "Fechar"
 

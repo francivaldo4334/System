@@ -28,10 +28,8 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
         if not value:
             return queryset
         return queryset.filter_date_colision(value, value)
-        # return queryset.filter(
-        #     Q(valid_until__isnull=True) | Q(valid_until__gte=value),
-        #     valid_from__lte=value,
-        # )
+class AvailabilityPresentationAssignmentsFilterSet(filters.FilterSet):
+    ...
 
 class ResourceFilterSet(filters.FilterSet):
     use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
