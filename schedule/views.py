@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentsFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
