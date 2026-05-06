@@ -119,6 +119,6 @@ class AvailabilityPresentationAPIView(ListAPIView):
         context = super().get_serializer_context()
         date = self.request.query_params.get('date')
         context.update({
-            'assignments': Assignment.objects.filter(date=date)
+            'assignments': Assignment.objects.filter(date=date).visibles()
         })
         return context;

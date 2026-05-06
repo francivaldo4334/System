@@ -92,7 +92,16 @@ class AssignmentFilterSet(filters.FilterSet):
             'service',
             'status'
         ]
-
+    @property
+    def qs(self):
+        parent = super().qs
+    
+        status_value = self.data.get('status') # type:ignore
+    
+        if not status_value:
+            return parent.visibles() # type:ignore
+        
+        return parent
     def filter_search(self, queryset, name, value):
         if not value:
             return queryset

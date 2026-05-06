@@ -200,6 +200,15 @@ class ResourceOccupation(models.Model):
         unique_together = ['resource', 'date']
 
 class Assignment(TimeStampedModel, CreatedByModel):
+    class QuerySet(models.QuerySet):
+        def visibles(self):
+            return self.exclude(
+                status__in=[
+                   Assignment.Status.CANCELLED.value,
+                   Assignment.Status.ABSENT.value,
+                ]
+            )
+    objects = QuerySet.as_manager()
     class Status(models.TextChoices):
         PENDING = 'PD', _('Pending')
         CONFIRMED = 'CF', _('Confirmed')
