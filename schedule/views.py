@@ -46,9 +46,7 @@ class ServiceRequirementsViewSet(viewsets.ModelViewSet):
 class AssignmentViewSet(viewsets.mixins.ListModelMixin,
                         viewsets.mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
-    queryset = Assignment.objects.all().exclude(
-        status=Assignment.Status.CANCELLED.value,
-    ).select_related('service').prefetch_related('resources')
+    queryset = Assignment.objects.all().select_related('service').prefetch_related('resources')
     serializer_class = AssignmentSerializer
     filterset_class = AssignmentFilterSet
 
@@ -100,7 +98,7 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         return Response(self.get_serializer(obj).data)
 
     @action(['POST'], True)
-    def absent(self, request):
+    def absent(self, request, pk):
         obj = self.get_object()
         obj.state.absent()
         return Response(self.get_serializer(obj).data)
