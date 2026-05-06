@@ -13,7 +13,7 @@ from rest_framework.fields import MinValueValidator
 from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import rrulestr
 from django.utils.translation import gettext_lazy as _
-from schedule.flows import AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
+from schedule.flows import AssignmentStateAbsent, AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
 from datetime import datetime, time, timedelta
 
 # Create your models here.
@@ -227,6 +227,7 @@ class Assignment(TimeStampedModel, CreatedByModel):
             self.Status.COMPLETED.value: AssignmentStateCompleted,
             self.Status.MIGRATED.value: AssignmentStateMigrated,
             self.Status.CANCELLED.value: AssignmentStateCancelled,
+            self.Status.ABSENT.value: AssignmentStateAbsent,
         }
         state_class = states.get(str(self.status))
         if not state_class: raise NotStateError()

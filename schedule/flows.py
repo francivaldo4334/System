@@ -26,6 +26,10 @@ class AssignmentState:
 
     def cancel(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
+
+    def absent(self):
+        raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
+        
     
 class AssignmentStatePeding(AssignmentState):
     ## Esse estado é para que futuramente seja implementado um sistema de concorrencia
@@ -78,6 +82,13 @@ class AssignmentStateConfirmed(AssignmentState):
         self.instance.status = self.instance.Status.IN_PROGRESS.value # type: ignore
         self.instance.save(update_fields=['status'])
 
+    def absent(self):
+        rules = utils.AssignmentUtil(self.instance)
+        with transaction.atomic():
+            rules.vacateTimeSlot()
+            self.instance.status = self.instance.Status.ABSENT.value # type: ignore
+            self.instance.save(update_fields=['status'])
+
             
 
 class AssignmentStateMigrated(AssignmentStateConfirmed):
@@ -105,6 +116,9 @@ class AssignmentStateCancelled(AssignmentState):
             self.instance.save(update_fields=['status'])
 
 class AssignmentStateCompleted(AssignmentState):
+    pass
+
+class AssignmentStateAbsent(AssignmentState):
     pass
 
 class NotStateError(Exception):

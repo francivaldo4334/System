@@ -99,6 +99,12 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         obj.state.cancel()
         return Response(self.get_serializer(obj).data)
 
+    @action(['POST'], True)
+    def absent(self, request):
+        obj = self.get_object()
+        obj.state.absent()
+        return Response(self.get_serializer(obj).data)
+
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()
