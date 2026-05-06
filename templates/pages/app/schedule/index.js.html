@@ -50,21 +50,20 @@
         "filter.resource_type",
         "filter.status",
         "filter.calendar.day",
-    ], (
-        search,
-        service,
-        resource,
-        resource_category,
-        status,
-        day,
-    ) => ({
-        search,
-        service,
-        resource,
-        resource_category,
-        status,
-        day: day?.split('T')?.[0],
-    }))
+    ], (search, service, resource, resource_category, status, day) => {
+    
+        const currentParams = {
+            search,
+            service,
+            resource,
+            resource_category,
+            status,
+            day: day?.split('T')?.[0],
+        };
+
+        sessionStorage.setItem('queryparams', JSON.stringify(currentParams));
+        return currentParams;
+    });
     $s.subscribe('filter_query_params', null, null, (queryparams) => {
         const params = new URLSearchParams();
         Object.entries(queryparams).forEach(([key, value]) => {
