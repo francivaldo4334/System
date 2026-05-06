@@ -1,13 +1,15 @@
 <script is="exec-mount" type="text/template">
+{
+    const saved = JSON.parse(sessionStorage.getItem('queryparams') || '{}');
     $s.createStore('filter', {
-        "search": "{{ request.GET.search|default:'' }}",
-        "service": "{{ request.GET.service|default:'' }}",
-        "resource": "{{ request.GET.resource|default:'' }}",
-        "resource_type": "{{ request.GET.resource_category|default:'' }}",
-        "status": "{{request.GET.status|default:''}}",
+        "search": saved.search || "{{ request.GET.search|default:'' }}",
+        "service": saved.service || "{{ request.GET.service|default:'' }}",
+        "resource": saved.resource || "{{ request.GET.resource|default:'' }}",
+        "resource_type": saved.resource_type || "{{ request.GET.resource_category|default:'' }}",
+        "status": saved.status || "{{request.GET.status|default:''}}",
     })
     $s.createStore('filter.calendar', {
-        "day": "{%if request.GET.day%}{{request.GET.day|add:'T00:00:00'}}{%else%}{{defaultday}}{%endif%}",
+        "day": saved.day ? `${saved.day}T00:00:00` : "{%if request.GET.day%}{{request.GET.day|add:'T00:00:00'}}{%else%}{{defaultday}}{%endif%}",
         "mode": 'd',
         //"mode": "{{ request.GET.mode|default:'w' }}",
     })
@@ -74,6 +76,7 @@
         const newRelativePathQuery = `${window.location.pathname}?${params.toString()}`
         history.pushState(null, '', newRelativePathQuery);
     })
+    }
 </script>
 <script is="exec-umount" type="text/template">
 $s.remove('filter')
