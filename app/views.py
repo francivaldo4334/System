@@ -50,7 +50,7 @@ class AppView(PermissionRequiredMixin,
 
         context.update({
             'app_template_name_options': app_template_name_options,
-            'today': f'{timezone.localtime(timezone.now()).date().isoformat()}T00:00:00',
+            'defaultday': f'{timezone.localtime(timezone.now()).date().isoformat()}T00:00:00',
         })
         return context
     def get_template_names(self):

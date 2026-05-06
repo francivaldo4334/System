@@ -7,7 +7,7 @@
         "status": "{{request.GET.status|default:''}}",
     })
     $s.createStore('filter.calendar', {
-        "day": "{%if request.GET.day%}{{request.GET.day|add:'T00:00:00'}}{%else%}{{today}}{%endif%}",
+        "day": "{%if request.GET.day%}{{request.GET.day|add:'T00:00:00'}}{%else%}{{defaultday}}{%endif%}",
         "mode": 'd',
         //"mode": "{{ request.GET.mode|default:'w' }}",
     })
