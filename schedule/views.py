@@ -18,6 +18,8 @@ from schedule.serializers import (
 from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
 
+from schedule.utils import ResourceOcuppied
+
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
@@ -53,6 +55,8 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
     def handle_exception(self, exc):
         try:
             return super().handle_exception(exc)
+        except ResourceOcuppied as e:
+            return Response([_('Slot occupied')], 422)
         except NotImplementedError as e:
             return Response(e.args, 422)
 
@@ -60,6 +64,11 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         if self.action == 'create':
             return CreateAssigmentSerializer
         return super().get_serializer_class()
+
+    def filter_queryset(self, queryset):
+        if self.action == 'list':
+            return super().filter_queryset(queryset)
+        return super().get_queryset()
 
     @action(['POST'], True)
     def rescue(self, request, pk):

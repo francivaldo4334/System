@@ -24,8 +24,11 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                         $q.refetch('slots')
                         el.closest('dialog')?.close()
                     },
-                    onError(){
-                        toastError('{% trans 'Error'%}')
+                    onError(error){
+                        if (error.status > 499)
+                            toastError('{% trans 'Error'%}')
+                        else 
+                            toastError(error.data)
                     },
                     onFinally(){
                         $s.set('action_is_fetching', false)
