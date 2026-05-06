@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-06 11:41+0000\n"
+"POT-Creation-Date: 2026-05-06 13:37+0000\n"
 "PO-Revision-Date: 2026-05-05 10:00-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -150,31 +150,31 @@ msgstr "Existe um conflito de horários para a data e intervalo selecionados."
 msgid "There cannot be an availability period greater than 90 days."
 msgstr "Não pode haver um período de disponibilidade superior a 90 dias."
 
-#: schedule/models.py:204
+#: schedule/models.py:213
 msgid "Pending"
 msgstr "Pendente"
 
-#: schedule/models.py:205
+#: schedule/models.py:214
 msgid "Confirmed"
 msgstr "Confirmado"
 
-#: schedule/models.py:206
+#: schedule/models.py:215
 msgid "Migrated"
 msgstr "Migrado"
 
-#: schedule/models.py:207
+#: schedule/models.py:216
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: schedule/models.py:208
+#: schedule/models.py:217
 msgid "Absent"
 msgstr "Faltou"
 
-#: schedule/models.py:209
+#: schedule/models.py:218
 msgid "In Progress"
 msgstr "Em andamento"
 
-#: schedule/models.py:210
+#: schedule/models.py:219
 msgid "Completed"
 msgstr "Concluído"
 
@@ -210,10 +210,14 @@ msgstr ""
 msgid "Service is required for creating this assignment."
 msgstr "O serviço é obrigatório para criar esta atribuição."
 
-#: schedule/views.py:31
+#: schedule/views.py:33
 #, python-format
 msgid "Deletion of %(name)s failed"
 msgstr "Falha ao excluir %(name)s"
+
+#: schedule/views.py:59
+msgid "Slot occupied"
+msgstr "Horário ocupado"
 
 #: stock/models.py:172
 msgid "This specific stock move already exists."
@@ -280,7 +284,7 @@ msgid "Add"
 msgstr "Adicionar"
 
 #: templates/layouts/crud/create.html:40 templates/layouts/crud/update.html:102
-#: templates/pages/app/schedule/actions.html:28
+#: templates/pages/app/schedule/actions.html:29
 #: templates/pages/app/schedule/create.html:76
 msgid "Error"
 msgstr "Erro"
@@ -339,35 +343,35 @@ msgstr "Editar"
 msgid "Success"
 msgstr "Sucesso"
 
-#: templates/pages/app/schedule/actions.html:47
+#: templates/pages/app/schedule/actions.html:50
 msgid "Rescue appointment"
 msgstr "Recuperar agendamento"
 
-#: templates/pages/app/schedule/actions.html:52
+#: templates/pages/app/schedule/actions.html:55
 msgid "Confirm new appointment"
 msgstr "Confirmar novo agendamento"
 
-#: templates/pages/app/schedule/actions.html:57
+#: templates/pages/app/schedule/actions.html:60
 msgid "Start service"
 msgstr "Iniciar atendimento"
 
-#: templates/pages/app/schedule/actions.html:62
+#: templates/pages/app/schedule/actions.html:65
 msgid "Finish service"
 msgstr "Finalizar atendimento"
 
-#: templates/pages/app/schedule/actions.html:67
+#: templates/pages/app/schedule/actions.html:70
 msgid "Migrate appointment"
 msgstr "Migrar agendamento"
 
-#: templates/pages/app/schedule/actions.html:72
+#: templates/pages/app/schedule/actions.html:75
 msgid "Cancel appointment"
 msgstr "Cancelar agendamento"
 
-#: templates/pages/app/schedule/actions.html:77
+#: templates/pages/app/schedule/actions.html:80
 msgid "Mark as absent"
 msgstr "Marcar como ausente"
 
-#: templates/pages/app/schedule/actions.html:84
+#: templates/pages/app/schedule/actions.html:87
 msgid "Close"
 msgstr "Fechar"
 
