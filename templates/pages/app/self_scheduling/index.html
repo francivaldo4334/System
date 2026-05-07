@@ -18,6 +18,11 @@
 {% block body %}
 <div class="w-screen h-screen grid grid-rows-[1fr_auto]">
   <main>
+    <div class='page' data-id='1'>hi</div>
+    <div class='page' data-id='2'>hi2</div>
+    <div class='page' data-id='3'></div>
+    <div class='page' data-id='4'></div>
+    <div class='page' data-id='5'></div>
   </main>
   <ul class='steps p-4'>
     {% with iconpath='icons/house.svg' key='1' %}
@@ -43,7 +48,12 @@
   $s.create('page', pageId)
   document.querySelectorAll('.step').forEach(item => {
     $s.subscribe('page', item, null, (value, el) => {
-        el.classList.toggle('step-primary', Number(el.dataset.id) <= value)
+        el.classList.toggle('step-primary', Number(el.dataset.id) <= value, true)
+    })
+  })
+  document.querySelectorAll('.page').forEach(item => {
+    $s.subscribe('page', item, null, (value, el) => {
+      el.classList.toggle('hidden',Number(el.dataset.id) !== value, true)
     })
   })
 }
