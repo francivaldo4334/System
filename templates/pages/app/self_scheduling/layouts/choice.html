@@ -1,0 +1,21 @@
+<section class='w-full h-full'>
+  <div>
+    {% block title%}
+      {% trans 'Select a option' %}
+    {% endblock %}
+  </div>
+  <ul class="list">
+    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
+    {% block list_title %}
+      {% trans 'Select one of the items below' %}
+    {% endblock %}
+    </li>
+    {% for optin in options %}
+      {% block option %}
+        <li class="list-row">
+          {{option}}
+        </li>
+      {% endblock %}
+    {% endfor %}
+  </ul>
+</section>
