@@ -1,7 +1,51 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
+
 {% block title %}
   {% trans 'Scheduling' %}
 {% endblock %}
+
+{% block header %}
+<script src="{% static 'state.js' %}"></script>
+<script src="{% static 'query-manager.js' %}"></script>
+<script src="{% static 'request-manager.js' %}"></script>
+{% endblock %}
+{% partialdef progress %}
+<li class="step" data-id='{{key}}'>
+  <span class="step-icon *:w-4">{% include iconpath %}</span>
+</li>
+{% endpartialdef %}
 {% block body %}
-helo
+<div class="w-screen h-screen grid grid-rows-[1fr_auto]">
+  <main>
+  </main>
+  <ul class='steps p-4'>
+    {% with iconpath='icons/house.svg' key='1' %}
+    {% partial progress %}
+    {% endwith %}
+    {% with iconpath='icons/users.svg' key='2' %}
+    {% partial progress %}
+    {% endwith %}  
+    {% with iconpath='icons/calendar.svg' key='3' %}
+    {% partial progress %}
+    {% endwith %}  
+    {% with iconpath='icons/clipboard-clock.svg' key='4' %}
+    {% partial progress %}
+    {% endwith %}  
+    {% with iconpath='icons/check-check.svg' key='5' %}
+    {% partial progress %}
+    {% endwith %}
+  </ul>
+</div>
+<script>
+{
+  const pageId = Number(sessionStorage.getItem('router_scheduling') || '1')
+  $s.create('page', pageId)
+  document.querySelectorAll('.step').forEach(item => {
+    $s.subscribe('page', item, null, (value, el) => {
+        el.classList.toggle('step-primary', Number(el.dataset.id) <= value)
+    })
+  })
+}
+</script>
 {% endblock %}
