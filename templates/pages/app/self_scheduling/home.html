@@ -1,1 +1,23 @@
-
+<section class="relative w-full h-full grid grid-rows-2 overflow-hidden">
+  <div class="relative overflow-hidden">
+    <img
+      class="absolute inset-0 w-full h-full object-cover"
+      src="https://img.daisyui.com/images/stock/photo-1567653418876-5bb0e566e1c2.webp"
+      alt="background" />
+    
+    <div class="relative z-10 flex items-center justify-center h-full">
+      <span class="text-white text-2xl font-bold">content</span>
+    </div>
+  </div>
+  <div class="bg-base-100 flex flex-col items-center justify-center">
+    <button class="btn btn-xl btn-primary" onclick='$s.set("page", 2)'>
+      {% trans 'Schedule an appointment' %}
+    </button>
+  </div>
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <img
+      class="mask mask-circle object-cover aspect-square"
+      style="width: 200px;" 
+      src="https://img.daisyui.com/images/stock/photo-1567653418876-5bb0e566e1c2.webp" />
+  </div>
+</section>
