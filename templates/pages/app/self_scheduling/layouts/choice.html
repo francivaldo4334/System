@@ -1,14 +1,12 @@
-<section class='w-full h-full'>
-  <div>
-    {% block title%}
-      {% trans 'Select a option' %}
-    {% endblock %}
+<section class='w-full h-full p-4'>
+  <div class='text-xl font-bold w-full text-center'>
+    {{title|default:_('Select a option')}}
+  </div>
+  <div class="divider">
   </div>
   <ul class="list">
     <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
-    {% block list_title %}
-      {% trans 'Select one of the items below' %}
-    {% endblock %}
+      {{list_title|default:_('Select one of the items below')}}
     </li>
     {% for optin in options %}
       {% block option %}
