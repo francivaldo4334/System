@@ -1,3 +1,4 @@
+# pyright: reportIncompatibleVariableOverride=false
 from django.db import models
 
 from core.models import ActivatorModel, TimeStampedModel
