@@ -4,16 +4,9 @@
   </div>
   <div class="divider">
   </div>
-  <ul class="list">
+  <ul class="list" id="id_{{key}}">
     <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
       {{list_title|default:_('Select one of the items below')}}
     </li>
-    {% for optin in options %}
-      {% block option %}
-        <li class="list-row">
-          {{option}}
-        </li>
-      {% endblock %}
-    {% endfor %}
   </ul>
 </section>
