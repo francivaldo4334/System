@@ -172,3 +172,6 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
     model_name = 'serviceresourcerelation'
     form = ServiceRequirementsForm
     table = ServiceRequirementsTable
+
+class SelfSchedulingView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/app/self_scheduling/index.html'
