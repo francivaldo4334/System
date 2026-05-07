@@ -1,4 +1,5 @@
 # pyright: reportIncompatibleVariableOverride=false
+from django.core.validators import RegexValidator
 from django.db import models
 
 from core.models import ActivatorModel, TimeStampedModel
@@ -17,8 +18,10 @@ class ScheduleAppConfig(TimeStampedModel, ActivatorModel):
         null=True,
         black=True,
     )
-    resource_visible_to_self_scheduling = models.ManyToManyField(
-        'uri.URIModel',
+    resource_slogs_visible_to_self_scheduling = models.CharField(
+        validators=[RegexValidator(r'^[a-z0-9_-]+(,[a-z0-9_-]+)*$')],
+        null=True,
+        black=True,
     )
 
     class ActiveScheduleAppConfigExists(Exception):
