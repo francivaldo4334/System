@@ -46,3 +46,20 @@ class DescriptionModel(models.Model):
 class TitleDescriptionModel(TitleModel, DescriptionModel):
     class Meta:
         abstract = True
+# Common Models
+class ScheduleAppConfig(TimeStampedModel):
+    company_image = models.ImageField(
+        null=True,
+        black=True,
+    )
+    company_name = models.CharField(
+        null=True,
+        black=True,
+    )
+    background_image = models.ImageField(
+        null=True,
+        black=True,
+    )
+    resource_visible_to_self_scheduling = models.ManyToManyField(
+        'uri.URIModel',
+    )
