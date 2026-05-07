@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from app.views import AppScheduleSettingsView, AppScheduleView, AppView, ScheduleSettingsAvailabilitiesView, ScheduleSettingsResourceView, ScheduleSettingsServiceRequirementsView, ScheduleSettingsServiceView, SelfSchedulingView
+from app.views import AppConfigView, AppScheduleSettingsView, AppScheduleView, AppView, ScheduleSettingsAvailabilitiesView, ScheduleSettingsResourceView, ScheduleSettingsServiceRequirementsView, ScheduleSettingsServiceView, SelfSchedulingView
 from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect
 
@@ -15,4 +15,6 @@ urlpatterns = [
     path('self-scheduling', SelfSchedulingView.as_view(), name="self-scheduling"),
     path('login/', auth_views.LoginView.as_view(template_name="pages/login/index.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
+    # app api/
+    path('api/config', AppConfigView.as_view(), name="app-config")
 ]

@@ -4,6 +4,8 @@ from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from app.forms import AssignmentForm, AvailabilityForm, BaseForm, ResourceForm, ServiceForm, ServiceRequirementsForm
+from app.models import AppConfig
+from app.serializers import AppConfigSerializer
 from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
 from core.permissions import IsFrontDesk, IsOwner, IsProfessional
 
@@ -175,3 +177,10 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 
 class SelfSchedulingView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/app/self_scheduling/index.html'
+
+from rest_framework.views import APIView
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView
+
+class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
+    queryset = AppConfig.objects.all()
+    serializer_class = AppConfigSerializer
