@@ -22,7 +22,7 @@ class AppConfig(TimeStampedModel, ActivatorModel):
         pass
 
     def save(self, *, force_insert=False, force_update=False, using=None, update_fields=None):
-        if self.__class__.objects.filter(status=self.StatusChoice.ACTIVE.value).exists(): # type: ignore
+        if self.__class__.objects.filter(status=self.StatusChoice.ACTIVE.value).exclude(pk=self.pk).exists(): # type: ignore
             raise self.ActiveScheduleAppConfigExists()
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 

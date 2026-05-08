@@ -2,11 +2,10 @@
   <div class="relative overflow-hidden">
     <img
       class="absolute inset-0 w-full h-full object-cover"
-      src="https://img.daisyui.com/images/stock/photo-1567653418876-5bb0e566e1c2.webp"
+      src="{{config.background_image|default:''}}"
       alt="background" />
-    
     <div class="relative z-10 flex items-center justify-center h-full">
-      <span class="text-white text-2xl font-bold">content</span>
+      <span class="text-white text-2xl font-bold"></span>
     </div>
   </div>
   <div class="bg-base-100 flex flex-col items-center justify-center">
@@ -18,6 +17,6 @@
     <img
       class="mask mask-circle object-cover aspect-square"
       style="width: 120px;" 
-      src="https://img.daisyui.com/images/stock/photo-1567653418876-5bb0e566e1c2.webp" />
+      src="{{config.company_image}}" />
   </div>
 </section>

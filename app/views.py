@@ -177,6 +177,9 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 
 class SelfSchedulingView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/app/self_scheduling/index.html'
+    extra_context = {
+        'config': AppConfig.objects.first()
+    }
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
