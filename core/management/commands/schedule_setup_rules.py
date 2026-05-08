@@ -10,6 +10,7 @@ PERMISSION_GROUPS = {
         'view_service',
         'view_serviceresourcerelation',
         'view_appconfig',
+        'view_resourceslugvisible',
 
         'change_resource',
         'change_availability',
@@ -17,6 +18,7 @@ PERMISSION_GROUPS = {
         'change_service',
         'change_serviceresourcerelation',
         'change_appconfig',
+        'change_resourceslugvisible',
 
         'add_resource',
         'add_availability',
@@ -24,12 +26,14 @@ PERMISSION_GROUPS = {
         'add_service',
         'add_serviceresourcerelation',
         'add_appconfig',
+        'add_resourceslugvisible',
 
         'delete_resource',
         'delete_availability',
         'delete_assignment',
         'delete_service',
         'delete_serviceresourcerelation',
+        'delete_resourceslugvisible',
     ],
     'FRONT_DESK': [        
         'view_resource',
@@ -40,6 +44,7 @@ PERMISSION_GROUPS = {
     'PROFESSIONAL': [],
     'CLIENT': [
         'view_appconfig',
+        'view_resourceslugvisible',
     ],
 }
 
