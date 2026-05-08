@@ -180,8 +180,37 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
     config = AppConfig.objects.first()
     extra_context = {
         'config': config,
-        # Se resources_visible for um ManyToManyField, o .all() ainda fará uma query
-        'resource_visibles': config.resources_visibles.all() if config else []
+        'steps': [{
+            'step': i,
+            **step
+        } for i,step in enumerate([
+            {
+                'icon': 'icons/house.svg',
+                'template': 'pages/app/self_scheduling/home.html',
+                'tag': 'home',
+            },
+        ] + [ {
+                'icon': 'icons/notebook-pen.svg',
+                'template': 'pages/app/self_scheduling/professionals.html',
+                'tag': it.resource_code,
+        } for it in (config.resources_visibles.all() if config else [])
+        ] + [
+            {
+                'icon': 'icons/calendar.svg',
+                'template': 'pages/app/self_scheduling/home.html',
+                'tag': 'date'
+            },
+            {
+                'icon': 'icons/clipboard-clock.svg',
+                'template': 'pages/app/self_scheduling/home.html',
+                'tag': 'hour'
+            },
+            {
+                'icon': 'icons/check-check.svg',
+                'template': 'pages/app/self_scheduling/home.html',
+                'tag': 'confirm'
+            },
+        ])]
     }
 
 from rest_framework.views import APIView
