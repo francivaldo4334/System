@@ -3,6 +3,8 @@ from django.urls import include, path
 from app.views import AppConfigView, AppScheduleSettingsView, AppScheduleView, AppView, ScheduleSettingsAvailabilitiesView, ScheduleSettingsResourceView, ScheduleSettingsServiceRequirementsView, ScheduleSettingsServiceView, SelfSchedulingView
 from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', lambda request: redirect('app-schedule'),name="app"),
@@ -19,7 +21,5 @@ urlpatterns = [
     path('api/config', AppConfigView.as_view(), name="app-config")
 ]
 
-from django.conf import settings
-from django.conf.urls.static import static
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
