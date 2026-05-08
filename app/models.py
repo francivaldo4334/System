@@ -26,7 +26,13 @@ class AppConfig(TimeStampedModel, ActivatorModel):
             raise self.ActiveScheduleAppConfigExists()
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
+    class Meta:
+        ordering = ('status', 'created')
+
 class ResourceSlugVisible(models.Model):
     resource_slug = models.SlugField()
     subtitle = models.CharField()
     config = models.ForeignKey(AppConfig, models.CASCADE, 'resources_visibles')
+
+    class Meta:
+        unique_together = ('config', 'resource_slug')
