@@ -1,11 +1,13 @@
 # pyright: reportAttributeAccessIssue=false
+from datetime import timedelta
 from django.db.models.deletion import ProtectedError
+from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
-from schedule.models import Assignment, Availability, Resource, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceOccupation, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
         AvailabilityPresentationSerializer,
@@ -25,6 +27,14 @@ class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
+
+    @action(["GET"], False)
+    def unavailable_dates(self, request):
+        now = datetime.now()
+        occupieds = ResourceOccupation.objects.filter(
+            date__range=(now, now + timedelta(days=30)),
+        ).exclude(bitmap__icontains='0')
+        return Response([o.date for o in occupieds])
 
     def perform_destroy(self, instance):
         try:
