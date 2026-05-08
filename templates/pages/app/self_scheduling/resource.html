@@ -1,6 +1,27 @@
-{% with key="professionals_choice" title=data_context.title list_title=data_context.subtitle %}
+{% with key=data_context.id title=data_context.title list_title=data_context.subtitle %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
 <script>
+$q.use(
+  ['resources', '{{data_context.id}}'],
+  () => $r.get('{% url "resources-list"%}?parent__code={{data_context.resource_code}}'),
+  {
+    onSuccess(data){
+      const ul = document.getElementById('id_{{data_context.id}}')
+      if (!ul) {
+        return
+      }
+      const frag = document.createDocumentFragment()
+      data.results.forEach(item => {
+        const li = document.createElement('li')
+        const btn = document.createElement('button')
+        btn.innerText = item.name
+        li.appendChild(btn)
+        frag.appendChild(li)
+      })
+      ul.appendChild(frag)
+    }
+  }
+)
 </script>
 
