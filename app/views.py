@@ -191,7 +191,7 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
             },
         ] + [ {
                 'icon': 'icons/notebook-pen.svg',
-                'template': 'pages/app/self_scheduling/professionals.html',
+                'template': 'pages/app/self_scheduling/resource.html',
                 'tag': it.resource_code,
         } for it in (config.resources_visibles.all() if config else [])
         ] + [
