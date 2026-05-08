@@ -167,6 +167,7 @@ class AvailabilityPresentationAPIView(ListAPIView):
             raise self.AssignmentFilterSetError(assignment_filterset.errors)
 
         context.update({
-            'assignments': assignment_filterset.qs
+            'assignments': assignment_filterset.qs,
+            'date': date,
         })
         return context;

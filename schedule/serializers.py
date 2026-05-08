@@ -304,7 +304,7 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
             hours, minutes = divmod(assignment.start_slot * 5, 60)
             exclude_times.add(f'{hours:02d}:{minutes:02d}')
 
-        date_str = request.query_params.get("day")
+        date_str = self.context.get("date")
         target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         occurences = obj.get_occurrences(target_date, target_date)
         return [
