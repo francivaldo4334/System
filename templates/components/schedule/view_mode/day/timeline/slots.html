@@ -62,7 +62,7 @@ $s.subscribe('filter_query_params', null, null, (queryparams, el, name, oldValue
     ['slots', queryString],
     () => {
         return Promise.all([
-          $r.get(`{% url 'availabilities_presentation'%}?date=${queryparams.day}`),
+          $r.get(`{% url 'availabilities_presentation'%}?${queryString}`),
           $r.get(`{% url 'assignment-list'%}?${queryString}`),
         ]).then(dataList => {
           const dataPreview = dataList[0]

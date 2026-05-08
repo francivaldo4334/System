@@ -158,7 +158,7 @@ class AvailabilityPresentationAPIView(ListAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        date = self.request.query_params.get('date')
+        date = self.request.query_params.get('day')
         assignment_filterset = AvailabilityPresentationAssignmentFilterSet(
             self.request.GET,
             Assignment.objects.filter(date=date).visibles()

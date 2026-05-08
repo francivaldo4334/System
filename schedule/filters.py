@@ -18,7 +18,7 @@ class AvailabilityFilterSet(filters.FilterSet):
         ).distinct()
 
 class AvailabilityPresentationFilterSet(filters.FilterSet):
-    date = filters.DateFilter(method='filter_date', required=True)
+    day = filters.DateFilter(method='filter_date', required=True)
     resource = filters.BaseInFilter('resources__id', method='filter_pass')
     resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
 
