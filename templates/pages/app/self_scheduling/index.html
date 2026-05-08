@@ -32,9 +32,11 @@
     {% with iconpath='icons/house.svg' key='1' %}
     {% partial progress %}
     {% endwith %}
-    {% with iconpath='icons/notebook-pen.svg' key='2' %}
-    {% partial progress %}
-    {% endwith %}  
+    {% for option, i in resources_visibles %}
+      {% with iconpath='icons/notebook-pen.svg' key=i|add:2 %}
+        {% partial progress %}
+      {% endwith %}  
+    {% endfor %}
     {% with iconpath='icons/calendar.svg' key='3' %}
     {% partial progress %}
     {% endwith %}  

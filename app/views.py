@@ -177,8 +177,11 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 
 class SelfSchedulingView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/app/self_scheduling/index.html'
+    config = AppConfig.objects.first()
     extra_context = {
-        'config': AppConfig.objects.first()
+        'config': config,
+        # Se resources_visible for um ManyToManyField, o .all() ainda fará uma query
+        'resource_visibles': config.resources_visibles.all() if config else []
     }
 
 from rest_framework.views import APIView
