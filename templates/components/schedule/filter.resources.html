@@ -34,6 +34,7 @@
                     $s.subscribe('filter.resource_type', id_select_resource_category, 'value')
                     $s.subscribe('filter.resource_type', id_select_resource, 'disabled', it => !it)
                     $s.subscribe('filter.resource_type', null, null, (r_type) => {
+                        $s.set('filter.resource', '')
                         $q.use(
                             ['resources-list', 'selectable', r_type],
                             () => $r.get(`{%url 'resources-list'%}?use_as_category=false&parent=${r_type}`),
