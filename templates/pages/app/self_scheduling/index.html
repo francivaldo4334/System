@@ -36,6 +36,11 @@
 {
   const pageId = Number(sessionStorage.getItem('router_scheduling') || '0')
   $s.create('page', pageId)
+  $s.createStore('form', {
+    'resources': [],
+    'date': null,
+    'start_slot': null,
+  })
   document.querySelectorAll('.step').forEach(item => {
     $s.subscribe('page', item, null, (value, el) => {
         el.classList.toggle('step-primary', Number(el.dataset.id) <= value, true)

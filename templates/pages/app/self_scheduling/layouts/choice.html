@@ -1,9 +1,14 @@
+<div class="navbar bg-base-100 shadow-sm">
+  <div class="navbar-start">
+    <button class="btn btn-ghost" onclick="$s.set('page', $s.get('page') - 1)">
+    {% include 'icons/undo-2.svg'%}
+    </button>
+  </div>
+  <div class="navbar-center">
+    <a class="btn btn-ghost text-xl">{{title|default:_('Select a option')}}</a>
+  </div>
+</div>
 <section class='w-full h-full p-4'>
-  <div class='text-xl font-bold w-full text-center'>
-    {{title|default:_('Select a option')}}
-  </div>
-  <div class="divider">
-  </div>
   <ul class="menu menu-xl w-full px-4" id="id_{{key}}">
     <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
       {{list_title|default:_('Select one of the items below')}}
