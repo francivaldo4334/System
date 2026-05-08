@@ -9,6 +9,7 @@ class AppConfig(TimeStampedModel, ActivatorModel):
     company_image = models.ImageField(
         null=True,
         blank=True,
+        upload_to="company_images/"
     )
     company_name = models.CharField(
         null=True,
@@ -17,6 +18,7 @@ class AppConfig(TimeStampedModel, ActivatorModel):
     background_image = models.ImageField(
         null=True,
         blank=True,
+        upload_to="background_images/"
     )
     class ActiveScheduleAppConfigExists(Exception):
         pass
