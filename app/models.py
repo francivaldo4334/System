@@ -32,6 +32,7 @@ class AppConfig(TimeStampedModel, ActivatorModel):
         ordering = ('status', 'created')
 
 class ResourceSlugVisible(models.Model):
+    title = models.CharField()
     subtitle = models.CharField()
     config = models.ForeignKey(AppConfig, models.CASCADE, 'resources_visibles')
     resource_code = models.CharField(max_length=20, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])

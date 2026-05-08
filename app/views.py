@@ -177,41 +177,44 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 
 class SelfSchedulingView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/app/self_scheduling/index.html'
-    config = AppConfig.objects.first()
-    extra_context = {
-        'config': config,
-        'steps': [{
-            'step': i,
-            **step
-        } for i,step in enumerate([
-            {
-                'icon': 'icons/house.svg',
-                'template': 'pages/app/self_scheduling/home.html',
-                'tag': 'home',
-            },
-        ] + [ {
-                'icon': 'icons/notebook-pen.svg',
-                'template': 'pages/app/self_scheduling/resource.html',
-                'tag': it.resource_code,
-        } for it in (config.resources_visibles.all() if config else [])
-        ] + [
-            {
-                'icon': 'icons/calendar.svg',
-                'template': 'pages/app/self_scheduling/home.html',
-                'tag': 'date'
-            },
-            {
-                'icon': 'icons/clipboard-clock.svg',
-                'template': 'pages/app/self_scheduling/home.html',
-                'tag': 'hour'
-            },
-            {
-                'icon': 'icons/check-check.svg',
-                'template': 'pages/app/self_scheduling/home.html',
-                'tag': 'confirm'
-            },
-        ])]
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        config = AppConfig.objects.first()
+        context.update({
+            'config': config,
+            'steps': [{
+                'step': i,
+                **step
+            } for i,step in enumerate([
+                {
+                    'icon': 'icons/house.svg',
+                    'template': 'pages/app/self_scheduling/home.html',
+                    'tag': 'home',
+                },
+            ] + [ {
+                    'icon': 'icons/notebook-pen.svg',
+                    'template': 'pages/app/self_scheduling/resource.html',
+                    'tag': it.resource_code,
+            } for it in (config.resources_visibles.all() if config else [])
+            ] + [
+                {
+                    'icon': 'icons/calendar.svg',
+                    'template': 'pages/app/self_scheduling/home.html',
+                    'tag': 'date'
+                },
+                {
+                    'icon': 'icons/clipboard-clock.svg',
+                    'template': 'pages/app/self_scheduling/home.html',
+                    'tag': 'hour'
+                },
+                {
+                    'icon': 'icons/check-check.svg',
+                    'template': 'pages/app/self_scheduling/home.html',
+                    'tag': 'confirm'
+                },
+            ])]
+        })
+        return context;
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
