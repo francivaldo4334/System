@@ -18,6 +18,6 @@
       class="mask mask-circle object-cover aspect-square"
       style="width: 120px;" 
       src="{{config.company_image.url}}" />
-      {{config.company_name}}
+      {{config.company_name|default:''}}
   </div>
 </section>
