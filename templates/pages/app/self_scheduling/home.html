@@ -13,10 +13,11 @@
       {% trans 'Schedule an appointment' %}
     </button>
   </div>
-  <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none flex flex-col">
     <img
       class="mask mask-circle object-cover aspect-square"
       style="width: 120px;" 
       src="{{config.company_image.url}}" />
+      {{config.company_name}}
   </div>
 </section>
