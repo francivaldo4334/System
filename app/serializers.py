@@ -9,5 +9,7 @@ class AppConfigSerializer(serializers.ModelSerializer):
             'company_image',
             'company_name',
             'background_image',
-            'resource_slogs_visible_to_self_scheduling'
+            'resources_visibles'
         ]
+        depth = 1
+ 

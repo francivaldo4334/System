@@ -18,12 +18,6 @@ class AppConfig(TimeStampedModel, ActivatorModel):
         null=True,
         blank=True,
     )
-    resource_slogs_visible_to_self_scheduling = models.CharField(
-        validators=[RegexValidator(r'^[a-z0-9_-]+(,[a-z0-9_-]+)*$')],
-        null=True,
-        blank=True,
-    )
-
     class ActiveScheduleAppConfigExists(Exception):
         pass
 
@@ -31,3 +25,8 @@ class AppConfig(TimeStampedModel, ActivatorModel):
         if self.__class__.objects.filter(status=self.StatusChoice.ACTIVE.value).exists(): # type: ignore
             raise self.ActiveScheduleAppConfigExists()
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+class ResourceSlugVisible(models.Model):
+    resource_slug = models.SlugField()
+    subtitle = models.CharField()
+    config = models.ForeignKey(AppConfig, models.CASCADE, 'resources_visibles')
