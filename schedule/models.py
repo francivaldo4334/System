@@ -8,13 +8,15 @@ from typing import List, cast
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
-from django.db.models.functions import Coalesce, Concat, Substr
+from django.db.models.functions import Concat, Substr
 from rest_framework.fields import MinValueValidator
 from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
 from dateutil.rrule import rrulestr
 from django.utils.translation import gettext_lazy as _
 from schedule.flows import AssignmentStateAbsent, AssignmentStateCancelled, AssignmentStateCompleted, AssignmentStateConfirmed, AssignmentStatePeding, AssignmentState, AssignmentStateInProgress, AssignmentStateMigrated, NotStateError
 from datetime import datetime, time, timedelta
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
@@ -22,9 +24,14 @@ class Resource(TimeStampedModel, ActivatorModel):
     parent = models.ForeignKey('ResourceNotSelectable',models.PROTECT,'childrens', null=True, blank=True)
     code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
     is_selectable = models.BooleanField()
-    uri = models.ForeignKey('uri.URIModel', models.CASCADE, blank=True, null=True)
+    object_id = models.PositiveBigIntegerField(blank=True, null=True)
+    content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
+    content_object = GenericForeignKey()
     class Meta:
         ordering = ('parent_id',)
+        indexes = [
+            models.Index(fields=['content_type', 'object_id'])
+        ]
     def clean(self):
         if self.parent and not str(self.code).startswith(getattr(self.parent,'code')):
             raise ValidationError({'code': _('Enter a valid value.')})
