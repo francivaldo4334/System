@@ -9,18 +9,21 @@ PERMISSION_GROUPS = {
         'view_assignment',
         'view_service',
         'view_serviceresourcerelation',
+        'view_appconfig',
 
         'change_resource',
         'change_availability',
         'change_assignment',
         'change_service',
         'change_serviceresourcerelation',
+        'change_appconfig',
 
         'add_resource',
         'add_availability',
         'add_assignment',
         'add_service',
         'add_serviceresourcerelation',
+        'add_appconfig',
 
         'delete_resource',
         'delete_availability',
@@ -35,6 +38,9 @@ PERMISSION_GROUPS = {
         'view_service',
     ],
     'PROFESSIONAL': [],
+    'CLIENT': [
+        'view_appconfig',
+    ],
 }
 
 class Command(BaseCommand):
