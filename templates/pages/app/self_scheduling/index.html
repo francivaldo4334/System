@@ -20,7 +20,7 @@
   <main>
     {% for it in steps %}
       <div class='page h-full' data-id='{{it.step}}'>
-      {% include it.template %}
+      {% include it.template with data_context=it.context%}
       </div>
     {% endfor %}
   </main>

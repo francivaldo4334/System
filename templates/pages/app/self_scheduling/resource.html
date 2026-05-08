@@ -1,4 +1,4 @@
-{% with key="professionals_choice" title=_('Select a Professional') %}
+{% with key="professionals_choice" title=data_context.title list_title=data_context.subtitle %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
 <script>

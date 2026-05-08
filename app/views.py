@@ -189,28 +189,28 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
                 {
                     'icon': 'icons/house.svg',
                     'template': 'pages/app/self_scheduling/home.html',
-                    'tag': 'home',
+                    'context': None
                 },
             ] + [ {
                     'icon': 'icons/notebook-pen.svg',
                     'template': 'pages/app/self_scheduling/resource.html',
-                    'tag': it.resource_code,
+                    'context': it
             } for it in (config.resources_visibles.all() if config else [])
             ] + [
                 {
                     'icon': 'icons/calendar.svg',
                     'template': 'pages/app/self_scheduling/home.html',
-                    'tag': 'date'
+                    'context': None
                 },
                 {
                     'icon': 'icons/clipboard-clock.svg',
                     'template': 'pages/app/self_scheduling/home.html',
-                    'tag': 'hour'
+                    'context': None
                 },
                 {
                     'icon': 'icons/check-check.svg',
                     'template': 'pages/app/self_scheduling/home.html',
-                    'tag': 'confirm'
+                    'context': None
                 },
             ])]
         })
