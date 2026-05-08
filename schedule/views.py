@@ -28,12 +28,25 @@ class ResourceViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
+    def get_resources_list(self, value):
+        try:
+            list = [int(item.strip()) for item in value.split(',') if item.strip()]
+            return list
+        except ValueError:
+            return None
+
     @action(["GET"], False)
     def unavailable_dates(self, request):
+        resources = request.query_params.get('resources', '')
+        resources = self.get_resources_list(resources)
         now = datetime.now()
         occupieds = ResourceOccupation.objects.filter(
             date__range=(now, now + timedelta(days=30)),
         ).exclude(bitmap__icontains='0')
+        if resources:
+            occupieds = occupieds.filter(
+                resource__in=resources
+            )
         return Response([o.date for o in occupieds])
 
     def perform_destroy(self, instance):
