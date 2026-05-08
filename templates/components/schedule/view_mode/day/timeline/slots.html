@@ -7,15 +7,8 @@
 {% partialdef status %}
 <template id="tmpl_assignment_slot_{{value}}">
     <app-slot class="assignment-slot">
-        <button
-            class="w-full h-full"
-            data-status="{{value}}"
-        >
-            <app-assignment
-                date=""
-                resourcenames=""
-                servicename=""
-            >
+        <button class="w-full h-full" data-status="{{value}}">
+            <app-assignment date="" resourcenames="" servicename="">
                 {% include icon %}
                 <span class="hidden md:block">{%trans label%}</span>
             </app-assignment>
@@ -46,128 +39,128 @@
 {% partial status %}
 {% endwith %}
 <script is="exec-mount" type="pass">
-$s.subscribe('filter_query_params', null, null, (queryparams, el, name, oldValue)=>{
-  const toQueryString = (queryparams) => {
-    if (!queryparams) return ''
-    const params = new URLSearchParams();
-    Object.entries(queryparams).forEach(([key, value]) => {
-        if (value) params.append(key, value)
+    $s.subscribe('filter_query_params', null, null, (queryparams, el, name, oldValue) => {
+        const toQueryString = (queryparams) => {
+            if (!queryparams) return ''
+            const params = new URLSearchParams();
+            Object.entries(queryparams).forEach(([key, value]) => {
+                if (value) params.append(key, value)
+            })
+            return params.toString();
+        }
+        const queryString = toQueryString(queryparams);
+        const oldQueryString = toQueryString(oldValue);
+        if (queryString === oldQueryString) return
+        $q.use(
+            ['slots', queryString],
+            () => {
+                return Promise.all([
+                    $r.get(`{% url 'availabilities_presentation'%}?${queryString}`),
+                    $r.get(`{% url 'assignment-list'%}?${queryString}`),
+                ]).then(dataList => {
+                    const dataPreview = dataList[0]
+                    const dataAssignment = dataList[1]
+
+                    const items = []
+
+
+                    const isoToSlot = (isoString) => {
+                        const date = new Date(isoString);
+                        if (isNaN(date.getTime())) throw new Error("Data inválida");
+                        const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
+                        const result = Math.floor(minutesSinceStartOfDay / 5);
+                        return result;
+                    }
+
+                    dataPreview?.forEach(av => {
+                        av?.occurrences?.forEach(iso => {
+                            items.push({
+                                start: isoToSlot(iso),
+                                duration: av.duration_slot,
+                                type: 'empty',
+                                description: av.description,
+                                id: av.id,
+                            });
+                        })
+                    })
+                    dataAssignment?.results?.forEach(as => {
+                        items.push({
+                            start: as.start_slot,
+                            duration: as.duration_slot,
+                            type: 'assignment',
+                            assignmentId: as.id,
+                            service_name: as.service_name,
+                            resource_names: as.resource_names,
+                            date: as.date,
+                            status: as.status,
+                        })
+                    })
+                    return items
+                })
+            },
+            {
+                onSuccess(data) {
+                    const timelineSlots = document.getElementById('id_timeline_slots')
+                    timelineSlots.innerHTML = ''
+                    const frag = document.createDocumentFragment()
+                    data.forEach(item => {
+                        let clone = null
+                        if (item.type === 'empty') {
+                            clone = tmpl_empty_slot?.content.cloneNode(true)
+                            const btn = clone.querySelector("app-slot > button");
+                            if (btn) {
+                                btn.innerText = item.description
+                                btn.onclick = () => {
+                                    $s.set('form_assignment.start_slot', item.start)
+                                    $s.set('form_assignment.duration_slot', item.duration)
+                                    $s.set('form_assignment.availability_id', item.id)
+                                    id_new_schedule_modal?.showModal();
+                                }
+                            }
+                        }
+                        else if (item.type === 'assignment') {
+                            tmpl_assignment_slot = document.getElementById(`tmpl_assignment_slot_${item.status}`)
+                            clone = tmpl_assignment_slot?.content.cloneNode(true)
+                            const assignment = clone.querySelector('app-assignment');
+                            assignment.setAttribute('date', item.date)
+                            assignment.setAttribute('resourcenames', item.resource_names)
+                            assignment.setAttribute('servicename', item.service_name)
+                            const btn = clone.querySelector('button')
+                            btn.onclick = () => {
+                                $s.set('assignment_id', item.assignmentId)
+                                document.getElementById(`id_modal_assignment_action_${btn.dataset.status}`)
+                                    ?.showModal()
+                            }
+                        }
+                        if (clone) {
+                            const slot = clone.querySelector('app-slot');
+                            slot.setAttribute('start', item.start + 1);
+                            slot.setAttribute('duration', item.duration);
+                        }
+                        frag.appendChild(clone)
+                    });
+                    timelineSlots.replaceChildren(frag)
+                    setTimeout(() => {
+                        const firstSlot = Array.from(
+                            id_timeline_slots.querySelectorAll('app-slot')
+                        ).sort((a, b) => {
+                            const orderA = parseInt(a.getAttribute('start'))
+                            const orderB = parseInt(b.getAttribute('start'))
+                            return orderA - orderB
+                        })?.[0]
+                        if (firstSlot) {
+                            id_timeline_content.scrollTo({
+                                top: firstSlot.offsetTop,
+                                behavior: 'smooth'
+                            })
+                        }
+                    }, 300)
+                }
+            },
+            {
+                ttl: 0,
+                enableRefetch: true,
+            }
+        )
     })
-    return params.toString();
-  }
-  const queryString = toQueryString(queryparams);
-  const oldQueryString = toQueryString(oldValue);
-  if (queryString === oldQueryString) return
-  $q.use(
-    ['slots', queryString],
-    () => {
-        return Promise.all([
-          $r.get(`{% url 'availabilities_presentation'%}?${queryString}`),
-          $r.get(`{% url 'assignment-list'%}?${queryString}`),
-        ]).then(dataList => {
-          const dataPreview = dataList[0]
-          const dataAssignment = dataList[1]
-
-          const items = []
-
-      
-          const isoToSlot = (isoString) => {
-              const date = new Date(isoString);
-              if (isNaN(date.getTime())) throw new Error("Data inválida");
-              const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
-              const result = Math.floor(minutesSinceStartOfDay / 5);
-              return result;
-          }
-
-          dataPreview?.forEach(av => {
-              av?.occurrences?.forEach(iso => {
-                  items.push({
-                      start: isoToSlot(iso),
-                      duration: av.duration_slot,
-                      type: 'empty',
-                      description: av.description,
-                      id: av.id,
-                  });
-              })
-          })
-          dataAssignment?.results?.forEach(as => {
-              items.push({
-                  start: as.start_slot,
-                  duration: as.duration_slot,
-                  type: 'assignment',
-                  assignmentId: as.id,
-                  service_name: as.service_name,
-                  resource_names: as.resource_names,
-                  date: as.date,
-                  status:as.status,
-              })
-          })
-          return items
-        })
-    },
-    {
-      onSuccess(data){
-        const timelineSlots = document.getElementById('id_timeline_slots')
-        timelineSlots.innerHTML = ''
-        const frag = document.createDocumentFragment()
-        data.forEach(item => {
-            let clone = null
-            if (item.type === 'empty') {
-              clone = tmpl_empty_slot?.content.cloneNode(true)
-              const btn = clone.querySelector("app-slot > button");
-              if (btn){
-                  btn.innerText = item.description
-                  btn.onclick = () => {
-                      $s.set('form_assignment.start_slot', item.start)
-                      $s.set('form_assignment.duration_slot', item.duration)
-                      $s.set('form_assignment.availability_id', item.id)
-                      id_new_schedule_modal?.showModal();
-                  }
-              }
-            }
-            else if (item.type === 'assignment') {
-              tmpl_assignment_slot = document.getElementById(`tmpl_assignment_slot_${item.status}`)
-              clone = tmpl_assignment_slot?.content.cloneNode(true)
-              const assignment = clone.querySelector('app-assignment');
-              assignment.setAttribute('date', item.date)
-              assignment.setAttribute('resourcenames', item.resource_names)
-              assignment.setAttribute('servicename', item.service_name)
-              const btn = clone.querySelector('button')
-              btn.onclick = () => {
-                $s.set('assignment_id', item.assignmentId)
-                document.getElementById(`id_modal_assignment_action_${btn.dataset.status}`)
-                ?.showModal()
-              }
-            }
-            if (clone){
-                const slot = clone.querySelector('app-slot');
-                slot.setAttribute('start', item.start + 1);
-                slot.setAttribute('duration', item.duration);
-            }
-            frag.appendChild(clone)
-        });
-        timelineSlots.replaceChildren(frag)
-        setTimeout(()=>{
-            const firstSlot = Array.from(
-                id_timeline_slots.querySelectorAll('app-slot')
-            ).sort((a,b) => {
-                const orderA = parseInt(a.getAttribute('start'))
-                const orderB = parseInt(b.getAttribute('start'))
-                return orderA - orderB
-            })?.[0]
-            if (firstSlot){
-                id_timeline_content.scrollTo({
-                    top: firstSlot.offsetTop,
-                    behavior: 'smooth'
-                })        
-            }
-        }, 300)
-      }
-    },
-    {
-      ttl: 0,
-      enableRefetch:true,
-    }
-  )
-})
 </script>
