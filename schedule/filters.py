@@ -19,6 +19,11 @@ class AvailabilityFilterSet(filters.FilterSet):
 
 class AvailabilityPresentationFilterSet(filters.FilterSet):
     date = filters.DateFilter(method='filter_date', required=True)
+    resource = filters.BaseInFilter('resources__id', method='filter_pass')
+    resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
+
+    def filter_pass(self, queryset, name, value):
+        return queryset
 
     class Meta:
         model = Availability
@@ -28,6 +33,17 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
         if not value:
             return queryset
         return queryset.filter_date_colision(value, value)
+
+class AvailabilityPresentationAssignmentFilterSet(filters.FilterSet):
+    resource = filters.BaseInFilter('resources__id', method='filter_pass')
+    resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
+
+    def filter_pass(self, queryset, name, value):
+        return queryset
+
+    class Meta:
+        model = Assignment
+        fields = ['date', 'service']
 
 class ResourceFilterSet(filters.FilterSet):
     use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
@@ -77,14 +93,8 @@ class ServiceRequirementsFilterSet(filters.FilterSet):
 
 class AssignmentFilterSet(filters.FilterSet):
     search = filters.CharFilter(method='filter_search')
-    resource = filters.ModelChoiceFilter(
-        'resources',
-        queryset=ResourceSelectable.objects.all(),
-    )
-    resource_category = filters.ModelChoiceFilter(
-        'resources__parent',
-        queryset=ResourceNotSelectable.objects.all(),
-    )
+    resource = filters.BaseInFilter('resources__id')
+    resource_category = filters.BaseInFilter('resources__parent_id')
     day = filters.DateFilter('date')
     class Meta:
         model = Assignment

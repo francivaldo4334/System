@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceOccupation, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
@@ -147,10 +147,26 @@ class AvailabilityPresentationAPIView(ListAPIView):
     filterset_class = AvailabilityPresentationFilterSet
     pagination_class = None
 
+    class AssignmentFilterSetError(Exception):
+        pass
+
+    def handle_exception(self, exc):
+        try:
+            return super().handle_exception(exc)
+        except self.AssignmentFilterSetError as e:
+            return Response(e.args[0], 400)
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         date = self.request.query_params.get('date')
+        assignment_filterset = AvailabilityPresentationAssignmentFilterSet(
+            self.request.GET,
+            Assignment.objects.filter(date=date).visibles()
+        )
+        if not assignment_filterset.is_valid():
+            raise self.AssignmentFilterSetError(assignment_filterset.errors)
+
         context.update({
-            'assignments': Assignment.objects.filter(date=date).visibles()
+            'assignments': assignment_filterset.qs
         })
         return context;
