@@ -46,57 +46,65 @@
 {% partial status %}
 {% endwith %}
 <script is="exec-mount" type="pass">
-$s.subscribe('filter_query_params', null, null, (queryparams)=>{
-  const params = new URLSearchParams();
-  Object.entries(queryparams).forEach(([key, value]) => {
-    if (value) params.append(key, value)
-  })
-  const queryString = params.toString();
+$s.subscribe('filter_query_params', null, null, (queryparams, el, name, oldValue)=>{
+  const toQueryString = (queryparams) => {
+    if (!queryparams) return ''
+    const params = new URLSearchParams();
+    Object.entries(queryparams).forEach(([key, value]) => {
+        if (value) params.append(key, value)
+    })
+    return params.toString();
+  }
+  const queryString = toQueryString(queryparams);
+  const oldQueryString = toQueryString(oldValue);
+  if (queryString === oldQueryString) return
   $q.use(
-    'slots',
-    () => Promise.all([
-      $r.get(`{% url 'availabilities_presentation'%}?date=${queryparams.day}`),
-      $r.get(`{% url 'assignment-list'%}?${queryString}`),
-    ]).then(dataList => {
-      const dataPreview = dataList[0]
-      const dataAssignment = dataList[1]
+    ['slots', queryString],
+    () => {
+        return Promise.all([
+          $r.get(`{% url 'availabilities_presentation'%}?date=${queryparams.day}`),
+          $r.get(`{% url 'assignment-list'%}?${queryString}`),
+        ]).then(dataList => {
+          const dataPreview = dataList[0]
+          const dataAssignment = dataList[1]
 
-      const items = []
+          const items = []
 
       
-      const isoToSlot = (isoString) => {
-          const date = new Date(isoString);
-          if (isNaN(date.getTime())) throw new Error("Data inválida");
-          const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
-          const result = Math.floor(minutesSinceStartOfDay / 5);
-          return result;
-      }
+          const isoToSlot = (isoString) => {
+              const date = new Date(isoString);
+              if (isNaN(date.getTime())) throw new Error("Data inválida");
+              const minutesSinceStartOfDay = (date.getHours() * 60) + date.getMinutes();
+              const result = Math.floor(minutesSinceStartOfDay / 5);
+              return result;
+          }
 
-      dataPreview?.forEach(av => {
-          av?.occurrences?.forEach(iso => {
+          dataPreview?.forEach(av => {
+              av?.occurrences?.forEach(iso => {
+                  items.push({
+                      start: isoToSlot(iso),
+                      duration: av.duration_slot,
+                      type: 'empty',
+                      description: av.description,
+                      id: av.id,
+                  });
+              })
+          })
+          dataAssignment?.results?.forEach(as => {
               items.push({
-                  start: isoToSlot(iso),
-                  duration: av.duration_slot,
-                  type: 'empty',
-                  description: av.description,
-                  id: av.id,
-              });
+                  start: as.start_slot,
+                  duration: as.duration_slot,
+                  type: 'assignment',
+                  assignmentId: as.id,
+                  service_name: as.service_name,
+                  resource_names: as.resource_names,
+                  date: as.date,
+                  status:as.status,
+              })
           })
-      })
-      dataAssignment?.results?.forEach(as => {
-          items.push({
-              start: as.start_slot,
-              duration: as.duration_slot,
-              type: 'assignment',
-              assignmentId: as.id,
-              service_name: as.service_name,
-              resource_names: as.resource_names,
-              date: as.date,
-              status:as.status,
-          })
-      })
-      return items
-    }),
+          return items
+        })
+    },
     {
       onSuccess(data){
         const timelineSlots = document.getElementById('id_timeline_slots')

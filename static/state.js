@@ -5,9 +5,9 @@ function createStateManager() {
 
   const _getState = (name) => states.get(name);
 
-  const _notify = (state, value, name) => {
+  const _notify = (state, value, name, oldValue) => {
     state.observers.forEach(obs => {
-      const content = obs.transform(value, obs.el, name);
+      const content = obs.transform(value, obs.el, name, oldValue);
       // Atribuição segura: só altera se houver atributo e conteúdo
       if (obs.at !== null && content !== undefined) {
         obs.el[obs.at] = content;
@@ -63,7 +63,8 @@ function createStateManager() {
       const state = _getState(name);
       if (!state) return;
       state.value = newValue;
-      _notify(state, newValue, name);
+      state.oldValue = state.value;
+      _notify(state, state.value, name, state.oldValue);
     },
 
     get: (name) => {
@@ -102,8 +103,9 @@ function createStateManager() {
           states.set(name, { value: newValue, observers: [] });
         } else {
           const state = _getState(name);
+          state.oldValue = state.value;
           state.value = newValue;
-          _notify(state, newValue, name);
+          _notify(state, newValue, name, state.oldValue);
         }
       };
 
