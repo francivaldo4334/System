@@ -62,17 +62,21 @@ class AssignmentUtil:
                 raise ResourceOcuppied()
 
     def occupyTimeSlot(self):
-        from schedule.models import ResourceOccupation
-        occupation_queryset:ResourceOccupation.QuerySet = ResourceOccupation.objects.all()
-        occupation_queryset.occupy(
-            start_slot=self.assignment.start_slot,
-            duration_slot=self.assignment.duration_slot,
-        )
+        from schedule.models import ResourceOccupation, Resource
+        for resource in self.assignment.resources.all():
+            resource = cast(Resource, resource)
+            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.all()
+            occupation_queryset.occupy(
+                start_slot=self.assignment.start_slot,
+                duration_slot=self.assignment.duration_slot,
+            )
 
     def vacateTimeSlot(self):
-        from schedule.models import ResourceOccupation
-        occupation_queryset:ResourceOccupation.QuerySet = ResourceOccupation.objects.all()
-        occupation_queryset.vacate(
-            start_slot=self.assignment.start_slot,
-            duration_slot=self.assignment.duration_slot,
-        )
+        from schedule.models import ResourceOccupation, Resource
+        for resource in self.assignment.resources.all():
+            resource = cast(Resource, resource)
+            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.all()
+            occupation_queryset.vacate(
+                start_slot=self.assignment.start_slot,
+                duration_slot=self.assignment.duration_slot,
+            )
