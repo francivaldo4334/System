@@ -17,6 +17,13 @@ class AvailabilityFilterSet(filters.FilterSet):
             Q(description__icontains=value)
         ).distinct()
 
+class AvailabiityDatesFilterSet(filters.FilterSet):
+    class Meta:
+        model = Availability
+        fields = [
+            
+        ]
+
 class AvailabilityPresentationFilterSet(filters.FilterSet):
     day = filters.DateFilter(method='filter_date', required=True)
     resource = filters.BaseInFilter('resources__id', method='filter_pass')

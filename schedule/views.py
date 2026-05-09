@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabiityDatesFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceOccupation, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
@@ -140,6 +140,11 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
     filterset_class = AvailabilityFilterSet
+
+class AvailabiityDatesListAPIView(ListAPIView):
+    serializer_class = Availability.objects.all()
+    filterset_class = AvailabiityDatesFilterSet
+    pagination_class = None
 
 class AvailabilityPresentationAPIView(ListAPIView):
     queryset = Availability.objects.all()
