@@ -65,7 +65,9 @@ class AssignmentUtil:
         from schedule.models import ResourceOccupation, Resource
         for resource in self.assignment.resources.all():
             resource = cast(Resource, resource)
-            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.all()
+            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.filter(
+                date=self.assignment.date
+            )
             occupation_queryset.occupy(
                 start_slot=self.assignment.start_slot,
                 duration_slot=self.assignment.duration_slot,
@@ -75,7 +77,9 @@ class AssignmentUtil:
         from schedule.models import ResourceOccupation, Resource
         for resource in self.assignment.resources.all():
             resource = cast(Resource, resource)
-            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.all()
+            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.filter(
+                date=self.assignment.date
+            )
             occupation_queryset.vacate(
                 start_slot=self.assignment.start_slot,
                 duration_slot=self.assignment.duration_slot,
