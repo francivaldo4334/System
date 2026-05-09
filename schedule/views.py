@@ -142,7 +142,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     filterset_class = AvailabilityFilterSet
 
 class AvailabiityDatesListAPIView(ListAPIView):
-    serializer_class = Availability.objects.all()
+    queryset = Availability.objects.all()
     filterset_class = AvailabiityDatesFilterSet
     pagination_class = None
 
