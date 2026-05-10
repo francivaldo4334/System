@@ -1,18 +1,20 @@
 {% extends 'pages/app/layout.html' %}
 {% partialdef main %}
-{% include 'components/appbar.html' with title=_('RSA Agenda') %}
-<section class="w-full flex">
-    <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr]">
-        <div class="tabs tabs-border px-2" id="id_schedule_settings_tabs">
-            {%for opt in setting_tabs%}
-            <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
-                data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />
-            {%endfor%}
-        </div>
-        <div id="id_schedule_settings_content">
-        </div>
-    </main>
-</section>
+<div class="h-screen overflow-y-auto grid grid-rows-[auto_1fr]">
+    {% include 'components/appbar.html' with title=_('RSA Agenda') %}
+    <section class="w-full flex overflow-y-auto">
+        <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr]">
+            <div class="tabs tabs-border px-2" id="id_schedule_settings_tabs">
+                {%for opt in setting_tabs%}
+                <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
+                    data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />
+                {%endfor%}
+            </div>
+            <div id="id_schedule_settings_content" class="overflow-y-auto">
+            </div>
+        </main>
+    </section>
+</div>
 <script is="exec-umount" type="pass">
 $s.remove("settings.tab")
 </script>
