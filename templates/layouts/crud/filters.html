@@ -1,6 +1,6 @@
 <label class="input">
-  {% include "icons/search.svg" %}
-  <input type="search" placeholder="{% trans 'Search' %}..." id="id_{{key}}_filter_search"/>
+    {% include "icons/search.svg" %}
+    <input type="search" placeholder="{% trans 'Search' %}..." id="id_{{key}}_filter_search" />
 </label>
 <script is="exec-umount" type="pass">
 $s.remove("{{key}}.filters")
