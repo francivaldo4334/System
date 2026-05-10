@@ -10,14 +10,14 @@
 </li>
 {% endpartialdef %}
 <label class="floating-label  min-w-3xs">
-    <button id="id_filter_status_trigger" class="select" popovertarget="id_filter_status"
+    <button id="id_filter_status_trigger" class="select select-sm" popovertarget="id_filter_status"
         style="anchor-name:--anchor-filter-status">
     </button>
     <span>
         {%trans "Status"%}
     </span>
 </label>
-<ul class="dropdown menu w-52 rounded-box bg-base-100 shadow-sm" popover id="id_filter_status"
+<ul class="dropdown menu menu-sm w-52 rounded-box bg-base-100 shadow-sm" popover id="id_filter_status"
     style="position-anchor:--anchor-filter-status">
     {% with value='' label="Show All"%}
     {% partial status %}
