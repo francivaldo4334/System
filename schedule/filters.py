@@ -25,11 +25,26 @@ class AvailabiityDatesFilterSet(filters.FilterSet):
         ]
 
 class AvailabilityPresentationFilterSet(filters.FilterSet):
+
+    date_after = filters.DateFilter(field_name='date_after', method='filter_by_range')
+    date_before = filters.DateFilter(field_name='date_before', method='filter_by_range')
     day = filters.DateFilter(method='filter_date', required=True)
     resource = filters.BaseInFilter('resources__id', method='filter_pass')
     resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
 
     def filter_pass(self, queryset, name, value):
+        return queryset
+
+    def filter_by_range(self, queryset, name, value):
+        date_after = self.data.get('date_after')
+        date_before = self.data.get('date_before')
+
+        if not date_after or not date_before:
+            return queryset
+
+        if name == 'date_before':
+            return queryset.filter_date_colision(date_after, date_before)
+        
         return queryset
 
     class Meta:

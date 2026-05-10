@@ -127,15 +127,19 @@
   .assignment-slot {
     @apply border border-dashed border-2 rounded-field text-base-content text-xs;
   }
+
   .assignment-slot button[data-status="CF"] {
     @apply bg-info/40 border-info hover:bg-info active:bg-info
   }
+
   .assignment-slot button[data-status="CC"] {
     @apply bg-error/40 border-error hover:bg-error active:bg-error
   }
+
   .assignment-slot button[data-status="IP"] {
     @apply bg-warning/40 border-warning hover:bg-warning active:bg-warning
   }
+
   .assignment-slot button[data-status="CP"] {
     @apply bg-success/40 border-success hover:bg-success active:bg-success
   }
