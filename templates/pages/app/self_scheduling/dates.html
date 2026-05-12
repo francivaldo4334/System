@@ -1,5 +1,5 @@
 {% get_current_language as LANG %}
-{% with key='dates' title='Selecione A data' list_title="selecione uma data abaixo" %}
+{% with key='dates' title=_("Available days") list_title=_('Select a day from the calendar below for obligations.') %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
 <script>
