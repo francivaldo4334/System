@@ -96,7 +96,7 @@
   }
 
   .calendar-grid>* {
-    @apply btn btn-sm btn-square btn-ghost transition-all duration-200;
+    @apply btn btn-xs btn-ghost transition-all duration-200;
   }
 
   .calendar-grid>div {

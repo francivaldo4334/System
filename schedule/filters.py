@@ -52,15 +52,11 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
 class AvailabilityPresentationAssignmentFilterSet(filters.FilterSet):
     date_after = filters.DateFilter(field_name='date_after', method='filter_by_range')
     date_before = filters.DateFilter(field_name='date_before', method='filter_by_range')
-    day = filters.DateFilter(method='filter_date')
+    day = filters.DateFilter(field_name='date')
+    service = filters.NumberFilter()
 
     resource = filters.BaseInFilter('resources__id', method='filter_pass')
     resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
-
-    def filter_date(self, queryset, name, value):
-        if not value:
-            return queryset
-        return queryset.filter(date=value)
 
     def filter_by_range(self, queryset, name, value):
         date_after = self.data.get('date_after')
