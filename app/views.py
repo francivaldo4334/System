@@ -209,7 +209,7 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
                 },
                 {
                     'icon': 'icons/check-check.svg',
-                    'template': 'pages/app/self_scheduling/home.html',
+                    'template': 'pages/app/self_scheduling/confirm.html',
                     'context': None
                 },
             ])]
