@@ -296,17 +296,19 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
 
     def get_occurrences(self, obj: Availability):
         from datetime import datetime
-
-        request = self.context.get("request")
         assignments = self.context.get('assignments', [])
         exclude_times = set()
         for assignment in assignments:
             hours, minutes = divmod(assignment.start_slot * 5, 60)
             exclude_times.add(f'{hours:02d}:{minutes:02d}')
 
-        date_str = self.context.get("date")
-        target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        occurences = obj.get_occurrences(target_date, target_date)
+        dt_before_str = self.context.get('dt_before', None)
+        dt_after_str = self.context.get('dt_after', None)
+        if not dt_before_str or not dt_after_str:
+            return []
+        dt_before = datetime.strptime(dt_before_str, '%Y-%m-%d').date()
+        dt_after = datetime.strptime(dt_after_str, '%Y-%m-%d').date()
+        occurences = obj.get_occurrences(dt_after, dt_before)
         return [
             it for it in occurences
             if it.strftime('%H:%M') not in exclude_times

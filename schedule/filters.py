@@ -17,18 +17,11 @@ class AvailabilityFilterSet(filters.FilterSet):
             Q(description__icontains=value)
         ).distinct()
 
-class AvailabiityDatesFilterSet(filters.FilterSet):
-    class Meta:
-        model = Availability
-        fields = [
-            
-        ]
-
 class AvailabilityPresentationFilterSet(filters.FilterSet):
 
     date_after = filters.DateFilter(field_name='date_after', method='filter_by_range')
     date_before = filters.DateFilter(field_name='date_before', method='filter_by_range')
-    day = filters.DateFilter(method='filter_date', required=True)
+    day = filters.DateFilter(method='filter_date')
     resource = filters.BaseInFilter('resources__id', method='filter_pass')
     resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
 
@@ -57,8 +50,32 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
         return queryset.filter_date_colision(value, value)
 
 class AvailabilityPresentationAssignmentFilterSet(filters.FilterSet):
+    date_after = filters.DateFilter(field_name='date_after', method='filter_by_range')
+    date_before = filters.DateFilter(field_name='date_before', method='filter_by_range')
+    day = filters.DateFilter(method='filter_date')
+
     resource = filters.BaseInFilter('resources__id', method='filter_pass')
     resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
+
+    def filter_date(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(date=value)
+
+    def filter_by_range(self, queryset, name, value):
+        date_after = self.data.get('date_after')
+        date_before = self.data.get('date_before')
+
+        if not date_after or not date_before:
+            return queryset
+
+        if name == 'date_before':
+            return queryset.filter(
+                date__gte=date_after,
+                date__lte=date_before,
+            )
+        
+        return queryset
 
     def filter_pass(self, queryset, name, value):
         return queryset

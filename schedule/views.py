@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from schedule.filters import AssignmentFilterSet, AvailabiityDatesFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceOccupation, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
@@ -141,10 +141,6 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     serializer_class = AvailabilitySerializer
     filterset_class = AvailabilityFilterSet
 
-class AvailabiityDatesListAPIView(ListAPIView):
-    queryset = Availability.objects.all()
-    filterset_class = AvailabiityDatesFilterSet
-    pagination_class = None
 
 class AvailabilityPresentationAPIView(ListAPIView):
     queryset = Availability.objects.all()
@@ -163,16 +159,28 @@ class AvailabilityPresentationAPIView(ListAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        date = self.request.query_params.get('day')
+        dt_before = self.request.query_params.get('date_before', None)
+        dt_after = self.request.query_params.get('date_after', None)
+        date = self.request.query_params.get('day', None)
         assignment_filterset = AvailabilityPresentationAssignmentFilterSet(
-            self.request.GET,
+            {
+                **self.request.GET,
+                'date_after': dt_after,
+                'date_before': dt_after,
+                'day': date,
+            },
             Assignment.objects.filter(date=date).visibles()
         )
         if not assignment_filterset.is_valid():
             raise self.AssignmentFilterSetError(assignment_filterset.errors)
 
+        if date:
+            dt_before = date
+            dt_after = date
+
         context.update({
             'assignments': assignment_filterset.qs,
-            'date': date,
+            'dt_before': dt_before,
+            'dt_after': dt_after,
         })
         return context;
