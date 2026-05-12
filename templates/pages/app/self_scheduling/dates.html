@@ -1,49 +1,4 @@
-{% get_current_language as LANG %}
 {% with key='dates' title=_("Available days") list_title=_('Select a day from the calendar below for obligations.') %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
-<script>
-$q.use(
-  ['availability_presentation_dates'],
-  () => {
-    const nowObj = new Date();
-    const now = nowObj.toISOString().split('T')[0];
-    const untilObj = new Date();
-    untilObj.setDate(nowObj.getDate() + 15);
-    const until = untilObj.toISOString().split('T')[0];
-    return $r.get(`{% url "availabilities_presentation"%}?date_after=${now}&date_before=${until}`)
-  },
-  {
-    onSuccess(data){
-      const allDates = data.flatMap(it => it.occurrences)
-                         .map(isoStr => isoStr.split('T')[0]);
-      const uniqueDates = [...new Set(allDates)];
-      uniqueDates.sort();
-
-      const ul = document.getElementById('id_dates')
-      const frag = document.createDocumentFragment()
-
-      uniqueDates.forEach(date => {
-        const li = document.createElement('li')
-        const btn = document.createElement('button')
-        const dateObj = new Date(date + 'T00:00:00');
-
-        btn.innerText = dateObj.toLocaleDateString('{{LANG}}', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-        btn.onclick = () => {
-        }
-        li.appendChild(btn)
-        $s.subscribe('form.date', li, null, (value) => {
-          li.classList.toggle('menu-active', value === date)
-        })
-        frag.appendChild(li)
-      })
-      ul.appendChild(frag)
-    }
-  }
-)
-</script>
 
