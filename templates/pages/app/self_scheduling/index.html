@@ -44,7 +44,7 @@
   })
   document.querySelectorAll('.step').forEach(item => {
     $s.subscribe('page', item, null, (value, el) => {
-        el.classList.toggle('step-primary', Number(el.dataset.id) <= value, true)
+        el.classList.toggle('step-neutral', Number(el.dataset.id) <= value, true)
     })
   })
   document.querySelectorAll('.page').forEach(item => {
