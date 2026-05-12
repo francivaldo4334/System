@@ -199,7 +199,7 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
             ] + [
                 {
                     'icon': 'icons/calendar.svg',
-                    'template': 'pages/app/self_scheduling/home.html',
+                    'template': 'pages/app/self_scheduling/dates.html',
                     'context': None
                 },
                 {
