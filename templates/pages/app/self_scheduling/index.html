@@ -12,7 +12,7 @@
 {% endblock %}
 {% partialdef progress %}
 <li class="step" data-id='{{key}}'>
-  <span class="step-icon *:w-4">{% include iconpath %}</span>
+  <span class="step-icon *:w-4">{{key|add:1}}</span>
 </li>
 {% endpartialdef %}
 {% block body %}
