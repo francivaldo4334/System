@@ -78,6 +78,7 @@
           const ul = document.getElementById('id_dates')
           const frag = document.createDocumentFragment()
 
+          ul.innerHTML = ''; 
           uniqueDates.forEach(date => {
             const li = document.createElement('li')
             const btn = document.createElement('button')
@@ -103,6 +104,56 @@
       }
     )
   })
+  //
+
+  $s.subscribe('form.date', null, null, (value) => {
+    if (!value) return;
+    const resources = Object.values($s.get('form.resources'))
+    $q.use(
+      ['availability_presentation_hours'],
+      () => {
+        return $r.get(`{% url "availabilities_presentation"%}?day=${value}&resources=${resources.join(',')}`)
+      },
+      {
+        onSuccess(data) {
+          const allOccurrences = data.flatMap(it => it.occurrences).sort();
+          const ul = document.getElementById('id_times');
+          const frag = document.createDocumentFragment();
+
+          ul.innerHTML = ''; 
+          allOccurrences.forEach(isoStr => {
+            const [date, fullTime] = isoStr.split('T');
+            const time = fullTime.substring(0, 5);
+    
+            const li = document.createElement('li');
+            const btn = document.createElement('button');
+    
+            // Objeto de data para formatação legível
+            const dateObj = new Date(date + 'T00:00:00');
+            const dayMonth = dateObj.toLocaleDateString('{{LANG}}', { day: '2-digit', month: '2-digit' });
+
+            // Exibe "12/05 - 10:00"
+            btn.innerText = `${time}`;
+    
+            btn.onclick = () => {
+              $s.set('form.start_slot', time);
+              $s.set('page', $s.get('page') + 1);
+            };
+
+            li.appendChild(btn);
+            $s.subscribe('form.start_slot', li, null, (value) => {
+              li.classList.toggle('menu-active', value === time);
+            });
+
+            frag.appendChild(li);
+          });
+
+          ul.appendChild(frag);
+        }
+      }
+    )
+  })
+  //
 })()
 </script>
 {% endblock %}

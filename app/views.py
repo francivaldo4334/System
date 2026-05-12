@@ -204,7 +204,7 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
                 },
                 {
                     'icon': 'icons/clipboard-clock.svg',
-                    'template': 'pages/app/self_scheduling/home.html',
+                    'template': 'pages/app/self_scheduling/times.html',
                     'context': None
                 },
                 {
