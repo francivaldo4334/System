@@ -77,7 +77,7 @@ class Service(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
 class ServiceResourceRelation(models.Model):
     service = models.ForeignKey(Service, models.CASCADE)
     resource_type = models.ForeignKey(ResourceNotSelectable, models.CASCADE)
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=1)
 
     class Meta:
         unique_together = ('service', 'resource_type')

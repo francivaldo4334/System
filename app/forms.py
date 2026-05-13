@@ -210,10 +210,10 @@ class ServiceRequirementsForm(BaseForm):
             url_query_params='?use_as_category=true',
             attrs='required'
         ),
-        NumberField(
-            name='quantity',
-            label=_('Quantity'),
-            attrs='required min="1" step="1"'
-        )
+        # NumberField(
+        #     name='quantity',
+        #     label=_('Quantity'),
+        #     attrs='required min="1" step="1"'
+        # )
         
     ]
