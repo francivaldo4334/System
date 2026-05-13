@@ -38,6 +38,7 @@
   const pageId = Number(sessionStorage.getItem('router_scheduling') || '0')
   $s.create('page', pageId)
   $s.createStore('form', {
+    'service': null,
     'resources': {},
     'date': null,
     'start_slot': null,

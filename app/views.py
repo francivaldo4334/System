@@ -191,6 +191,12 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
                     'template': 'pages/app/self_scheduling/home.html',
                     'context': None
                 },
+
+                {
+                    'icon': 'icons/notebook-pen.svg',
+                    'template': 'pages/app/self_scheduling/services.html',
+                    'context': None
+                }
             ] + [ {
                     'icon': 'icons/notebook-pen.svg',
                     'template': 'pages/app/self_scheduling/resource.html',

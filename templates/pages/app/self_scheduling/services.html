@@ -1,0 +1,32 @@
+{% with key='services' title=_('Available Services') list_title=_('Select a service below') %}
+  {% include 'pages/app/self_scheduling/layouts/choice.html' %}
+{% endwith %}
+<script>
+$q.use(
+  ['services'],
+  () => $r.get('{% url "services-list"%}'),
+  {
+    onSuccess(data){
+      const ul = document.getElementById('id_services')
+      if (!ul) { return }
+      const frag = document.createDocumentFragment()
+      data.results.forEach(item => {
+        const li = document.createElement('li')
+        const btn = document.createElement('button')
+        btn.innerText = item.label
+        btn.onclick = () => {
+          $s.set('form.service', item.id);
+          $s.set('page', $s.get('page') + 1)
+        }
+        li.appendChild(btn)
+        $s.subscribe('form.service', li, null, (value) => {
+          li.classList.toggle('menu-active', value === item.id)
+        })
+        frag.appendChild(li)
+      })
+      ul.appendChild(frag)
+    }
+  }
+)
+</script>
+
