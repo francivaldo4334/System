@@ -196,13 +196,13 @@ class SelfSchedulingView(LoginRequiredMixin, TemplateView):
                     'icon': 'icons/notebook-pen.svg',
                     'template': 'pages/app/self_scheduling/services.html',
                     'context': None
-                }
-            ] + [ {
-                    'icon': 'icons/notebook-pen.svg',
-                    'template': 'pages/app/self_scheduling/resource.html',
-                    'context': it
-            } for it in (config.resources_visibles.all() if config else [])
-            ] + [
+                },
+            # ] + [ {
+            #         'icon': 'icons/notebook-pen.svg',
+            #         'template': 'pages/app/self_scheduling/resource.html',
+            #         'context': it
+            # } for it in (config.resources_visibles.all() if config else [])
+            # ] + [
                 {
                     'icon': 'icons/calendar.svg',
                     'template': 'pages/app/self_scheduling/dates.html',

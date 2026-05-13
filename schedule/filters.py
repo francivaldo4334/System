@@ -84,6 +84,7 @@ class ResourceFilterSet(filters.FilterSet):
     use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
     is_selectable = filters.BooleanFilter('is_selectable')
     search = filters.CharFilter(method='filter_search')
+    service = filters.NumberFilter('service__id')
     class Meta:
         model = Resource
         fields = ['parent','parent__code']

@@ -2,35 +2,5 @@
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
 <script>
-$q.use(
-  ['resources', '{{data_context.id}}'],
-  () => $r.get('{% url "resources-list"%}?parent__code={{data_context.resource_code}}'),
-  {
-    onSuccess(data){
-      const ul = document.getElementById('id_{{data_context.id}}')
-      if (!ul) {
-        return
-      }
-      const frag = document.createDocumentFragment()
-      data.results.forEach(item => {
-        const li = document.createElement('li')
-        const btn = document.createElement('button')
-        btn.innerText = item.name
-        btn.onclick = () => {
-          const current = $s.get('form.resources') || {};  
-          current['{{data_context.id}}'] = item.id
-          $s.set('form.resources', current);
-          $s.set('page', $s.get('page') + 1)
-        }
-        li.appendChild(btn)
-        $s.subscribe('form.resources', li, null, (value) => {
-          li.classList.toggle('menu-active', value['{{data_context.id}}'] === item.id)
-        })
-        frag.appendChild(li)
-      })
-      ul.appendChild(frag)
-    }
-  }
-)
 </script>
 
