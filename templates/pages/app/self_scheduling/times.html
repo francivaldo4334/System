@@ -1,3 +1,6 @@
+{% extends 'pages/app/self_scheduling/index.html'%}
+{% block content %}
 {% with key='times' title=_("Available Times") list_title=_('Select a time on the calendar to proceed.') %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
+{% endblock %}
