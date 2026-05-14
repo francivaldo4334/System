@@ -22,7 +22,7 @@ urlpatterns = [
     path('schedule/settings/resources',ScheduleSettingsResourceView.as_view(), name="app-schedule-settings-resources"),
     path('schedule/settings/services',ScheduleSettingsServiceView.as_view(), name="app-schedule-settings-services"),
     path('schedule/settings/service_requirements',ScheduleSettingsServiceRequirementsView.as_view(), name="app-schedule-settings-service-requirements"),
-    path('self-scheduling', SelfScheduleView.as_view(), name="self-scheduling"),
+    path('self-scheduling', SelfScheduleView.as_view(), name="self_scheduling"),
     path('login/', auth_views.LoginView.as_view(template_name="pages/login/index.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
     # app api/

@@ -226,16 +226,19 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
     @property
     def step(self):
         step = self.request.GET.get('step', 0)
-        return step;
+        return int(step);
         
     @property
     def template_name(self):
+        if self.step == 1:
+            return 'pages/app/self_scheduling/services.html'
+
         return 'pages/app/self_scheduling/home.html'
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.step == 0:
-
             config = AppConfig.objects.first()
             context.update(
                 {
