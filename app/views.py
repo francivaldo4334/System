@@ -252,8 +252,8 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             from schedule.models import Service, ResourceSelectable
             service_pk = self.request.GET.get('service', 0) or 0
             service = get_object_or_404(Service, pk=service_pk)
-            required_resources = list(service.required_resources.all())
-            required_resource_step = self.request.GET.get('required_resource_step', 0)
+            required_resources = list(service.required_resources.exclude(code__icontains='client'))
+            required_resource_step = int(self.request.GET.get('required_resource_step', 0) or 0)
             if required_resource_step < 0 or required_resource_step > len(required_resources) or len(required_resources) == 0:
                 return context
             parent =required_resources[required_resource_step]
@@ -261,7 +261,9 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             context.update(
                 {
                     'resources': resources,
-                    'parent':parent
+                    'parent':parent,
+                    'next_step': '3' if required_resources[-1].id == parent.id else '2',
+                    'next_resource_step': (required_resource_step + 1) % len(required_resources)
                 }
             )
         return context 
