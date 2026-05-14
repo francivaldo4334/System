@@ -224,11 +224,25 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 
 class SelfScheduleView(LoginRequiredMixin, TemplateView):
     @property
+    def step(self):
+        step = self.request.GET.get('step', 0)
+        return step;
+        
+    @property
     def template_name(self):
-        step = self.request.GET.get('step', 1)
         return 'pages/app/self_scheduling/home.html'
-    def get_template_names(self):
-        return super().get_template_names()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.step == 0:
+
+            config = AppConfig.objects.first()
+            context.update(
+                {
+                    'config':config
+                }
+            )
+        return context 
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
