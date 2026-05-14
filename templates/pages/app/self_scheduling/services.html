@@ -1,3 +1,5 @@
+{% extends 'pages/app/self_scheduling/index.html' %}
+{% block content %}
 {% with key='services' title=_('Available Services') list_title=_('Select a service below') %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
@@ -12,13 +14,10 @@ $q.use(
       const frag = document.createDocumentFragment()
       data.results.forEach(item => {
         const li = document.createElement('li')
-        const btn = document.createElement('button')
-        btn.innerText = item.label
-        btn.onclick = () => {
-          $s.set('form.service', item.id);
-          $s.set('page', $s.get('page') + 1)
-        }
-        li.appendChild(btn)
+        const a = document.createElement('a')
+        a.innerText = item.label
+        a.href = '/app/self-scheduling?step=2&service='+item.id
+        li.appendChild(a)
         $s.subscribe('form.service', li, null, (value) => {
           li.classList.toggle('menu-active', value === item.id)
         })
@@ -29,4 +28,4 @@ $q.use(
   }
 )
 </script>
-
+{% endblock %}
