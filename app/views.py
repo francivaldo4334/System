@@ -223,50 +223,74 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 #         })
 #         return context;
 
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 class SelfScheduleView(LoginRequiredMixin, TemplateView):
+    # Mapeamento de templates para fácil expansão
+    STEP_TEMPLATES = {
+        0: 'pages/app/self_scheduling/home.html',
+        1: 'pages/app/self_scheduling/services.html',
+        2: 'pages/app/self_scheduling/resource.html',
+    }
+
     @property
     def step(self):
-        step = self.request.GET.get('step', 0)
-        return int(step);
-        
+        try:
+            return int(self.request.GET.get('step', 0))
+        except (ValueError, TypeError):
+            return 0
+
     @property
     def template_name(self):
-        if self.step == 1:
-            return 'pages/app/self_scheduling/services.html'
-        if self.step == 2:
-            return 'pages/app/self_scheduling/resource.html'
-
-        return 'pages/app/self_scheduling/home.html'
-
+        template = self.STEP_TEMPLATES.get(self.step, self.STEP_TEMPLATES[0])
+        return template
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Dispatcher simples baseado no step
         if self.step == 0:
-            config = AppConfig.objects.first()
-            context.update(
-                {
-                    'config':config
-                }
-            )
-        if self.step == 2:
-            from schedule.models import Service, ResourceSelectable
-            service_pk = self.request.GET.get('service', 0) or 0
-            service = get_object_or_404(Service, pk=service_pk)
-            required_resources = list(service.required_resources.exclude(code__icontains='client'))
-            required_resource_step = int(self.request.GET.get('required_resource_step', 0) or 0)
-            if required_resource_step < 0 or required_resource_step > len(required_resources) or len(required_resources) == 0:
-                return context
-            parent =required_resources[required_resource_step]
-            resources = ResourceSelectable.objects.filter(parent=parent)
-            context.update(
-                {
-                    'resources': resources,
-                    'parent':parent,
-                    'next_step': '3' if required_resources[-1].id == parent.id else '2',
-                    'next_resource_step': (required_resource_step + 1) % len(required_resources)
-                }
-            )
-        return context 
+            context['config'] = AppConfig.objects.first()
+            
+        elif self.step == 2:
+            context.update(self._get_resource_step_context())
+
+        return context
+
+    def _get_resource_step_context(self):
+        """Encapsula a lógica complexa do Step 2 sem alterar o funcionamento."""
+        from schedule.models import Service, ResourceSelectable
+        
+        service_pk = self.request.GET.get('service', 0)
+        service = get_object_or_404(Service, pk=service_pk)
+        
+        # Filtro de recursos necessários
+        required_resources = list(service.required_resources.exclude(code__icontains='client'))
+        total_resources = len(required_resources)
+        
+        try:
+            current_idx = int(self.request.GET.get('required_resource_step', 0))
+        except (ValueError, TypeError):
+            current_idx = 0
+
+        # Validação de limites
+        if not required_resources or not (0 <= current_idx < total_resources):
+            return {}
+
+        parent = required_resources[current_idx]
+        resources = ResourceSelectable.objects.filter(parent=parent)
+        
+        # Lógica de transição
+        is_last_resource = (current_idx == total_resources - 1)
+        
+        return {
+            'resources': resources,
+            'parent': parent,
+            'next_step': '3' if is_last_resource else '2',
+            'next_resource_step': (current_idx + 1) % total_resources
+        }
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
