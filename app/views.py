@@ -249,12 +249,19 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
                 }
             )
         if self.step == 2:
-            from schedule.models import Service
-            service = get_object_or_404(Service, pk=self.request.GET.get('service', None))
+            from schedule.models import Service, ResourceSelectable
+            service_pk = self.request.GET.get('service', 0) or 0
+            service = get_object_or_404(Service, pk=service_pk)
             required_resources = list(service.required_resources.all())
             required_resource_step = self.request.GET.get('required_resource_step', 0)
+            if required_resource_step < 0 or required_resource_step > len(required_resources) or len(required_resources) == 0:
+                return context
+            parent =required_resources[required_resource_step]
+            resources = ResourceSelectable.objects.filter(parent=parent)
             context.update(
                 {
+                    'resources': resources,
+                    'parent':parent
                 }
             )
         return context 

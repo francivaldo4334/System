@@ -28,7 +28,7 @@ class Resource(TimeStampedModel, ActivatorModel):
     content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
     content_object = GenericForeignKey()
     class Meta:
-        ordering = ('parent_id',)
+        ordering = ('parent_id','code')
         indexes = [
             models.Index(fields=['content_type', 'object_id'])
         ]
@@ -62,7 +62,6 @@ class ResourceNotSelectable(Resource):
     objects = Manager()
     class Meta:
         proxy = True
-        ordering = ('')
 
 class ResourceSelectable(Resource):
     class Manager(models.Manager):

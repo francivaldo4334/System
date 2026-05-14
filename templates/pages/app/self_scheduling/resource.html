@@ -1,6 +1,24 @@
 {% extends 'pages/app/self_scheduling/index.html' %}
 {% block content%}
-  {% with key=data_context.id title=data_context.title list_title=data_context.subtitle %}
+  {% with key='resource' title='Selecione um '|add:parent.name list_title="Selecione uma das opções abaixo" %}
     {% include 'pages/app/self_scheduling/layouts/choice.html' %}
   {% endwith %}
-{% endblock%}
+<script>
+  const ul = document.getElementById('id_resource')
+  if (ul) {
+  const frag = document.createDocumentFragment()
+  {% for it in resources %}
+    const li_{{it.id}} = document.createElement('li')
+    const a_{{it.id}} = document.createElement('a')
+    a_{{it.id}}.innerText = '{{it.name}}'
+    a_{{it.id}}.href = '/app/self-scheduling?step=2&service='
+    li_{{it.id}}.appendChild(a_{{it.id}})
+    $s.subscribe('form.service', li_{{it.id}}, null, (value) => {
+      li_{{it.id}}.classList.toggle('menu-active', value === {{it.id}})
+    })
+    frag.appendChild(li_{{it.id}})
+  {% endfor %}
+  ul.appendChild(frag)
+  }
+</script>
+{% endblock %}
