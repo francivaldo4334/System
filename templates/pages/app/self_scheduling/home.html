@@ -1,3 +1,5 @@
+{% extends 'pages/app/self_scheduling/index.html' %}
+{% block content %}
 <section class="relative w-full h-full grid grid-rows-2 overflow-hidden">
   <div class="relative overflow-hidden">
     <img
@@ -21,3 +23,4 @@
       {{config.company_name|default:''}}
   </div>
 </section>
+{% endblock %}

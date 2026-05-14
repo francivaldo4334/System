@@ -175,52 +175,60 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
     form = ServiceRequirementsForm
     table = ServiceRequirementsTable
 
-class SelfSchedulingView(LoginRequiredMixin, TemplateView):
-    template_name = 'pages/app/self_scheduling/index.html'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        config = AppConfig.objects.first()
-        context.update({
-            'config': config,
-            'steps': [{
-                'step': i,
-                **step
-            } for i,step in enumerate([
-                {
-                    'icon': 'icons/house.svg',
-                    'template': 'pages/app/self_scheduling/home.html',
-                    'context': None
-                },
+# class SelfSchedulingView(LoginRequiredMixin, TemplateView):
+#     template_name = 'pages/app/self_scheduling/index.html'
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         config = AppConfig.objects.first()
+#         context.update({
+#             'config': config,
+#             'steps': [{
+#                 'step': i,
+#                 **step
+#             } for i,step in enumerate([
+#                 {
+#                     'icon': 'icons/house.svg',
+#                     'template': 'pages/app/self_scheduling/home.html',
+#                     'context': None
+#                 },
 
-                {
-                    'icon': 'icons/notebook-pen.svg',
-                    'template': 'pages/app/self_scheduling/services.html',
-                    'context': None
-                },
-            # ] + [ {
-            #         'icon': 'icons/notebook-pen.svg',
-            #         'template': 'pages/app/self_scheduling/resource.html',
-            #         'context': it
-            # } for it in (config.resources_visibles.all() if config else [])
-            # ] + [
-                {
-                    'icon': 'icons/calendar.svg',
-                    'template': 'pages/app/self_scheduling/dates.html',
-                    'context': None
-                },
-                {
-                    'icon': 'icons/clipboard-clock.svg',
-                    'template': 'pages/app/self_scheduling/times.html',
-                    'context': None
-                },
-                {
-                    'icon': 'icons/check-check.svg',
-                    'template': 'pages/app/self_scheduling/confirm.html',
-                    'context': None
-                },
-            ])]
-        })
-        return context;
+#                 {
+#                     'icon': 'icons/notebook-pen.svg',
+#                     'template': 'pages/app/self_scheduling/services.html',
+#                     'context': None
+#                 },
+#             # ] + [ {
+#             #         'icon': 'icons/notebook-pen.svg',
+#             #         'template': 'pages/app/self_scheduling/resource.html',
+#             #         'context': it
+#             # } for it in (config.resources_visibles.all() if config else [])
+#             # ] + [
+#                 {
+#                     'icon': 'icons/calendar.svg',
+#                     'template': 'pages/app/self_scheduling/dates.html',
+#                     'context': None
+#                 },
+#                 {
+#                     'icon': 'icons/clipboard-clock.svg',
+#                     'template': 'pages/app/self_scheduling/times.html',
+#                     'context': None
+#                 },
+#                 {
+#                     'icon': 'icons/check-check.svg',
+#                     'template': 'pages/app/self_scheduling/confirm.html',
+#                     'context': None
+#                 },
+#             ])]
+#         })
+#         return context;
+
+class SelfScheduleView(LoginRequiredMixin, TemplateView):
+    @property
+    def template_name(self):
+        step = self.request.GET.get('step', 1)
+        return 'pages/app/self_scheduling/home.html'
+    def get_template_names(self):
+        return super().get_template_names()
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
