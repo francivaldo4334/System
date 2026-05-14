@@ -1,6 +1,6 @@
-{% with key=data_context.id title=data_context.title list_title=data_context.subtitle %}
-  {% include 'pages/app/self_scheduling/layouts/choice.html' %}
-{% endwith %}
-<script>
-</script>
-
+{% extends 'pages/app/self_scheduling/index.html' %}
+{% block content%}
+  {% with key=data_context.id title=data_context.title list_title=data_context.subtitle %}
+    {% include 'pages/app/self_scheduling/layouts/choice.html' %}
+  {% endwith %}
+{% endblock%}

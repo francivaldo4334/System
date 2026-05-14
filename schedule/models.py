@@ -62,6 +62,7 @@ class ResourceNotSelectable(Resource):
     objects = Manager()
     class Meta:
         proxy = True
+        ordering = ('')
 
 class ResourceSelectable(Resource):
     class Manager(models.Manager):

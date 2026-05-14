@@ -1,5 +1,6 @@
 from typing import Type
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
@@ -232,6 +233,8 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
     def template_name(self):
         if self.step == 1:
             return 'pages/app/self_scheduling/services.html'
+        if self.step == 2:
+            return 'pages/app/self_scheduling/resource.html'
 
         return 'pages/app/self_scheduling/home.html'
 
@@ -243,6 +246,15 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             context.update(
                 {
                     'config':config
+                }
+            )
+        if self.step == 2:
+            from schedule.models import Service
+            service = get_object_or_404(Service, pk=self.request.GET.get('service', None))
+            required_resources = list(service.required_resources.all())
+            required_resource_step = self.request.GET.get('required_resource_step', 0)
+            context.update(
+                {
                 }
             )
         return context 
