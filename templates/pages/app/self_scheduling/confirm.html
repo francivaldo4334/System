@@ -6,6 +6,7 @@
 </div>
 <script>
 $s.create('date', '{{request.GET.date}}')
+$s.create('is_loading', false)
 $s.subscribe('date',id_date_field, 'innerText', (v) => {
   const dateObj = new Date(`${v}T00:00:00`)
   return new Intl.DateTimeFormat('{{LANG_CODE}}', {
@@ -14,5 +15,28 @@ $s.subscribe('date',id_date_field, 'innerText', (v) => {
     year: 'numeric'
   }).format(dateObj)
 })
+$q.use(
+  ['create_appointment'],
+  ()=> {
+    $s.set('is_loading', true)
+    return $r.post('{% url "client_assignment-list" %}', {
+      'service': Number('{{request.GET.service|escapejs}}'),
+      'resources': '{{request.GET.resource|escapejs}}'.split(','),
+      'date': '{{request.GET.date|escapejs}}',
+      'availability': '{{request.GET.availability|escapejs}}',
+      'start_slot': '{{request.GET.slot|escapejs}}',
+    },
+    { "X-CSRFToken": "{{csrf_token}}" }
+    )
+  },
+  {
+    onSuccess(){
+      
+    },
+    onFinally(){
+      $s.set('is_loading', false)
+    }
+  }
+)
 </script>
 {% endblock %}

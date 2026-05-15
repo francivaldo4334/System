@@ -138,9 +138,14 @@ class AssignmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         availability = validated_data.pop('availability')
-        validated_data['duration_slot'] = availability.duration_slot        
+        user_client_resource = validated_data.pop('user_client_resource', None)
+
+        resources = validated_data.pop('resources', [])
+        if user_client_resource and user_client_resource not in resources:
+            resources.append(user_client_resource)
+
+        validated_data['duration_slot'] = availability.duration_slot
         validated_data['created_by'] = getattr(request,'user')
-        resources = validated_data.pop('resources')
         instance =  Assignment.objects.create(**validated_data)
         instance.resources.set([r.pk for r in resources]) 
         return instance;

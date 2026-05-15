@@ -1,13 +1,15 @@
 # pyright: reportAttributeAccessIssue=false
 from datetime import timedelta
+from django.contrib.contenttypes.models import ContentType
 from django.db.models.deletion import ProtectedError
 from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from core.permissions import IsFrontDesk, IsOwner
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
-from schedule.models import Assignment, Availability, Resource, ResourceOccupation, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation
 from schedule.serializers import (
         AssignmentSerializer,
         AvailabilityPresentationSerializer,
@@ -68,13 +70,13 @@ class ServiceRequirementsViewSet(viewsets.ModelViewSet):
     filterset_class = ServiceRequirementsFilterSet
 
 # pyright:reportIncompatibleMethodOverride=false
-class AssignmentViewSet(viewsets.mixins.ListModelMixin,
-                        viewsets.mixins.CreateModelMixin,
-                        viewsets.GenericViewSet):
+class BaseAssignmentViewSet(
+    viewsets.mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = Assignment.objects.all().select_related('service').prefetch_related('resources')
     serializer_class = AssignmentSerializer
     filterset_class = AssignmentFilterSet
-
     def handle_exception(self, exc):
         try:
             return super().handle_exception(exc)
@@ -92,6 +94,10 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         if self.action == 'list':
             return super().filter_queryset(queryset)
         return super().get_queryset()
+    
+class AssignmentViewSet(viewsets.mixins.ListModelMixin,
+                        BaseAssignmentViewSet):
+    permission_classes = [IsOwner | IsFrontDesk]
 
     @action(['POST'], True)
     def rescue(self, request, pk):
@@ -135,6 +141,27 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         obj.state.absent()
         return Response(self.get_serializer(obj).data)
 
+    
+class ClientAssignmentViewSet(BaseAssignmentViewSet):
+    def perform_create(self, serializer):
+        client_type, c = ResourceNotSelectable.objects.get_or_create(
+            code="client",
+            defaults={
+                'is_selectable': False,
+                'name': _('Client'),
+            }
+        )
+    
+        user_resource, c = ResourceSelectable.objects.get_or_create(
+            parent=client_type,
+            content_type=ContentType.objects.get_for_model(self.request.user),
+            object_id=self.request.user.id,
+            defaults={
+                'name': self.request.user.get_full_name,
+                'is_selectable': True,
+            }
+        )
+        serializer.save(user_client_resource=user_resource)
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()

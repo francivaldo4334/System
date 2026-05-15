@@ -11,15 +11,23 @@ $q.use(
   },
   {
     onSuccess(data){
-      const times = Array.from(new Set(data.map(it => it.occurrences.map(it => it.split('T')[1])).flat()))
+      const times = Array.from(new Set(data.map(a => a.occurrences.map(it => ({
+        time:it.split('T')[1],
+        id: a.id,
+      }))).flat()))
       const ul = document.getElementById('id_times');
+      const calcSlot = (it) => {
+        const [hour, minute] = it.split(':').map(Number)
+        return Math.floor((hour * 60 + minute)/5)
+      }
       if (ul){
         const frag = document.createDocumentFragment();
         times.forEach(it => {
           const li = document.createElement('li');
           const a = document.createElement('a');
-          a.innerText = it.slice(0,5)
-          a.href = `{% url 'self_scheduling' %}?step=5&service={{request.GET.service}}&resource={{request.GET.resource}}&date={{request.GET.date}}&time=${it}`
+          const slot = calcSlot(it.time)
+          a.innerText = it.time.slice(0,5)
+          a.href = `{% url 'self_scheduling' %}?step=5&service={{request.GET.service}}&resource={{request.GET.resource}}&date={{request.GET.date}}&time=${it.time}&availability=${it.id}&slot=${slot}`
           li.appendChild(a);
           frag.appendChild(li);
         })
