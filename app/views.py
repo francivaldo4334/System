@@ -235,6 +235,7 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
         2: 'pages/app/self_scheduling/resource.html',
         3: 'pages/app/self_scheduling/dates.html',
         4: 'pages/app/self_scheduling/times.html',
+        5: 'pages/app/self_scheduling/confirm.html',
     }
 
     @property
