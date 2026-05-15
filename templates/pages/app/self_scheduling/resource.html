@@ -11,7 +11,7 @@
     const li_{{it.id}} = document.createElement('li')
     const a_{{it.id}} = document.createElement('a')
     a_{{it.id}}.innerText = '{{it.name}}'
-    a_{{it.id}}.href = '/app/self-scheduling?step={{next_step}}&service={{request.GET.service}}&required_resource_step={{next_resource_step}}'
+    a_{{it.id}}.href = '{% url "self_scheduling" %}?step={{next_step}}&service={{request.GET.service}}&required_resource_step={{next_resource_step}}'
     li_{{it.id}}.appendChild(a_{{it.id}})
     $s.subscribe('form.service', li_{{it.id}}, null, (value) => {
       li_{{it.id}}.classList.toggle('menu-active', value === {{it.id}})
