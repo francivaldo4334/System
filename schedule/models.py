@@ -40,7 +40,7 @@ class Resource(TimeStampedModel, ActivatorModel):
         if self.is_selectable and str(self.code).endswith('.'):
             raise ValidationError({'code': _('Enter a valid value.')})
     def save(self, *args, **kwargs):
-        if self._state.adding:
+        if self._state.adding and not self.code:
             self.code = self.get_next_code();
         return super().save(*args, **kwargs)
 

@@ -156,6 +156,7 @@ class ClientAssignmentViewSet(BaseAssignmentViewSet):
             parent=client_type,
             content_type=ContentType.objects.get_for_model(self.request.user),
             object_id=self.request.user.id,
+            code=f'client.{self.request.user.username}',
             defaults={
                 'name': self.request.user.get_full_name,
                 'is_selectable': True,

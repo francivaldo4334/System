@@ -6,7 +6,7 @@
 <script>
 $q.use(
   ['services'],
-  () => $r.get('{% url "services-list"%}'),
+  () => $r.get('{% url "services-list"%}?required_resources__code=client'),
   {
     onSuccess(data){
       const ul = document.getElementById('id_services')
