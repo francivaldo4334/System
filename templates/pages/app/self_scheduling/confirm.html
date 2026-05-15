@@ -15,6 +15,14 @@ $s.subscribe('date',id_date_field, 'innerText', (v) => {
     year: 'numeric'
   }).format(dateObj)
 })
+$s.subscribe('is_loading', id_figure, null, (v, el) => {
+  el.classList.toggle('loading', v)
+})
+document.querySelectorAll('.success-text').forEach(it => {
+  $s.subscribe('is_loading', it, null, (v)=>{
+    it.classList.toggle('hidden', v)
+  })
+})
 $q.use(
   ['create_appointment'],
   ()=> {
