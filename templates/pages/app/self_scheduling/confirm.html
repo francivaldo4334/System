@@ -23,6 +23,9 @@ document.querySelectorAll('.success-text').forEach(it => {
     it.classList.toggle('hidden', v)
   })
 })
+document.querySelectorAll('button').forEach(it => {
+  $s.subscribe('is_loading', it, 'disabled')
+})
 $q.use(
   ['create_appointment'],
   ()=> {
