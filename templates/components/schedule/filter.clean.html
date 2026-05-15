@@ -1,0 +1,12 @@
+<button class="btn btn-sm" id="id_btn_clear_filters">
+{% trans 'Clear filters' %}
+</button>
+<script>
+id_btn_clear_filters.onclick = () => {
+  $s.set('filter.search', '');
+  $s.set('filter.service', '');
+  $s.set('filter.resource', '');
+  $s.set('filter.resource_type', '');
+  $s.set('filter.status', '');
+}
+</script>
