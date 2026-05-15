@@ -260,6 +260,17 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
         elif self.step == 2:
             context.update(self._get_resource_step_context())
 
+        elif self.step == 5:
+            from schedule.models import Service, Resource
+            service = get_object_or_404(Service, pk=self.request.GET.get('service', 0))
+            resources = Resource.objects.filter(pk__in=self.request.GET.get('resource', '').split(','))
+            context.update(
+                {
+                    'service': service,
+                    'resources': resources
+                }
+            )
+
         return context
 
     def _get_resource_step_context(self):

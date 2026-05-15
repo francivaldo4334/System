@@ -17,14 +17,14 @@
       <div class="w-full mt-6 space-y-3">
         <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
           <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Service' %}</span>
-          <span class="badge badge-outline">{{service_name}}</span>
+          <span class="badge badge-outline">{{service.title}}</span>
         </div>
 
         <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
           <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Resources' %}</span>
-          <div class="flex gap-1">
+          <div class="flex gap-1 flex-wrap justify-end">
             {% for it in resources %}
-              <span class="badge badge-primary badge-sm">#{{it}}</span>
+              <span class="badge badge-primary badge-sm">#{{it.parent.name|add:'/'|add:it.name}}</span>
             {% endfor %}
           </div>
         </div>
