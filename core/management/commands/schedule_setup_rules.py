@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from django.db.transaction import atomic
+from django.utils.translation import gettext_lazy as _
+
+from schedule.models import ResourceNotSelectable
 
 PERMISSION_GROUPS = {
     'OWNER': [
@@ -61,3 +64,10 @@ class Command(BaseCommand):
                 group.permissions.set(permissions_to_add)
                 status = "Criado" if created else "Atualizado"
                 self.stdout.write(self.style.SUCCESS(f'Gropo {group_name}: {status} com {len(permissions_to_add)} permissões.'))
+            client_type, c = ResourceNotSelectable.objects.get_or_create(
+                code="client",
+                defaults={
+                    'is_selectable': False,
+                    'name': _('Client'),
+                }
+            )
