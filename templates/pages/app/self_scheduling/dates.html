@@ -29,6 +29,7 @@ $q.use(
             month: '2-digit',
             year: 'numeric'
           }).format(dateObj)
+          a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
           li.appendChild(a);
           frag.appendChild(li);
         })

@@ -3,4 +3,30 @@
 {% with key='times' title=_("Available Times") list_title=_('Select a time on the calendar to proceed.') %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
+<script>
+$q.use(
+  ['times'],
+  () => {
+    return $r.get(`{% url 'availabilities_presentation' %}?day={{request.GET.date}}`)
+  },
+  {
+    onSuccess(data){
+      const times = Array.from(new Set(data.map(it => it.occurrences.map(it => it.split('T')[1])).flat()))
+      const ul = document.getElementById('id_times');
+      if (ul){
+        const frag = document.createDocumentFragment();
+        times.forEach(it => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.innerText = it.slice(0,5)
+          a.href = `{% url 'self_scheduling' %}?step=5&service={{request.GET.service}}&resource={{request.GET.resource}}&date={{request.GET.date}}&time=${it}`
+          li.appendChild(a);
+          frag.appendChild(li);
+        })
+        ul.appendChild(frag);
+      }
+    }
+  }
+)
+</script>
 {% endblock %}
