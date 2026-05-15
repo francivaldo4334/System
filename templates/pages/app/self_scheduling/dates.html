@@ -16,7 +16,7 @@ $q.use(
   },
   {
     onSuccess(data){
-      const dates = Array.from(new Set(data.map(it => it.occurrences.map(it => it.split('T')[0])).flat()))
+      const dates = Array.from(new Set(data.map(it => it.occurrences.map(it => it.split('T')[0])).flat())).sort()
       const ul = document.getElementById('id_dates');
       if (ul){
         const frag = document.createDocumentFragment();

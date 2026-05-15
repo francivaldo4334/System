@@ -11,10 +11,18 @@ $q.use(
   },
   {
     onSuccess(data){
-      const times = Array.from(new Set(data.map(a => a.occurrences.map(it => ({
-        time:it.split('T')[1],
-        id: a.id,
-      }))).flat()))
+    const times = Array.from(
+      new Set(
+        data.flatMap(a => 
+          a.occurrences.map(it => JSON.stringify({
+            time: it.split('T')[1],
+            id: a.id,
+          }))
+        )
+      )
+    )
+    .map(it => JSON.parse(it))
+    .sort((a, b) => a.time.localeCompare(b.time));
       const ul = document.getElementById('id_times');
       const calcSlot = (it) => {
         const [hour, minute] = it.split(':').map(Number)
