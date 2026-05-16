@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-06 13:37+0000\n"
+"POT-Creation-Date: 2026-05-16 14:24+0000\n"
 "PO-Revision-Date: 2026-05-05 10:00-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -93,21 +93,19 @@ msgstr "Usar como categoria."
 
 #: app/forms.py:154 app/forms.py:203 app/tables.py:98
 #: templates/components/schedule/filter.services.html:3
+#: templates/pages/app/self_scheduling/ticket.html:15
 msgid "Service"
 msgstr "Serviço"
 
-#: app/forms.py:159 app/tables.py:88 app/views.py:86
+#: app/forms.py:159 app/tables.py:88 app/views.py:89
 #: templates/pages/app/schedule/settings/availabilities/index.html:11
+#: templates/pages/app/self_scheduling/ticket.html:20
 msgid "Resources"
 msgstr "Recursos"
 
 #: app/forms.py:209 app/tables.py:76 app/tables.py:99
 msgid "Resource Type"
 msgstr "Tipo de recurso"
-
-#: app/forms.py:215 app/tables.py:100
-msgid "Quantity"
-msgstr "Quantidade"
 
 #: app/tables.py:74
 msgid "Resource Name"
@@ -117,64 +115,72 @@ msgstr "Nome do recurso"
 msgid "Is Selectable"
 msgstr "É selecionável"
 
-#: app/views.py:40
+#: app/tables.py:100
+msgid "Quantity"
+msgstr "Quantidade"
+
+#: app/views.py:43
 msgid "Agenda"
 msgstr "Agenda"
 
-#: app/views.py:46
+#: app/views.py:49
 msgid "Settings"
 msgstr "Configurações"
 
-#: app/views.py:78
+#: app/views.py:81
 msgid "Availabilities"
 msgstr "Disponibilidades"
 
-#: app/views.py:91
+#: app/views.py:94
 msgid "Services"
 msgstr "Serviços"
 
-#: app/views.py:96
+#: app/views.py:99
 msgid "Service Requirements"
 msgstr "Requisitos do serviço"
 
-#: schedule/models.py:30 schedule/models.py:32 schedule/models.py:34
-#: schedule/models.py:46
+#: core/management/commands/schedule_setup_rules.py:71 schedule/views.py:151
+msgid "Client"
+msgstr "Cliente"
+
+#: schedule/models.py:37 schedule/models.py:39 schedule/models.py:41
+#: schedule/models.py:53
 msgid "Enter a valid value."
 msgstr "Insira um valor válido."
 
-#: schedule/models.py:82 schedule/serializers.py:280
+#: schedule/models.py:89 schedule/serializers.py:285
 msgid "There is a schedule conflict for the selected date and time range."
 msgstr "Existe um conflito de horários para a data e intervalo selecionados."
 
-#: schedule/models.py:86 schedule/serializers.py:276
+#: schedule/models.py:93 schedule/serializers.py:281
 msgid "There cannot be an availability period greater than 90 days."
 msgstr "Não pode haver um período de disponibilidade superior a 90 dias."
 
-#: schedule/models.py:213
+#: schedule/models.py:220
 msgid "Pending"
 msgstr "Pendente"
 
-#: schedule/models.py:214
+#: schedule/models.py:221
 msgid "Confirmed"
 msgstr "Confirmado"
 
-#: schedule/models.py:215
+#: schedule/models.py:222
 msgid "Migrated"
 msgstr "Migrado"
 
-#: schedule/models.py:216
+#: schedule/models.py:223
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: schedule/models.py:217
+#: schedule/models.py:224
 msgid "Absent"
 msgstr "Faltou"
 
-#: schedule/models.py:218
+#: schedule/models.py:225
 msgid "In Progress"
 msgstr "Em andamento"
 
-#: schedule/models.py:219
+#: schedule/models.py:226
 msgid "Completed"
 msgstr "Concluído"
 
@@ -186,13 +192,13 @@ msgstr "Este campo é obrigatório."
 msgid "A rule already exists between this Service and this Resource."
 msgstr "Já existe uma regra entre este Serviço e este Recurso."
 
-#: schedule/serializers.py:158
+#: schedule/serializers.py:163
 msgid "One or more selected resources are not allowed for this service type."
 msgstr ""
 "Um ou mais recursos selecionados não são permitidos para este tipo de "
 "serviço."
 
-#: schedule/serializers.py:159
+#: schedule/serializers.py:164
 msgid ""
 "The provided resource quantity does not match the requirement for this "
 "service."
@@ -200,22 +206,22 @@ msgstr ""
 "A quantidade de recurso fornecida não corresponde ao requisito para este "
 "serviço."
 
-#: schedule/serializers.py:160
+#: schedule/serializers.py:165
 msgid ""
 "One or more selected resources are already occupied at the requested time."
 msgstr ""
 "Um ou mais recursos selecionados já estão ocupados no horário solicitado."
 
-#: schedule/serializers.py:161
+#: schedule/serializers.py:166
 msgid "Service is required for creating this assignment."
 msgstr "O serviço é obrigatório para criar esta atribuição."
 
-#: schedule/views.py:33
+#: schedule/views.py:58
 #, python-format
 msgid "Deletion of %(name)s failed"
 msgstr "Falha ao excluir %(name)s"
 
-#: schedule/views.py:59
+#: schedule/views.py:84
 msgid "Slot occupied"
 msgstr "Horário ocupado"
 
@@ -248,21 +254,24 @@ msgstr "Sair"
 msgid "Today"
 msgstr "Hoje"
 
+#: templates/components/schedule/filter.clean.html:2
+msgid "Clear filters"
+msgstr "Limpar Filtros"
+
 #: templates/components/schedule/filter.resources.html:2
 msgid "Resource Category"
 msgstr "Categoria de Recurso"
 
-#: templates/components/schedule/filter.resources.html:7
+#: templates/components/schedule/filter.resources.html:8
 msgid "Resource"
 msgstr "Recurso"
 
-#: templates/components/schedule/filter.resources.html:22
+#: templates/components/schedule/filter.resources.html:23
 #: templates/components/schedule/filter.services.html:14
-#: templates/components/schedule/filter.status.html:22
 msgid "Show All"
 msgstr "Mostrar Todos"
 
-#: templates/components/schedule/filter.resources.html:46
+#: templates/components/schedule/filter.resources.html:48
 msgid "Sholl All"
 msgstr "Mostrar Todos"
 
@@ -319,19 +328,19 @@ msgstr "Mostrando"
 msgid "of"
 msgstr "de"
 
-#: templates/layouts/crud/list.html:21
+#: templates/layouts/crud/list.html:22
 msgid "items"
 msgstr "itens"
 
-#: templates/layouts/crud/list.html:25
+#: templates/layouts/crud/list.html:26
 msgid "Before"
 msgstr "Anterior"
 
-#: templates/layouts/crud/list.html:28
+#: templates/layouts/crud/list.html:29
 msgid "After"
 msgstr "Próximo"
 
-#: templates/layouts/crud/list.html:73
+#: templates/layouts/crud/list.html:74
 msgid "Undefined"
 msgstr "Indefinido"
 
@@ -396,7 +405,7 @@ msgid "Confirmar"
 msgstr "Confirmado"
 
 #: templates/pages/app/schedule/index.html:5
-#: templates/pages/app/schedule/settings/index.html:3
+#: templates/pages/app/schedule/settings/index.html:4
 msgid "RSA Agenda"
 msgstr "Agenda RSA"
 
@@ -407,6 +416,88 @@ msgstr " Buscar"
 #: templates/pages/app/schedule/settings/availabilities/index.html:19
 msgid "New Availability"
 msgstr "Nova Disponibilidade"
+
+#: templates/pages/app/self_scheduling/dates.html:4
+#, fuzzy
+#| msgid "Availabilities"
+msgid "Available days"
+msgstr "Disponibilidades"
+
+#: templates/pages/app/self_scheduling/dates.html:4
+msgid "Select a day from the calendar below for obligations."
+msgstr "Selecione um dia disponível"
+
+#: templates/pages/app/self_scheduling/home.html:15
+#, fuzzy
+#| msgid "Rescue appointment"
+msgid "Schedule an appointment"
+msgstr "Recuperar agendamento"
+
+#: templates/pages/app/self_scheduling/index.html:5
+msgid "Scheduling"
+msgstr "Agendando"
+
+#: templates/pages/app/self_scheduling/layouts/choice.html:4
+msgid "Go back"
+msgstr "Voltar"
+
+#: templates/pages/app/self_scheduling/layouts/choice.html:8
+#, fuzzy
+#| msgid "Select a value."
+msgid "Select a option"
+msgstr "Selecione um valor."
+
+#: templates/pages/app/self_scheduling/layouts/choice.html:14
+msgid "Select one of the items below"
+msgstr "Selecione um dos itens abaixo"
+
+#: templates/pages/app/self_scheduling/services.html:3
+#, fuzzy
+#| msgid "Availabilities"
+msgid "Available Services"
+msgstr "Disponibilidades"
+
+#: templates/pages/app/self_scheduling/services.html:3
+#, fuzzy
+#| msgid "Start service"
+msgid "Select a service below"
+msgstr "Iniciar atendimento"
+
+#: templates/pages/app/self_scheduling/ticket.html:10
+msgid "Appointment confirmed"
+msgstr "Confirmar Agendamento"
+
+#: templates/pages/app/self_scheduling/ticket.html:11
+msgid "The details have been sent to your email."
+msgstr "Os dados foram enviados para o seu email."
+
+#: templates/pages/app/self_scheduling/ticket.html:29
+msgid "Date"
+msgstr "Data"
+
+#: templates/pages/app/self_scheduling/ticket.html:34
+#, fuzzy
+#| msgid "Time From"
+msgid "Time"
+msgstr "Hora de início"
+
+#: templates/pages/app/self_scheduling/ticket.html:40
+msgid "Add to Calendar"
+msgstr "Adicionar na sua agenda"
+
+#: templates/pages/app/self_scheduling/ticket.html:41
+msgid "Download Receipt"
+msgstr "Baixar comprovante"
+
+#: templates/pages/app/self_scheduling/times.html:3
+#, fuzzy
+#| msgid "Availabilities"
+msgid "Available Times"
+msgstr "Disponibilidades"
+
+#: templates/pages/app/self_scheduling/times.html:3
+msgid "Select a time on the calendar to proceed."
+msgstr "Selecione um horário disponível."
 
 #, fuzzy, python-format
 #~| msgid ""
