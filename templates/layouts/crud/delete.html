@@ -65,7 +65,6 @@
                     },
                     onError(error){
                         if (error.status > 300 && error.status < 500) {
-                            console.log(error.data)
                             toastError(error.data.detail || error.data)
                         }
                     }
