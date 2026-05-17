@@ -1,12 +1,46 @@
 {% extends 'pages/app/self_scheduling/index.html'%}
 {% block content %}
 {% get_current_language as LANG_CODE %}
+
 <div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
-    {% include 'pages/app/self_scheduling/ticket.html'%}
+    <div class="w-full max-w-md flex flex-col items-center justify-center">
+
+        <!-- 1. CONTAINER DE LOADING (Visível por padrão ao carregar) -->
+        <div id="loading_view" class="flex flex-col items-center gap-4 py-12">
+            <span class="loading loading-spinner loading-lg text-primary"></span>
+            <p class="text-base-content/70 text-sm animate-pulse">Processando seu agendamento...</p>
+        </div>
+
+        <!-- 2. CONTAINER DE ERRO (Oculto por padrão) -->
+        <div id="error_view"
+            class="hidden w-full bg-error/10 border border-error/20 p-6 rounded-2xl text-center shadow-sm">
+            <div class="text-error mb-3 flex justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-error mb-2">Não foi possível agendar</h3>
+            <p id="error_text" class="text-base-content/80 text-sm mb-4"></p>
+            <button onclick="window.location.reload()" class="btn btn-error btn-outline btn-sm">
+                Tentar Novamente
+            </button>
+        </div>
+
+        <!-- 3. CONTAINER DO TICKET (Oculto por padrão, só aparece no sucesso) -->
+        <div id="ticket_view" class="hidden w-full">
+            {% include 'pages/app/self_scheduling/ticket.html'%}
+        </div>
+
+    </div>
 </div>
+
 <script>
+    // Inicialização dos Estados
     $s.create('date', '{{request.GET.date}}')
-    $s.create('is_loading', false)
+
+    // Formatação reativa da data interna do ticket
     $s.subscribe('date', id_date_field, 'innerText', (v) => {
         const dateObj = new Date(`${v}T00:00:00`)
         return new Intl.DateTimeFormat('{{LANG_CODE}}', {
@@ -15,21 +49,38 @@
             year: 'numeric'
         }).format(dateObj)
     })
-    $s.subscribe('is_loading', id_figure, null, (v, el) => {
-        el.classList.toggle('loading', v)
-    })
-    document.querySelectorAll('.success-text').forEach(it => {
-        $s.subscribe('is_loading', it, null, (v) => {
-            it.classList.toggle('hidden', v)
-        })
-    })
-    document.querySelectorAll('button').forEach(it => {
-        $s.subscribe('is_loading', it, 'disabled')
-    })
+
+    // Elementos do DOM para controle de fluxo
+    const viewLoading = document.getElementById('loading_view')
+    const viewError = document.getElementById('error_view')
+    const viewTicket = document.getElementById('ticket_view')
+    const textError = document.getElementById('error_text')
+
+    // Função central que controla qual "tela" o usuário vê
+    // Aceita: 'LOADING' | 'SUCCESS' | 'ERROR'
+    function switchView(state, errorMessage = '') {
+        // Reset de classes
+        viewLoading.classList.add('hidden')
+        viewError.classList.add('hidden')
+        viewTicket.classList.add('hidden')
+
+        if (state === 'LOADING') {
+            viewLoading.classList.remove('hidden')
+        } else if (state === 'SUCCESS') {
+            viewTicket.classList.remove('hidden')
+        } else if (state === 'ERROR') {
+            if (textError) textError.innerText = errorMessage
+            viewError.classList.remove('hidden')
+        }
+    }
+
+    // Execução do Request
     $q.use(
         ['create_appointment'],
         () => {
-            $s.set('is_loading', true)
+            // Entra em estado de loading imediatamente ao disparar
+            switchView('LOADING')
+
             return $r.post('{% url "client_assignment-list" %}', {
                 'service': Number('{{request.GET.service|escapejs}}'),
                 'resources': '{{request.GET.resource|escapejs}}'.split(','),
@@ -41,11 +92,17 @@
             )
         },
         {
-            onSuccess() {
-
+            onSuccess(response) {
+                // Requisição OK: Esconde o loading e renderiza o Ticket
+                switchView('SUCCESS')
+            },
+            onError(error) {
+                // Falha: Esconde o loading e renderiza o bloco de erro com a mensagem do servidor
+                const msg = error?.response?.data?.detail || 'O horário selecionado não está mais disponível ou os dados são inválidos.'
+                switchView('ERROR', msg)
             },
             onFinally() {
-                $s.set('is_loading', false)
+                // Não altera o estado aqui para evitar que o loading suma antes da hora ou que o fluxo quebre
             }
         }
     )
