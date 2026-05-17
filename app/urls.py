@@ -4,6 +4,7 @@ from app.views import (
     AppConfigView,
     AppScheduleSettingsView,
     AppScheduleView,
+    HomeView,
     ScheduleSettingsAvailabilitiesView,
     ScheduleSettingsResourceView,
     ScheduleSettingsServiceRequirementsView,
@@ -12,10 +13,9 @@ from app.views import (
     RegisterView,
 )
 from django.contrib.auth import views as auth_views
-from django.shortcuts import redirect
 
 urlpatterns = [
-    path('', lambda request: redirect('app-schedule'),name="app"),
+    path('', HomeView.as_view(),name="app"),
     path('schedule', AppScheduleView.as_view(), name='app-schedule'),
     path('schedule/settings', AppScheduleSettingsView.as_view(), name='app-schedule-settings'),
     path('schedule/settings/availabilities',ScheduleSettingsAvailabilitiesView.as_view(), name="app-schedule-settings-availabilities"),

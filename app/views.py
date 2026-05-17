@@ -9,7 +9,7 @@ from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCrea
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
 from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
-from core.permissions import IsFrontDesk, IsOwner, IsProfessional
+from core.permissions import IsFrontDesk, IsOnlyClient, IsOwner, IsProfessional
 
 
 class AppView(PermissionRequiredMixin,
@@ -225,7 +225,7 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 #         return context;
 
 from django.shortcuts import get_object_or_404
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class SelfScheduleView(LoginRequiredMixin, TemplateView):
@@ -321,3 +321,11 @@ class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "pages/register/index.html"
     success_url = reverse_lazy('login')
+
+
+class HomeView(LoginRequiredMixin,View):
+    def get(self, request):
+        from django.shortcuts import redirect
+        if IsOnlyClient().has_permission(request, None):
+            return redirect('self_scheduling')
+        return redirect('app-schedule')

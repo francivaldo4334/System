@@ -15,3 +15,14 @@ class IsFrontDesk(permissions.BasePermission):
 class IsProfessional(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name='PROFESSIONAL').exists()
+
+class IsOnlyClient(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return all([
+                not C().has_permission(request, view) for C in
+                [
+                    IsOwner,
+                    IsFrontDesk,
+                    IsProfessional,
+                ]
+            ])
