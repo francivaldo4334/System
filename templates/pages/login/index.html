@@ -1,38 +1,70 @@
 {% extends "layouts/base.html" %}
 
 {% block body %}
-<div class="flex items-center justify-center min-h-screen bg-base-200">
-    <div class="card w-full max-w-sm shadow-2xl bg-base-100 rounded-box">
-        <div class="card-body">
-            <h2 class="card-title justify-center text-2xl mb-4">Acessar Conta</h2>
+<div class="flex items-center justify-center min-h-screen bg-base-200 px-4">
+    <div class="card w-full max-w-md shadow-xl bg-base-100 border border-base-300/50">
+        <div class="card-body p-8">
 
-            {% if form.errors %}
-            <div class="alert alert-error mb-4 py-2">
-                <span class="text-sm">Usuário ou senha incorretos.</span>
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold tracking-tight text-base-content">Acessar Conta</h2>
+                <p class="text-sm text-base-content/60 mt-2">Seja bem-vindo de volta</p>
+            </div>
+
+            {% if form.errors or form.non_field_errors %}
+            <div class="alert alert-error gap-2 mb-6 py-3 shadow-sm rounded-lg" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="box-10 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                    <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span class="text-sm font-medium">Usuário ou senha incorretos.</span>
             </div>
             {% endif %}
-            <form method="post" action="{% url 'login' %}">
+
+            <form method="post" action="{% url 'login' %}" class="space-y-4">
                 {% csrf_token %}
-                
+
                 <div class="form-control w-full">
-                    <label class="label">
-                        <span class="label-text">Nome de Usuário</span>
+                    <label class="label pb-1.5" for="username">
+                        <span class="label-text font-medium text-base-content/80">Nome de Usuário</span>
                     </label>
-                    <input type="text" name="username" autofocus autocomplete="username" required
-                           class="input w-full" />
+                    <input type="text" id="username" name="username" autofocus autocomplete="username" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
                 </div>
 
-                <div class="form-control w-full mt-4">
-                    <label class="label">
-                        <span class="label-text">Senha</span>
-                    </label>
-                    <input type="password" name="password" autocomplete="current-password" required
-                           class="input w-full" />
+                <div class="form-control w-full">
+                    <div class="flex justify-between items-center pb-1.5">
+                        <label class="label p-0" for="password">
+                            <span class="label-text font-medium text-base-content/80">Senha</span>
+                        </label>
+                        {# Opcional: Link para recuperação de senha no futuro #}
+                        {# <a href="#" class="text-xs link link-hover link-primary">Esqueceu?</a> #}
+                    </div>
+                    <input type="password" id="password" name="password" autocomplete="current-password" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
                 </div>
-                <div class="form-control mt-6">
-                    <button type="submit" class="btn btn-primary">Entrar</button>
+
+                <div class="form-control pt-4">
+                    <button type="submit" class="btn btn-primary w-full shadow-md tracking-wide">
+                        Entrar
+                    </button>
                 </div>
-            </form>            
+            </form>
+
+            <div class="divider my-6 text-xs text-base-content/40">ou</div>
+
+            <div class="text-center">
+                <p class="text-sm text-base-content/70">
+                    Não tem uma conta?
+                    <a href="{% url 'register' %}"
+                        class="link link-primary font-semibold no-underline hover:underline transition-all ml-1">
+                        Cadastre-se
+                    </a>
+                </p>
+            </div>
+
         </div>
     </div>
 </div>

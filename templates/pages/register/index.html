@@ -1,0 +1,110 @@
+{% extends "layouts/base.html" %}
+
+{% block body %}
+<div class="flex items-center justify-center min-h-screen bg-base-200 px-4 py-8">
+    <div class="card w-full max-w-md shadow-xl bg-base-100 border border-base-300/50">
+        <div class="card-body p-8">
+
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold tracking-tight text-base-content">Criar Conta</h2>
+                <p class="text-sm text-base-content/60 mt-2">Comece a gerenciar suas atividades agora mesmo</p>
+            </div>
+
+            {% if form.errors or form.non_field_errors %}
+            <div class="alert alert-error gap-2 mb-6 py-3 shadow-sm rounded-lg" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none"
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                    <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <div class="text-sm font-medium text-left w-full">
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                    {% else %}
+                    <p>Por favor, corrija os erros abaixo.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'register' %}" class="space-y-4" novalidate>
+                {% csrf_token %}
+
+                <!-- Campo: Nome de Usuário -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="username">
+                        <span class="label-text font-medium text-base-content/80">Nome de Usuário</span>
+                    </label>
+                    <input type="text" id="username" name="username" autofocus autocomplete="username" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.username.errors %}input-error{% endif %}"
+                        value="{{ form.username.value|default:'' }}" />
+                    {% if form.username.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.username.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo: E-mail -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="email">
+                        <span class="label-text font-medium text-base-content/80">E-mail</span>
+                    </label>
+                    <input type="email" id="email" name="email" autocomplete="email" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.email.errors %}input-error{% endif %}"
+                        value="{{ form.email.value|default:'' }}" />
+                    {% if form.email.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo: Senha -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="password">
+                        <span class="label-text font-medium text-base-content/80">Senha</span>
+                    </label>
+                    <input type="password" id="password" name="password" autocomplete="new-password" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password.errors %}input-error{% endif %}" />
+                    {% if form.password.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.password.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo: Confirmar Senha -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="password_confirm">
+                        <span class="label-text font-medium text-base-content/80">Confirmar Senha</span>
+                    </label>
+                    <input type="password" id="password_confirm" name="password_confirm" autocomplete="new-password"
+                        required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password_confirm.errors %}input-error{% endif %}" />
+                    {% if form.password_confirm.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.password_confirm.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Botão de Submissão -->
+                <div class="form-control pt-4">
+                    <button type="submit" class="btn btn-primary w-full shadow-md tracking-wide">
+                        Criar minha conta
+                    </button>
+                </div>
+            </form>
+
+            <div class="divider my-6 text-xs text-base-content/40">ou</div>
+
+            <!-- Link para a Tela de Login -->
+            <div class="text-center">
+                <p class="text-sm text-base-content/70">
+                    Já possui uma conta?
+                    <a href="{% url 'login' %}"
+                        class="link link-primary font-semibold no-underline hover:underline transition-all ml-1">
+                        Faça login
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

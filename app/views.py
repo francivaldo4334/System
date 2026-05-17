@@ -1,6 +1,8 @@
 from typing import Type
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
@@ -224,7 +226,7 @@ class ScheduleSettingsServiceRequirementsView(CrudView):
 #         return context;
 
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView
+from django.views.generic import CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class SelfScheduleView(LoginRequiredMixin, TemplateView):
@@ -314,3 +316,9 @@ from rest_framework.generics import RetrieveAPIView, UpdateAPIView
 class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
     queryset = AppConfig.objects.all()
     serializer_class = AppConfigSerializer
+
+
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = "pages/register/index.html"
+    success_url = reverse_lazy('login')
