@@ -294,13 +294,15 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             return {}
 
         parent = required_resources[current_idx]
-        resources = ResourceSelectable.objects.filter(parent=parent)
+        resources = ResourceSelectable.objects.filter(parent=parent).values(
+            'id', 'name'
+        )
         
         # Lógica de transição
         is_last_resource = (current_idx == total_resources - 1)
         
         return {
-            'resources': resources,
+            'resources': list(resources),
             'parent': parent,
             'next_step': '3' if is_last_resource else '2',
             'next_resource_step': (current_idx + 1) % total_resources

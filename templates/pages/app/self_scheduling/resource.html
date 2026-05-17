@@ -1,29 +1,69 @@
 {% extends 'pages/app/self_scheduling/index.html' %}
-{% block content%}
-  {% with key='resource' title='Selecione um '|add:parent.name list_title="Selecione uma das opções abaixo" %}
-    {% include 'pages/app/self_scheduling/layouts/choice.html' %}
-  {% endwith %}
+{% load i18n %}
+
+{% block content %}
+{# Resolvendo a internacionalização e o fallback para o parent.name #}
+{% with parent_name=parent.name|default:"recurso" %}
+{% blocktranslate asvar title_text %}Selecione um {{ parent_name }}{% endblocktranslate %}
+
+{% with key='resource' title=title_text list_title="Selecione uma das opções abaixo" %}
+{% include 'pages/app/self_scheduling/layouts/choice.html' %}
+{% endwith %}
+{% endwith %}
+
+{# Injeta os dados dos resources de forma segura como JSON no DOM #}
+{{ resources|json_script:"resources-data" }}
+
 <script>
-  const ul = document.getElementById('id_resource')
-  if (ul) {
-  const frag = document.createDocumentFragment()
-  {% for it in resources %}
-    const li_{{it.id}} = document.createElement('li')
-    const a_{{it.id}} = document.createElement('a')
-    a_{{it.id}}.innerText = '{{it.name}}'
-    const currentResource = "{{ request.GET.resource|escapejs }}";
-    const ids = currentResource ? currentResource.split(',') : [];
-    if (!ids.includes('{{it.id}}')) {
-        ids.push("{{it.id}}");
-    }
-    a_{{it.id}}.href = `{% url "self_scheduling" %}?step={{next_step}}&service={{request.GET.service}}&required_resource_step={{next_resource_step}}&resource=${ids.join(',')}`
-    li_{{it.id}}.appendChild(a_{{it.id}})
-    $s.subscribe('form.service', li_{{it.id}}, null, (value) => {
-      li_{{it.id}}.classList.toggle('menu-active', value === {{it.id}})
-    })
-    frag.appendChild(li_{{it.id}})
-  {% endfor %}
-  ul.appendChild(frag)
-  }
+    (() => {
+        const ul = document.getElementById('id_resource');
+        if (!ul) return;
+
+        // 1. Recupera e parseia os dados do Django
+        const resources = JSON.parse(document.getElementById('resources-data').textContent);
+
+        // 2. Extrai parâmetros da URL atual usando a API nativa URLSearchParams
+        const currentUrl = new URL(window.location.href);
+        const currentService = currentUrl.searchParams.get('service') || '';
+        const currentResource = currentUrl.searchParams.get('resource') || '';
+
+        const baseIds = currentResource ? currentResource.split(',') : [];
+        const frag = document.createDocumentFragment();
+
+        // 3. Loop puro em JS (Gera um HTML final muito menor e mais limpo)
+        resources.forEach(it => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.innerText = it.name;
+
+            // Clone do array para não mutar o escopo do loop anterior
+            const ids = [...baseIds];
+            if (!ids.includes(String(it.id))) {
+                ids.push(it.id);
+            }
+
+            // Construção robusta da URL usando URLSearchParams
+            const params = new URLSearchParams({
+                step: '{{ next_step|escapejs }}',
+                service: currentService,
+                required_resource_step: '{{ next_resource_step|escapejs }}',
+                resource: ids.join(',')
+            });
+
+            a.href = `{% url "self_scheduling" %}?${params.toString()}`;
+            li.appendChild(a);
+
+            // Inscrição no estado reativo
+            if (typeof $s !== 'undefined' && $s.subscribe) {
+                $s.subscribe('form.service', li, null, (value) => {
+                    li.classList.toggle('menu-active', value === it.id);
+                });
+            }
+
+            frag.appendChild(li);
+        });
+
+        ul.appendChild(frag);
+    })();
 </script>
 {% endblock %}
