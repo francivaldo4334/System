@@ -2,52 +2,52 @@
 {% block content %}
 {% get_current_language as LANG_CODE %}
 <div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
-{% include 'pages/app/self_scheduling/ticket.html'%}
+    {% include 'pages/app/self_scheduling/ticket.html'%}
 </div>
 <script>
-$s.create('date', '{{request.GET.date}}')
-$s.create('is_loading', false)
-$s.subscribe('date',id_date_field, 'innerText', (v) => {
-  const dateObj = new Date(`${v}T00:00:00`)
-  return new Intl.DateTimeFormat('{{LANG_CODE}}', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  }).format(dateObj)
-})
-$s.subscribe('is_loading', id_figure, null, (v, el) => {
-  el.classList.toggle('loading', v)
-})
-document.querySelectorAll('.success-text').forEach(it => {
-  $s.subscribe('is_loading', it, null, (v)=>{
-    it.classList.toggle('hidden', v)
-  })
-})
-document.querySelectorAll('button').forEach(it => {
-  $s.subscribe('is_loading', it, 'disabled')
-})
-$q.use(
-  ['create_appointment'],
-  ()=> {
-    $s.set('is_loading', true)
-    return $r.post('{% url "client_assignment-list" %}', {
-      'service': Number('{{request.GET.service|escapejs}}'),
-      'resources': '{{request.GET.resource|escapejs}}'.split(','),
-      'date': '{{request.GET.date|escapejs}}',
-      'availability': '{{request.GET.availability|escapejs}}',
-      'start_slot': '{{request.GET.slot|escapejs}}',
-    },
-    { "X-CSRFToken": "{{csrf_token}}" }
+    $s.create('date', '{{request.GET.date}}')
+    $s.create('is_loading', false)
+    $s.subscribe('date', id_date_field, 'innerText', (v) => {
+        const dateObj = new Date(`${v}T00:00:00`)
+        return new Intl.DateTimeFormat('{{LANG_CODE}}', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).format(dateObj)
+    })
+    $s.subscribe('is_loading', id_figure, null, (v, el) => {
+        el.classList.toggle('loading', v)
+    })
+    document.querySelectorAll('.success-text').forEach(it => {
+        $s.subscribe('is_loading', it, null, (v) => {
+            it.classList.toggle('hidden', v)
+        })
+    })
+    document.querySelectorAll('button').forEach(it => {
+        $s.subscribe('is_loading', it, 'disabled')
+    })
+    $q.use(
+        ['create_appointment'],
+        () => {
+            $s.set('is_loading', true)
+            return $r.post('{% url "client_assignment-list" %}', {
+                'service': Number('{{request.GET.service|escapejs}}'),
+                'resources': '{{request.GET.resource|escapejs}}'.split(','),
+                'date': '{{request.GET.date|escapejs}}',
+                'availability': '{{request.GET.availability|escapejs}}',
+                'start_slot': '{{request.GET.slot|escapejs}}',
+            },
+                {"X-CSRFToken": "{{csrf_token}}"}
+            )
+        },
+        {
+            onSuccess() {
+
+            },
+            onFinally() {
+                $s.set('is_loading', false)
+            }
+        }
     )
-  },
-  {
-    onSuccess(){
-      
-    },
-    onFinally(){
-      $s.set('is_loading', false)
-    }
-  }
-)
 </script>
 {% endblock %}
