@@ -1,12 +1,11 @@
 from typing import Type
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm, BaseForm, ResourceForm, ServiceForm, ServiceRequirementsForm
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ServiceForm, ServiceRequirementsForm
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
 from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
@@ -319,6 +318,6 @@ class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
 
 
 class RegisterView(CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     template_name = "pages/register/index.html"
     success_url = reverse_lazy('login')

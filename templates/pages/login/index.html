@@ -1,4 +1,8 @@
 {% extends "layouts/base.html" %}
+{% load static %}
+{% block header%}
+<script src="{% static 'state.js' %}"></script>
+{%endblock%}
 
 {% block body %}
 <div class="flex items-center justify-center min-h-screen bg-base-200 px-4">
@@ -45,6 +49,14 @@
                     <input type="password" id="password" name="password" autocomplete="current-password" required
                         class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
                 </div>
+                <!-- Mostrar senha -->
+                <fieldset class="form-control w-full">
+                    <label class="label">
+                        <input type="checkbox" checked="checked" class="toggle"
+                            onchange="$s.set('show_password',!$s.get('show_password'))" />
+                        {% trans 'Show password' %}
+                    </label>
+                </fieldset>
 
                 <div class="form-control pt-4">
                     <button type="submit" class="btn btn-primary w-full shadow-md tracking-wide">
@@ -68,4 +80,10 @@
         </div>
     </div>
 </div>
+<script>
+    $s.create('show_password', false)
+    document.querySelectorAll('input[type="password"]').forEach(it => {
+        $s.subscribe('show_password', it, 'type', (v) => v ? 'text' : 'password')
+    })
+</script>
 {% endblock %}

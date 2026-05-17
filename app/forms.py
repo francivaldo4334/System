@@ -2,6 +2,9 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Any, List
 
+from django import forms
+from django.contrib.auth.models import User
+
 @dataclass
 class Field:
     label: Any;
@@ -63,6 +66,7 @@ class BaseForm:
         return self._form.fields
 
 # forms
+from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 class AvailabilityForm(BaseForm):
@@ -217,3 +221,9 @@ class ServiceRequirementsForm(BaseForm):
         # )
         
     ]
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = UserCreationForm.Meta.fields + ('email',)
