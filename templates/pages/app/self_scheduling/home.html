@@ -1,26 +1,27 @@
 {% extends 'pages/app/self_scheduling/index.html' %}
 {% block content %}
-<section class="relative w-full h-full grid grid-rows-2 overflow-hidden">
-  <div class="relative overflow-hidden">
-    <img
-      class="absolute inset-0 w-full h-full object-cover"
-      src="{{config.background_image.url|default:''}}"
-      alt="background" />
-    <div class="relative z-10 flex items-center justify-center h-full">
-      <span class="text-white text-2xl font-bold"></span>
+<section class="relative w-full h-full grid grid-rows-[auto_1fr_1fr] overflow-hidden">
+    <div class="flex w-full justify-end p-4">
+        <div class="*:btn-ghost">
+            {% include 'components/logout.html' %}
+        </div>
     </div>
-  </div>
-  <div class="bg-base-100 flex flex-col items-center justify-center">
-    <a class="btn btn-lg btn-primary" href="{% url 'self_scheduling' %}?step=1">
-      {% trans 'Schedule an appointment' %}
-    </a>
-  </div>
-  <div class="absolute inset-0 flex items-center justify-center pointer-events-none flex flex-col">
-    <img
-      class="mask mask-circle object-cover aspect-square"
-      style="width: 120px;" 
-      src="{{config.company_image.url}}" />
-      {{config.company_name|default:''}}
-  </div>
+    <div class="relative overflow-hidden">
+        <img class="absolute inset-0 w-full h-full object-cover" src="{{config.background_image.url|default:''}}"
+            alt="background" />
+        <div class="relative z-10 flex items-center justify-center h-full">
+            <span class="text-white text-2xl font-bold"></span>
+        </div>
+    </div>
+    <div class="bg-base-100 flex flex-col items-center justify-center">
+        <a class="btn btn-lg btn-primary" href="{% url 'self_scheduling' %}?step=1">
+            {% trans 'Schedule an appointment' %}
+        </a>
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none flex flex-col">
+        <img class="mask mask-circle object-cover aspect-square" style="width: 120px;"
+            src="{{config.company_image.url}}" />
+        {{config.company_name|default:''}}
+    </div>
 </section>
 {% endblock %}

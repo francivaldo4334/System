@@ -1,17 +1,24 @@
-<div class="navbar bg-base-100 shadow-sm">
-  <div class="navbar-start">
-    <button class="btn btn-ghost" onclick="history.go(-1)">
-    {% include 'icons/undo-2.svg'%} {% trans 'Go back' %}
-    </button>
-  </div>
-  <div class="navbar-center">
-    <span class="text-xl">{{title|default:_('Select a option')}}</span>
-  </div>
+<div class="w-full h-full grid grid-rows-[auto_1fr]">
+    <div class="navbar bg-base-100 shadow-sm">
+        <div class="navbar-start">
+            <button class="btn btn-ghost" onclick="history.go(-1)">
+                {% include 'icons/undo-2.svg'%} {% trans 'Go back' %}
+            </button>
+        </div>
+        <div class="navbar-center">
+            <span class="text-xl">
+                {{title|default:_("Select a option")}}
+            </span>
+        </div>
+        <div class="navbar-end *:btn-ghost">
+            {% include 'components/logout.html' %}
+        </div>
+    </div>
+    <section class='w-full h-full p-4'>
+        <ul class="menu menu-xl w-full px-4" id="id_{{key}}">
+            <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
+                {{list_title|default:_('Select one of the items below')}}
+            </li>
+        </ul>
+    </section>
 </div>
-<section class='w-full h-full p-4'>
-  <ul class="menu menu-xl w-full px-4" id="id_{{key}}">
-    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
-      {{list_title|default:_('Select one of the items below')}}
-    </li>
-  </ul>
-</section>
