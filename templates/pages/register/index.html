@@ -6,8 +6,8 @@
         <div class="card-body p-8">
 
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold tracking-tight text-base-content">Criar Conta</h2>
-                <p class="text-sm text-base-content/60 mt-2">Comece a gerenciar suas atividades agora mesmo</p>
+                <h2 class="text-3xl font-bold tracking-tight text-base-content">{% trans 'Create Account' %}</h2>
+                <p class="text-sm text-base-content/60 mt-2">{% trans 'Start managing your activities right now.' %}</p>
             </div>
 
             {% if form.errors or form.non_field_errors %}
@@ -35,7 +35,7 @@
                 <!-- Campo: Nome de Usuário -->
                 <div class="form-control w-full">
                     <label class="label pb-1.5" for="username">
-                        <span class="label-text font-medium text-base-content/80">Nome de Usuário</span>
+                        <span class="label-text font-medium text-base-content/80">{% trans "Username" %}</span>
                     </label>
                     <input type="text" id="username" name="username" autofocus autocomplete="username" required
                         class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.username.errors %}input-error{% endif %}"
@@ -48,7 +48,7 @@
                 <!-- Campo: E-mail -->
                 <div class="form-control w-full">
                     <label class="label pb-1.5" for="email">
-                        <span class="label-text font-medium text-base-content/80">E-mail</span>
+                        <span class="label-text font-medium text-base-content/80">{% trans 'E-mail' %}</span>
                     </label>
                     <input type="email" id="email" name="email" autocomplete="email" required
                         class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.email.errors %}input-error{% endif %}"
@@ -61,7 +61,7 @@
                 <!-- Campo: Senha -->
                 <div class="form-control w-full">
                     <label class="label pb-1.5" for="password">
-                        <span class="label-text font-medium text-base-content/80">Senha</span>
+                        <span class="label-text font-medium text-base-content/80">{% trans 'Password' %}</span>
                     </label>
                     <input type="password" id="password" name="password" autocomplete="new-password" required
                         class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password.errors %}input-error{% endif %}" />
@@ -73,7 +73,7 @@
                 <!-- Campo: Confirmar Senha -->
                 <div class="form-control w-full">
                     <label class="label pb-1.5" for="password_confirm">
-                        <span class="label-text font-medium text-base-content/80">Confirmar Senha</span>
+                        <span class="label-text font-medium text-base-content/80">{% trans "Confirm password" %}</span>
                     </label>
                     <input type="password" id="password_confirm" name="password_confirm" autocomplete="new-password"
                         required
@@ -86,20 +86,20 @@
                 <!-- Botão de Submissão -->
                 <div class="form-control pt-4">
                     <button type="submit" class="btn btn-primary w-full shadow-md tracking-wide">
-                        Criar minha conta
+                        {% trans 'Create your account' %}
                     </button>
                 </div>
             </form>
 
-            <div class="divider my-6 text-xs text-base-content/40">ou</div>
+            <div class="divider my-6 text-xs text-base-content/40">{% trans "Or" %}</div>
 
             <!-- Link para a Tela de Login -->
             <div class="text-center">
                 <p class="text-sm text-base-content/70">
-                    Já possui uma conta?
+                    {% trans 'Do you already have an account?' %}
                     <a href="{% url 'login' %}"
                         class="link link-primary font-semibold no-underline hover:underline transition-all ml-1">
-                        Faça login
+                        {% trans 'Log in' %}
                     </a>
                 </p>
             </div>

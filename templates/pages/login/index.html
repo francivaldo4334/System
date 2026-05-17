@@ -6,8 +6,8 @@
         <div class="card-body p-8">
 
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold tracking-tight text-base-content">Acessar Conta</h2>
-                <p class="text-sm text-base-content/60 mt-2">Seja bem-vindo de volta</p>
+                <h2 class="text-3xl font-bold tracking-tight text-base-content">{% trans 'Access you account' %}</h2>
+                <p class="text-sm text-base-content/60 mt-2">{% trans 'Welcome back' %}</p>
             </div>
 
             {% if form.errors or form.non_field_errors %}
@@ -19,7 +19,7 @@
                     <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
                     <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                 </svg>
-                <span class="text-sm font-medium">Usuário ou senha incorretos.</span>
+                <span class="text-sm font-medium">{% trans "Incorrect username or password" %}</span>
             </div>
             {% endif %}
 
@@ -28,7 +28,7 @@
 
                 <div class="form-control w-full">
                     <label class="label pb-1.5" for="username">
-                        <span class="label-text font-medium text-base-content/80">Nome de Usuário</span>
+                        <span class="label-text font-medium text-base-content/80">{% trans 'Username' %}</span>
                     </label>
                     <input type="text" id="username" name="username" autofocus autocomplete="username" required
                         class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
@@ -37,7 +37,7 @@
                 <div class="form-control w-full">
                     <div class="flex justify-between items-center pb-1.5">
                         <label class="label p-0" for="password">
-                            <span class="label-text font-medium text-base-content/80">Senha</span>
+                            <span class="label-text font-medium text-base-content/80">{% trans 'Password' %}</span>
                         </label>
                         {# Opcional: Link para recuperação de senha no futuro #}
                         {# <a href="#" class="text-xs link link-hover link-primary">Esqueceu?</a> #}
@@ -48,19 +48,19 @@
 
                 <div class="form-control pt-4">
                     <button type="submit" class="btn btn-primary w-full shadow-md tracking-wide">
-                        Entrar
+                        {% trans "Access your account" %}
                     </button>
                 </div>
             </form>
 
-            <div class="divider my-6 text-xs text-base-content/40">ou</div>
+            <div class="divider my-6 text-xs text-base-content/40">{% trans 'Or' %}</div>
 
             <div class="text-center">
                 <p class="text-sm text-base-content/70">
-                    Não tem uma conta?
+                    {% trans "Don't have an account?" %}
                     <a href="{% url 'register' %}"
                         class="link link-primary font-semibold no-underline hover:underline transition-all ml-1">
-                        Cadastre-se
+                        {% trans 'Register' %}
                     </a>
                 </p>
             </div>
