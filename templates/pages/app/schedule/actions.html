@@ -127,12 +127,14 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
             <button class="btn btn-primary" onclick="((el) => {
             const assignmentId = $s.get('assignment_id')
             const startSlot = $s.get('modal_migrate_select_date.slot')
+            const newDate = $s.get('modal_migrate_select_date.date')
             const availabilityId = $s.get('modal_migrate_select_date.av')
             $q.use(
                 ['assignment_action'],
                 () => $r.post('{% url 'assignment-migrate' 0 %}'.replace('0',assignmentId), {
                     'start_slot':startSlot,
-                    'availability':availabilityId
+                    'availability':availabilityId,
+                    'date': newDate,
                 }, {
                     'X-CSRFToken': '{{csrf_token}}'
                 }),

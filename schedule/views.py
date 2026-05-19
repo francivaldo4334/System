@@ -137,7 +137,8 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         validated_data = serializer.save()
         start_slot = validated_data['start_slot']
         duration_slot = validated_data['duration_slot']
-        obj.state.migrate(start_slot, duration_slot, request.user)
+        new_date = validated_data['date']
+        obj.state.migrate(start_slot, duration_slot, new_date, request.user)
         return Response(self.get_serializer(obj).data)
 
     @action(['POST'], True)

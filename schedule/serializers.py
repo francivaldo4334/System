@@ -324,6 +324,7 @@ class ActionMigrateSerializer(serializers.Serializer):
         queryset=Availability.objects.all()
     )
     start_slot = serializers.IntegerField()
+    date = serializers.DateField()
     duration_slot = serializers.ReadOnlyField()
 
     def save(self, **kwargs):
@@ -331,9 +332,11 @@ class ActionMigrateSerializer(serializers.Serializer):
         availability = data.get('availability', None)
         duration_slot = availability.duration_slot if availability else None
         start_slot = data.get('start_slot', None)
+        date = data.get('date', None)
         result = {
             'duration_slot': duration_slot,
             'start_slot': start_slot,
+            'date': date,
         }
         return result
 
