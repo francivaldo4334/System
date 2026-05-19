@@ -3,5 +3,7 @@
 {% with key='dates' title=_("Available days") list_title=_('Select a day from the calendar below for obligations.') %}
   {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
-{% include "components/schedule/select_date.js.html" with ul_id="id_dates" %}
+{% with ul_id="id_dates" set_href=True%}
+{% include "components/schedule/select_date.js.html" %}
+{% endwith %}
 {% endblock %}

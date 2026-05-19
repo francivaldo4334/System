@@ -34,7 +34,16 @@ $q.use(
             sufix = " - {% trans 'Tomorrow'%}"
           }
           a.innerText = formatedDate + sufix
-          a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
+          {% if set_href %}
+            a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
+          {% endif %}
+          {% if onclick %}
+            a.onclick = () => {
+              (()=>{
+                {{onclick}}
+              })(it)
+            }
+          {% endif %}
           li.appendChild(a);
           frag.appendChild(li);
         })

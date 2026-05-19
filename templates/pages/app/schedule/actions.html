@@ -111,6 +111,9 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
 
 <dialog id="id_modal_select_date_time" class="modal">
     <div class="modal-box">
+        <h1 class='text-lg font-bold'>
+            {% trans "Select a migrate date" %}
+        </h1>
         <div>
             <ul id="id_ul_select_dates" class="menu">
             </ul>
@@ -122,9 +125,15 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
         </div>
     </div>
 </dialog>
-{% include "components/schedule/select_date.js.html" with ul_id="id_ul_select_dates" %}
+{% with ul_id="id_ul_select_dates" onclick="$s.set('modal_migrate_select_date.date', it)"%}
+{% include "components/schedule/select_date.js.html" %}
+{% endwith %}
 <script type='pass' is="exec-mount">
 {
+    $s.createStore('modal_migrate_select_date',{
+        'date': null,
+        'slot': null,
+    })
     document.querySelectorAll('.btn_action_migrate').forEach(btn => {
         btn.onclick = () => {
             $q.refetch(['dates'])
