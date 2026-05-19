@@ -318,3 +318,22 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
             it for it in occurences
             if it.strftime('%H:%M') not in exclude_times
         ]
+
+class ActionMigrateSerializer(serializers.Serializer):
+    availability = serializers.PrimaryKeyRelatedField(
+        queryset=Availability.objects.all()
+    )
+    start_slot = serializers.IntegerField()
+    duration_slot = serializers.ReadOnlyField()
+
+    def save(self, **kwargs):
+        data = self.validated_data
+        availability = data.get('availability', None)
+        duration_slot = availability.duration_slot if availability else None
+        start_slot = data.get('start_slot', None)
+        result = {
+            'duration_slot': duration_slot,
+            'start_slot': start_slot,
+        }
+        return result
+

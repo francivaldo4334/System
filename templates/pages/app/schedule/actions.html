@@ -115,14 +115,49 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
             {% trans "Select a migrate date" %}
         </h1>
         <div class="grid grid-cols-2 w-full">
-            <ul id="id_ul_select_dates" class="menu">
+            <ul id="id_ul_select_dates" class="menu w-full">
             </ul>
-            <ul id="id_ul_select_times" class="menu">
+            <ul id="id_ul_select_times" class="menu w-full">
             </ul>
         </div>
         <div class="modal-action">
-            <button class="btn btn-outline" onclick="id_modal_select_date_time.close();">
+            <button class="btn btn-ghost" onclick="id_modal_select_date_time.close();">
                 {% trans 'Close' %}
+            </button>
+            <button class="btn btn-primary" onclick="((el) => {
+            const assignmentId = $s.get('assignment_id')
+            const startSlot = $s.get('modal_migrate_select_date.slot')
+            const availabilityId = $s.get('modal_migrate_select_date.av')
+            $q.use(
+                ['assignment_action'],
+                () => $r.post('{% url 'assignment-migrate' 0 %}'.replace('0',assignmentId), {
+                    'start_slot':startSlot,
+                    'availability':availabilityId
+                }, {
+                    'X-CSRFToken': '{{csrf_token}}'
+                }),
+                {
+                    onSuccess(){
+                        toastSuccess('{% trans 'Success'%}')
+                        $q.refetch('slots')
+                        el.closest('dialog')?.close()
+                    },
+                    onError(error){
+                        if (error.status > 499)
+                            toastError('{% trans 'Error'%}')
+                        else 
+                            toastError(error.data)
+                    },
+                    onFinally(){
+                        $s.set('action_is_fetching', false)
+                    }
+                },
+                {
+                    ttl: 0,
+                }
+            )
+        })(this)">
+                {% trans "Reschedule" %}
             </button>
         </div>
     </div>
@@ -134,10 +169,12 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
     $s.createStore('modal_migrate_select_date',{
         'date': null,
         'slot': null,
+        'av': null,
     })
     id_modal_select_date_time.onclose = () => {
         $s.set('modal_migrate_select_date.date', null);
         $s.set('modal_migrate_select_date.slot', null);
+        $s.set('modal_migrate_select_date.av', null);
     }
 
     $q.use(
@@ -231,6 +268,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                         a.innerText = it.time.slice(0,5)
                         a.onclick = () => {
                             $s.set("modal_migrate_select_date.slot", slot)
+                            $s.set('modal_migrate_select_date.av',it.id)
                         }
                         li.appendChild(a);
                         a.dataset.value = slot

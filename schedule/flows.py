@@ -21,7 +21,7 @@ class AssignmentState:
     def finish(self):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
-    def migrate(self, start_slot, duration_slot):
+    def migrate(self, start_slot, duration_slot, created_by):
         raise NotImplementedError(f'Status:{self.instance.get_status_display()}') # type: ignore
 
     def cancel(self):
@@ -56,7 +56,7 @@ class AssignmentStateConfirmed(AssignmentState):
             self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
             self.instance.save(update_fields=['status'])
 
-    def migrate(self, start_slot, duration_slot):
+    def migrate(self, start_slot, duration_slot, created_by):
         from schedule.models import Assignment
 
         rules = utils.AssignmentUtil(self.instance)
@@ -65,16 +65,17 @@ class AssignmentStateConfirmed(AssignmentState):
             self.instance.status = self.instance.Status.CANCELLED.value # type: ignore
             self.instance.save(update_fields=['status'])
 
-            new_assigment = Assignment.objects.create(# type: ignore
-                resources=self.instance.resources,
+            new_assignment = Assignment.objects.create(
                 date=self.instance.date,
                 service=self.instance.service,
                 start_slot=start_slot,
                 duration_slot=duration_slot,
-                status=self.instance.Status.MIGRATED.value
+                status=self.instance.Status.MIGRATED.value,
+                created_by=created_by,
             )
+            new_assignment.resources.set(self.instance.resources.all())
 
-            new_rules = utils.AssignmentUtil(new_assigment)
+            new_rules = utils.AssignmentUtil(new_assignment)
             new_rules.checkResourceOccupations()
             new_rules.occupyTimeSlot()
 

@@ -1,16 +1,18 @@
 # pyright: reportAttributeAccessIssue=false
 from datetime import timedelta
+from typing import cast
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.deletion import ProtectedError
 from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from core.permissions import IsFrontDesk, IsOwner
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation
 from schedule.serializers import (
+        ActionMigrateSerializer,
         AssignmentSerializer,
         AvailabilityPresentationSerializer,
         AvailabilitySerializer,
@@ -125,8 +127,13 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
 
     @action(['POST'], True)
     def migrate(self, request, pk):
-        obj = self.get_object()
-        obj.state.migrate()
+        obj = cast(Assignment,self.get_object())
+        serializer = ActionMigrateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.save()
+        start_slot = validated_data['start_slot']
+        duration_slot = validated_data['duration_slot']
+        obj.state.migrate(start_slot, duration_slot, request.user)
         return Response(self.get_serializer(obj).data)
 
     @action(['POST'], True)
