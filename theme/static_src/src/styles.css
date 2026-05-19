@@ -128,7 +128,8 @@
     @apply border border-dashed border-2 rounded-field text-base-content text-xs;
   }
 
-  .assignment-slot button[data-status="CF"] {
+  .assignment-slot button[data-status="CF"],
+  .assignment-slot button[data-status="MG"] {
     @apply bg-info/40 border-info hover:bg-info active:bg-info
   }
 
