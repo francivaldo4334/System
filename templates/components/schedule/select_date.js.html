@@ -44,6 +44,7 @@ $q.use(
               })(it)
             }
           {% endif %}
+          a.dataset.value = it
           li.appendChild(a);
           frag.appendChild(li);
         })
