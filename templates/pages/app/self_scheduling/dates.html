@@ -24,11 +24,22 @@ $q.use(
           const li = document.createElement('li');
           const a = document.createElement('a');
           const dateObj = new Date(`${it}T00:00:00`)
-          a.innerText = new Intl.DateTimeFormat('{{LANG_CODE}}', {
+          const formatedDate = new Intl.DateTimeFormat('{{LANG_CODE}}', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
           }).format(dateObj)
+          const now = new Date()
+          let sufix = ''
+          debugger
+          if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
+            sufix = " - {% trans 'Today'%}"
+          }
+          now.setDate(now.getDate() + 1)
+          if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
+            sufix = " - {% trans 'Tomorrow'%}"
+          }
+          a.innerText = formatedDate + sufix
           a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
           li.appendChild(a);
           frag.appendChild(li);
