@@ -114,8 +114,10 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
         <h1 class='text-lg font-bold'>
             {% trans "Select a migrate date" %}
         </h1>
-        <div>
+        <div class="grid grid-cols-2 w-full">
             <ul id="id_ul_select_dates" class="menu">
+            </ul>
+            <ul id="id_ul_select_times" class="menu">
             </ul>
         </div>
         <div class="modal-action">
@@ -133,6 +135,57 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
     $s.createStore('modal_migrate_select_date',{
         'date': null,
         'slot': null,
+    })
+    $s.subscribe('modal_migrate_select_date.date', null, null, (v) => {
+
+        $q.use(
+          ['times'],
+          () => {
+            const date = v
+            if (date === null) throw Error('date is null')
+            return $r.get(`{% url 'availabilities_presentation' %}?day=${date}`)
+          },
+          {
+            onSuccess(data){            
+                const times = Array.from(
+                  new Set(
+                    data.flatMap(a => 
+                      a.occurrences.map(it => JSON.stringify({
+                        time: it.split('T')[1],
+                        id: a.id,
+                      }))
+                    )
+                  )
+                )
+                .map(it => JSON.parse(it))
+                .sort((a, b) => a.time.localeCompare(b.time));
+                const ul = document.getElementById('id_ul_select_times')
+                const calcSlot = (it) => {
+                    const [hour, minute] = it.split(':').map(Number)
+                    return Math.floor((hour * 60 + minute)/5)
+                }
+                if (ul){
+                    const frag = document.createDocumentFragment();
+                    times.forEach(it => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        const slot = calcSlot(it.time)
+                        a.innerText = it.time.slice(0,5)
+                        a.onclick = () => {
+                            (()=>{ })({
+                                availabilityId:it.id,
+                                time:it.time,
+                                slot,
+                            })
+                        }
+                        li.appendChild(a);
+                        frag.appendChild(li);
+                    })
+                    ul.replaceChildren(frag);
+                }
+            }
+          },
+        )
     })
     document.querySelectorAll('.btn_action_migrate').forEach(btn => {
         btn.onclick = () => {

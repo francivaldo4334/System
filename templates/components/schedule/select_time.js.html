@@ -1,0 +1,64 @@
+<script>
+$q.use(
+  ['times'],
+  () => {
+    {% if set_str %}
+      const date = '{{default_dt_value}}'
+    {% else %}
+      const date = {{default_dt_value}}
+    {% endif %}
+    if (date === null) throw Error('date is null')
+    return $r.get(`{% url 'availabilities_presentation' %}?day=${date}`)
+  },
+  {
+    onSuccess(data){
+    const times = Array.from(
+      new Set(
+        data.flatMap(a => 
+          a.occurrences.map(it => JSON.stringify({
+            time: it.split('T')[1],
+            id: a.id,
+          }))
+        )
+      )
+    )
+    .map(it => JSON.parse(it))
+    .sort((a, b) => a.time.localeCompare(b.time));
+      const ul = document.getElementById('{{ul_id}}');
+      const calcSlot = (it) => {
+        const [hour, minute] = it.split(':').map(Number)
+        return Math.floor((hour * 60 + minute)/5)
+      }
+      if (ul){
+        const frag = document.createDocumentFragment();
+        times.forEach(it => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          const slot = calcSlot(it.time)
+          a.innerText = it.time.slice(0,5)
+          {% if set_href%}
+          a.href = `{% url 'self_scheduling' %}?step=5&service={{request.GET.service}}&resource={{request.GET.resource}}&date={{request.GET.date}}&time=${it.time}&availability=${it.id}&slot=${slot}`
+          {% endif %}
+          {% if onclick %}
+            a.onclick = () => {
+              (()=>{
+                {{onclick}}
+              })({
+                availabilityId:it.id,
+                time:it.time,
+                slot,
+              })
+            }
+          {% endif %}
+          li.appendChild(a);
+          frag.appendChild(li);
+        })
+        ul.appendChild(frag);
+      }
+    }
+  },
+  {
+    enableRefetch:true,
+  }
+)
+</script>

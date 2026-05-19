@@ -39,7 +39,7 @@ $q.use(
           {% endif %}
           {% if onclick %}
             a.onclick = () => {
-              (()=>{
+              ((it)=>{
                 {{onclick}}
               })(it)
             }
