@@ -9,7 +9,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
 </script>
 {% partialdef btn_action %}
     <button
-        class="btn btn-soft w-full btn-assignment-action"
+        class="btn btn-soft w-full btn-assignment-action btn_action_{{choice}}"
         onclick="((el) => {
             $s.set('action_is_fetching', true);
             const assignmentId = $s.get('assignment_id')
@@ -108,3 +108,28 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
 {% with status='CC' has_rescue=True %}
     {% partial modal %}
 {% endwith %}
+
+<dialog id="id_modal_select_date_time" class="modal">
+    <div class="modal-box">
+        <div>
+            <ul id="id_ul_select_dates" class="menu">
+            </ul>
+        </div>
+        <div class="modal-action">
+            <button class="btn btn-outline" onclick="id_modal_select_date_time.close();">
+                {% trans 'Close' %}
+            </button>
+        </div>
+    </div>
+</dialog>
+{% include "components/schedule/select_date.js.html" with ul_id="id_ul_select_dates" %}
+<script type='pass' is="exec-mount">
+{
+    document.querySelectorAll('.btn_action_migrate').forEach(btn => {
+        btn.onclick = () => {
+            $q.refetch(['dates'])
+            id_modal_select_date_time?.showModal();
+        }
+    })
+}
+</script>
