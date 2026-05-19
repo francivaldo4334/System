@@ -23,6 +23,7 @@ from schedule.serializers import (
     )
 from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
+from drf_spectacular.utils import extend_schema
 
 from schedule.utils import ResourceOcuppied
 
@@ -126,6 +127,9 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         return Response(self.get_serializer(obj).data)
 
     @action(['POST'], True)
+    @extend_schema(
+        request=ActionMigrateSerializer(),
+    )
     def migrate(self, request, pk):
         obj = cast(Assignment,self.get_object())
         serializer = ActionMigrateSerializer(data=request.data)
