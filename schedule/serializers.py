@@ -13,17 +13,17 @@ class ResourceSerializer(serializers.ModelSerializer):
     parent_label = serializers.CharField(source='parent.name',
                                          allow_null=True,
                                          read_only=True)
+    username = serializers.CharField(write_only=True)
+    name = serializers.CharField(required=False, write_only=True)
     class Meta:
         model = Resource
         fields = [
             'id',
             'label',
             'name',
+            'username',
             'parent_label',
             'object_id',
-        ]
-        write_only_fields = [
-            'name',
         ]
     def get_label(self, obj: Resource):
         if obj.parent:
@@ -41,6 +41,15 @@ class ResourceSerializer(serializers.ModelSerializer):
         validated_data['is_selectable'] = True
         parent_code = self.context.get('parent_code')
         validated_data['parent'] = get_object_or_404(ResourceNotSelectable, code=parent_code)
+        username = validated_data.pop('username', None)
+        validated_data['name'] = ''
+        if username:
+            from django.apps import apps
+            from django.conf import settings
+            user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+            user = get_object_or_404(user_model, username=username)
+            validated_data['object_id'] = user.pk
+            validated_data['name'] = user.get_full_name()
         return super().create(validated_data)
 
 class ServiceResourceRelationSerializer(serializers.ModelSerializer):
