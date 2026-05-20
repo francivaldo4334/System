@@ -17,6 +17,8 @@ from schedule.serializers import (
         AvailabilityPresentationSerializer,
         AvailabilitySerializer,
         CreateAssigmentSerializer,
+        ResourceObjectSerializer,
+        ResourcePersonSerializer,
         ResourceSerializer,
         ServiceResourceRelationSerializer,
         ServiceSerializer
@@ -41,6 +43,19 @@ class ResourceViewSet(viewsets.ModelViewSet):
             error.status_code = 409
             raise error
 class DynamicResourceViewSet(ResourceViewSet):
+    serializer_class = ResourceObjectSerializer
+
+    def get_serializer_class(self):
+        parent = get_object_or_404(ResourceNotSelectable,code=self.code_filter)
+
+        if parent.content_type:
+            from django.apps import apps
+            from django.conf import settings
+            user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+            content_type = ContentType.objects.get_for_model(user_model)
+            if parent.content_type == content_type:
+                return ResourcePersonSerializer
+        return super().get_serializer_class()
     @property
     def code_filter(self):
         """

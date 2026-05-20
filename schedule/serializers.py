@@ -2,7 +2,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
 
 from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, ResourceOcuppied, ServiceIsRequired
@@ -13,15 +13,12 @@ class ResourceSerializer(serializers.ModelSerializer):
     parent_label = serializers.CharField(source='parent.name',
                                          allow_null=True,
                                          read_only=True)
-    username = serializers.CharField(write_only=True,required=False)
-    name = serializers.CharField(required=False, write_only=True)
     class Meta:
         model = Resource
         fields = [
             'id',
             'label',
             'name',
-            'username',
             'code',
             'parent_label',
             'object_id',
@@ -33,15 +30,41 @@ class ResourceSerializer(serializers.ModelSerializer):
         return obj.name
 
 
-    def to_representation(self, instance):
-        representation =  super().to_representation(instance)
-        representation['use_as_category'] = not instance.is_selectable
-        return representation
-
     def create(self, validated_data):
         validated_data['is_selectable'] = True
         parent_code = self.context.get('parent_code')
         validated_data['parent'] = get_object_or_404(ResourceNotSelectable, code=parent_code)
+        return super().create(validated_data)
+
+class ResourceObjectSerializer(ResourceSerializer):
+    class Meta:
+        model = ResourceObject
+        fields = [
+            'id',
+            'label',
+            'name',
+            'code',
+            'parent_label',
+            'object_id',
+        ]
+class ResourcePersonSerializer(ResourceSerializer):
+    username = serializers.CharField(write_only=True)
+    class Meta:
+        model = ResourceObject
+        fields = [
+            'id',
+            'label',
+            'username',
+            'code',
+            'parent_label',
+            'object_id',
+        ]
+    def to_representation(self, instance):
+        return {
+            **super().to_representation(instance),
+            'username':instance.content_object.username
+        }
+    def create(self, validated_data):
         username = validated_data.pop('username', None)
         validated_data['name'] = validated_data.get('name', '')
         if username:
