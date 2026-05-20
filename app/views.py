@@ -175,33 +175,27 @@ class ScheduleSettingsResourceView(CrudView):
     form = ResourceForm
     table = ResourcesTable
 
-    @classmethod
-    def as_view(cls, **kwargs):
-        if 'key' in kwargs:
-            key = kwargs.pop('key')
-            dynamic_name = f"{cls.__name__}_{key.replace('-', '_')}"
-            class CustomTable(cls.table):
+    def setup(self, request, *args, **kwargs):
+        """
+        Executado em tempo de requisição. Captura o '<str:key>' vindo da URL
+        e customiza a tabela e as chaves de contexto dinamicamente.
+        """
+        super().setup(request, *args, **kwargs)
+        
+        # Se veio uma chave na URL, reconfigura a view para essa request
+        url_key = self.kwargs.get('key')
+        if url_key:
+            # Mantém o isolamento criando uma subclasse da tabela em tempo de execução
+            class CustomTable(self.table):
                 pass
-            CustomTable.key = f'resource-{key}'
-            dynamic_cls = type(dynamic_name, (cls,), {
-                'key': f'resource-{key}',
-                'table': CustomTable
-            })
-            return super(ScheduleSettingsResourceView, dynamic_cls).as_view(**kwargs)
+            CustomTable.key = f'resource-{url_key}'
             
-        return super().as_view(**kwargs)
+            self.key = f'resource-{url_key}'
+            self.table = CustomTable
 
-    @classmethod
-    def get_options(cls) -> List[str]:
-        from schedule.models import ResourceObject
-        return list(ResourceObject.objects.filter(is_selectable=False).values_list('code', flat=True))
 class ScheduleSettingsResourcePersonView(ScheduleSettingsResourceView):
     form = ResourcePersonForm
-
-    @classmethod
-    def get_options(cls) -> List[str]:
-        from schedule.models import ResourcePerson
-        return list(ResourcePerson.objects.filter(is_selectable=False).values_list('code', flat=True))
+    # Herda o comportamento dinâmico de setup() automaticamente
 
 class ScheduleSettingsServiceView(CrudView):
     key = 'services'

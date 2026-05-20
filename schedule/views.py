@@ -29,14 +29,21 @@ from schedule.utils import ResourceOcuppied
 
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
-    code_filter:str
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
+    @property
+    def code_filter(self):
+        """
+        Captura o código dinamicamente da URL caso a rota coringa seja acessada.
+        Se acessar a rota padrão de resources, retorna None.
+        """
+        return self.kwargs.get('resource_code')
 
     def get_queryset(self):
-        if hasattr(self, 'code_filter') and self.code_filter:
+        # A propriedade code_filter agora resolve dinamicamente
+        if self.code_filter:
             return super().get_queryset().filter(
                 parent__code=self.code_filter
             )
@@ -44,7 +51,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        if hasattr(self, 'code_filter'):
+        if self.code_filter:
             context.update({
                 'parent_code': self.code_filter
             })
@@ -52,24 +59,11 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
     def get_resources_list(self, value):
         try:
-            list = [int(item.strip()) for item in value.split(',') if item.strip()]
-            return list
+            # Dica: Evite usar 'list' como nome de variável para não sombrear o tipo nativo do Python
+            parsed_ids = [int(item.strip()) for item in value.split(',') if item.strip()]
+            return parsed_ids
         except ValueError:
             return None
-
-    @action(["GET"], False)
-    def unavailable_dates(self, request):
-        resources = request.query_params.get('resources', '')
-        resources = self.get_resources_list(resources)
-        now = datetime.now()
-        occupieds = ResourceOccupation.objects.filter(
-            date__range=(now, now + timedelta(days=30)),
-        ).exclude(bitmap__icontains='0')
-        if resources:
-            occupieds = occupieds.filter(
-                resource__in=resources
-            )
-        return Response([o.date for o in occupieds])
 
     def perform_destroy(self, instance):
         try:

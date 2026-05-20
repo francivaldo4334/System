@@ -13,19 +13,13 @@ router.register('assignment', AssignmentViewSet, 'assignment')
 router.register('client/assignment', ClientAssignmentViewSet, 'client_assignment')
 router.register('availabilities', AvailabilityViewSet, 'availabilities')
 
-def create_resource_viewset(code):
-    class DynamicResourceViewSet(ResourceViewSet):
-        code_filter = code
-    return DynamicResourceViewSet
-
-resource_types = list(ResourceNotSelectable.objects.all())
-
-for r in resource_types:
-    DynamicViewSet = create_resource_viewset(r.code)
-    router.register(f'resource/{r.code}', DynamicViewSet, basename=f'resource-{r.code}')
-
+dynamic_resource_list = ResourceViewSet.as_view({'get': 'list', 'post': 'create'})
+dynamic_resource_detail = ResourceViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})
 
 urlpatterns = [
     path('schedule/',include(router.urls)),
-    path('schedule/availabilities_presentation', AvailabilityPresentationAPIView.as_view(), name="availabilities_presentation")
+    path('schedule/availabilities_presentation', AvailabilityPresentationAPIView.as_view(), name="availabilities_presentation"),
+    # Rotas dinâmicas que capturam o 'resource_code' e passam para a ViewSet
+    path('schedule/resource/<str:resource_code>/', dynamic_resource_list, name='dynamic-resource-list'),
+    path('schedule/resource/<str:resource_code>/<int:pk>/', dynamic_resource_detail, name='dynamic-resource-detail'),
 ]
