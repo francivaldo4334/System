@@ -33,6 +33,14 @@ class ResourceViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
+    def perform_destroy(self, instance):
+        try:
+            instance.delete()
+        except ProtectedError:
+            error = APIException(_("Deletion of %(name)s failed") % {'name': instance._meta.verbose_name})
+            error.status_code = 409
+            raise error
+class DynamicResourceViewSet(ResourceViewSet):
     @property
     def code_filter(self):
         """
@@ -42,36 +50,14 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return self.kwargs.get('resource_code')
 
     def get_queryset(self):
-        # A propriedade code_filter agora resolve dinamicamente
-        if self.code_filter:
-            return super().get_queryset().filter(
-                parent__code=self.code_filter
-            )
-        return super().get_queryset()
+        return super().get_queryset().filter(parent__code=self.code_filter)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        if self.code_filter:
-            context.update({
-                'parent_code': self.code_filter
-            })
+        context.update({
+            'parent_code': self.code_filter
+        })
         return context
-
-    def get_resources_list(self, value):
-        try:
-            # Dica: Evite usar 'list' como nome de variável para não sombrear o tipo nativo do Python
-            parsed_ids = [int(item.strip()) for item in value.split(',') if item.strip()]
-            return parsed_ids
-        except ValueError:
-            return None
-
-    def perform_destroy(self, instance):
-        try:
-            instance.delete()
-        except ProtectedError:
-            error = APIException(_("Deletion of %(name)s failed") % {'name': instance._meta.verbose_name})
-            error.status_code = 409
-            raise error
 
 class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
