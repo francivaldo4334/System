@@ -137,6 +137,15 @@ class ResourceForm(BaseForm):
             attrs="required",
         ),
     ]
+class ResourcePersonForm(BaseForm):
+    key = 'resources'
+    form_fields = [
+        Field(
+            name="username",
+            label=_('Username'),
+            attrs="required",
+        ),
+    ]
 
 class AssignmentForm(BaseForm):
     key = 'assignment'

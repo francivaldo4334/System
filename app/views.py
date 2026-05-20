@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ServiceForm, ServiceRequirementsForm
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
 from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
@@ -196,6 +196,8 @@ class ScheduleSettingsResourceView(CrudView):
         from schedule.models import ResourceObject
         return list(ResourceObject.objects.filter(is_selectable=False).values_list('code', flat=True))
 class ScheduleSettingsResourcePersonView(ScheduleSettingsResourceView):
+    form = ResourcePersonForm
+
     @classmethod
     def get_options(cls) -> List[str]:
         from schedule.models import ResourcePerson
