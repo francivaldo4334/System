@@ -5,6 +5,7 @@
 # pyright: reportCallIssue=false
 # pyright: reportGeneralTypeIssues=false
 from typing import List, cast
+from django.contrib.auth.mixins import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
@@ -67,6 +68,32 @@ class ResourceSelectable(Resource):
     class Manager(models.Manager):
         def get_queryset(self):
             return super().get_queryset().filter(is_selectable=True)
+    objects = Manager()
+    class Meta:
+        proxy = True
+
+class ResourcePerson(ResourceSelectable):
+    class Manager(ResourceSelectable.Manager):
+        def get_queryset(self):
+            from django.apps import apps
+            from django.conf import settings
+            user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+            content_type = ContentType.objects.get_for_model(user_model)
+    
+            return super().get_queryset().filter(content_type=content_type)
+    objects = Manager()
+    class Meta:
+        proxy = True
+
+class ResourceObject(ResourceSelectable):
+    class Manager(ResourceSelectable.Manager):
+        def get_queryset(self):
+            from django.apps import apps
+            from django.conf import settings
+            user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+            content_type = ContentType.objects.get_for_model(user_model)
+    
+            return super().get_queryset().exclude(content_type=content_type)
     objects = Manager()
     class Meta:
         proxy = True

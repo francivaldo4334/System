@@ -10,7 +10,7 @@ from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from core.permissions import IsFrontDesk, IsOwner
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation
 from schedule.serializers import (
         ActionMigrateSerializer,
         AssignmentSerializer,
@@ -30,7 +30,7 @@ from schedule.utils import ResourceOcuppied
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
     code_filter:str
-    queryset = Resource.objects.all()
+    queryset = ResourceObject.objects.all()
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
