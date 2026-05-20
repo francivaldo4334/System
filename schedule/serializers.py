@@ -22,6 +22,7 @@ class ResourceSerializer(serializers.ModelSerializer):
             'label',
             'name',
             'username',
+            'code',
             'parent_label',
             'object_id',
         ]
