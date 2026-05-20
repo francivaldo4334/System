@@ -53,7 +53,12 @@
             $q.use(
                 "{{delete.delete_url_name}}",
                 () => $r.delete(
-                    "{% url delete.delete_url_name 0 %}".replace("0", currentId),
+                    {%if request.GET.key%}
+                    "{% url delete.delete_url_name resource_code=request.GET.key pk=0 %}"
+                    {%else%}
+                    "{% url delete.delete_url_name 0 %}"
+                    {%endif%}
+                    .replace("0", currentId),
                     { "X-CSRFToken": "{{csrf_token}}" }
                 ),
                 {

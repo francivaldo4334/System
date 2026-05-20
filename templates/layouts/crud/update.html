@@ -39,7 +39,13 @@
         $s.subscribe("update.modal.id", null, null, (value, el) => {
             if (!value) return
             const form = document.getElementById("id_{{key}}_update_form")
-            $q.use("{{update.update_url_name}}", () => $r.get("{% url update.update_url_name 0 %}".replace("0", value)), {
+            $q.use("{{update.update_url_name}}", () => $r.get(
+            {%if request.GET.key%}
+            "{% url update.update_url_name pk=0 resource_code=request.GET.key %}"
+            {%else%}
+            "{% url update.update_url_name 0 %}"
+            {%endif%}
+            .replace("0", value)), {
                 onSuccess(data) {
                     Object.keys(data).forEach(key => {
                         const field = form.elements[key];
@@ -67,7 +73,12 @@
                 $q.use(
                     '{{update.update_url_name}}',
                     () => $r.put(
-                        '{% url update.update_url_name 0 %}'.replace(
+                        {%if request.GET.key%}
+                        '{% url update.update_url_name pk=0 resource_code=request.GET.key%}'
+                        {%else%}
+                        '{% url update.update_url_name 0 %}'
+                        {%endif%}
+                        .replace(
                             "0",
                             $s.get('update.modal.id'),
                         ),

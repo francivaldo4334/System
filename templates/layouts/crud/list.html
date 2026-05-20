@@ -61,7 +61,13 @@ $s.compute("{{list.table.list_url_name}}.data", [
 ], (search, offset, limit) => {
   $q.use(
     ["{{list.table.list_url_name}}", limit, offset, search],
-    ()=>$r.get(`{% url list.table.list_url_name %}?limit=${limit}&offset=${offset}&search=${search}`),
+    ()=>$r.get(
+    {%if request.GET.key%}
+    `{% url list.table.list_url_name resource_code=request.GET.key %}?limit=${limit}&offset=${offset}&search=${search}`,
+    {%else%}
+    `{% url list.table.list_url_name %}?limit=${limit}&offset=${offset}&search=${search}`,
+    {%endif%}
+    ),
     {
       onSuccess(data){
         const items = data.results

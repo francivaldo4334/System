@@ -10,7 +10,15 @@
                 event.preventDefault();
                 const data = $u.getDataByForm(event.target);
                 $q.use("{{create.post_url_name}}",
-                    () => $r.post("{% url create.post_url_name %}", data, {"X-CSRFToken": "{{csrf_token}}"}),
+                    () => $r.post(
+                        {%if request.GET.key%}
+                        "{% url create.post_url_name resource_code=request.GET.key %}",
+                        {%else%}
+                        "{% url create.post_url_name %}",
+                        {%endif%}
+                        data,
+                        {"X-CSRFToken": "{{csrf_token}}"},
+                    ),
                     {
                         onSuccess() {
                             {% if list %}
