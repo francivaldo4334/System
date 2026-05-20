@@ -68,9 +68,9 @@ class AppScheduleView(AppView):
     extra_context = {
         'assignment_form': AssignmentForm
     }
-
 class AppScheduleSettingsView(AppView):
     template_name = 'pages/app/schedule/settings/index.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -78,38 +78,56 @@ class AppScheduleSettingsView(AppView):
         })
         user = self.request.user
         setting_tabs = []
+
         if user.has_perm('schedule.view_availability'):
             setting_tabs.append({
                 'label': _("Availabilities"),
                 'url_name': 'app-schedule-settings-availabilities',
+                'is_dynamic': False,  # Flag útil para o template diferenciar as URLs
             })
             context.update({
                 'setting_tag_selected': 'app-schedule-settings-availabilities',
             })
+
         if user.has_perm('schedule.view_resource'):
-            from schedule.models import ResourceNotSelectable
-            resources = ResourceNotSelectable.objects.filter(code__in=ScheduleSettingsResourceView.get_options())
-            for it in list(resources):
+            from schedule.models import ResourceObject, ResourcePerson
+            
+            # 1. Recursos do tipo Objeto
+            # object_options = ScheduleSettingsResourceView.get_options()
+            resources_object = ResourceObject.objects.filter(is_selectable=False)
+            for it in resources_object:
                 setting_tabs.append({
                     'label': it.name,
-                    'url_name': f'app-schedule-settings-resource-{it.code}',
+                    'url_name': 'app-schedule-settings-resource-object',  # Nome base estático da rota
+                    'url_kwargs': {'key': it.code},  # Dicionário de argumentos que a rota exige
+                    'is_dynamic': True,
                 })
-            resources = ResourceNotSelectable.objects.filter(code__in=ScheduleSettingsResourcePersonView.get_options())
-            for it in list(resources):
+
+            # 2. Recursos do tipo Pessoa
+            # person_options = ScheduleSettingsResourcePersonView.get_options()
+            resources_person = ResourcePerson.objects.filter(is_selectable=False)
+            for it in resources_person:
                 setting_tabs.append({
                     'label': it.name,
-                    'url_name': f'app-schedule-settings-resource-{it.code}',
+                    'url_name': 'app-schedule-settings-resource-person',  # Nome base estático da rota
+                    'url_kwargs': {'key': it.code},  # Dicionário de argumentos que a rota exige
+                    'is_dynamic': True,
                 })
+
         if user.has_perm('schedule.view_service'):
             setting_tabs.append({
                 'label': _("Services"),
                 'url_name': 'app-schedule-settings-services',
+                'is_dynamic': False,
             })
+
         if user.has_perm('schedule.view_serviceresourcerelation'):
             setting_tabs.append({
                 'label': _("Service Requirements"),
                 'url_name': 'app-schedule-settings-service-requirements',
+                'is_dynamic': False,
             })
+
         context.update({
             'setting_tabs': setting_tabs
         })
@@ -188,9 +206,9 @@ class ScheduleSettingsResourceView(CrudView):
             # Mantém o isolamento criando uma subclasse da tabela em tempo de execução
             class CustomTable(self.table):
                 pass
-            CustomTable.key = f'resource-{url_key}'
+            CustomTable.key = f'dynamic-resource'
             
-            self.key = f'resource-{url_key}'
+            self.key = f'dynamic-resource'
             self.table = CustomTable
 
 class ScheduleSettingsResourcePersonView(ScheduleSettingsResourceView):
