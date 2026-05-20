@@ -88,10 +88,17 @@ class AppScheduleSettingsView(AppView):
             })
         if user.has_perm('schedule.view_resource'):
             from schedule.models import ResourceNotSelectable
-            for it in ResourceNotSelectable.objects.values('name', 'code'):
+            resources = ResourceNotSelectable.objects.filter(code__in=ScheduleSettingsResourceView.get_options())
+            for it in list(resources):
                 setting_tabs.append({
-                    'label': it['name'],
-                    'url_name': f'app-schedule-settings-resource-{it["code"]}',
+                    'label': it.name,
+                    'url_name': f'app-schedule-settings-resource-{it.code}',
+                })
+            resources = ResourceNotSelectable.objects.filter(code__in=ScheduleSettingsResourcePersonView.get_options())
+            for it in list(resources):
+                setting_tabs.append({
+                    'label': it.name,
+                    'url_name': f'app-schedule-settings-resource-{it.code}',
                 })
         if user.has_perm('schedule.view_service'):
             setting_tabs.append({
@@ -186,9 +193,13 @@ class ScheduleSettingsResourceView(CrudView):
 
     @classmethod
     def get_options(cls) -> List[str]:
-        # Import local mantido caso seja necessário para evitar import circular
-        from schedule.models import ResourceNotSelectable
-        return list(ResourceNotSelectable.objects.values_list('code', flat=True))
+        from schedule.models import ResourceObject
+        return list(ResourceObject.objects.filter(is_selectable=False).values_list('code', flat=True))
+class ScheduleSettingsResourcePersonView(ScheduleSettingsResourceView):
+    @classmethod
+    def get_options(cls) -> List[str]:
+        from schedule.models import ResourcePerson
+        return list(ResourcePerson.objects.filter(is_selectable=False).values_list('code', flat=True))
 
 class ScheduleSettingsServiceView(CrudView):
     key = 'services'

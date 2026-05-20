@@ -6,6 +6,7 @@ from app.views import (
     AppScheduleView,
     HomeView,
     ScheduleSettingsAvailabilitiesView,
+    ScheduleSettingsResourcePersonView,
     ScheduleSettingsResourceView,
     ScheduleSettingsServiceRequirementsView,
     ScheduleSettingsServiceView,
@@ -25,7 +26,7 @@ urlpatterns = [
             f'schedule/settings/resource/{it}/',
             ScheduleSettingsResourceView.as_view(key=it),
             name=f'app-schedule-settings-resource-{it}'
-        ) for it in ScheduleSettingsResourceView.get_options()
+        ) for it in ScheduleSettingsResourceView.get_options() + ScheduleSettingsResourcePersonView.get_options()
     ],
     path('schedule/settings/services',ScheduleSettingsServiceView.as_view(), name="app-schedule-settings-services"),
     path('schedule/settings/service_requirements',ScheduleSettingsServiceRequirementsView.as_view(), name="app-schedule-settings-service-requirements"),

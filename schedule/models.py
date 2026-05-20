@@ -76,8 +76,8 @@ class ResourceSelectable(Resource):
     class Meta:
         proxy = True
 
-class ResourcePerson(ResourceSelectable):
-    class Manager(ResourceSelectable.Manager):
+class ResourcePerson(Resource):
+    class Manager(models.Manager):
         def get_queryset(self):
             from django.apps import apps
             from django.conf import settings
@@ -89,8 +89,8 @@ class ResourcePerson(ResourceSelectable):
     class Meta:
         proxy = True
 
-class ResourceObject(ResourceSelectable):
-    class Manager(ResourceSelectable.Manager):
+class ResourceObject(Resource):
+    class Manager(models.Manager):
         def get_queryset(self):
             from django.apps import apps
             from django.conf import settings
