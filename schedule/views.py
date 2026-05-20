@@ -1,6 +1,6 @@
 # pyright: reportAttributeAccessIssue=false
 from datetime import timedelta
-from typing import cast
+from typing import Self, Type, cast
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.deletion import ProtectedError
 from django.utils.timezone import datetime
@@ -29,9 +29,18 @@ from schedule.utils import ResourceOcuppied
 
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
+    code_filter:str
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
+
+
+    def get_queryset(self):
+        if self.code_filter:
+            return super().get_queryset().filter(
+                code=self.code_filter
+            )
+        return super().get_queryset()
 
     def get_resources_list(self, value):
         try:
