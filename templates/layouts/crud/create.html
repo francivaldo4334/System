@@ -28,7 +28,7 @@
                             form.reset();
                         },
                         onError(error) {
-                            if (error.status === 400) {
+                            if (error.status < 500 && error.status >= 400) {
                                 Object.entries(error.data).forEach(([key, value]) => {
                                     const field = form.elements[key];
                                     if (field) {

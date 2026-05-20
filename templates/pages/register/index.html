@@ -27,7 +27,6 @@
                     <span class="text-xs text-error mt-1 px-1">{{ form.username.errors.0 }}</span>
                     {% endif %}
                 </div>
-
                 <!-- Campo: E-mail (Certifique-se de ter feito o Passo 1 da resposta anterior no seu forms.py) -->
                 <div class="form-control w-full">
                     <label class="label pb-1.5" for="email">
@@ -72,6 +71,33 @@
                         {% trans 'Show password' %}
                     </label>
                 </fieldset>
+                <div class="divider">
+                </div>
+
+                <!-- Campo: Primeiro Nome -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="first_name">
+                        <span class="label-text font-medium text-base-content/80">{% trans "Your name" %}</span>
+                    </label>
+                    <input type="text" id="first_name" name="first_name" autofocus autocomplete="name" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.first_name.errors %}input-error{% endif %}"
+                        value="{{ form.first_name.value|default:'' }}" />
+                    {% if form.first_name.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.first_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <!-- Campo: Sobre Nome -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="last_name">
+                        <span class="label-text font-medium text-base-content/80">{% trans "Last name" %}</span>
+                    </label>
+                    <input type="text" id="last_name" name="last_name" autofocus autocomplete="name" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.last_name.errors %}input-error{% endif %}"
+                        value="{{ form.last_name.value|default:'' }}" />
+                    {% if form.last_name.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.last_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
 
                 <!-- Botão de Submissão -->
                 <div class="form-control pt-4">
