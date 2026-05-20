@@ -23,6 +23,9 @@ class ResourceSerializer(serializers.ModelSerializer):
             'parent_label',
             'object_id',
         ]
+        read_only_fields = [
+            'code',
+        ]
     def get_label(self, obj: Resource):
         if obj.parent:
             prefix = self.get_label(obj.parent) # type:ignore
@@ -47,6 +50,9 @@ class ResourceObjectSerializer(ResourceSerializer):
             'parent_label',
             'object_id',
         ]
+        read_only_fields = [
+            'code',
+        ]
 class ResourcePersonSerializer(ResourceSerializer):
     username = serializers.CharField(write_only=True)
     class Meta:
@@ -58,6 +64,9 @@ class ResourcePersonSerializer(ResourceSerializer):
             'code',
             'parent_label',
             'object_id',
+        ]
+        read_only_fields = [
+            'code',
         ]
     def to_representation(self, instance):
         return {

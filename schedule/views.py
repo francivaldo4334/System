@@ -3,6 +3,7 @@ from datetime import timedelta
 from typing import Self, Type, cast
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.deletion import ProtectedError
+from django.db.utils import IntegrityError
 from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
@@ -35,6 +36,13 @@ class ResourceViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
+    def perform_create(self, serializer):
+        try:
+            return super().perform_create(serializer)
+        except IntegrityError:
+            error = APIException(_("This item already exists."))
+            error.status_code = 409
+            raise error
     def perform_destroy(self, instance):
         try:
             instance.delete()
