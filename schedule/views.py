@@ -44,9 +44,10 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update({
-            'parent_code': self.code_filter
-        })
+        if hasattr(self, 'code_filter'):
+            context.update({
+                'parent_code': self.code_filter
+            })
         return context
 
     def get_resources_list(self, value):
