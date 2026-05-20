@@ -19,7 +19,14 @@ urlpatterns = [
     path('schedule', AppScheduleView.as_view(), name='app-schedule'),
     path('schedule/settings', AppScheduleSettingsView.as_view(), name='app-schedule-settings'),
     path('schedule/settings/availabilities',ScheduleSettingsAvailabilitiesView.as_view(), name="app-schedule-settings-availabilities"),
-    path('schedule/settings/resources',ScheduleSettingsResourceView.as_view(), name="app-schedule-settings-resources"),
+    #path('schedule/settings/resources',ScheduleSettingsResourceView.as_view(), name="app-schedule-settings-resources"),
+    *[
+        path(
+            f'schedule/settings/resource/{it}/',
+            ScheduleSettingsResourceView.as_view(key=it),
+            name=f'app-schedule-settings-resource-{it}'
+        ) for it in ScheduleSettingsResourceView.get_options()
+    ],
     path('schedule/settings/services',ScheduleSettingsServiceView.as_view(), name="app-schedule-settings-services"),
     path('schedule/settings/service_requirements',ScheduleSettingsServiceRequirementsView.as_view(), name="app-schedule-settings-service-requirements"),
     path('self-scheduling', SelfScheduleView.as_view(), name="self_scheduling"),

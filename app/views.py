@@ -1,4 +1,5 @@
-from typing import Type
+from dataclasses import dataclass
+from typing import List, Type
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -86,10 +87,12 @@ class AppScheduleSettingsView(AppView):
                 'setting_tag_selected': 'app-schedule-settings-availabilities',
             })
         if user.has_perm('schedule.view_resource'):
-            setting_tabs.append({
-                'label': _("Resources"),
-                'url_name': 'app-schedule-settings-resources',
-            })
+            from schedule.models import ResourceNotSelectable
+            for it in ResourceNotSelectable.objects.values('name', 'code'):
+                setting_tabs.append({
+                    'label': it['name'],
+                    'url_name': f'app-schedule-settings-resource-{it["code"]}',
+                })
         if user.has_perm('schedule.view_service'):
             setting_tabs.append({
                 'label': _("Services"),
@@ -164,6 +167,18 @@ class ScheduleSettingsResourceView(CrudView):
     model_name = 'resource'
     form = ResourceForm
     table = ResourcesTable
+
+    @classmethod
+    def as_view(cls, **kwargs):
+        if 'key' in kwargs:
+            cls.key = f'resource-{kwargs.pop('key')}'
+        return super().as_view(**kwargs)
+    @classmethod
+    def get_options(cls) -> List[str]:
+        from schedule.models import ResourceNotSelectable
+        resource_types = ResourceNotSelectable.objects.values_list('code', flat=True)
+        return list(resource_types)
+
 
 class ScheduleSettingsServiceView(CrudView):
     key = 'services'

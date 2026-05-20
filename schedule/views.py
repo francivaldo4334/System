@@ -36,7 +36,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        if self.code_filter:
+        if hasattr(self, 'code_filter') and self.code_filter:
             return super().get_queryset().filter(
                 code=self.code_filter
             )
