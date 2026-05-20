@@ -43,6 +43,10 @@ class Resource(TimeStampedModel, ActivatorModel):
     def save(self, *args, **kwargs):
         if self._state.adding and not self.code:
             self.code = self.get_next_code();
+        if self.parent and self.parent.content_type:
+            self.content_type = self.parent.content_type
+            if not self.object_id:
+                raise ValidationError({'object_id': _("Enter a valid value.")})
         return super().save(*args, **kwargs)
 
     def get_next_code(self):
