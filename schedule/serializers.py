@@ -20,6 +20,8 @@ class ResourceSerializer(serializers.ModelSerializer):
             'label',
             'name',
             'parent_label',
+            'content_type',
+            'object_id',
         ]
         write_only_fields = [
             'name',
