@@ -136,19 +136,6 @@ class ResourceForm(BaseForm):
             label=_('Name'),
             attrs="required",
         ),
-        SelectField(
-            name='parent',
-            label=_('Resource category'),
-            url_name='resources',
-            url_query_params="?use_as_category=true"
-        ),
-        CheckboxesField(
-            name="use_as_category",
-            label="",
-            options=[
-                CheckboxesField.Option(value='true', label=_('Use as category.')),
-            ],
-        ),
     ]
 
 class AssignmentForm(BaseForm):

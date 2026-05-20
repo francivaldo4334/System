@@ -11,7 +11,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody id="id_{{key}}_table">
+        <tbody id="id_table">
         </tbody>
         <tfoot>
             <tr>
@@ -76,7 +76,7 @@ $s.compute("{{list.table.list_url_name}}.data", [
             },
             "checked": (v) => v ? '\u2714' : '',
         }
-        id_{{key}}_table.innerHTML = ''
+        id_table.innerHTML = ''
         const frag = document.createDocumentFragment();
         for (const item of items) {
           const tr = document.createElement("tr")
@@ -101,7 +101,7 @@ $s.compute("{{list.table.list_url_name}}.data", [
           tr.appendChild(th)
           frag.appendChild(tr)
         }
-        id_{{key}}_table.replaceChildren(frag);
+        id_table.replaceChildren(frag);
         $s.set("{{key}}.page.previous", data.previous)
         $s.set("{{key}}.page.next", data.next)
         $s.set("{{key}}.page.count", data.count)

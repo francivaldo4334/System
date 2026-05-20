@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation
@@ -9,35 +10,19 @@ from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, Resourc
 
 class ResourceSerializer(serializers.ModelSerializer):
     label = serializers.SerializerMethodField()
-    use_as_category = serializers.BooleanField(
-        source="is_selectable",
-        default=False,
-    )
     parent_label = serializers.CharField(source='parent.name',
                                          allow_null=True,
                                          read_only=True)
-    parent = serializers.PrimaryKeyRelatedField(
-        queryset=ResourceNotSelectable.objects.all(),
-        required=False,
-    )
     class Meta:
         model = Resource
         fields = [
             'id',
             'label',
             'name',
-            'code',
-            'use_as_category',
-            'parent',
             'parent_label',
-            'is_selectable'
         ]
         write_only_fields = [
             'name',
-        ]
-        read_only_fields = [
-            'code',
-            'is_selectable',
         ]
     def get_label(self, obj: Resource):
         if obj.parent:
@@ -45,22 +30,17 @@ class ResourceSerializer(serializers.ModelSerializer):
             return  f'{prefix} / {obj.name}'
         return obj.name
 
-    def validate(self, attrs):
-        is_selectable = attrs.get('is_selectable', False)
-        parent = attrs.get('parent', None)
-        if not parent and is_selectable:
-            raise serializers.ValidationError(
-                {'parent': _('This field is required.')}
-            )
-        return super().validate(attrs)
-
-    def validate_use_as_category(self, value):
-        return not value
 
     def to_representation(self, instance):
         representation =  super().to_representation(instance)
         representation['use_as_category'] = not instance.is_selectable
         return representation
+
+    def create(self, validated_data):
+        validated_data['is_selectable'] = True
+        parent_code = self.context.get('parent_code')
+        validated_data['parent'] = get_object_or_404(ResourceNotSelectable, code=parent_code)
+        return super().create(validated_data)
 
 class ServiceResourceRelationSerializer(serializers.ModelSerializer):
     service_label = serializers.ReadOnlyField(source='service.title')

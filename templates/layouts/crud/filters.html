@@ -10,10 +10,10 @@ $s.createStore("{{key}}.filters", {
   "search": "",
 })
 {
-  let {{key}}_filter_search_id = null
+  let filter_search_id = null
   document.getElementById("id_{{key}}_filter_search").oninput = (event) => {
-    clearTimeout({{key}}_filter_search_id)
-    {{key}}_filter_search_id = setTimeout(()=>{
+    clearTimeout(filter_search_id)
+    filter_search_id = setTimeout(()=>{
       $s.set("{{key}}.filters.search", event.target.value)
     }, 300)
   }

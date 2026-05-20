@@ -42,6 +42,13 @@ class ResourceViewSet(viewsets.ModelViewSet):
             )
         return super().get_queryset()
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({
+            'parent_code': self.code_filter
+        })
+        return context
+
     def get_resources_list(self, value):
         try:
             list = [int(item.strip()) for item in value.split(',') if item.strip()]

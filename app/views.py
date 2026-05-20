@@ -171,14 +171,24 @@ class ScheduleSettingsResourceView(CrudView):
     @classmethod
     def as_view(cls, **kwargs):
         if 'key' in kwargs:
-            cls.key = f'resource-{kwargs.pop('key')}'
+            key = kwargs.pop('key')
+            dynamic_name = f"{cls.__name__}_{key.replace('-', '_')}"
+            class CustomTable(cls.table):
+                pass
+            CustomTable.key = f'resource-{key}'
+            dynamic_cls = type(dynamic_name, (cls,), {
+                'key': f'resource-{key}',
+                'table': CustomTable
+            })
+            return super(ScheduleSettingsResourceView, dynamic_cls).as_view(**kwargs)
+            
         return super().as_view(**kwargs)
+
     @classmethod
     def get_options(cls) -> List[str]:
+        # Import local mantido caso seja necessário para evitar import circular
         from schedule.models import ResourceNotSelectable
-        resource_types = ResourceNotSelectable.objects.values_list('code', flat=True)
-        return list(resource_types)
-
+        return list(ResourceNotSelectable.objects.values_list('code', flat=True))
 
 class ScheduleSettingsServiceView(CrudView):
     key = 'services'
