@@ -72,13 +72,9 @@ class ResourcesTable(BaseTable):
     key = 'resources'
     thead = [
         _('Resource Name'),
-        _('Is Selectable'),
-        _('Resource Type'),
     ]
     tr = [
         ('label', 'text'),
-        ('is_selectable', 'checked'),
-        ('parent_label', 'text'),
     ]
 class ServicesTable(BaseTable):
     key = 'services'
