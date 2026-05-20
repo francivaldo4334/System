@@ -30,7 +30,7 @@ from schedule.utils import ResourceOcuppied
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
     code_filter:str
-    queryset = ResourceObject.objects.all()
+    queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
