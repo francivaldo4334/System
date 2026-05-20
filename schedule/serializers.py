@@ -13,7 +13,7 @@ class ResourceSerializer(serializers.ModelSerializer):
     parent_label = serializers.CharField(source='parent.name',
                                          allow_null=True,
                                          read_only=True)
-    username = serializers.CharField(write_only=True)
+    username = serializers.CharField(write_only=True,required=False)
     name = serializers.CharField(required=False, write_only=True)
     class Meta:
         model = Resource
@@ -42,7 +42,7 @@ class ResourceSerializer(serializers.ModelSerializer):
         parent_code = self.context.get('parent_code')
         validated_data['parent'] = get_object_or_404(ResourceNotSelectable, code=parent_code)
         username = validated_data.pop('username', None)
-        validated_data['name'] = ''
+        validated_data['name'] = validated_data.get('name', '')
         if username:
             from django.apps import apps
             from django.conf import settings

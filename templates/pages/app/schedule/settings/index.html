@@ -8,7 +8,7 @@
                 {%for opt in setting_tabs%}
                     {% if opt.is_dynamic %}
                     <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
-                        data-url="{%url opt.url_name key=opt.url_kwargs.key %}?key={{opt.url_kwargs.key}}" data-url-name="{{opt.url_name}}" />
+                        data-url="{%url opt.url_name key=opt.url_kwargs.key %}?key={{opt.url_kwargs.key}}" data-url-name="{{opt.url_name}}_{{opt.url_kwargs.key}}" />
                     {% else %}
                     <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
                         data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />
