@@ -23,6 +23,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                         toastSuccess('{% trans 'Success'%}')
                         $q.refetch('slots')
                         el.closest('dialog')?.close()
+                        $q.refetch(['dashboard-status'])
                     },
                     onError(error){
                         if (error.status > 499)
@@ -99,7 +100,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
 {% with status='CF' has_cancel=True has_migrate=True has_start=True has_absent=True %}
     {% partial modal %}
 {% endwith %}
-{% with status='MG' has_cancel=True has_migrate=True has_start=True %}
+{% with status='MG' has_cancel=True has_migrate=True has_start=True has_absent=True%}
     {% partial modal %}
 {% endwith %}
 {% with status='IP' has_cancel=True has_finish=True %}
@@ -142,7 +143,10 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                     onSuccess(){
                         toastSuccess('{% trans 'Success'%}')
                         $q.refetch('slots')
-                        el.closest('dialog')?.close()
+                        const modalStatus = document.querySelectorAll('dialog').forEach(it => {
+                            it?.close()
+                        })
+                        $q.refetch(['dashboard-status'])
                     },
                     onError(error){
                         if (error.status > 499)

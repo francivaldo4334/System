@@ -29,3 +29,53 @@
   {% partial status %}
 {% endwith %}
 </div>
+<script is="exec-mount" type="pass">
+$s.subscribe('filter_query_params', null, null, (queryparams) => {
+  $q.use(
+    ['dashboard-status'],
+    () => {
+      const buildUrl = (baseUrl, params) => {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                searchParams.append(key, value);
+            }
+        });
+
+        const queryString = searchParams.toString();
+        return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+      };
+      const filters = {
+          status: queryparams?.status,
+          date: queryparams?.day,
+          service: queryparams?.service,
+          resources__parent: queryparams?.resource_category,
+          resources: queryparams?.resource,
+      };
+
+      const url = buildUrl("{% url 'schedule-dashboard-status' %}", filters);
+      return $r.get(url);
+    },
+    {
+      onSuccess(data){
+        const mapStatus = {
+          'status-pendding': 'PD',
+          'status-confirmed': 'CF',
+          'status-in-progress': 'IP',
+          'status-completed': 'CP',
+          'status-migrated': 'MG',
+          'status-cancelled': 'CC',
+          'status-absent': 'AB',
+        }
+        document.querySelectorAll(".dashboard-status").forEach(it => {
+          const count = data.find(s => s.status === mapStatus[it.dataset.label])?.total || 0
+          it.innerText = count
+        })
+      }
+    },
+    {
+      enableRefetch:true,
+    }
+  ) 
+})
+</script>
