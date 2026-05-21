@@ -1,3 +1,31 @@
-<div>
-HELO DASHBOARD
+<div class="w-full">
+{% partialdef status %}
+<div class="badge badge-soft [&>svg]:w-[16px] tooltip" data-tip="{{text}}">
+  {% include 'icons/'|add:icon|add:'.svg'%}
+  <span class="dashboard-status" data-label="{{icon}}">
+    {{count|default:0}}
+  </span>
+</div>
+{% endpartialdef %}
+{% with  icon="status-pendding" text=_('Pendding')%}
+  {% partial status %}
+{% endwith %}
+{% with  icon="status-confirmed" text=_('Confirmed')%}
+  {% partial status %}
+{% endwith %}
+{% with  icon="status-in-progress" text=_('In Progress')%}
+  {% partial status %}
+{% endwith %}
+{% with  icon="status-completed" text=_('Completed')%}
+  {% partial status %}
+{% endwith %}
+{% with  icon="status-migrated" text=_('Migrated')%}
+  {% partial status %}
+{% endwith %}
+{% with  icon="status-cancelled" text=_('Cancelled')%}
+  {% partial status %}
+{% endwith %}
+{% with  icon="status-absent" text=_('Absent')%}
+  {% partial status %}
+{% endwith %}
 </div>
