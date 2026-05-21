@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from schedule.models import ResourceNotSelectable
-from schedule.views import AssignmentViewSet, AvailabilityPresentationAPIView, AvailabilityViewSet, ClientAssignmentViewSet, DynamicResourceViewSet, ResourceViewSet, ServiceRequirementsViewSet, ServiceViewSet
+from schedule.views import AssignmentViewSet, AvailabilityPresentationAPIView, AvailabilityViewSet, ClientAssignmentViewSet, DashboardAPIView, DynamicResourceViewSet, ResourceViewSet, ServiceRequirementsViewSet, ServiceViewSet
 
 router = routers.SimpleRouter()
 
@@ -22,4 +22,5 @@ urlpatterns = [
     # Rotas dinâmicas que capturam o 'resource_code' e passam para a ViewSet
     path('schedule/resource/<str:resource_code>/', dynamic_resource_list, name='dynamic-resource-list'),
     path('schedule/resource/<str:resource_code>/<int:pk>/', dynamic_resource_detail, name='dynamic-resource-detail'),
+    path('schedule/dashboard/status', DashboardAPIView.as_view(), name="schedule-dashboard-status")
 ]

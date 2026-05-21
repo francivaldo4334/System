@@ -2,12 +2,13 @@
 from datetime import timedelta
 from typing import Self, Type, cast
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Count
 from django.db.models.deletion import ProtectedError
 from django.db.utils import IntegrityError
 from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
-from rest_framework.generics import ListAPIView, get_object_or_404
+from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from core.permissions import IsFrontDesk, IsOwner
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
@@ -18,6 +19,7 @@ from schedule.serializers import (
         AvailabilityPresentationSerializer,
         AvailabilitySerializer,
         CreateAssigmentSerializer,
+        DashboardSerializer,
         ResourceObjectSerializer,
         ResourcePersonSerializer,
         ResourceSerializer,
@@ -244,3 +246,20 @@ class AvailabilityPresentationAPIView(ListAPIView):
             'dt_after': dt_after,
         })
         return context;
+
+class DashboardAPIView(GenericAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = DashboardSerializer
+    filterset_fields = [
+        'date',
+        'status',
+        'service',
+        'resources__parent',
+        'resources',
+    ]
+    def get(self, request):
+        queryset = self.filter_queryset(self.get_queryset()).values(
+            'status'
+        ).annotate(total=Count('status'))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

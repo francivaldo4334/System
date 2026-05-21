@@ -363,3 +363,7 @@ class ActionMigrateSerializer(serializers.Serializer):
         }
         return result
 
+
+class DashboardSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=Assignment.Status.choices)
+    total = serializers.IntegerField()
