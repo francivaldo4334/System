@@ -65,9 +65,9 @@ class AppView(PermissionRequiredMixin,
 
 class AppScheduleView(AppView):
     template_name = 'pages/app/schedule/index.html'
-    extra_context = {
-        'assignment_form': AssignmentForm
-    }
+    # extra_context = {
+    #     'assignment_form': AssignmentForm
+    # }
 class AppScheduleSettingsView(AppView):
     template_name = 'pages/app/schedule/settings/index.html'
 
