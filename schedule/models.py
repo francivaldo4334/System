@@ -30,7 +30,6 @@ class Resource(TimeStampedModel, ActivatorModel):
     content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
     content_object = GenericForeignKey()
     class Meta:
-        unique_together = ['content_type', 'object_id']
         ordering = ('parent_id','code')
         indexes = [
             models.Index(fields=['content_type', 'object_id'])

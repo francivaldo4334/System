@@ -111,6 +111,8 @@ class BaseAssignmentViewSet(
             return Response([_('Slot occupied')], 422)
         except NotImplementedError as e:
             return Response(e.args, 422)
+        except IntegrityError as e:
+            return Response('Erro de concorrência ao registrar o recurso. Tente novamente.', 422)
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -218,17 +220,21 @@ class ClientAssignmentViewSet(BaseAssignmentViewSet):
                 'name': _('Client'),
             }
         )
+
+        content_type = ContentType.objects.get_for_model(self.request.user)
+        object_id = self.request.user.id
     
         user_resource, c = ResourceSelectable.objects.get_or_create(
             parent=client_type,
-            content_type=ContentType.objects.get_for_model(self.request.user),
-            object_id=self.request.user.id,
+            content_type=content_type,
+            object_id=object_id,
             defaults={
                 'name': self.request.user.get_full_name,
                 'is_selectable': True,
                 'code':f'client.{self.request.user.username}',
             }
         )
+        print("ok3")
         serializer.save(user_client_resource=user_resource)
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
