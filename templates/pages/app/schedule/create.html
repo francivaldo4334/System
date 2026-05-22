@@ -200,6 +200,8 @@
     if (modal){
         modal.onclose = () => {
             form.reset();
+            $s.set("create_asg_form.service", null)
+            $s.set("create_asg_form.resources", {})
         }
     }
 }
