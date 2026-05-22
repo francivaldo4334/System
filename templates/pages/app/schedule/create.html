@@ -19,8 +19,13 @@
                     {# endwith #}
                     <label> {% trans "Service"%} </label>
                     <select id="id_service__add_asg"></select>
-                    <fieldset class="fieldset col-span-2" id="id_fieldset__add_asg">
-                    <legend class="fieldset-legend"> {% trans "Resources"%} </legend>
+                    <fieldset class="fieldset col-span-2 border rounded-md border-base-content/40 p-2 mb-4" id="id_fieldset__add_asg">
+                        <legend class="fieldset-legend"> {% trans "Resources"%} </legend>
+                        <div
+                            id="id_form_resources"
+                            class="[&>label]:label [&>select]:select grid grid-cols-2 gap-3"
+                        >
+                        </div>
                     </fieldset>
                 </div>
             </form>
@@ -49,6 +54,70 @@
 </script>
 <script is="exec-mount" type="pass">
 {
+    $s.createStore('create_asg_form',{
+        'service': null,
+        'resources': [],
+    })
+    $q.use(
+        ['services'],
+        () => $r.get('{% url "services-list" %}'),
+        {
+            onSuccess(data){
+                const select = document.getElementById('id_service__add_asg')
+                const frag = document.createDocumentFragment()
+                const option = document.createElement('option')
+
+                option.value = ''
+                option.innerText = "{% trans 'Select a value'%}"
+                frag.appendChild(option)
+
+                data.results.map(it => {
+                    const option = document.createElement('option')
+                    option.value = it.id
+                    option.innerText = it.label
+                    option.onclick = () => {
+                        $s.set("create_asg_form.service", it)
+                    }
+                    frag.appendChild(option)
+                })
+
+                select.replaceChildren(frag)
+            }
+        }
+    )
+    $s.subscribe('create_asg_form.service', null, null, async (data) => {
+        const content = document.getElementById('id_form_resources')
+        const frag = document.createDocumentFragment()
+        data?.service_resource_relation.forEach(it => {
+            const parentName = it.resource_type_name
+            const parentId = it.resource_type
+
+            const label = document.createElement('label')
+            label.innerText = parentName
+            label.for = `id_resource_type_${it.resource_type}`
+
+            frag.appendChild(label)
+
+            const select = document.createElement('select')
+            select.id = `id_resource_type_${it.resource_type}`
+            try {
+                $r.get(`{% url "resources-list" %}?parent=${it.resource_type}`)
+                .then(data => {
+                    const select = document.getElementById(`id_resource_type_${it.resource_type}`)
+                    const frag = document.createDocumentFragment()
+                    data.results.forEach(it => {
+                        const option = document.createElement('option')
+                        option.value = it.id
+                        option.innerText = it.name
+                        frag.appendChild(option)
+                    })
+                    select.replaceChildren(frag)
+                })
+            } catch(e) {}
+            frag.appendChild(select)
+        })
+        content.replaceChildren(frag)
+    })
     $s.createStore("form_assignment", {
         'availability_id': 0,
         'start_slot': 0,

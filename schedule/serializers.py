@@ -106,10 +106,24 @@ class ServiceResourceRelationSerializer(serializers.ModelSerializer):
             )
         ]
 
+class ServiceResourceRelationSerializer(serializers.ModelSerializer):
+    resource_type_name = serializers.CharField(source="resource_type.name")
+    class Meta:
+        model = ServiceResourceRelation
+        fields = [
+            'id',
+            'resource_type',
+            'resource_type_name'
+        ]
+
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
     required_resources_label = serializers.SerializerMethodField()
+    service_resource_relation = ServiceResourceRelationSerializer(
+        source="serviceresourcerelation_set",
+        many=True,
+    )
     class Meta:
         model = Service
         fields = [
@@ -117,6 +131,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             'label',
             'description',
             'required_resources_label',
+            'service_resource_relation',
         ]
     def get_required_resources_label(self, obj):
         if not hasattr(obj, 'required_resources'):

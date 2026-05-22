@@ -238,7 +238,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
       }
     )
     $s.subscribe('modal_migrate_select_date.date', null, null, (v) => {
-
+        if (v === null) return
         $q.use(
           ['times'],
           () => {
