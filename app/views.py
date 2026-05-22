@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Type
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
@@ -379,3 +379,6 @@ class HomeView(LoginRequiredMixin,View):
         if IsOnlyClient().has_permission(request, None):
             return redirect('self_scheduling')
         return redirect('app-schedule')
+
+class TickerView(TemplateView):
+    template_name = 'components/ticker.html'
