@@ -88,6 +88,7 @@ class ResourcePersonSerializer(ResourceSerializer):
 class ServiceResourceRelationSerializer(serializers.ModelSerializer):
     service_label = serializers.ReadOnlyField(source='service.title')
     resource_type_label = serializers.ReadOnlyField(source='resource_type.name')
+    resource_type_name = serializers.ReadOnlyField(source="resource_type.name")
     class Meta:
         model = ServiceResourceRelation
         fields = [
@@ -95,6 +96,7 @@ class ServiceResourceRelationSerializer(serializers.ModelSerializer):
             'service',
             'resource_type',
             'quantity',
+            'resource_type_name',
             'service_label',
             'resource_type_label',
         ]
@@ -106,16 +108,6 @@ class ServiceResourceRelationSerializer(serializers.ModelSerializer):
             )
         ]
 
-class ServiceResourceRelationSerializer(serializers.ModelSerializer):
-    resource_type_name = serializers.CharField(source="resource_type.name")
-    class Meta:
-        model = ServiceResourceRelation
-        fields = [
-            'id',
-            'resource_type',
-            'resource_type_name'
-        ]
-
 
 class ServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="title")
@@ -123,6 +115,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     service_resource_relation = ServiceResourceRelationSerializer(
         source="serviceresourcerelation_set",
         many=True,
+        read_only=True,
     )
     class Meta:
         model = Service
@@ -133,6 +126,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             'required_resources_label',
             'service_resource_relation',
         ]
+
     def get_required_resources_label(self, obj):
         if not hasattr(obj, 'required_resources'):
             return None;
