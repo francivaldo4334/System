@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Comprovativo de Pagamento</title>
+    <title>{% trans "Appointment Confirmation"%}</title>
     <style>
         @page {
             size: A4;
@@ -19,35 +19,104 @@
             font-family: Arial, sans-serif;
             color: #333;
             line-height: 1.5;
+            margin: 0;
+            padding: 0;
         }
 
         .header {
             border-bottom: 2px solid #0056b3;
             padding-bottom: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .header h1 {
             color: #0056b3;
             margin: 0;
             font-size: 24pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .detalhes {
+        .subheader-text {
+            margin: 5px 0 0 0;
+            font-size: 12pt;
+            color: #666;
+            font-weight: bold;
+        }
+
+        /* Estrutura de Metadados em duas colunas para otimizar espaço */
+        .meta-container {
+            width: 100%;
+            margin-bottom: 30px;
+            border-collapse: collapse;
+        }
+
+        .meta-container td {
+            padding: 4px 0;
+            vertical-align: top;
+            font-size: 10.5pt;
+        }
+
+        .meta-label {
+            color: #555;
+            font-weight: bold;
+            width: 15%;
+        }
+
+        .meta-value {
+            color: #111;
+            width: 35%;
+        }
+
+        .meta-value-full {
+            color: #111;
+            font-family: 'Courier New', Courier, monospace; /* Melhora a leitura de hashes/UUIDs */
+            font-size: 10pt;
+        }
+
+        /* Tabelas de Itens e Recursos */
+        .section-title {
+            font-size: 12pt;
+            color: #0056b3;
+            margin: 20px 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: bold;
+        }
+
+        .tabela-dados {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        .detalhes th, .detalhes td {
-            padding: 10px;
+        .tabela-dados th, .tabela-dados td {
+            padding: 10px 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 10.5pt;
         }
 
-        .detalhes th {
+        .tabela-dados th {
             background-color: #f8f9fa;
-            color: #555;
+            color: #495057;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 9.5pt;
+            letter-spacing: 0.5px;
+        }
+
+        /* Lista inline de recursos para não ocupar espaço vertical desnecessário */
+        .recursos-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 6px;
+            margin-bottom: 4px;
+            font-size: 9.5pt;
+            font-weight: 500;
         }
 
         .total {
@@ -56,6 +125,8 @@
             color: #000;
             text-align: right;
             margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
         }
     </style>
 </head>
@@ -63,31 +134,61 @@
 
     <div class="header">
         <h1>{{ empresa }}</h1>
-        <p>Comprovativo de Operação</p>
+        <p class="subheader-text">{% trans "Appointment Confirmation"%}</p>
     </div>
 
-    <p><strong>Cliente:</strong> {{ pagamento.usuario.get_full_name }}</p>
-    <p><strong>Data de Emissão:</strong> {{ pagamento.data_pagamento|date:"d/m/Y H:i" }}</p>
-    <p><strong>Identificador do PDF:</strong> {{ pagamento.uuid }}</p>
+    <!-- Bloco de informações gerais usando tabela limpa (sem bordas) para alinhamento -->
+    <table class="meta-container">
+        <tr>
+            <td class="meta-label">{% trans 'Client' %}:</td>
+            <td class="meta-value">{{ client_name }}</td>
+            
+            <td class="meta-label">{% trans "Emission" %}:</td>
+            <td class="meta-value">{{ emission|date:"d/m/Y H:i" }}</td>
+        </tr>
+        <tr>
+            <td class="meta-label">{% trans "Appointment Cod"%}:</td>
+            <td class="meta-value-full" colspan="3">{{ appointment_uuid }}</td>
+        </tr>
+    </table>
 
-    <table class="detalhes">
+    <div class="section-title">{% trans 'Appointment Detail' %}</div>
+    <table class="tabela-dados">
         <thead>
             <tr>
-                <th>Descrição do Serviço</th>
-                <th>Referência</th>
+                <th style="width: 45%;">{% trans "Contracted Service" %}</th>
+                <th style="width: 30%;">{% trans "Appointment Date" %}</th>
+                <th style="width: 25%;">{% trans "Time" %}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{{ pagamento.descricao }}</td>
-                <td>{{ pagamento.referencia }}</td>
+                <td><strong>{{ service_name }}</strong></td>
+                <td>{{ appointment_date|date:"d/m/Y" }}</td>
+                <td>{{ appointment_start|time:"H:i" }} - {{ appointment_end|time:"H:i" }}</td>
             </tr>
         </tbody>
     </table>
 
-    <div class="total">
-        Valor Pago: {{ pagamento.valor }} €
-    </div>
-
+    <div class="section-title">{% trans "Recursos Alocados" %}</div>
+    <table class="tabela-dados">
+        <thead>
+            <tr>
+                <th>{% trans 'Professionals / Related Infrastructure' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <!-- Loop ideal para renderizar múltiplos recursos envolvidos (ex: Profissional, Sala, Equipamento) -->
+                    {% for resource in resources %}
+                        <span class="recursos-tag">{{ resource.name }}</span>
+                    {% empty %}
+                        <span style="color: #6c757d; font-style: italic;">{% trans 'No fixed associated resources.' %}</span>
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
