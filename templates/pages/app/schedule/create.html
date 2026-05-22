@@ -18,7 +18,7 @@
                         {# include 'components/form/index.html' #}
                     {# endwith #}
                     <label> {% trans "Service"%} </label>
-                    <select id="id_service__add_asg"></select>
+                    <select required id="id_service__add_asg"></select>
                     <fieldset class="fieldset col-span-2 border rounded-md border-base-content/40 p-2 mb-4" id="id_fieldset__add_asg">
                         <legend class="fieldset-legend"> {% trans "Resources"%} </legend>
                         <div
@@ -56,7 +56,7 @@
 {
     $s.createStore('create_asg_form',{
         'service': null,
-        'resources': [],
+        'resources': {},
     })
     $q.use(
         ['services'],
@@ -87,6 +87,15 @@
     )
     $s.subscribe('create_asg_form.service', null, null, async (data) => {
         const content = document.getElementById('id_form_resources')
+        if (!data) {
+            $s.set("create_asg_form.resources", {})
+            content.innerHTML = ` 
+                <span class="w-full text-lg text-center p-2 col-span-2">
+                    {% trans 'Select a service'%}
+                </span>
+            `
+            return
+        }
         const frag = document.createDocumentFragment()
         data?.service_resource_relation.forEach(it => {
             const parentName = it.resource_type_name
@@ -94,17 +103,31 @@
 
             const label = document.createElement('label')
             label.innerText = parentName
-            label.for = `id_resource_type_${it.resource_type}`
 
             frag.appendChild(label)
 
             const select = document.createElement('select')
             select.id = `id_resource_type_${it.resource_type}`
+            select.required = true
+            select.onchange = (e)=> {
+                let resources = $s.get('create_asg_form.resources')
+                const value = e.target.value
+                if (value === "") {
+                    delete resources[parentId]
+                } else {
+                    resources[parentId] = value
+                }
+                $s.set('create_asg_form.resources', resources)
+            }
             try {
                 $r.get(`{% url "resources-list" %}?parent=${it.resource_type}`)
                 .then(data => {
                     const select = document.getElementById(`id_resource_type_${it.resource_type}`)
                     const frag = document.createDocumentFragment()
+                    const option = document.createElement('option')
+                    option.value = ''
+                    option.innerText = "{% trans 'Select a value'%}"
+                    frag.appendChild(option)
                     data.results.forEach(it => {
                         const option = document.createElement('option')
                         option.value = it.id
@@ -127,7 +150,10 @@
     if (form){
         form._handlerSubmit = (event) => {
             event.preventDefault();
-            const data = $u.getDataByForm(event.target);
+            const data = {
+                service: $s.get('create_asg_form.service')?.id || 0,
+                resources: $s.get('create_asg_form.resources') ? Object.values($s.get('create_asg_form.resources')) : [] ,
+            }
             const storeData = $s.get('form_assignment')
             const date = $s.get("filter.calendar.day")
             data.duration_slot = storeData.duration_slot;
@@ -159,12 +185,6 @@
                             else {
                                 const message = Array.isArray(value) ? value.join(', ') : value;
                                 toastError(message)
-                                //field.setCustomValidity(message);
-                                //field.reportValidity();
-
-                                //field.addEventListener('change',() => {
-                                //    field.setCustomValidity('');
-                                //}, {once: true});
                             }
                         });
                     }
