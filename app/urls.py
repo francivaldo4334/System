@@ -3,13 +3,12 @@ from app.views import (
     AppConfigView, AppScheduleSettingsView, AppScheduleView, HomeView,
     ScheduleSettingsAvailabilitiesView, ScheduleSettingsResourcePersonView,
     ScheduleSettingsResourceView, ScheduleSettingsServiceRequirementsView,
-    ScheduleSettingsServiceView, SelfScheduleView, RegisterView, TickerView,
+    ScheduleSettingsServiceView, SelfScheduleView, RegisterView,
 )
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', HomeView.as_view(), name="app"),
-    path('ticker/', TickerView.as_view(),name="ticker"),
     path('schedule', AppScheduleView.as_view(), name='app-schedule'),
     path('schedule/settings', AppScheduleSettingsView.as_view(), name='app-schedule-settings'),
     path('schedule/settings/availabilities', ScheduleSettingsAvailabilitiesView.as_view(), name="app-schedule-settings-availabilities"),

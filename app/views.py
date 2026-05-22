@@ -379,6 +379,3 @@ class HomeView(LoginRequiredMixin,View):
         if IsOnlyClient().has_permission(request, None):
             return redirect('self_scheduling')
         return redirect('app-schedule')
-
-class TickerView(TemplateView):
-    template_name = 'components/ticker.html'

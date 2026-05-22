@@ -3,7 +3,10 @@
 # pyright: reportArgumentType=false
 # Exceptions
 
+import datetime
 from typing import List, cast
+
+from django_filters import DateTimeFilter
 
 
 class ResourceNotAllowed(Exception):
@@ -84,3 +87,9 @@ class AssignmentUtil:
                 start_slot=self.assignment.start_slot,
                 duration_slot=self.assignment.duration_slot,
             )
+
+def slot_to_time(slot: int) -> datetime.time:
+    total_minutes = slot * 5
+    hours = total_minutes // 60
+    minutes = total_minutes % 60
+    return datetime.time(hours, minutes)

@@ -5,6 +5,7 @@
 # pyright: reportCallIssue=false
 # pyright: reportGeneralTypeIssues=false
 from typing import List, cast
+from uuid import uuid4
 from django.contrib.auth.mixins import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
@@ -256,6 +257,11 @@ class Assignment(TimeStampedModel, CreatedByModel):
         ABSENT = 'AB', _('Absent')
         IN_PROGRESS = 'IP', _('In Progress')
         COMPLETED = 'CP', _('Completed')
+
+    uuid = models.UUIDField(
+        default=uuid4,
+        unique=True,
+    )
 
     service = models.ForeignKey(Service, models.CASCADE, null=True, blank=True)
     resources = models.ManyToManyField(ResourceSelectable)

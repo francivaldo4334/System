@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.db.models.deletion import ProtectedError
 from django.db.utils import IntegrityError
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
@@ -30,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
 from drf_spectacular.utils import extend_schema
 
-from schedule.utils import ResourceOcuppied
+from schedule.utils import ResourceOcuppied, slot_to_time
 
 # Create your views here.
 class ResourceViewSet(viewsets.ModelViewSet):
@@ -174,6 +176,37 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
         obj = self.get_object()
         obj.state.absent()
         return Response(self.get_serializer(obj).data)
+
+    @action(["GET"], True)
+    def ticker_download(self, request, pk):
+        from weasyprint import HTML
+        obj = cast(Assignment,self.get_object())
+        html_string = render_to_string(
+            'components/ticker.html',
+            {
+                'client_name': self.request.user.get_full_name(),
+                'emission': obj.created,
+                'appointment_uuid': str(obj.uuid).split(0,9),
+                'appointment_date': obj.date,
+                'appointment_start': slot_to_time(obj.start_slot),
+                'appointment_end': slot_to_time(obj.duration_slot + obj.start_slot),
+                'resources': obj.resources,
+            }
+        )
+        response = HttpResponse(content_type="application/pdf")
+        response['Content-Disposition'] = f'inline; filename="ticker_{obj.uuid}.pdf"'
+        HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf(response)
+        return response
+
+    def get_queryset(self):
+        if self.action == "ticker_download":
+            content_type = ContentType.objects.get_for_model(self.request.user)
+            return super().get_queryset().filter(
+                resources__content_type=content_type,
+                resources__object_id=self.request.user.pk,
+            )
+            
+        return super().get_queryset()
 
     
 class ClientAssignmentViewSet(BaseAssignmentViewSet):
