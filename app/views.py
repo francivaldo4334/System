@@ -121,12 +121,12 @@ class AppScheduleSettingsView(AppView):
                 'is_dynamic': False,
             })
 
-        if user.has_perm('schedule.view_serviceresourcerelation'):
-            setting_tabs.append({
-                'label': _("Service Requirements"),
-                'url_name': 'app-schedule-settings-service-requirements',
-                'is_dynamic': False,
-            })
+        # if user.has_perm('schedule.view_serviceresourcerelation'):
+        #     setting_tabs.append({
+        #         'label': _("Service Requirements"),
+        #         'url_name': 'app-schedule-settings-service-requirements',
+        #         'is_dynamic': False,
+        #     })
 
         context.update({
             'setting_tabs': setting_tabs
