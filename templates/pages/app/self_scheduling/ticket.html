@@ -1,44 +1,47 @@
 <div class="card w-full max-w-md bg-base-100 shadow-xl border border-base-300">
-  
-  <figure class="px-10 pt-10">
-    <div class="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center *:text-success"  id="id_figure">
-      {% include 'icons/check-check.svg'%}
-    </div>
-  </figure>
 
-  <div class="card-body items-center text-center">
-    <h2 class="card-title text-2xl font-bold success-text">{% trans 'Appointment confirmed'%}</h2>
-    <p class="text-base-content/70 success-text">{% trans 'The details have been sent to your email.' %}</p>
-
-    <div class="w-full mt-6 space-y-3">
-      <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-        <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Service' %}</span>
-        <span class="badge badge-outline">{{service.title}}</span>
-      </div>
-
-      <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-        <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Resources' %}</span>
-        <div class="flex gap-1 flex-wrap justify-end">
-          {% for it in resources %}
-            <span class="badge badge-primary badge-sm">#{{it.parent.name|add:'/'|add:it.name}}</span>
-          {% endfor %}
+    <figure class="px-10 pt-10">
+        <div class="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center *:text-success"
+            id="id_figure">
+            {% include 'icons/check-check.svg'%}
         </div>
-      </div>
+    </figure>
 
-      <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-        <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Date' %}</span>
-        <span class="font-mono font-medium" id="id_date_field"></span>
-      </div>
+    <div class="card-body items-center text-center">
+        <h2 class="card-title text-2xl font-bold success-text">{% trans 'Appointment confirmed'%}</h2>
+        <p class="text-base-content/70 success-text">{% trans 'The details have been sent to your email.' %}</p>
 
-      <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-        <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Time' %}</span>
-        <span class="font-mono font-medium">{{request.GET.time}}</span>
-      </div>
+        <div class="w-full mt-6 space-y-3">
+            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
+                <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Service' %}</span>
+                <span class="badge badge-outline">{{service.title}}</span>
+            </div>
+
+            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
+                <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Resources' %}</span>
+                <div class="flex gap-1 flex-wrap justify-end">
+                    {% for it in resources %}
+                    <span class="badge badge-primary badge-sm">#{{it.parent.name|add:'/'|add:it.name}}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
+                <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Date' %}</span>
+                <span class="font-mono font-medium" id="id_date_field"></span>
+            </div>
+
+            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
+                <span class="text-sm font-semibold opacity-60 uppercase">{% trans 'Time' %}</span>
+                <span class="font-mono font-medium">{{request.GET.time}}</span>
+            </div>
+        </div>
+
+        <div class="card-actions w-full mt-8 flex flex-col gap-2">
+            <button class="btn btn-primary w-full">{% trans 'Add to Calendar' %}</button>
+            <a class="btn btn-ghost btn-sm w-full" id="id_a_download_ticker" target="_blank" rel="noopener noreferrer">
+                {% trans 'Download Receipt' %}
+            </a>
+        </div>
     </div>
-
-    <div class="card-actions w-full mt-8 flex flex-col gap-2">
-      <button class="btn btn-primary w-full">{% trans 'Add to Calendar' %}</button>
-      <button class="btn btn-ghost btn-sm w-full">{% trans 'Download Receipt' %}</button>
-    </div>
-  </div>
 </div>

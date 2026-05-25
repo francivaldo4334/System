@@ -93,8 +93,15 @@
         },
         {
             onSuccess(response) {
+                console.log("response", response)
                 // Requisição OK: Esconde o loading e renderiza o Ticket
                 switchView('SUCCESS')
+                const a = document.getElementById('id_a_download_ticker')
+                a.href = "{% url 'assignment-ticker-download' 0%}".replace(
+                    '0',
+                    response.id
+                )
+
             },
             onError(error) {
                 // Falha: Esconde o loading e renderiza o bloco de erro com a mensagem do servidor
