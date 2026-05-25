@@ -192,6 +192,13 @@ class ServiceForm(BaseForm):
             label=_('Description'),
             attrs="required",
         ),
+        SelectField(
+            label=_('Resource Types'),
+            name="required_resources",
+            url_name="resources",
+            url_query_params='?use_as_category=true',
+            attrs="multiple",
+        ),
     ]
 
 class ServiceRequirementsForm(BaseForm):

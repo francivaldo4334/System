@@ -59,10 +59,17 @@ class Command(BaseCommand):
                 group.permissions.set(permissions_to_add)
                 status = "Criado" if created else "Atualizado"
                 self.stdout.write(self.style.SUCCESS(f'Gropo {group_name}: {status} com {len(permissions_to_add)} permissões.'))
+
+            from django.apps import apps
+            from django.conf import settings
+            from django.contrib.contenttypes.models import ContentType
+            user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+            content_type = ContentType.objects.get_for_model(user_model)
             client_type, c = ResourceNotSelectable.objects.get_or_create(
                 code="client",
                 defaults={
                     'is_selectable': False,
                     'name': _('Client'),
+                    'content_type': content_type
                 }
             )

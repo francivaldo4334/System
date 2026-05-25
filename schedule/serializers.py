@@ -117,12 +117,17 @@ class ServiceSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True,
     )
+    required_resources = serializers.PrimaryKeyRelatedField(
+        many=True, 
+        queryset=ResourceNotSelectable.objects.all()
+    )
     class Meta:
         model = Service
         fields = [
             'id',
             'label',
             'description',
+            'required_resources',
             'required_resources_label',
             'service_resource_relation',
         ]

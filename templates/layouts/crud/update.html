@@ -40,83 +40,112 @@
             if (!value) return
             const form = document.getElementById("id_{{key}}_update_form")
             $q.use("{{update.update_url_name}}", () => $r.get(
-            {%if request.GET.key%}
-            "{% url update.update_url_name pk=0 resource_code=request.GET.key %}"
+            {%if request.GET.key %}
+                "{% url update.update_url_name pk=0 resource_code=request.GET.key %}"
             {%else%}
-            "{% url update.update_url_name 0 %}"
-            {%endif%}
+                "{% url update.update_url_name 0 %}"
+            {% endif %}
             .replace("0", value)), {
-                onSuccess(data) {
-                    Object.keys(data).forEach(key => {
+        // onSuccess(data) {
+        //     Object.keys(data).forEach(key => {
+        //         const field = form.elements[key];
+        //         if (field) {
+        //             const fieldGroup = Array.from(field)
+        //             if (fieldGroup.length && field.tagName !== "SELECT") {
+        //                 fieldGroup.forEach(field => {
+        //                     field.checked = data[key].map(String).includes(field.value)
+        //                 })
+        //             } else if (field.type === "checkbox") {
+        //                 field.checked = data[key];
+        //             } else {
+        //                 field.value = data[key];
+        //             }
+        //         }
+        //     })
+        // }
+        onSuccess(data) {
+            Object.keys(data).forEach(key => {
+                const field = form.elements[key];
+                if (!field) return; // Cláusula de guarda para evitar erros se o campo não existir
+
+                // 1. Trata grupos de elementos (como RadioNodeList de checkboxes ou inputs de mesmo nome)
+                const fieldGroup = Array.from(field);
+                if (fieldGroup.length && field.tagName !== "SELECT") {
+                    fieldGroup.forEach(f => {
+                        f.checked = data[key].map(String).includes(f.value);
+                    });
+                }
+                // 2. Trata especificamente o SELECT MULTIPLE
+                else if (field.tagName === "SELECT" && field.multiple) {
+                    const values = Array.isArray(data[key]) ? data[key].map(String) : [String(data[key])];
+                    Array.from(field.options).forEach(option => {
+                        option.selected = values.includes(option.value);
+                    });
+                }
+                // 3. Trata Checkbox único (Booleano)
+                else if (field.type === "checkbox") {
+                    field.checked = !!data[key];
+                }
+                // 4. Trata inputs text, hidden, select simples, textarea, etc.
+                else {
+                    field.value = data[key];
+                }
+            });
+        }
+    })
+        })
+    const form = document.getElementById("id_{{key}}_update_form");
+    if (form) {
+        form._handlerUpdate = (event) => {
+            event.preventDefault();
+            const data = $u.getDataByForm(event.target);
+            $q.use(
+                '{{update.update_url_name}}',
+                () => $r.put(
+                    {%if request.GET.key %}
+        '{% url update.update_url_name pk=0 resource_code=request.GET.key%}'
+        {%else%}
+        '{% url update.update_url_name 0 %}'
+        {% endif %}
+                        .replace(
+            "0",
+            $s.get('update.modal.id'),
+        ),
+            data,
+            {'X-CSRFToken': '{{csrf_token}}'}
+                    ),
+        {
+            onSuccess() {
+                {% if list %}
+                $q.refetch('{{list.table.list_url_name}}');
+                {% endif %}
+                document.getElementById('id_update_modal')?.close();
+            },
+            onError(error) {
+                if (error.status === 400) {
+                    Object.entries(error.data).forEach(([key, value]) => {
                         const field = form.elements[key];
                         if (field) {
-                            const fieldGroup = Array.from(field)
-                            if (fieldGroup.length && field.tagName !== "SELECT") {
-                                fieldGroup.forEach(field => {
-                                    field.checked = data[key].map(String).includes(field.value)
-                                })
-                            } else if (field.type === "checkbox") {
-                                field.checked = data[key];
-                            } else {
-                                field.value = data[key];
-                            }
+                            const message = Array.isArray(value) ? value.join(', ') : value;
+
+                            field.setCustomValidity(message);
+                            field.reportValidity();
+
+                            field.addEventListener('input', () => {
+                                field.setCustomValidity('');
+                            }, {once: true});
+                        } else {
+                            toastError(value);
                         }
-                    })
+                    });
+                } else {
+                    toastError("{% trans 'Error' %}!");
                 }
-            })
-        })
-        const form = document.getElementById("id_{{key}}_update_form");
-        if (form) {
-            form._handlerUpdate = (event) => {
-                event.preventDefault();
-                const data = $u.getDataByForm(event.target);
-                $q.use(
-                    '{{update.update_url_name}}',
-                    () => $r.put(
-                        {%if request.GET.key%}
-                        '{% url update.update_url_name pk=0 resource_code=request.GET.key%}'
-                        {%else%}
-                        '{% url update.update_url_name 0 %}'
-                        {%endif%}
-                        .replace(
-                            "0",
-                            $s.get('update.modal.id'),
-                        ),
-                        data,
-                        {'X-CSRFToken': '{{csrf_token}}'}
-                    ),
-                    {
-                        onSuccess() {
-                            {% if list %}
-                            $q.refetch('{{list.table.list_url_name}}');
-                            {% endif %}
-                            document.getElementById('id_update_modal')?.close();
-                        },
-                        onError(error) {
-                            if (error.status === 400) {
-                                Object.entries(error.data).forEach(([key, value]) => {
-                                    const field = form.elements[key];
-                                    if (field) {
-                                        const message = Array.isArray(value) ? value.join(', ') : value;
-
-                                        field.setCustomValidity(message);
-                                        field.reportValidity();
-
-                                        field.addEventListener('input', () => {
-                                            field.setCustomValidity('');
-                                        }, {once: true});
-                                    } else {
-                                        toastError(value);
-                                    }
-                                });
-                            } else {
-                                toastError("{% trans 'Error' %}!");
-                            }
-                        }
-                    }
+            }
+        }
                 )
-            };
-            form.addEventListener('submit', form._handlerUpdate);
+    };
+    form.addEventListener('submit', form._handlerUpdate);
         }
     }
 </script>
