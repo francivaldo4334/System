@@ -10,11 +10,6 @@ class CustomUser(AbstractUser):
         primary_key=True,
         unique=True,
     )
-    is_active = models.BooleanField(
-        _("active"),
-        default=False, # type: ignore
-        help_text=_( # type: ignore
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
-        ),
+    is_email_checked = models.BooleanField(
+        default=False # type: ignore
     )
