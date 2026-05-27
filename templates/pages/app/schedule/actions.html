@@ -46,6 +46,9 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
 {% partialdef modal %}
 <dialog class="modal" id="id_modal_assignment_action_{{status}}">
     <div class="modal-box">
+        <h1 class="text-lg font-bold mb-4">
+        {% trans 'Actions Availables'%}
+        </h1>
         <div class="flex flex-col gap-3">
             {% if has_rescue %}
                 {% with text=_('Rescue appointment') choice='rescue'%}
