@@ -1,75 +1,159 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
+{% block header %}
+<script src="{% static 'state.js' %}"></script>
+<script src="{% static 'query-manager.js' %}"></script>
+<script src="{% static 'request-manager.js' %}"></script>
+{% endblock%}
 
 {% block body%}
 <div class="min-h-screen bg-base-200 flex flex-col items-center justify-center p-4">
+    <div class="card w-full max-w-2xl bg-base-100 shadow-xl border border-base-300">
+        <div class="card-body gap-6">
 
-  <div class="card w-full max-w-2xl bg-base-100 shadow-xl border border-base-300">
-    <div class="card-body gap-6">
+            <!-- Ícone e Cabeçalho -->
+            <div class="text-center">
+                <div class="inline-flex p-3 bg-primary/10 text-primary rounded-full mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.92V6.75" />
+                    </svg>
+                </div>
+                <h1 class="card-title justify-center text-2xl font-bold">{% trans "Check your email."%}</h1>
+                <p class="text-base-content/70 mt-1">
+                    {% trans 'We sent a confirmation link to '%} <span class="font-semibold text-base-content">
+                        {{ email_preview }}
+                    </span>.
+                </p>
+            </div>
 
-      <div class="text-center">
-        <div class="inline-flex p-3 bg-primary/10 text-primary rounded-full mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-8 h-8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.92V6.75" />
-          </svg>
+            <!-- CONTAINER DINÂMICO PARA ALERTAS DE FEEDBACK -->
+            <div id="id_alert_container" class="hidden transition-all duration-300">
+                <div id="id_alert_box" class="alert shadow-sm flex items-start gap-3 p-3 text-sm rounded-lg">
+                    <span id="id_alert_icon"></span>
+                    <span id="id_alert_text"></span>
+                </div>
+            </div>
+
+            <!-- Ações do Card -->
+            <div
+                class="card-actions flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-base-200">
+                <a href="{% url 'login' %}" class="btn btn-ghost btn-sm gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    {% trans 'Go back to login'%}
+                </a>
+
+                <button class="btn btn-outline btn-primary btn-sm w-full sm:w-auto gap-2" id="id_btn_resent_email">
+                    <span id="id_btn_spinner" class="loading loading-spinner loading-xs hidden"></span>
+                    <span id="id_btn_text">{% trans "Didn't receive it? Resend the email." %}</span>
+                </button>
+            </div>
+
         </div>
-        <h1 class="card-title justify-center text-2xl font-bold">{% trans "Check your email."%}</h1>
-        <p class="text-base-content/70 mt-1">
-          {% trans 'We sent a confirmation link to '%} <span class="font-semibold text-base-content">
-            {{ email_preview }}
-          </span>.
-        </p>
-      </div>
-      <!-- <div class="space-y-2"> -->
-      <!-- <div class="mockup-window border border-base-300 bg-base-200"> -->
-      <!-- <div class="bg-base-100 px-4 py-3 border-b border-base-300 text-xs space-y-1"> -->
-      <!-- <div><span class="font-semibold text-base-content/60">De:</span> email_preview.from }}</div> -->
-      <!-- <div><span class="font-semibold text-base-content/60">Para:</span> email_preview.to }}</div> -->
-      <!-- <div><span class="font-semibold text-base-content/60">Assunto:</span> email_preview.subject -->
-      <!-- }}</div> -->
-      <!-- </div> -->
-      <!-- <div class="bg-base-100 p-6 min-h-[180px] flex flex-col items-center justify-center text-center"> -->
-      <!-- <div class="max-w-md space-y-4"> -->
-      <!-- <div class="text-xl font-black tracking-tight text-primary">Ponto <span class="text-secondary">Ágio</span> -->
-      <!-- </div> -->
-
-      <!-- <h2 class="text-lg font-bold text-base-content">Falta pouco para ativar sua conta!</h2> -->
-      <!-- <p class="text-sm text-base-content/70"> -->
-      <!-- Clique no botão abaixo para confirmar seu endereço de e-mail e liberar o acesso total à -->
-      <!-- plataforma. -->
-      <!-- </p> -->
-      <!-- <span class="btn btn-primary btn-sm pointer-events-none opacity-80 cursor-default"> -->
-      <!-- Confirmar E-mail -->
-      <!-- </span> -->
-      <!-- <p class="text-xs text-base-content/40 mt-4 break-all"> -->
-      <!-- Se o botão não funcionar, copie o link: <br> -->
-      <!-- <span class="link link-hover text-primary/70"> email_preview.activation_link }}</span> -->
-      <!-- </p> -->
-      <!-- </div> -->
-      <!-- </div> -->
-      <!-- </div> -->
-      <!-- </div> -->
-
-      <div
-        class="card-actions flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-base-200">
-        <a href="{% url 'login' %}" class="btn btn-ghost btn-sm gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-4 h-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-          </svg>
-          {% trans 'Go back to login'%}
-        </a>
-
-        <form action="" method="POST" class="w-full sm:w-auto">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-outline btn-primary btn-sm w-full sm:w-auto">
-            {% trans "Didn't receive it? Resend the email." %}
-          </button>
-        </form>
-      </div>
-
     </div>
-  </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // 1. Estados Reativos Internos
+        $s.create('isLoading', false);
+        $s.create('cooldownTime', 0); // Tempo restante para novo envio
+
+        const btnResend = document.getElementById("id_btn_resent_email");
+        const btnSpinner = document.getElementById("id_btn_spinner");
+        const btnText = document.getElementById("id_btn_text");
+
+        const alertContainer = document.getElementById("id_alert_container");
+        const alertBox = document.getElementById("id_alert_box");
+        const alertIcon = document.getElementById("id_alert_icon");
+        const alertText = document.getElementById("id_alert_text");
+
+        if (btnResend) {
+
+            // Reatividade: Controla se o botão está habilitado/desabilitado baseado no loading OU no cooldown
+            $s.subscribe("isLoading", btnResend, "disabled", loading => loading || $s.get('cooldownTime') > 0);
+
+            // Ouvinte para mutação visual de Loading (Adiciona Spinner de forma limpa)
+            $s.subscribe("isLoading", null, null, (loading) => {
+                if (loading) {
+                    btnSpinner.classList.remove('hidden');
+                } else {
+                    btnSpinner.classList.add('hidden');
+                }
+            });
+
+            // Gerenciador de Exibição de Alertas do Sistema
+            const showAlert = (type, message) => {
+                alertContainer.classList.remove('hidden');
+                alertBox.className = `alert shadow-sm flex items-start gap-3 p-3 text-sm rounded-lg alert-${type}`;
+                alertText.textContent = message;
+
+                // Alteração de ícones SVG adaptáveis para DaisyUI
+                if (type === 'success') {
+                    alertIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                } else {
+                    alertIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                }
+            };
+
+            // Função de Cooldown (Bloqueia re-envios consecutivos imediatos por 60 segundos)
+            const startCooldown = (durationSeconds) => {
+                $s.set('cooldownTime', durationSeconds);
+                btnResend.disabled = true;
+
+                const interval = setInterval(() => {
+                    let current = $s.get('cooldownTime') - 1;
+                    $s.set('cooldownTime', current);
+
+                    if (current <= 0) {
+                        clearInterval(interval);
+                        btnText.textContent = `{% trans "Didn't receive it? Resend the email." %}`;
+                        btnResend.disabled = false;
+                    } else {
+                        btnText.textContent = `{% trans "Wait"%} ${current}{% trans "s para reenviar"%}`;
+                    }
+                }, 1000);
+            };
+
+            btnResend.onclick = () => {
+                if ($s.get('cooldownTime') > 0) return;
+
+                $s.set("isLoading", true);
+                alertContainer.classList.add('hidden'); // Oculta alertas anteriores ao tentar novamente
+
+                const csrfToken = '{{ csrf_token }}';
+
+                // Usando seu encapsulador nativo de queries/requests ($q.use e $r.post)
+                $q.use(
+                    ['send_ce'],
+                    () => $r.post(
+                        "{% url 'send_email-email-confirmation' %}",
+                        {},
+                        {'X-CSRFToken': csrfToken}
+                    ),
+                    {
+                        onSuccess(response) {
+                            // Pega o detalhe da resposta JSON enviada pelo DRF
+                            const successMsg = response?.detail;
+                            showAlert('success', successMsg);
+                            startCooldown(60); // Aplica bloqueio preventivo de 60 segundos
+                        },
+                        onError(error) {
+                            // Tenta capturar o erro da API se houver throttling ou payload inválido
+                            const errorMsg = error?.data?.detail;
+                            showAlert('error', errorMsg);
+                        },
+                        onFinally() {
+                            $s.set("isLoading", false);
+                        }
+                    }
+                );
+            };
+        }
+    });
+</script>
 {% endblock %}

@@ -4,6 +4,7 @@ from typing import Any, List
 
 from django import forms
 from authentication.models import CustomUser
+from authentication.services import SendEmail
 
 @dataclass
 class Field:
@@ -263,3 +264,8 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = UserCreationForm.Meta.fields + ('email','first_name', 'last_name')
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        SendEmail().send_email_cofirmation(user)
+        return user
