@@ -188,11 +188,11 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
             {
                 'client_name': self.request.user.get_full_name(),
                 'emission': obj.created,
-                'appointment_uuid': str(obj.uuid).split(0,9),
+                'appointment_uuid': str(obj.uuid)[:8],
                 'appointment_date': obj.date,
                 'appointment_start': slot_to_time(obj.start_slot),
                 'appointment_end': slot_to_time(obj.duration_slot + obj.start_slot),
-                'resources': obj.resources,
+                'resources': obj.resources.all(),
             }
         )
         response = HttpResponse(content_type="application/pdf")
