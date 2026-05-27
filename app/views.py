@@ -376,6 +376,7 @@ from rest_framework.generics import RetrieveAPIView, UpdateAPIView
 class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
     queryset = AppConfig.objects.all()
     serializer_class = AppConfigSerializer
+    permission_classes = [IsOwner]
 
 
 class RegisterView(CreateView):
