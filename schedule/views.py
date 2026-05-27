@@ -193,6 +193,7 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
                 'appointment_start': slot_to_time(obj.start_slot),
                 'appointment_end': slot_to_time(obj.duration_slot + obj.start_slot),
                 'resources': obj.resources.all(),
+                'service_name': obj.service.title if obj.service else ""
             }
         )
         response = HttpResponse(content_type="application/pdf")
