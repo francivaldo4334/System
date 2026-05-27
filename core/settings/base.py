@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -93,3 +94,5 @@ LOGOUT_REDIRECT_URL = 'login'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'authentication.CustomUser'
