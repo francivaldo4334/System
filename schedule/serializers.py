@@ -84,6 +84,17 @@ class ResourcePersonSerializer(ResourceSerializer):
             validated_data['object_id'] = user.pk
             validated_data['name'] = user.get_full_name()
         return super().create(validated_data)
+    def update(self, instance, validated_data):
+        username = validated_data.pop('username', None)
+        validated_data['name'] = validated_data.get('name', '')
+        if username:
+            from django.apps import apps
+            from django.conf import settings
+            user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+            user = get_object_or_404(user_model, username=username)
+            validated_data['object_id'] = user.pk
+            validated_data['name'] = user.get_full_name()
+        return super().update(instance, validated_data)
 
 class ServiceResourceRelationSerializer(serializers.ModelSerializer):
     service_label = serializers.ReadOnlyField(source='service.title')
