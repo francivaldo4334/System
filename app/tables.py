@@ -88,6 +88,17 @@ class ServicesTable(BaseTable):
         ('description', 'text'),
         ('resources_label', 'text'),
     ]
+
+class UserTable(BaseTable):
+    key = 'users'
+    thead = [
+        _('Full Name'),
+        _('username'),
+    ]
+    tr = [
+        ('full_name', 'text'),
+        ('username', 'text'),
+    ]
 class ServiceRequirementsTable(BaseTable):
     key = 'service_requirements'
     thead = [

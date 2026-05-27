@@ -201,6 +201,37 @@ class ServiceForm(BaseForm):
         ),
     ]
 
+class UserForm(BaseForm):
+    key = 'users'
+    
+    form_fields = [
+        Field(
+            name="username",
+            label=_('User Name'),
+            attrs="required",
+        ),
+        Field(
+            name="first_name",
+            label=_('First Name'),
+            attrs="required",
+        ),
+        Field(
+            name="last_name",
+            label=_('Last Name'),
+            attrs="required",
+        ),
+        Field(
+            name="email",
+            label=_('Email'),
+            attrs="required type='email'",
+        ),
+        Field(
+            name="password",
+            label=_('Password'),
+            attrs="type='password'",
+        ),
+    ]    
+
 class ServiceRequirementsForm(BaseForm):
     key = 'service_requirements'
     form_fields = [

@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm, UserForm
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
-from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table
+from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table, UserTable
 from core.permissions import IsFrontDesk, IsOnlyClient, IsOwner, IsProfessional
 
 
@@ -120,6 +120,12 @@ class AppScheduleSettingsView(AppView):
                 'url_name': 'app-schedule-settings-services',
                 'is_dynamic': False,
             })
+        if user.has_perm('schedule.view_users'):
+            setting_tabs.append({
+                'label': _("Users"),
+                'url_name': 'app-schedule-settings-users',
+                'is_dynamic': False,
+            })
 
         # if user.has_perm('schedule.view_serviceresourcerelation'):
         #     setting_tabs.append({
@@ -220,6 +226,11 @@ class ScheduleSettingsServiceView(CrudView):
     model_name = 'service'
     form = ServiceForm
     table = ServicesTable
+class SettingsUserView(CrudView):
+    key = "users"
+    model_name = 'user'
+    form = UserForm
+    table = UserTable
 
 class ScheduleSettingsServiceRequirementsView(CrudView):
     key = 'service_requirements'
