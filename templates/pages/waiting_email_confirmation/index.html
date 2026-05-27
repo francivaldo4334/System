@@ -71,7 +71,7 @@
                 </a>
                 
                 <form action="{% url 'resend_verification_email' %}" method="POST" class="w-full sm:w-auto">
-                    {% csrf_cols %} {% csrf_token %}
+                    {% csrf_token %}
                     <button type="submit" class="btn btn-outline btn-primary btn-sm w-full sm:w-auto">
                         Não recebeu? Reenviar e-mail
                     </button>
