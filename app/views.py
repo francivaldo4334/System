@@ -372,11 +372,13 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
     queryset = AppConfig.objects.all()
     serializer_class = AppConfigSerializer
     permission_classes = [IsOwner]
+    parser_classes = [MultiPartParser, FormParser]
 
 
 class RegisterView(CreateView):
