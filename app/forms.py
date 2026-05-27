@@ -3,7 +3,7 @@ from datetime import timedelta
 from typing import Any, List
 
 from django import forms
-from django.contrib.auth.models import User
+from authentication.models import CustomUser
 
 @dataclass
 class Field:
@@ -261,5 +261,5 @@ class CustomUserCreationForm(UserCreationForm):
     last_name = forms.CharField(required=True)
 
     class Meta(UserCreationForm.Meta):
-        model = User
+        model = CustomUser
         fields = UserCreationForm.Meta.fields + ('email','first_name', 'last_name')

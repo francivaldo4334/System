@@ -1,84 +1,75 @@
 {% extends 'layouts/base.html' %}
 
-{% block content %}
+{% block body%}
 <div class="min-h-screen bg-base-200 flex flex-col items-center justify-center p-4">
-    
-    <div class="mb-8 w-full max-w-xl hidden md:block">
-        <ul class="steps w-full">
-            <li class="step step-primary">Cadastro</li>
-            <li class="step step-primary">Validar E-mail</li>
-            <li class="step">Configurar Perfil</li>
-        </ul>
-    </div>
 
-    <div class="card w-full max-w-2xl bg-base-100 shadow-xl border border-base-300">
-        <div class="card-body gap-6">
-            
-            <div class="text-center">
-                <div class="inline-flex p-3 bg-primary/10 text-primary rounded-full mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.92V6.75" />
-                    </svg>
-                </div>
-                <h1 class="card-title justify-center text-2xl font-bold">Verifique seu e-mail</h1>
-                <p class="text-base-content/70 mt-1">
-                    Enviamos um link de confirmação para <span class="font-semibold text-base-content">{{ email }}</span>.
-                </p>
-            </div>
+  <div class="card w-full max-w-2xl bg-base-100 shadow-xl border border-base-300">
+    <div class="card-body gap-6">
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %} shadow-sm text-sm">
-                        <span>{{ message }}</span>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            <div class="space-y-2">
-                <label class="text-xs font-bold uppercase tracking-wider text-base-content/50 px-1">Prévia do e-mail enviado</label>
-                <div class="mockup-window border border-base-300 bg-base-200">
-                    <div class="bg-base-100 px-4 py-3 border-b border-base-300 text-xs space-y-1">
-                        <div><span class="font-semibold text-base-content/60">De:</span> {{ email_preview.from }}</div>
-                        <div><span class="font-semibold text-base-content/60">Para:</span> {{ email_preview.to }}</div>
-                        <div><span class="font-semibold text-base-content/60">Assunto:</span> {{ email_preview.subject }}</div>
-                    </div>
-                    <div class="bg-base-100 p-6 min-h-[180px] flex flex-col items-center justify-center text-center">
-                        <div class="max-w-md space-y-4">
-                            <div class="text-xl font-black tracking-tight text-primary">Ponto <span class="text-secondary">Ágio</span></div>
-                            
-                            <h2 class="text-lg font-bold text-base-content">Falta pouco para ativar sua conta!</h2>
-                            <p class="text-sm text-base-content/70">
-                                Clique no botão abaixo para confirmar seu endereço de e-mail e liberar o acesso total à plataforma.
-                            </p>
-                            <span class="btn btn-primary btn-sm pointer-events-none opacity-80 cursor-default">
-                                Confirmar E-mail
-                            </span>
-                            <p class="text-xs text-base-content/40 mt-4 break-all">
-                                Se o botão não funcionar, copie o link: <br>
-                                <span class="link link-hover text-primary/70">{{ email_preview.activation_link }}</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-actions flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-base-200">
-                <a href="{% url 'account_login' %}" class="btn btn-ghost btn-sm gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-                    </svg>
-                    Voltar ao login
-                </a>
-                
-                <form action="{% url 'resend_verification_email' %}" method="POST" class="w-full sm:w-auto">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline btn-primary btn-sm w-full sm:w-auto">
-                        Não recebeu? Reenviar e-mail
-                    </button>
-                </form>
-            </div>
-
+      <div class="text-center">
+        <div class="inline-flex p-3 bg-primary/10 text-primary rounded-full mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.92V6.75" />
+          </svg>
         </div>
+        <h1 class="card-title justify-center text-2xl font-bold">{% trans "Check your email."%}</h1>
+        <p class="text-base-content/70 mt-1">
+          {% trans 'We sent a confirmation link to '%} <span class="font-semibold text-base-content">
+            {{ email_preview }}
+          </span>.
+        </p>
+      </div>
+      <!-- <div class="space-y-2"> -->
+      <!-- <div class="mockup-window border border-base-300 bg-base-200"> -->
+      <!-- <div class="bg-base-100 px-4 py-3 border-b border-base-300 text-xs space-y-1"> -->
+      <!-- <div><span class="font-semibold text-base-content/60">De:</span> email_preview.from }}</div> -->
+      <!-- <div><span class="font-semibold text-base-content/60">Para:</span> email_preview.to }}</div> -->
+      <!-- <div><span class="font-semibold text-base-content/60">Assunto:</span> email_preview.subject -->
+      <!-- }}</div> -->
+      <!-- </div> -->
+      <!-- <div class="bg-base-100 p-6 min-h-[180px] flex flex-col items-center justify-center text-center"> -->
+      <!-- <div class="max-w-md space-y-4"> -->
+      <!-- <div class="text-xl font-black tracking-tight text-primary">Ponto <span class="text-secondary">Ágio</span> -->
+      <!-- </div> -->
+
+      <!-- <h2 class="text-lg font-bold text-base-content">Falta pouco para ativar sua conta!</h2> -->
+      <!-- <p class="text-sm text-base-content/70"> -->
+      <!-- Clique no botão abaixo para confirmar seu endereço de e-mail e liberar o acesso total à -->
+      <!-- plataforma. -->
+      <!-- </p> -->
+      <!-- <span class="btn btn-primary btn-sm pointer-events-none opacity-80 cursor-default"> -->
+      <!-- Confirmar E-mail -->
+      <!-- </span> -->
+      <!-- <p class="text-xs text-base-content/40 mt-4 break-all"> -->
+      <!-- Se o botão não funcionar, copie o link: <br> -->
+      <!-- <span class="link link-hover text-primary/70"> email_preview.activation_link }}</span> -->
+      <!-- </p> -->
+      <!-- </div> -->
+      <!-- </div> -->
+      <!-- </div> -->
+      <!-- </div> -->
+
+      <div
+        class="card-actions flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-base-200">
+        <a href="{% url 'login' %}" class="btn btn-ghost btn-sm gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          </svg>
+          {% trans 'Go back to login'%}
+        </a>
+
+        <form action="" method="POST" class="w-full sm:w-auto">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline btn-primary btn-sm w-full sm:w-auto">
+            {% trans "Didn't receive it? Resend the email." %}
+          </button>
+        </form>
+      </div>
+
     </div>
+  </div>
 </div>
 {% endblock %}

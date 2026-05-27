@@ -4,7 +4,7 @@ from django.shortcuts import redirect, reverse
 from django.conf.urls.i18n import i18n_patterns
 
 def to_app_page(request):
-    if request.user.is_email_checked:
+    if hasattr(request.user, 'is_email_checked') and request.user.is_email_checked:
         return redirect('/app/')
     return redirect(reverse('waiting_email_confirmation'))
 

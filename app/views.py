@@ -10,6 +10,7 @@ from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCrea
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
 from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table, UserTable
+from authentication.permissions import IsEmailCheckedPermission
 from core.permissions import IsFrontDesk, IsOnlyClient, IsOwner, IsProfessional
 
 
@@ -390,6 +391,8 @@ class RegisterView(CreateView):
 class HomeView(LoginRequiredMixin,View):
     def get(self, request):
         from django.shortcuts import redirect
+        if not IsEmailCheckedPermission().has_permission(request,None):
+            return redirect('waiting_email_confirmation')
         if IsOnlyClient().has_permission(request, None):
             return redirect('self_scheduling')
         return redirect('app-schedule')
