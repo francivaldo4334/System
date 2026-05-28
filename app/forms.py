@@ -263,9 +263,14 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = UserCreationForm.Meta.fields + ('email','first_name', 'last_name')
+        fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name')
+
+    def __init__(self, *args, **kwargs):
+        # Remove o request dos kwargs para não quebrar o formulário base
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
         user = super().save(commit)
-        SendEmail().send_email_cofirmation(user)
+        SendEmail().send_email_cofirmation(user, self.request)
         return user

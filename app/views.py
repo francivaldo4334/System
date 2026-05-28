@@ -387,6 +387,12 @@ class RegisterView(CreateView):
     template_name = "pages/register/index.html"
     success_url = reverse_lazy('login')
 
+    def get_form_kwargs(self):
+        # Obtém os argumentos padrão que a CreateView já passa (ex: data, files, initial)
+        kwargs = super().get_form_kwargs()
+        # Injeta o objeto request atual nos argumentos
+        kwargs['request'] = self.request
+        return kwargs
 
 class HomeView(LoginRequiredMixin,View):
     def get(self, request):
