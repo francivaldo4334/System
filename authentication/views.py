@@ -9,6 +9,7 @@ from rest_framework.response import Response
 
 from authentication.services import SendEmail
 from django.utils.translation import gettext_lazy as _
+from rest_framework.permissions import AllowAny
 
 User = get_user_model()
 
@@ -69,7 +70,7 @@ class EmailViewSet(viewsets.ViewSet):
                 status=status.HTTP_503_SERVICE_UNAVAILABLE
             )
 
-    @action(detail=False, methods=["POST"])
+    @action(["POST"], False, 'active_account/<str:uuid>/<str:token>', permission_classes=[AllowAny])
     def active_account(self, request, uuid, token):
         user = get_object_or_404(User, id=uuid)
         if default_token_generator.check_token(user, token):
