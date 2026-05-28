@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import default_token_generator
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -54,6 +54,9 @@ class EmailViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["POST"], throttle_classes=[EmailResendThrottle])
     def email_confirmation(self, request):
+        print(request.user and hasattr(request.user, 'is_email_checked') and request.user.is_email_checked)
+        if request.user and hasattr(request.user, 'is_email_checked') and request.user.is_email_checked:
+            redirect('/')
         try:
             # RECOMENDAÇÃO: Disparar isso como uma task assíncrona (ex: Celery)
             # send_email_confirmation_task.delay(request.user.id)
