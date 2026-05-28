@@ -64,19 +64,23 @@ class EmailViewSet(viewsets.ViewSet):
                 status=status.HTTP_200_OK
             )
         except Exception as e:
-            # Tratamento defensivo caso o provedor de e-mail falhe
             return Response(
-                {"detail": "We were unable to send the email at this time. Please try again later."},
+                {"detail": _("We were unable to send the email at this time. Please try again later.")},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE
             )
 
-    @action(["POST"], False, 'active_account/<str:uuid>/<str:token>', permission_classes=[AllowAny])
+    @action(
+        methods=["GET"], 
+        detail=False, 
+        url_path=r'active_account/(?P<uuid>[^/.]+)/(?P<token>[^/.]+)', 
+        url_name='active-account',
+        permission_classes=[AllowAny]
+    )
     def active_account(self, request, uuid, token):
         user = get_object_or_404(User, id=uuid)
         if default_token_generator.check_token(user, token):
-            user.is_email_checked = True
+            user.is_email_checked = True # Certifique-se de que este campo existe no seu User customizado
             user.save()
-            return Response({"detail": "Success"})
-        return Response({"detail": "Error"}, 400)
-            
+            return Response({"detail": "Success"}, status=status.HTTP_200_OK)
+        return Response({"detail": "Error"}, status=status.HTTP_400_BAD_REQUEST)            
 
