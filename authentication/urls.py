@@ -1,10 +1,10 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from authentication.views import EndEmailViewSet, waiting_email_confirmation
+from authentication.views import EmailViewSet, waiting_email_confirmation
 
 router = routers.SimpleRouter()
-router.register('send_email', EndEmailViewSet, 'send_email')
+router.register('email', EmailViewSet, 'send_email')
 
 
 urlpatterns = [

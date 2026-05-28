@@ -1,13 +1,16 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from django.contrib.auth.views import default_token_generator
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from authentication.permissions import IsEmailCheckedPermission
 from authentication.services import SendEmail
 from django.utils.translation import gettext_lazy as _
+
+User = get_user_model()
 
 # Create your views here.
 @login_required
@@ -35,7 +38,7 @@ class EmailResendThrottle(UserRateThrottle):
     rate = '2/minute'  # Permite apenas 2 envios por minuto por usuário
 
 
-class EndEmailViewSet(viewsets.ViewSet):
+class EmailViewSet(viewsets.ViewSet):
     # Throttle padrão mapeado para a Action
     throttle_classes = [] 
 
@@ -53,7 +56,7 @@ class EndEmailViewSet(viewsets.ViewSet):
         try:
             # RECOMENDAÇÃO: Disparar isso como uma task assíncrona (ex: Celery)
             # send_email_confirmation_task.delay(request.user.id)
-            SendEmail().send_email_cofirmation(request.user)
+            SendEmail().send_email_cofirmation(request.user, request)
             
             return Response(
                 {"detail": _("Confirmation email sent successfully.")}, 
@@ -65,3 +68,14 @@ class EndEmailViewSet(viewsets.ViewSet):
                 {"detail": "We were unable to send the email at this time. Please try again later."},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE
             )
+
+    @action(detail=False, methods=["POST"])
+    def active_account(self, request, uuid, token):
+        user = get_object_or_404(User, id=uuid)
+        if default_token_generator.check_token(user, token):
+            user.is_email_checked = True
+            user.save()
+            return Response({"detail": "Success"})
+        return Response({"detail": "Error"}, 400)
+            
+
