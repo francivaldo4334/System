@@ -134,11 +134,22 @@ class AppScheduleSettingsView(AppView):
         #         'url_name': 'app-schedule-settings-service-requirements',
         #         'is_dynamic': False,
         #     })
+        if user.has_perm('app.view_appconfig'):
+            setting_tabs.append(
+                {
+                    'label': _("Configurations"),
+                    'url_name': 'app-schedule-settings-config',
+                    'is_dynamic': False,
+                }
+            )
 
         context.update({
             'setting_tabs': setting_tabs
         })
         return context
+
+class AppConfitView(LoginRequiredMixin, TemplateView):
+    template_name = "pages/app/schedule/settings/config/index.html"
 
 class CrudView(LoginRequiredMixin, TemplateView):
     template_name = 'layouts/crud/index.html'
