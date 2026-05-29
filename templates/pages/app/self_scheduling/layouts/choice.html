@@ -1,24 +1,59 @@
-<div class="w-full h-full grid grid-rows-[auto_1fr]">
-    <div class="navbar bg-base-100 shadow-sm">
+{% load i18n %}
+
+<div class="w-full h-full grid grid-rows-[auto_1fr] bg-base-200/50"> <!-- Fundo levemente acinzentado para dar contraste aos cards -->
+    
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 shadow-md z-10 px-2 sm:px-4">
         <div class="navbar-start">
-            <button class="btn btn-ghost" onclick="history.go(-1)">
-                {% include 'icons/undo-2.svg'%} {% trans 'Go back' %}
+            <button class="btn btn-ghost btn-sm sm:btn-md gap-2 text-base-content/80 hover:text-base-content" onclick="history.go(-1)">
+                {% include 'icons/undo-2.svg' %} 
+                <span class="hidden xs:inline">{% trans 'Go back' %}</span>
             </button>
         </div>
-        <div class="navbar-center">
-            <span class="text-xl">
-                {{title|default:_("Select a option")}}
-            </span>
+        <div class="navbar-center max-w-[50%] text-center">
+            <h1 class="text-base sm:text-lg font-bold truncate text-base-content">
+                {{ title|default:_("Select an option") }}
+            </h1>
         </div>
-        <div class="navbar-end *:btn-ghost">
+        <div class="navbar-end *:btn-ghost *:btn-sm sm:*:btn-md">
             {% include 'components/logout.html' %}
         </div>
     </div>
-    <section class='w-full h-full p-4'>
-        <ul class="menu menu-xl w-full px-4" id="id_{{key}}">
-            <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
-                {{list_title|default:_('Select one of the items below')}}
-            </li>
-        </ul>
+
+    <!-- Container da Listagem (Com rolagem independente garantida) -->
+    <section class="w-full h-full overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+        <div class="max-w-2xl mx-auto w-full flex flex-col gap-3">
+            
+            <!-- Cabeçalho/Subtítulo da Lista -->
+            <p class="px-2 text-xs sm:text-sm font-semibold text-base-content/60 uppercase tracking-wider">
+                {{ list_title|default:_('Select one of the items below') }}
+            </p>
+
+            <!-- Lista de Opções -->
+            <ul class="menu menu-vertical p-0 w-full gap-2.5" id="id_{{ key }}">
+                
+                <!-- EXEMPLO DE ITEM REPETÍVEL (Loop do seu backend deve gerar este formato) -->
+                {% comment %}
+                {% for item in items %}
+                <li>
+                    <a href="?step=2&choice={{ item.id }}" class="flex items-center justify-between p-4 bg-base-100 hover:bg-primary hover:text-primary-content active:scale-[0.99] rounded-xl border border-base-300 shadow-sm transition-all duration-200 group">
+                        <div class="flex items-center gap-3">
+                            <!-- Ícone opcional do item ou indicador -->
+                            <div class="w-2 h-2 rounded-full bg-primary group-hover:bg-primary-content transition-colors"></div>
+                            <span class="font-medium text-sm sm:text-base">{{ item.name }}</span>
+                        </div>
+                        <!-- Seta indicativa de ação -->
+                        <span class="opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </span>
+                    </a>
+                </li>
+                {% endfor %}
+                {% endcomment %}
+                
+            </ul>
+        </div>
     </section>
 </div>
