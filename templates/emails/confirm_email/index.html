@@ -83,35 +83,36 @@
     <div class="email-container">
         <!-- Header inspirado no Navbar do DaisyUI -->
         <div class="header-bar">
-            <h1 class="header-title">Sua Plataforma</h1>
+            <h1 class="header-title">{% trans "Agio" %}</h1>
         </div>
 
         <!-- Conteúdo em formato Card -->
         <div class="content">
-            <h2 class="welcome-text">Olá, {{ user.username }}! 👋</h2>
+            <h2 class="welcome-text">{% trans "Hello," %} {{ user.username }}! 👋</h2>
             <p class="body-text">
-                Obrigado por se cadastrar na nossa plataforma. Para ativar a sua conta e ter acesso a todos os recursos, por favor, confirme o seu endereço de e-mail clicando no botão abaixo.
+                {% trans "Thank you for registering on our platform. To activate your account and access all features, please confirm your email address by clicking the button below."%}
             </p>
             
             <!-- Botão estilo .btn .btn-primary do DaisyUI -->
             <div style="text-align: center; margin-bottom: 32px;">
                 <a href="{{ confirmation_link }}" class="btn-primary">
-                    Confirmar E-mail
+                    {% trans "Confirm E-mail" %}
                 </a>
             </div>
 
             <p class="body-text" style="font-size: 0.875rem; margin-bottom: 0;">
-                Se o botão acima não funcionar, copie e cole o link a seguir no seu navegador:<br>
+                {% trans "If the button above doesn't work, copy and paste the following link into your browser." %}:<br>
                 <a href="{{ confirmation_link }}" style="color: #4f46e5; word-break: break-all;">{{ confirmation_link }}</a>
             </p>
         </div>
 
         <!-- Footer estilo Footer do DaisyUI -->
         <div class="footer">
-            <p style="margin: 0 0 8px 0;">Este link expira em breve por motivos de segurança.</p>
+            <p style="margin: 0 0 8px 0;">
+            {% trans "If the button above doesn't work, copy and paste the following link into your browser." %}
+            </p>
             <p style="margin: 0;">
-                Se você não realizou este cadastro, pode ignorar este e-mail com segurança. 
-                Precisa de ajuda? <a href="mailto:suporte@seudominio.com">Contate o suporte</a>.
+                {%trans "Se você não realizou este cadastro, pode ignorar este e-mail com segurança. "%}
             </p>
         </div>
     </div>
