@@ -381,6 +381,9 @@ class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
     permission_classes = [IsOwner]
     parser_classes = [MultiPartParser, FormParser]
 
+    def get_object(self):
+        return self.get_queryset().first()
+
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
