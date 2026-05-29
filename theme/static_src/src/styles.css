@@ -2,6 +2,65 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
+  name: "esthetic-saas";
+  default: true;
+  color-scheme: light;
+
+  /* --- CORES DA MARCA & IDENTIDADE (Foco em Bem-Estar e Estética) --- */
+  /* Primary: Tom de sálvia/oliva suave (transmite naturalidade, dermatologia e calmaria) */
+  --color-primary: oklch(50% 0.08 140);
+  --color-primary-content: oklch(98% 0.01 140);
+
+  /* Secondary: Rose Gold / Nude sofisticado (remete ao toque humano, procedimentos corporais/faciais premium) */
+  --color-secondary: oklch(76% 0.07 45);
+  --color-secondary-content: oklch(25% 0.04 45);
+
+  /* Accent: Champagne / Pérola (usado cirurgicamente para destacar conversões primárias ou planos mais caros) */
+  --color-accent: oklch(85% 0.05 75);
+  --color-accent-content: oklch(30% 0.03 75);
+
+  /* --- CORES BASE (Foco em Interface SaaS Limpa e Confortável) --- */
+  /* Base 100: Off-white linho (evita o branco puro estéril de hospital, trazendo aconchego) */
+  --color-base-100: oklch(98% 0.005 80);
+  /* Base 200: Superfície de cards e fundos de tabelas/agendas */
+  --color-base-200: oklch(95% 0.008 80);
+  /* Base 300: Linhas de grid da agenda, bordas sutis e divisores */
+  --color-base-300: oklch(91% 0.01 80);
+  /* Text / Content: Grafite profundo (garante excelente legibilidade sem o peso agressivo do preto puro) */
+  --color-base-content: oklch(23% 0.02 80);
+
+  /* Neutral: Tom cinza-argila para menus laterais de navegação ou elementos secundários */
+  --color-neutral: oklch(40% 0.02 80);
+  --color-neutral-content: oklch(98% 0.005 80);
+
+  /* --- CORES SEMÂNTICAS (Estados do SaaS e Status de Agendamento) --- */
+  /* Info: Azul clínico sereno (Perfeito para: Agendamentos Confirmados) */
+  --color-info: oklch(65% 0.12 230);
+  --color-info-content: oklch(98% 0.01 230);
+
+  /* Success: Verde suave medicinal (Perfeito para: Procedimento Concluído / Pago) */
+  --color-success: oklch(68% 0.13 145);
+  --color-success-content: oklch(98% 0.01 145);
+
+  /* Warning: Ouro fosco / Âmbar (Perfeito para: Aguardando Confirmação / Horário Pendente) */
+  --color-warning: oklch(78% 0.12 85);
+  --color-warning-content: oklch(25% 0.04 85);
+
+  /* Error: Coral elegante (Perfeito para: Cancelamentos / Faltas / Alertas de Caixa) */
+  --color-error: oklch(62% 0.15 25);
+  --color-error-content: oklch(98% 0.01 25);
+
+  /* --- BORDAS E CANTOS --- */
+  /* Curvas mais suaves e orgânicas, abandonando o visual estritamente quadrado corporativo */
+  --radius-selector: 0.75rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.85rem;
+
+  /* Espessura de borda fina e elegante */
+  --border: 1px;
+}
+
+@plugin "daisyui/theme" {
   name: "default";
   default: true;
   prefersdark: false;

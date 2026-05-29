@@ -8,38 +8,40 @@
         {% include 'components/schedule/filter.clean.html' %}
         {% url 'self_scheduling' as schedule_url %}
 
-        <button class="btn btn-sm [&>svg]:w-4 js-copy-btn"
+        <button class="btn btn-sm [&>svg]:w-4 js-copy-btn" id="id_btn_link_copy"
             data-clipboard-text="{{ request.get_host }}{{ schedule_url }}">
             <span class="btn-text">{% trans "Self-Schedule" %}</span>
             {% include "icons/link.svg" %}
         </button>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const copyBtn = document.querySelector('.js-copy-btn');
-                if (copyBtn) {
-                    copyBtn.addEventListener('click', async () => {
-                        const textToCopy = copyBtn.getAttribute('data-clipboard-text');
-                        const btnText = copyBtn.querySelector('.btn-text');
-                        const originalText = btnText.textContent;
-
-                        try {
-                            await navigator.clipboard.writeText(textToCopy);
-
-                            btnText.textContent = "{% trans 'Copied!' %}";
-                            copyBtn.classList.add('btn-success');
-                            setTimeout(() => {
-                                btnText.textContent = originalText;
-                                copyBtn.classList.remove('btn-success');
-                            }, 2000);
-
-                        } catch (err) {
-                            console.error('Falha ao copiar link: ', err);
-                            alert("{% trans 'Error copying link. Please copy manually.' %}");
-                        }
-                    });
+        <script is="exec-mount" type="pass">
+        {
+            $s.create('link_is_copied', false)
+            const btn = document.getElementById('id_btn_link_copy')
+            const btnText = btn.querySelector('.btn-text');
+            if (btn){
+                $s.subscribe('link_is_copied', btn, null, (v) => {
+                    btn.classList.toggle('btn-success', v)
+                })
+                $s.subscribe('link_is_copied', btnText, 'innerText', (v) => {
+                    return v ? "{% trans 'Copied!' %}": '{% trans "Self-Schedule" %}'
+                })
+                btn.onclick = async () => {
+                    $s.set("link_is_copied", true)
+                    const textToCopy = btn.dataset.clipboardText;
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+                        setTimeout(() => {
+                            $s.set("link_is_copied", false)
+                        }, 2000);
+                    } catch (err) {
+                        $s.set("link_is_copied", false)
+                        console.error('{%trans "Falha ao copiar link"%}: ', err);
+                        alert("{% trans 'Error copying link. Please copy manually.' %}");
+                    }
                 }
-            });
+            }
+        }
         </script>
         {% include 'components/schedule/assignments.dashboard.html' %}
     </div>
