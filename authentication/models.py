@@ -5,9 +5,8 @@ import uuid
 
 # Create your models here.
 class CustomUser(AbstractUser):
-    id = models.UUIDField(
+    uid = models.UUIDField(
         default=uuid.uuid4,
-        primary_key=True,
         unique=True,
     )
     is_email_checked = models.BooleanField(
