@@ -10,5 +10,4 @@ class AppConfigSerializer(serializers.ModelSerializer):
             'company_name',
             'background_image',
         ]
-        depth = 1
  

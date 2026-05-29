@@ -1,0 +1,101 @@
+{% extends "layouts/base.html" %}
+
+{% block body %}
+<div class="container mx-auto max-w-3xl p-6">
+    
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-base-content">Configurações do Aplicativo</h1>
+        <p class="text-sm text-base-content/70">Gerencie a identidade visual e as informações principais da aplicação.</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-error shadow-lg mb-6 {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+        <div class="card-body">
+            
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="form-control w-full">
+                    <label class="label" for="company_name">
+                        <span class="label-text font-semibold">Nome da Empresa</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="company_name" 
+                        name="company_name" 
+                        placeholder="Ex: Minha Empresa LTDA" 
+                        value="{{ form.company_name.value|default_if_none:'' }}"
+                        class="input input-bordered w-full focus:input-primary" 
+                    />
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="form-control w-full">
+                        <label class="label" for="company_image">
+                            <span class="label-text font-semibold">Logo da Empresa (Imagem)</span>
+                        </label>
+                        
+                        {% if form.instance.company_image %}
+                            <div class="mb-2 avatar">
+                                <div class="w-24 rounded ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src="{{ form.instance.company_image.url }}" alt="Logo Atual" />
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <input 
+                            type="file" 
+                            id="company_image" 
+                            name="company_image" 
+                            class="file-input file-input-bordered file-input-primary w-full" 
+                            accept="image/*"
+                        />
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label" for="background_image">
+                            <span class="label-text font-semibold">Imagem de Fundo</span>
+                        </label>
+                        
+                        {% if form.instance.background_image %}
+                            <div class="mb-2 avatar">
+                                <div class="w-24 rounded ring ring-secondary ring-offset-base-100 ring-offset-2">
+                                    <img src="{{ form.instance.background_image.url }}" alt="Background Atual" />
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <input 
+                            type="file" 
+                            id="background_image" 
+                            name="background_image" 
+                            class="file-input file-input-bordered file-input-secondary w-full" 
+                            accept="image/*"
+                        />
+                    </div>
+
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="card-actions justify-end">
+                    <button type="submit" class="btn btn-primary px-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        Salvar Configurações
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
