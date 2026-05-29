@@ -6,7 +6,7 @@ from django.urls import reverse
 
 class SendEmail:
     def send_email_cofirmation(self, user, request):
-        uid = user.id        
+        uid = user.uid
         # 2. Gera o token seguro baseado no estado atual do usuário
         token = default_token_generator.make_token(user)
         

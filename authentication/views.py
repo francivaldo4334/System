@@ -16,6 +16,9 @@ User = get_user_model()
 # Create your views here.
 @login_required
 def waiting_email_confirmation(request):
+    print(request.user and hasattr(request.user, 'is_email_checked') and request.user.is_email_checked)
+    if request.user and hasattr(request.user, 'is_email_checked') and request.user.is_email_checked:
+        return redirect('/')
     def mask_email(email):
         try:
             email_parts = email.split('@')
@@ -80,7 +83,7 @@ class EmailViewSet(viewsets.ViewSet):
         permission_classes=[AllowAny]
     )
     def active_account(self, request, uuid, token):
-        user = get_object_or_404(User, id=uuid)
+        user = get_object_or_404(User, uid=uuid)
         if default_token_generator.check_token(user, token):
             user.is_email_checked = True # Certifique-se de que este campo existe no seu User customizado
             user.save()
