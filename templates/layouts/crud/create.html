@@ -75,6 +75,9 @@
 
 <dialog id="id_{{key}}_btn_add_modal" class="modal">
     <div class="modal-box">
+        <h3 class="text-xl font-bold mb-6 text-base-content">
+            {{modal_create_title|default:_('Add new item')}}
+        </h3>
         {% with form=create.form id="id_"|add:key|add:"_create_form" %}
         {% include "components/form/index.html" %}
         {% endwith %}

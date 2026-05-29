@@ -5,6 +5,9 @@
 </template>
 <dialog id="id_update_modal" class="modal">
     <div class="modal-box">
+        <h3 class="text-xl font-bold mb-6 text-base-content">
+            {{modal_update_title|default:_('Update item')}}
+        </h3>
         {% with form=update.form id="id_"|add:key|add:"_update_form" %}
         {% include "components/form/index.html" %}
         {% endwith %}
