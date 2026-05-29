@@ -30,29 +30,7 @@
             </p>
 
             <!-- Lista de Opções -->
-            <ul class="menu menu-vertical p-0 w-full gap-2.5" id="id_{{ key }}">
-                
-                <!-- EXEMPLO DE ITEM REPETÍVEL (Loop do seu backend deve gerar este formato) -->
-                {% comment %}
-                {% for item in items %}
-                <li>
-                    <a href="?step=2&choice={{ item.id }}" class="flex items-center justify-between p-4 bg-base-100 hover:bg-primary hover:text-primary-content active:scale-[0.99] rounded-xl border border-base-300 shadow-sm transition-all duration-200 group">
-                        <div class="flex items-center gap-3">
-                            <!-- Ícone opcional do item ou indicador -->
-                            <div class="w-2 h-2 rounded-full bg-primary group-hover:bg-primary-content transition-colors"></div>
-                            <span class="font-medium text-sm sm:text-base">{{ item.name }}</span>
-                        </div>
-                        <!-- Seta indicativa de ação -->
-                        <span class="opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </span>
-                    </a>
-                </li>
-                {% endfor %}
-                {% endcomment %}
-                
+            <ul class="choice_options_serlf_schedule" id="id_{{ key }}">                
             </ul>
         </div>
     </section>

@@ -214,6 +214,13 @@
   .modal-backdrop {
     @apply backdrop-blur-sm;
   }
+  .choice_options_serlf_schedule {
+    @apply menu menu-vertical p-0 w-full gap-2.5;
+  }
+
+  .choice_options_serlf_schedule a {
+    @apply p-4 bg-base-100 hover:bg-primary hover:text-primary-content active:scale-[0.99] rounded-xl border border-base-300 shadow-sm transition-all duration-200 font-medium text-sm sm:text-base;
+  }
 }
 
 @source "../../../**/*.{html,py,js}";

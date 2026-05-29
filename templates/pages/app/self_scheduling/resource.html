@@ -20,7 +20,7 @@
         if (!ul) return;
 
         // 1. Recupera e parseia os dados do Django
-        const resources = JSON.parse(document.getElementById('resources-data').textContent);
+        const resources = JSON.parse(document.getElementById('resources-data').textContent) || []
 
         // 2. Extrai parâmetros da URL atual usando a API nativa URLSearchParams
         const currentUrl = new URL(window.location.href);
@@ -29,6 +29,20 @@
 
         const baseIds = currentResource ? currentResource.split(',') : [];
         const frag = document.createDocumentFragment();
+        if (!resources.length) {
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            a.innerText = "{% trans 'Click to advance.'%}"
+            const params = new URLSearchParams({
+                step: '3',
+                service: currentService,
+                required_resource_step: '{{ next_resource_step|escapejs }}',
+                resource: []
+            });
+            a.href = `{% url "self_scheduling" %}?${params.toString()}`;
+            li.appendChild(a)
+            frag.appendChild(li)
+        }
 
         // 3. Loop puro em JS (Gera um HTML final muito menor e mais limpo)
         resources.forEach(it => {
