@@ -14,12 +14,6 @@
             {% include "icons/link.svg" %}
         </button>
 
-        <a href="{{ schedule_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm [&>svg]:w-4"
-            title="{% trans 'Open schedule in a new tab' %}">
-            {% trans "Self-Schedule" %}
-            {% include 'icons/external-link.svg' %}
-        </a>
-
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const copyBtn = document.querySelector('.js-copy-btn');
