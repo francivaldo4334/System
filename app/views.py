@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Type
+from typing import Any, List, Type
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
@@ -157,6 +157,8 @@ class CrudView(LoginRequiredMixin, TemplateView):
     form: Type[BaseForm]
     table: Type[BaseTable]
     model_name: str = ''
+    modal_create_title: Any = ''
+    modal_update_title: Any = ''
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -165,6 +167,8 @@ class CrudView(LoginRequiredMixin, TemplateView):
         
         context.update({
             'key': self.key,
+            'modal_create_title': self.modal_create_title,
+            'modal_update_title': self.modal_update_title,
         })
         user = self.request.user
 
@@ -204,6 +208,8 @@ class ScheduleSettingsAvailabilitiesView(CrudView):
     model_name = 'availability'
     form = AvailabilityForm
     table = AvailabilityTable
+    modal_create_title = _("Add new availability")
+    modal_update_title = _("Update availability")
 
 class ScheduleSettingsResourceView(CrudView):
     key = 'resources'
@@ -238,11 +244,16 @@ class ScheduleSettingsServiceView(CrudView):
     model_name = 'service'
     form = ServiceForm
     table = ServicesTable
+    modal_create_title = _("Add new service")
+    modal_update_title = _("Update service")
+
 class SettingsUserView(CrudView):
     key = "users"
     model_name = 'user'
     form = UserForm
     table = UserTable
+    modal_create_title = _("Add new user")
+    modal_update_title = _("Update user")
 
 class ScheduleSettingsServiceRequirementsView(CrudView):
     key = 'service_requirements'
