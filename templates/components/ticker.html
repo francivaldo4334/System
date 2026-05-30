@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <title>{% trans "Appointment Confirmation"%}</title>
@@ -7,6 +8,7 @@
         @page {
             size: A4;
             margin: 20mm;
+
             @bottom-right {
                 content: "Página " counter(page) " de " counter(pages);
                 font-size: 9pt;
@@ -14,7 +16,7 @@
                 color: #555;
             }
         }
-        
+
         body {
             font-family: Arial, sans-serif;
             color: #333;
@@ -70,7 +72,8 @@
 
         .meta-value-full {
             color: #111;
-            font-family: 'Courier New', Courier, monospace; /* Melhora a leitura de hashes/UUIDs */
+            font-family: 'Courier New', Courier, monospace;
+            /* Melhora a leitura de hashes/UUIDs */
             font-size: 10pt;
         }
 
@@ -90,7 +93,8 @@
             margin-bottom: 20px;
         }
 
-        .tabela-dados th, .tabela-dados td {
+        .tabela-dados th,
+        .tabela-dados td {
             padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid #dee2e6;
@@ -130,6 +134,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="header">
@@ -142,7 +147,7 @@
         <tr>
             <td class="meta-label">{% trans 'Client' %}:</td>
             <td class="meta-value">{{ client_name }}</td>
-            
+
             <td class="meta-label">{% trans "Emission" %}:</td>
             <td class="meta-value">{{ emission|date:"d/m/Y H:i" }}</td>
         </tr>
@@ -170,25 +175,22 @@
         </tbody>
     </table>
 
-    <div class="section-title">{% trans "Recursos Alocados" %}</div>
+    <div class="section-title">{% trans "Resources Allocated" %}</div>
     <table class="tabela-dados">
-        <thead>
-            <tr>
-                <th>{% trans 'Professionals / Related Infrastructure' %}</th>
-            </tr>
-        </thead>
         <tbody>
             <tr>
                 <td>
                     <!-- Loop ideal para renderizar múltiplos recursos envolvidos (ex: Profissional, Sala, Equipamento) -->
                     {% for resource in resources %}
-                        <span class="recursos-tag">{{ resource.name }}</span>
+                    <span class="recursos-tag">{{ resource.name }}</span>
                     {% empty %}
-                        <span style="color: #6c757d; font-style: italic;">{% trans 'No fixed associated resources.' %}</span>
+                    <span style="color: #6c757d; font-style: italic;">{% trans 'No fixed associated resources.'
+                        %}</span>
                     {% endfor %}
                 </td>
             </tr>
         </tbody>
     </table>
 </body>
+
 </html>

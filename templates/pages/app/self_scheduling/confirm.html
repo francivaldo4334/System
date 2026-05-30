@@ -83,7 +83,7 @@
 
             return $r.post('{% url "client_assignment-list" %}', {
                 'service': Number('{{request.GET.service|escapejs}}'),
-                'resources': '{{request.GET.resource|escapejs}}'.split(','),
+                'resources': '{{request.GET.resource|escapejs}}'.split(',').map(Number).filter(it => !!it),
                 'date': '{{request.GET.date|escapejs}}',
                 'availability': '{{request.GET.availability|escapejs}}',
                 'start_slot': '{{request.GET.slot|escapejs}}',
