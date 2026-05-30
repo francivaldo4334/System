@@ -410,9 +410,8 @@ class AppConfigView(RetrieveAPIView,UpdateAPIView,APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self):
-        return self.get_queryset().get_or_create(
-            pk=1
-        )
+        instance, _ = self.get_queryset().get_or_create(pk=1)
+        return instance
 
 
 class RegisterView(CreateView):

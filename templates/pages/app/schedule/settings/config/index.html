@@ -2,82 +2,98 @@
 
 {% block body %}
 <div class="container mx-auto max-w-3xl p-6">
-        <div class="card-body">
-            <form method="POST" enctype="multipart/form-data" class="space-y-6">
-                {% csrf_token %}
+    <div class="card-body">
+        <form id="company-settings-form" class="space-y-6">
+            <div class="form-control w-full">
+                <label class="label" for="company_name">
+                    <span class="label-text font-semibold">{%trans "Company name"%}</span>
+                </label>
+                <input type="text" id="company_name" name="company_name" placeholder="{%trans 'Ex: My company LTDA'%}"
+                    required class="input input-bordered w-full focus:input-primary" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <div class="form-control w-full">
-                    <label class="label" for="company_name">
-                        <span class="label-text font-semibold">Nome da Empresa</span>
+                    <label class="label" for="company_image">
+                        <span class="label-text font-semibold">{% trans "Comany image logo"%}</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="company_name" 
-                        name="company_name" 
-                        placeholder="Ex: Minha Empresa LTDA" 
-                        value="{{ form.company_name.value|default_if_none:'' }}"
-                        class="input input-bordered w-full focus:input-primary" 
-                    />
+
+                    <input type="file" id="company_image" name="company_image"
+                        class="file-input file-input-bordered file-input-primary w-full" accept="image/*" />
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <div class="form-control w-full">
-                        <label class="label" for="company_image">
-                            <span class="label-text font-semibold">Logo da Empresa (Imagem)</span>
-                        </label>
-                        
-                        {% if form.instance.company_image %}
-                            <div class="mb-2 avatar">
-                                <div class="w-24 rounded ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src="{{ form.instance.company_image.url }}" alt="Logo Atual" />
-                                </div>
-                            </div>
-                        {% endif %}
-                        
-                        <input 
-                            type="file" 
-                            id="company_image" 
-                            name="company_image" 
-                            class="file-input file-input-bordered file-input-primary w-full" 
-                            accept="image/*"
-                        />
-                    </div>
+                <div class="form-control w-full">
+                    <label class="label" for="background_image">
+                        <span class="label-text font-semibold">{% trans "Background image"%}</span>
+                    </label>
 
-                    <div class="form-control w-full">
-                        <label class="label" for="background_image">
-                            <span class="label-text font-semibold">Imagem de Fundo</span>
-                        </label>
-                        
-                        {% if form.instance.background_image %}
-                            <div class="mb-2 avatar">
-                                <div class="w-24 rounded ring ring-secondary ring-offset-base-100 ring-offset-2">
-                                    <img src="{{ form.instance.background_image.url }}" alt="Background Atual" />
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        <input 
-                            type="file" 
-                            id="background_image" 
-                            name="background_image" 
-                            class="file-input file-input-bordered file-input-secondary w-full" 
-                            accept="image/*"
-                        />
-                    </div>
-
+                    <input type="file" id="background_image" name="background_image"
+                        class="file-input file-input-bordered file-input-secondary w-full" accept="image/*" />
                 </div>
 
-                <div class="divider"></div>
+            </div>
 
-                <div class="card-actions justify-end">
-                    <button type="submit" class="btn btn-primary px-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                        Salvar Configurações
-                    </button>
-                </div>
+            <div class="divider"></div>
 
-            </form>
+            <div class="card-actions justify-end">
+                <button type="submit" class="btn btn-primary" id="btn_save_config">
+                    <span id="btn-text" class="flex gap-2 items-center">
+                        {%include 'icons/check-check.svg'%}
+                        {% trans 'Save configurations'%}
+                    </span>
+                </button>
+            </div>
+
+        </form>
     </div>
 </div>
+
+<script is="exec-mount" type="pass">
+{
+    $s.create('isSaving', false);
+    const btn = document.getElementById('btn_save_config')
+    $s.subscribe('isSaving', btn, null, (v) => {
+        btn.classList.toggle('loading', v)
+    })
+    const form = document.getElementById('company-settings-form')
+    if (form) {
+        form._handler = (event) => {
+            event.preventDefault();
+            $s.set('isSaving', true)
+            const data = new FormData(event.target);
+            $q.use(
+                ['app-config'],
+                () => $r.put(
+                    '{%url "app-config"%}',
+                    data,
+                    {'X-CSRFToken': '{{csrf_token}}'}
+                ),
+                {
+                    onSuccess(){
+                     toastSuccess('{%trans "Configurations updated"%}')   
+                    },
+                    onError(){
+                      toastError("{%trans 'Error in save'%}")
+                    },
+                    onFinally(){
+                        $s.set('isSaving', false)
+                    }
+                }
+            )
+
+        }
+        form.addEventListener('submit', form._handler);
+    }
+}
+</script>
+<script is="exec-unmount" type="pass">
+{
+    const form = document.getElementById('company-settings-form')
+    if (form && form._handler){
+        form.removeEventListener('submit', form._handler);
+        delete form._handler
+    }
+}
+</script>
 {% endblock %}
