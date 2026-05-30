@@ -29,24 +29,24 @@ function utilsManager() {
     window[rafId] = requestAnimationFrame(render)
   }
 
-  function getDataByForm(formElement){
+  function getDataByForm(formElement) {
     const formData = new FormData(formElement);
     const data = Object.fromEntries(Array.from(formData.keys()).map(key => {
-        let value = formData.getAll(key);
-        const field = formElement.elements[key];
-        if (field instanceof RadioNodeList) {
-          value = value
-        }
-        else if (field.tagName !== 'SELECT' && !field.multiple && value.length === 1) {
-          value = value[0]
-        }
-        else if (field.tagName === 'SELECT') {
-          if (field.multiple)
-            value = value.map(Number)
-          else
-            value = parseInt(value)
-        }
-        return [key, value || undefined];
+      let value = formData.getAll(key);
+      const field = formElement.elements[key];
+      if (field instanceof RadioNodeList) {
+        value = value
+      }
+      else if (field.tagName !== 'SELECT' && !field.multiple && value.length === 1) {
+        value = value[0]
+      }
+      else if (field.tagName === 'SELECT') {
+        if (field.multiple)
+          value = value.map(Number)
+        else
+          value = parseInt(value)
+      }
+      return [key, value || undefined];
     }));
     return data
   }
