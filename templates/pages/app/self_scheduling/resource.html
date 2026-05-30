@@ -48,7 +48,7 @@
         resources.forEach(it => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.innerText = it.label;
+            a.innerText = it.name;
 
             // Clone do array para não mutar o escopo do loop anterior
             const ids = [...baseIds];
