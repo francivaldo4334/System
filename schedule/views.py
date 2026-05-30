@@ -275,7 +275,7 @@ class AvailabilityPresentationAPIView(ListAPIView):
         date = self.request.query_params.get('day', None)
         assignment_filterset = AvailabilityPresentationAssignmentFilterSet(
             {
-                **self.request.query_params,
+                **self.request.query_params.dict(),
                 'date_after': dt_after,
                 'date_before': dt_after,
                 'day': date,
