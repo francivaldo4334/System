@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 22:29+0000\n"
+"POT-Creation-Date: 2026-05-30 22:43+0000\n"
 "PO-Revision-Date: 2026-05-30 19:30-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -211,11 +211,24 @@ msgid "Comprovante de Agendamento - Confirmação"
 msgstr "Comprovante de Agendamento - Confirmação"
 
 #: authentication/services.py:40
-#, python-brace-format
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Olá, {username}.\n"
+#| "\n"
+#| "Seu agendamento foi confirmed com sucesso!\n"
+#| "\n"
+#| "Detalhes do Agendamento:\n"
+#| " Horário: {time_range}\n"
+#| " Recurso(s): {resources}\n"
+#| "\n"
+#| "Você pode baixar o seu comprovante em PDF acessando o link abaixo:\n"
+#| "{download_link}\n"
+#| "\n"
+#| "Obrigado!"
 msgid ""
 "Olá, {username}.\n"
 "\n"
-"Seu agendamento foi confirmed com sucesso!\n"
+"Seu agendamento foi confirmado com sucesso!\n"
 "\n"
 "Detalhes do Agendamento:\n"
 " Horário: {time_range}\n"
@@ -262,7 +275,9 @@ msgstr "E-mail de confirmação enviado com sucesso."
 
 #: authentication/views.py:75
 msgid "We were unable to send the email at this time. Please try again later."
-msgstr "Não foi possível enviar o e-mail no momento. Por favor, tente novamente mais tarde."
+msgstr ""
+"Não foi possível enviar o e-mail no momento. Por favor, tente novamente mais "
+"tarde."
 
 #: core/management/commands/schedule_setup_rules.py:72 schedule/views.py:231
 #: templates/components/ticker.html:148
@@ -322,18 +337,23 @@ msgstr "Já existe uma regra entre este Serviço e este Recurso."
 
 #: schedule/serializers.py:218
 msgid "One or more selected resources are not allowed for this service type."
-msgstr "Um ou mais recursos selecionados não são permitidos para este tipo de serviço."
+msgstr ""
+"Um ou mais recursos selecionados não são permitidos para este tipo de "
+"serviço."
 
 #: schedule/serializers.py:219
 msgid ""
 "The provided resource quantity does not match the requirement for this "
 "service."
-msgstr "A quantidade de recurso fornecida não corresponde ao requisito para este serviço."
+msgstr ""
+"A quantidade de recurso fornecida não corresponde ao requisito para este "
+"serviço."
 
 #: schedule/serializers.py:220
 msgid ""
 "One or more selected resources are already occupied at the requested time."
-msgstr "Um ou mais recursos selecionados já estão ocupados no horário solicitado."
+msgstr ""
+"Um ou mais recursos selecionados já estão ocupados no horário solicitado."
 
 #: schedule/serializers.py:221
 msgid "Service is required for creating this assignment."
@@ -422,6 +442,12 @@ msgstr "Mostrar Todos"
 msgid "Search"
 msgstr "Buscar"
 
+#: templates/components/schedule/filter.status.html:22
+#, fuzzy
+#| msgid "Available Times"
+msgid "Show all available times"
+msgstr "Horários Disponíveis"
+
 #: templates/components/schedule/select_date.js.html:34
 #: templates/pages/app/schedule/actions.html:244
 msgid "Tomorrow"
@@ -503,7 +529,9 @@ msgstr "Baixar comprovante"
 msgid ""
 "If you need to change or cancel this appointment, please contact our support "
 "team."
-msgstr "Se você precisar alterar ou cancelar este agendamento, entre em contato com nossa equipe de suporte."
+msgstr ""
+"Se você precisar alterar ou cancelar este agendamento, entre em contato com "
+"nossa equipe de suporte."
 
 #: templates/emails/assignment_ticket/index.html:176
 msgid "This is an automated email, please do not reply directly."
@@ -518,7 +546,10 @@ msgid ""
 "Thank you for registering on our platform. To activate your account and "
 "access all features, please confirm your email address by clicking the "
 "button below."
-msgstr "Obrigado por se cadastrar em nossa plataforma. Para ativar sua conta e acessar todos os recursos, por favor confirme seu endereço de e-mail clicando no botão abaixo."
+msgstr ""
+"Obrigado por se cadastrar em nossa plataforma. Para ativar sua conta e "
+"acessar todos os recursos, por favor confirme seu endereço de e-mail "
+"clicando no botão abaixo."
 
 #: templates/emails/confirm_email/index.html:99
 msgid "Confirm E-mail"
@@ -529,7 +560,9 @@ msgstr "Confirmar E-mail"
 msgid ""
 "If the button above doesn't work, copy and paste the following link into "
 "your browser."
-msgstr "Se o botão acima não funcionar, copie e cole o seguinte link no seu navegador."
+msgstr ""
+"Se o botão acima não funcionar, copie e cole o seguinte link no seu "
+"navegador."
 
 #: templates/emails/confirm_email/index.html:115
 msgid ""
