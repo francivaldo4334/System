@@ -9,14 +9,12 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
 </script>
 
 {% partialdef btn_action %}
-    {# Alterado para usar cores semânticas baseadas na escolha (choice) #}
-    <button
-        class="btn w-full btn-assignment-action btn_action_{{choice}} 
+{# Alterado para usar cores semânticas baseadas na escolha (choice) #}
+<button class="btn w-full btn-assignment-action btn_action_{{choice}} 
         {% if choice == 'cancel' or choice == 'absent' %}btn-error btn-outline
         {% elif choice == 'start' or choice == 'confirm' or choice == 'rescue' %}btn-primary
         {% elif choice == 'finish' %}btn-success text-white
-        {% else %}btn-ghost bg-base-200{% endif %}"
-        onclick="((el) => {
+        {% else %}btn-ghost bg-base-200{% endif %}" onclick="((el) => {
             // Se for migrar, intercepta para abrir o modal de data/hora
             if ('{{choice}}' === 'migrate') {
                 $q.refetch(['dates']);
@@ -50,8 +48,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                 },
                 { ttl: 0 }
             )
-        })(this)"
-    >{{text}}</button>
+        })(this)">{{text}}</button>
 {% endpartialdef %}
 
 {% partialdef modal %}
@@ -63,31 +60,31 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
         </h3>
         <div class="flex flex-col gap-3">
             {% if has_rescue %}
-                {% with text=_('Rescue appointment') choice='rescue'%}{% partial btn_action%}{% endwith %}
+            {% with text=_('Rescue appointment') choice='rescue'%}{% partial btn_action%}{% endwith %}
             {% endif %}
             {% if has_confirm %}
-                {% with text=_('Confirm new appointment') choice='confirm'%}{% partial btn_action%}{% endwith %}
+            {% with text=_('Confirm new appointment') choice='confirm'%}{% partial btn_action%}{% endwith %}
             {% endif %}
             {% if has_start %}
-                {% with text=_('Start service') choice='start' %}{% partial btn_action%}{% endwith %}
+            {% with text=_('Start service') choice='start' %}{% partial btn_action%}{% endwith %}
             {% endif %}
             {% if has_finish %}
-                {% with text=_('Finish service') choice='finish' %}{% partial btn_action%}{% endwith %}
+            {% with text=_('Finish service') choice='finish' %}{% partial btn_action%}{% endwith %}
             {% endif %}
             {% if has_migrate %}
-                {% with text=_('Migrate appointment') choice='migrate' %}{% partial btn_action%}{% endwith %}
+            {% with text=_('Migrate appointment') choice='migrate' %}{% partial btn_action%}{% endwith %}
             {% endif %}
-            
+
             {# Divisor sutil para separar ações destrutivas/negativas #}
             {% if has_cancel or has_absent %}
-                <div class="divider my-1 text-xs opacity-50">{% trans "Danger Zone" %}</div>
+            <div class="divider my-1 text-xs opacity-50">{% trans "Danger Zone" %}</div>
             {% endif %}
 
             {% if has_cancel %}
-                {% with text=_('Cancel appointment') choice='cancel' %}{% partial btn_action%}{% endwith %}
+            {% with text=_('Cancel appointment') choice='cancel' %}{% partial btn_action%}{% endwith %}
             {% endif %}
             {% if has_absent %}
-                {% with text=_('Mark as absent') choice='absent' %}{% partial btn_action%}{% endwith %}
+            {% with text=_('Mark as absent') choice='absent' %}{% partial btn_action%}{% endwith %}
             {% endif %}
         </div>
         <div class="modal-action mt-6">
@@ -114,29 +111,34 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
     <div class="modal-box max-w-xl border border-base-300 shadow-2xl p-0 overflow-hidden">
         <div class="p-6 pb-4 bg-base-200 border-b border-base-300">
             <h3 class='text-lg font-bold text-base-content flex items-center gap-2'>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                {%include 'icons/calendar.svg'%}
                 {% trans "Select a migration date & time" %}
             </h3>
         </div>
-        
+
         <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-base-300 bg-base-100">
             <!-- Coluna de Datas -->
             <div class="p-4">
-                <span class="text-xs font-semibold uppercase tracking-wider text-base-content/60 block mb-2 px-2">1. {% trans "Date" %}</span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-base-content/60 block mb-2 px-2">
+                    1. {% trans "Date" %}
+                </span>
                 <div class="max-h-64 overflow-y-auto pr-1 rounded-lg bg-base-200/50 p-1">
                     <ul id="id_ul_select_dates" class="menu menu-sm w-full gap-1 p-0">
                         <!-- Injetado via JS -->
                     </ul>
                 </div>
             </div>
-            
+
             <!-- Coluna de Horários -->
             <div class="p-4 bg-base-50/50">
-                <span class="text-xs font-semibold uppercase tracking-wider text-base-content/60 block mb-2 px-2">2. {% trans "Available Time" %}</span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-base-content/60 block mb-2 px-2">
+                    2. {% trans "Available Time" %}
+                </span>
                 <div class="max-h-64 overflow-y-auto pr-1 rounded-lg bg-base-200/50 p-1">
                     <ul id="id_ul_select_times" class="menu menu-sm w-full grid grid-cols-2 gap-1 p-0">
                         <!-- Injetado via JS (ou placeholder vazio) -->
-                        <div id="id_time_placeholder" class="col-span-2 text-center py-8 text-sm text-base-content/40 italic">
+                        <div id="id_time_placeholder"
+                            class="col-span-2 text-center py-8 text-sm text-base-content/40 italic">
                             {% trans "Select a date first" %}
                         </div>
                     </ul>
@@ -227,7 +229,6 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
             dates.forEach(it => {
               const li = document.createElement('li');
               const a = document.createElement('a');
-              a.className = "rounded-md text-base-content hover:bg-primary/10";
               const dateObj = new Date(`${it}T00:00:00`)
               const formatedDate = new Intl.DateTimeFormat('{{LANG_CODE}}', {
                 day: '2-digit',
@@ -256,8 +257,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
             
             document.querySelectorAll("#id_ul_select_dates a").forEach(it => {
                 $s.subscribe('modal_migrate_select_date.date', it, null, (v) => {
-                    it.classList.toggle('active', v === it.dataset.value)
-                    it.classList.toggle('font-bold', v === it.dataset.value)
+                    it.classList.toggle('menu-active', v === it.dataset.value)
                 })
             })
           }
@@ -321,7 +321,7 @@ document.querySelectorAll('.btn-assignment-action').forEach(el => {
                     
                     document.querySelectorAll("#id_ul_select_times a").forEach(it => {
                         $s.subscribe('modal_migrate_select_date.slot', it, null, (v) => {
-                            it.classList.toggle('active', v === Number(it.dataset.value))
+                            it.classList.toggle('menu-active', v === Number(it.dataset.value))
                         })
                     })
                 }
