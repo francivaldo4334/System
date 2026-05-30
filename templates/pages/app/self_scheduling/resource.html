@@ -6,7 +6,7 @@
 {% with parent_name=parent.name|default:"recurso" %}
 {% blocktranslate asvar title_text %}Selecione um {{ parent_name }}{% endblocktranslate %}
 
-{% with key='resource' title=title_text list_title="Selecione uma das opções abaixo" %}
+{% with key='resource' title=title_text list_title=_("Select one of the options below") %}
 {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
 {% endwith %}
@@ -48,7 +48,7 @@
         resources.forEach(it => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.innerText = it.name;
+            a.innerText = it.label;
 
             // Clone do array para não mutar o escopo do loop anterior
             const ids = [...baseIds];
