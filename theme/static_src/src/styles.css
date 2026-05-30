@@ -211,9 +211,11 @@
   .form-continuous-inputs {
     @apply [&_input]:max-w-30 [&_input]:input [&_input]:input-sm [&_label]:label [&_label]:text-sm;
   }
+
   .modal-backdrop {
     @apply backdrop-blur-sm;
   }
+
   .choice_options_serlf_schedule {
     @apply menu menu-vertical p-0 w-full gap-2.5;
   }

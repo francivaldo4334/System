@@ -48,11 +48,10 @@
 
         <!-- Footer Fixo -->
         <div class="px-6 py-4 bg-base-200/40 border-t border-base-300 flex justify-end items-center gap-3">
-            <button class="btn btn-ghost border-base-300 hover:bg-base-300/50 JSON"
-                onclick="id_new_schedule_modal.close()">
+            <button class="btn btn-ghost JSON btn-sm" onclick="id_new_schedule_modal.close()">
                 {% trans 'Cancelar' %}
             </button>
-            <button id="btn_save_assignment" class="btn btn-primary min-w-[140px] shadow-md shadow-primary/20"
+            <button id="btn_save_assignment" class="btn btn-primary min-w-[140px] shadow-md shadow-primary/20 btn-sm"
                 onclick="id_assignment_form.requestSubmit();">
                 <span id="save_spinner" class="loading loading-spinner hidden"></span>
                 {% trans 'Confirmar' %}
@@ -88,6 +87,8 @@
 
                 option.value = ''
                 option.innerText = "{% trans 'Select a value'%}"
+                option.selected = true
+                option.disabled = true
                 frag.appendChild(option)
 
                 data.results.map(it => {
@@ -122,10 +123,12 @@
 
             const label = document.createElement('label')
             label.innerText = parentName
+            label.classList.add('label')
 
             frag.appendChild(label)
 
             const select = document.createElement('select')
+            select.classList.add('select')
             select.id = `id_resource_type_${it.resource_type}`
             select.required = true
             select.onchange = (e)=> {
@@ -146,6 +149,8 @@
                     const option = document.createElement('option')
                     option.value = ''
                     option.innerText = "{% trans 'Select a value'%}"
+                    option.disabled = true
+                    option.selected = true
                     frag.appendChild(option)
                     data.results.forEach(it => {
                         const option = document.createElement('option')
