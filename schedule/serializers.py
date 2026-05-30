@@ -29,10 +29,11 @@ class ResourceSerializer(serializers.ModelSerializer):
             'code',
         ]
     def get_label(self, obj: Resource):
+        name = _(obj.name)
         if obj.parent:
             prefix = self.get_label(obj.parent) # type:ignore
-            return  f'{prefix} / {obj.name}'
-        return obj.name
+            return  f'{prefix} / {_(name)}'
+        return name
 
 
     def create(self, validated_data):
