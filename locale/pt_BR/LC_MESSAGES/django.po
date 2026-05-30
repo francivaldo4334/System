@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 22:43+0000\n"
+"POT-Creation-Date: 2026-05-30 22:51+0000\n"
 "PO-Revision-Date: 2026-05-30 19:30-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -442,12 +442,6 @@ msgstr "Mostrar Todos"
 msgid "Search"
 msgstr "Buscar"
 
-#: templates/components/schedule/filter.status.html:22
-#, fuzzy
-#| msgid "Available Times"
-msgid "Show all available times"
-msgstr "Horários Disponíveis"
-
 #: templates/components/schedule/select_date.js.html:34
 #: templates/pages/app/schedule/actions.html:244
 msgid "Tomorrow"
@@ -841,6 +835,12 @@ msgstr "Selecione um dos itens abaixo"
 msgid "Selecione um %(parent_name)s"
 msgstr "Selecione um %(parent_name)s"
 
+#: templates/pages/app/self_scheduling/resource.html:9
+#, fuzzy
+#| msgid "Select one of the items below"
+msgid "Select one of the options below"
+msgstr "Selecione um dos itens abaixo"
+
 #: templates/pages/app/self_scheduling/resource.html:35
 msgid "Click to advance."
 msgstr "Clique para avançar."
@@ -965,6 +965,11 @@ msgstr "Aguarde"
 #: templates/pages/waiting_email_confirmation/index.html:117
 msgid "s para reenviar"
 msgstr "s para reenviar"
+
+#, fuzzy
+#~| msgid "Available Times"
+#~ msgid "Show all available times"
+#~ msgstr "Horários Disponíveis"
 
 #~ msgid "Use as category."
 #~ msgstr "Usar como categoria."
