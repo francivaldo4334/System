@@ -5,6 +5,7 @@ from rest_framework import serializers
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
 
+from schedule.services import LinkGenerator
 from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, ResourceOcuppied, ServiceIsRequired
 
 
@@ -161,6 +162,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     )
     service_name = serializers.ReadOnlyField(source="service.title")
     resource_names = serializers.SerializerMethodField()
+    google_calendar_link = serializers.SerializerMethodField()
 
     class Meta:
         model = Assignment
@@ -179,6 +181,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'duration_slot',
         ]
+    def get_google_calendar_link(self,obj):
+        return LinkGenerator().get_google_calendar_link(obj)
 
     def get_resource_names(self, obj):
         return [f'{r.parent.name}/{r.name}' for r in obj.resources.all()]
