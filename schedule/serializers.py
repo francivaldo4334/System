@@ -225,7 +225,15 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         try:
             instance:Assignment = super().create(validated_data)
             instance.state.confirm()
-            SendEmail().send_email_ticket(instance, self.context.get('request'))
+            user_resource = instance.resources.all().filter(
+                parent__code="client"
+            ).first()
+            user = user_resource.content_object
+            SendEmail().send_email_ticket(
+                instance,
+                self.context.get('request'),
+                user,
+            )
             return instance
         except ReourceQuantityNotEguals:
             raise self.fail('reourcequantitynoteguals')

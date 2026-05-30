@@ -8,8 +8,7 @@ from django.utils.translation import gettext as _
 from schedule.utils import slot_to_time
 
 class SendEmail:
-    def send_email_ticket(self, assignment, request):
-        user = request.user
+    def send_email_ticket(self, assignment, request, user):
         start_time = slot_to_time(assignment.start_slot)
         end_slot = assignment.start_slot + assignment.duration_slot
         end_time = slot_to_time(end_slot)
