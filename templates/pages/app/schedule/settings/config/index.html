@@ -9,7 +9,7 @@
                     <span class="label-text font-semibold">{%trans "Company name"%}</span>
                 </label>
                 <input type="text" id="company_name" name="company_name" placeholder="{%trans 'Ex: My company LTDA'%}"
-                    required class="input input-bordered w-full focus:input-primary" />
+                    value="{{config.company_name}}" required class="input input-bordered w-full focus:input-primary" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -18,6 +18,13 @@
                     <label class="label" for="company_image">
                         <span class="label-text font-semibold">{% trans "Comany image logo"%}</span>
                     </label>
+                    {% if config.company_image %}
+                    <div class="mb-2 avatar flex flex-col">
+                        <div class="w-24 rounded ring ring-secondary ring-offset-base-100 ring-offset-2">
+                            <img src="{{ config.company_image.url }}" alt="Background Atual" />
+                        </div>
+                    </div>
+                    {% endif %}
 
                     <input type="file" id="company_image" name="company_image"
                         class="file-input file-input-bordered file-input-primary w-full" accept="image/*" />
@@ -27,6 +34,13 @@
                     <label class="label" for="background_image">
                         <span class="label-text font-semibold">{% trans "Background image"%}</span>
                     </label>
+                    {% if config.background_image %}
+                    <div class="mb-2 avatar flex flex-col">
+                        <div class="w-24 rounded ring ring-secondary ring-offset-base-100 ring-offset-2">
+                            <img src="{{ config.background_image.url }}" alt="Background Atual" />
+                        </div>
+                    </div>
+                    {% endif %}
 
                     <input type="file" id="background_image" name="background_image"
                         class="file-input file-input-bordered file-input-secondary w-full" accept="image/*" />
@@ -62,9 +76,15 @@
             event.preventDefault();
             $s.set('isSaving', true)
             const data = new FormData(event.target);
+            const ci = data.get('company_image');
+            const bi = data.get('background_image');
+            if (ci instanceof File && ci.size === 0)
+                data.delete('company_image');
+            if (bi instanceof File && bi.size === 0)
+                data.delete('background_image');
             $q.use(
                 ['app-config'],
-                () => $r.put(
+                () => $r.patch(
                     '{%url "app-config"%}',
                     data,
                     {'X-CSRFToken': '{{csrf_token}}'}
