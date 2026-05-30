@@ -2,6 +2,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from authentication.services import SendEmail
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceSelectable, Service, ServiceResourceRelation
 from django.utils.translation import gettext_lazy as _
 
@@ -224,6 +225,7 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         try:
             instance:Assignment = super().create(validated_data)
             instance.state.confirm()
+            SendEmail().send_email_ticket(instance, self.context.get('request'))
             return instance
         except ReourceQuantityNotEguals:
             raise self.fail('reourcequantitynoteguals')
