@@ -177,10 +177,12 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'service_name',
             'resource_names',
             'status',
+            'google_calendar_link',
         ]
         read_only_fields = [
             'duration_slot',
         ]
+
     def get_google_calendar_link(self,obj):
         return LinkGenerator().get_google_calendar_link(obj)
 

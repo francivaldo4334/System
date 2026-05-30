@@ -8,7 +8,7 @@
         <!-- 1. CONTAINER DE LOADING (Visível por padrão ao carregar) -->
         <div id="loading_view" class="flex flex-col items-center gap-4 py-12">
             <span class="loading loading-spinner loading-lg text-primary"></span>
-            <p class="text-base-content/70 text-sm animate-pulse">Processando seu agendamento...</p>
+            <p class="text-base-content/70 text-sm animate-pulse">{%trans 'Processing your appointment'%}...</p>
         </div>
 
         <!-- 2. CONTAINER DE ERRO (Oculto por padrão) -->
@@ -21,10 +21,10 @@
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <h3 class="text-lg font-semibold text-error mb-2">Não foi possível agendar</h3>
+            <h3 class="text-lg font-semibold text-error mb-2">{% trans 'It was not possible to schedule.'%}</h3>
             <p id="error_text" class="text-base-content/80 text-sm mb-4"></p>
             <button onclick="window.location.reload()" class="btn btn-error btn-outline btn-sm">
-                Tentar Novamente
+                {% trans 'Try Again'%}
             </button>
         </div>
 
@@ -93,14 +93,14 @@
         },
         {
             onSuccess(response) {
-                console.log("response", response)
-                // Requisição OK: Esconde o loading e renderiza o Ticket
                 switchView('SUCCESS')
                 const a = document.getElementById('id_a_download_ticker')
+                const g_a = document.getElementById('id_btn_google_calendar_link')
                 a.href = "{% url 'assignment-ticker-download' 0%}".replace(
                     '0',
                     response.id
                 )
+                g_a.href = response.google_calendar_link
 
             },
             onError(error) {

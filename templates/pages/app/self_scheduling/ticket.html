@@ -38,7 +38,10 @@
         </div>
 
         <div class="card-actions w-full mt-8 flex flex-col gap-2">
-            <button class="btn btn-primary w-full">{% trans 'Add to Calendar' %}</button>
+            <a class="btn btn-primary w-full" id="id_btn_google_calendar_link" target="_blank"
+                rel="noopener noreferrer">
+                {% trans 'Add to Calendar' %}
+            </a>
             <a class="btn btn-ghost btn-sm w-full" id="id_a_download_ticker" target="_blank" rel="noopener noreferrer">
                 {% trans 'Download Receipt' %}
             </a>
