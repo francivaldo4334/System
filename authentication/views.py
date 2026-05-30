@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from authentication.services import SendEmail
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -89,4 +90,10 @@ class EmailViewSet(viewsets.ViewSet):
             user.save()
             return Response({"detail": "Success"}, status=status.HTTP_200_OK)
         return Response({"detail": "Error"}, status=status.HTTP_400_BAD_REQUEST)            
+
+    def handle_exception(self, exc):
+        try:
+            return super().handle_exception(exc)
+        except ValidationError as e:
+            return Response(e.message,400)
 
