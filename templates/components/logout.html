@@ -1,28 +1,28 @@
 <button class="btn btn-square" onclick="id_modal_confirm_logout.showModal()">
-  {% include 'icons/log-out.svg' %}
+    {% include 'icons/log-out.svg' %}
 </button>
 
 <dialog class="modal" id="id_modal_confirm_logout">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">
-      {% trans 'Log out of your account?' %}
-    </h3>
-    <p class="py-4">
-      {% trans 'Are you sure you want to end your current session?' %}
-    </p>
-    <div class="modal-action">
-      <button class="btn btn-ghost" onclick="id_modal_confirm_logout.close()">
-        {% trans 'Cancel' %}
-      </button>
-      <form action="{% url 'logout' %}" method="POST">
-        {% csrf_token %}
-        <button class="btn btn-error" >
-          {% trans 'Log out' %}
-        </button>
-      </form>
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">
+            {% trans 'Log out of your account?' %}
+        </h3>
+        <p class="py-4">
+            {% trans 'Are you sure you want to end your current session?' %}
+        </p>
+        <div class="modal-action">
+            <button class="btn btn-ghost btn-sm" onclick="id_modal_confirm_logout.close()">
+                {% trans 'Cancel' %}
+            </button>
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-error btn-sm">
+                    {% trans 'Log out' %}
+                </button>
+            </form>
+        </div>
     </div>
-  </div>
-  <form class="modal-backdrop" method="dialog">
-    <button></button>
-  </form>
+    <form class="modal-backdrop" method="dialog">
+        <button></button>
+    </form>
 </dialog>
