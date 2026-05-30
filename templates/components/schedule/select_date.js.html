@@ -1,60 +1,60 @@
 {% get_current_language as LANG_CODE %}
 <script>
-$q.use(
-  ['dates'],
-  () => {
-    const dateNow = new Date()
-    const startDate = dateNow.toISOString().split('T')[0]
-    dateNow.setDate(dateNow.getDate() + 15)
-    const endDate = dateNow.toISOString().split('T')[0]
-    return $r.get(`{% url 'availabilities_presentation' %}?date_after=${startDate}&date_before=${endDate}`)
-  },
-  {
-    onSuccess(data){
-      const dates = Array.from(new Set(data.map(it => it.occurrences.map(it => it.split('T')[0])).flat())).sort()
-      const ul = document.getElementById('{{ul_id}}');
-      if (ul){
-        const frag = document.createDocumentFragment();
-        dates.forEach(it => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          const dateObj = new Date(`${it}T00:00:00`)
-          const formatedDate = new Intl.DateTimeFormat('{{LANG_CODE}}', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-          }).format(dateObj)
-          const now = new Date()
-          let sufix = ''
-          if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
-            sufix = " - {% trans 'Today'%}"
-          }
-          now.setDate(now.getDate() + 1)
-          if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
-            sufix = " - {% trans 'Tomorrow'%}"
-          }
-          a.innerText = formatedDate + sufix
-          {% if set_href %}
-            a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
-          {% endif %}
-          {% if onclick %}
-            a.onclick = () => {
-              ((it)=>{
-                {{onclick}}
-              })(it)
+    $q.use(
+        ['dates'],
+        () => {
+            const dateNow = new Date()
+            const startDate = dateNow.toISOString().split('T')[0]
+            dateNow.setDate(dateNow.getDate() + 15)
+            const endDate = dateNow.toISOString().split('T')[0]
+            return $r.get(`{% url 'availabilities_presentation' %}?date_after=${startDate}&date_before=${endDate}`)
+        },
+        {
+            onSuccess(data) {
+                const dates = Array.from(new Set(data.map(it => it.occurrences.map(it => it.split('T')[0])).flat())).sort()
+                const ul = document.getElementById('{{ul_id}}');
+                if (ul) {
+                    const frag = document.createDocumentFragment();
+                    dates.forEach(it => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        const dateObj = new Date(`${it}T00:00:00`)
+                        const formatedDate = new Intl.DateTimeFormat('{{LANG_CODE}}', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        }).format(dateObj)
+                        const now = new Date()
+                        let sufix = ''
+                        if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
+                            sufix = " - {% trans 'Today'%}"
+                        }
+                        now.setDate(now.getDate() + 1)
+                        if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
+                            sufix = " - {% trans 'Tomorrow'%}"
+                        }
+                        const weekday = dateObj.toLocaleDateString('{{LANG_CODE}}', {weekday: 'long'});
+                        a.innerText = `${formatedDate} - ${weekday}${sufix}`;
+                        {% if set_href %}
+                        a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
+                        {% endif %}
+                        {% if onclick %}
+                        a.onclick = () => {
+                            ((it) => {
+                                {{onclick} }
+                            })(it)
+                        }
+                        {% endif %}
+                        a.dataset.value = it
+                        li.appendChild(a);
+                        frag.appendChild(li);
+                    })
+                    ul.replaceChildren(frag);
+                }
             }
-          {% endif %}
-          a.dataset.value = it
-          li.appendChild(a);
-          frag.appendChild(li);
-        })
-        ul.replaceChildren(frag);
-      }
-    }
-  },
-  {
-    enableRefetch: true,
-  }
-)
+        },
+        {
+            enableRefetch: true,
+        }
+    )
 </script>
-
