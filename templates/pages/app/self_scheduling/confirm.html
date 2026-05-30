@@ -5,13 +5,11 @@
 <div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
     <div class="w-full max-w-md flex flex-col items-center justify-center">
 
-        <!-- 1. CONTAINER DE LOADING (Visível por padrão ao carregar) -->
         <div id="loading_view" class="flex flex-col items-center gap-4 py-12">
             <span class="loading loading-spinner loading-lg text-primary"></span>
             <p class="text-base-content/70 text-sm animate-pulse">{%trans 'Processing your appointment'%}...</p>
         </div>
 
-        <!-- 2. CONTAINER DE ERRO (Oculto por padrão) -->
         <div id="error_view"
             class="hidden w-full bg-error/10 border border-error/20 p-6 rounded-2xl text-center shadow-sm">
             <div class="text-error mb-3 flex justify-center">
@@ -28,7 +26,6 @@
             </button>
         </div>
 
-        <!-- 3. CONTAINER DO TICKET (Oculto por padrão, só aparece no sucesso) -->
         <div id="ticket_view" class="hidden w-full">
             {% include 'pages/app/self_scheduling/ticket.html'%}
         </div>
@@ -37,11 +34,15 @@
 </div>
 
 <script>
+    // Captura inicial do assignmentId vindo da URL renderizada pelo Django
+    const assignmentId = "{{request.GET.aid|escapejs}}";
+
     // Inicialização dos Estados
     $s.create('date', '{{request.GET.date}}')
 
     // Formatação reativa da data interna do ticket
     $s.subscribe('date', id_date_field, 'innerText', (v) => {
+        if (!v) return '';
         const dateObj = new Date(`${v}T00:00:00`)
         return new Intl.DateTimeFormat('{{LANG_CODE}}', {
             day: '2-digit',
@@ -56,10 +57,7 @@
     const viewTicket = document.getElementById('ticket_view')
     const textError = document.getElementById('error_text')
 
-    // Função central que controla qual "tela" o usuário vê
-    // Aceita: 'LOADING' | 'SUCCESS' | 'ERROR'
     function switchView(state, errorMessage = '') {
-        // Reset de classes
         viewLoading.classList.add('hidden')
         viewError.classList.add('hidden')
         viewTicket.classList.add('hidden')
@@ -74,13 +72,19 @@
         }
     }
 
-    // Execução do Request
+    // Execução Dinâmica do Request (GET ou POST)
     $q.use(
-        ['create_appointment'],
+        ['fetch_or_create_appointment'],
         () => {
-            // Entra em estado de loading imediatamente ao disparar
             switchView('LOADING')
 
+            // CASO 1: Se houver ID na URL, faz a busca (GET)
+            if (assignmentId) {
+                // Nota: Ajuste a URL se a sua API exigir o ID no path (ex: `.../client_assignment-list/${assignmentId}/`)
+                return $r.get('{% url "client_assignment-detail" 0 %}'.replace('0', assignmentId))
+            }
+
+            // CASO 2: Se não houver ID, mantém o fluxo original de criação (POST)
             return $r.post('{% url "client_assignment-list" %}', {
                 'service': Number('{{request.GET.service|escapejs}}'),
                 'resources': '{{request.GET.resource|escapejs}}'.split(',').map(Number).filter(it => !!it),
@@ -93,23 +97,45 @@
         },
         {
             onSuccess(response) {
+                // Tratamento caso a API retorne uma lista no GET em vez de um objeto direto
+                const data = Array.isArray(response) ? response[0] : response;
+
+                if (!data || !data.id) {
+                    switchView('ERROR', 'Agendamento não encontrado.')
+                    return;
+                }
+
+                // Se os dados vieram do GET, pode ser necessário atualizar a data no estado reativo
+                if (data.date) {
+                    $s.set('date', data.date);
+                }
+
                 switchView('SUCCESS')
+
+                // Atualização dos elementos do ticket
                 const a = document.getElementById('id_a_download_ticker')
                 const g_a = document.getElementById('id_btn_google_calendar_link')
-                a.href = "{% url 'assignment-ticker-download' 0%}".replace(
-                    '0',
-                    response.id
-                )
-                g_a.href = response.google_calendar_link
 
+                if (a) {
+                    a.href = "{% url 'assignment-ticker-download' 0%}".replace('0', data.id)
+                }
+                if (g_a && data.google_calendar_link) {
+                    g_a.href = data.google_calendar_link
+                }
+
+                // ATUALIZAÇÃO DA URL SEM REFRESH (Apenas se já não estiver na URL)
+                if (!assignmentId) {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('aid', data.id);
+                    window.history.replaceState({}, '', currentUrl.toString());
+                }
             },
             onError(error) {
-                // Falha: Esconde o loading e renderiza o bloco de erro com a mensagem do servidor
-                const msg = error?.response?.data?.detail || 'O horário selecionado não está mais disponível ou os dados são inválidos.'
+                const msg = error?.response?.data?.detail || 'Ocorreu um erro ao processar a requisição ou os dados são inválidos.'
                 switchView('ERROR', msg)
             },
             onFinally() {
-                // Não altera o estado aqui para evitar que o loading suma antes da hora ou que o fluxo quebre
+                // Mantido vazio conforme arquitetura original
             }
         }
     )

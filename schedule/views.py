@@ -99,6 +99,7 @@ class ServiceRequirementsViewSet(viewsets.ModelViewSet):
 # pyright:reportIncompatibleMethodOverride=false
 class BaseAssignmentViewSet(
     viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
     viewsets.GenericViewSet
 ):
     queryset = Assignment.objects.all().select_related('service').prefetch_related('resources')
@@ -213,6 +214,15 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
 
     
 class ClientAssignmentViewSet(BaseAssignmentViewSet):
+    def get_queryset(self):
+        content_type = ContentType.objects.get_for_model(self.request.user)
+        object_id = self.request.user.id
+
+        return super().get_queryset().filter(
+            resources__content_type=content_type,
+            resources__object_id=object_id            
+        )
+    
     def perform_create(self, serializer):
         client_type, c = ResourceNotSelectable.objects.get_or_create(
             code="client",
@@ -235,7 +245,6 @@ class ClientAssignmentViewSet(BaseAssignmentViewSet):
                 'code':f'client.{self.request.user.username}',
             }
         )
-        print("ok3")
         serializer.save(user_client_resource=user_resource)
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
