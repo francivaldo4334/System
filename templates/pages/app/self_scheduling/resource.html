@@ -6,7 +6,7 @@
 {% with parent_name=parent.name|default:"recurso" %}
 {% blocktranslate asvar title_text %}Selecione um {{ parent_name }}{% endblocktranslate %}
 
-{% with key='resource' title=title_text list_title=_("Select one of the options below") %}
+{% with key='resource' title=title_text list_title=_("Select one of the items below") %}
 {% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
 {% endwith %}
