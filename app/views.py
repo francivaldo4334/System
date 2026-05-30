@@ -109,7 +109,7 @@ class AppScheduleSettingsView(AppView):
             resources_person = ResourcePerson.objects.filter(is_selectable=False)
             for it in resources_person:
                 setting_tabs.append({
-                    'label': it.name,
+                    'label': _(it.name),
                     'url_name': 'app-schedule-settings-resource-person',  # Nome base estático da rota
                     'url_kwargs': {'key': it.code},  # Dicionário de argumentos que a rota exige
                     'is_dynamic': True,
