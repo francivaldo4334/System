@@ -1,4 +1,4 @@
-<header class="w-full flex justify-between p-3 border-base-content/10 max-h-full">
+<header class="w-full flex justify-between p-3 border-base-content/10 max-h-full gap-4">
     <div class="flex flex-wrap gap-4 w-full">
         {# include 'components/schedule/filter.calendar.mode/index.html' #}
         {% include 'components/schedule/filter.search.html' %}
@@ -7,10 +7,9 @@
         {% include 'components/schedule/filter.resources.html' %}
         {% include 'components/schedule/filter.clean.html' %}
         {% url 'self_scheduling' as schedule_url %}
-
-        <button class="btn btn-sm [&>svg]:w-4 js-copy-btn" id="id_btn_link_copy"
+        <button class="btn btn-xs sm:btn-sm [&>svg]:w-4 js-copy-btn" id="id_btn_link_copy"
             data-clipboard-text="{{ request.get_host }}{{ schedule_url }}">
-            <span class="btn-text">{% trans "Self-Schedule" %}</span>
+            <span class="btn-text">{% trans "Schedule-link" %}</span>
             {% include "icons/link.svg" %}
         </button>
 
@@ -45,7 +44,7 @@
         </script>
         {% include 'components/schedule/assignments.dashboard.html' %}
     </div>
-    <label for="id_schdule_drawer_toggle" class="btn btn-square sm:hidden">
+    <label for="id_schdule_drawer_toggle" class="btn btn-sm btn-square sm:hidden">
         {%include 'icons/settings-2.svg'%}
     </label>
 </header>

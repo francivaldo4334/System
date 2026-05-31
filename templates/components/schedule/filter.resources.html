@@ -1,10 +1,10 @@
-<label class="floating-label min-w-3xs">
+<label class="floating-label min-w-3xs hidden sm:block">
     <span>{% trans 'Resource Category'%}</span>
     <select class="select select-sm" id="id_select_resource_category"
         onchange="$s.set('filter.resource_type', this.value)">
     </select>
 </label>
-<label class="floating-label min-w-3xs">
+<label class="floating-label min-w-3xs hidden sm:block">
     <span>{% trans 'Resource'%}</span>
     <select class="select select-sm" id="id_select_resource" onchange="$s.set('filter.resource', this.value)">
     </select>
