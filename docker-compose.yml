@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ponto_agio_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      # O Postgres original usa estas variáveis para criar o banco e o usuário iniciais
+      - POSTGRES_DB=ponto_agio_prod
+      - POSTGRES_USER=ponto_agio_admin
+      - POSTGRES_PASSWORD=uma_senha_forte_aqui
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Ajustado aqui também para bater com o usuário e banco definidos acima
+      test: ["CMD-SHELL", "pg_isready -U ponto_agio_admin -d ponto_agio_prod"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_app
+    command: >
+      sh -c "uv run python manage.py migrate &&
+             uv run python manage.py tailwind dev"
+    volumes:
+      - .:/app
+      - /app/.venv/
+      - uv_cache:/root/.cache/uv
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      # Variáveis exatas que a sua função config('...') está buscando:
+      - DB_NAME=ponto_agio_prod
+      - DB_USER=ponto_agio_admin
+      - DB_PASSWORD=uma_senha_forte_aqui
+      - DB_HOST=db  # Aponta para o serviço do banco de dados na rede do Docker
+      - DB_PORT=5432
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  uv_cache:
