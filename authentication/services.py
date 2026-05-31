@@ -148,6 +148,8 @@ class SendEmail:
             user_resource = assignment.resources.all().filter(
                 parent__code="client"
             ).first()
+            if not user_resource or not user_resource.content_object:
+                return False
             user = user_resource.content_object
             recipient = user.email 
 
