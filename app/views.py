@@ -121,7 +121,7 @@ class AppScheduleSettingsView(AppView):
                 'url_name': 'app-schedule-settings-services',
                 'is_dynamic': False,
             })
-        if user.has_perm('schedule.view_users'):
+        if user.has_perm('authentication.view_customuser'):
             setting_tabs.append({
                 'label': _("Users"),
                 'url_name': 'app-schedule-settings-users',
@@ -181,36 +181,38 @@ class CrudView(LoginRequiredMixin, TemplateView):
             'modal_update_title': self.modal_update_title,
         })
         user = self.request.user
+        app_names = ['schedule', 'authentication']
+        for app_name in app_names:
 
-        if user.has_perm(f'schedule.view_{self.model_name}'):
-            context.update({
-               'list': {
-                   'table': self.table,
-                }
-            })
+            if user.has_perm(f'{app_name}.view_{self.model_name}'):
+                context.update({
+                   'list': {
+                       'table': self.table,
+                    }
+                })
 
-        if user.has_perm(f'schedule.change_{self.model_name}'):
-            context.update({
-               'update': {
-                    'form': form_instance,
-                    'update_url_name': f'{self.key}-detail'
-                },
-            })
+            if user.has_perm(f'{app_name}.change_{self.model_name}'):
+                context.update({
+                   'update': {
+                        'form': form_instance,
+                        'update_url_name': f'{self.key}-detail'
+                    },
+                })
 
-        if user.has_perm(f'schedule.add_{self.model_name}'):
-            context.update({
-                'create': {
-                    'form': form_instance,
-                    'post_url_name': f'{self.key}-list',
-                },
-            })
+            if user.has_perm(f'{app_name}.add_{self.model_name}'):
+                context.update({
+                    'create': {
+                        'form': form_instance,
+                        'post_url_name': f'{self.key}-list',
+                    },
+                })
 
-        if user.has_perm(f'schedule.delete_{self.model_name}'):
-            context.update({
-                'delete': {
-                    'delete_url_name': f'{self.key}-detail',
-                },
-            })
+            if user.has_perm(f'{app_name}.delete_{self.model_name}'):
+                context.update({
+                    'delete': {
+                        'delete_url_name': f'{self.key}-detail',
+                    },
+                })
         return context
 
 class ScheduleSettingsAvailabilitiesView(CrudView):
@@ -259,7 +261,7 @@ class ScheduleSettingsServiceView(CrudView):
 
 class SettingsUserView(CrudView):
     key = "users"
-    model_name = 'user'
+    model_name = 'customuser'
     form = UserForm
     table = UserTable
     modal_create_title = _("Add new user")
