@@ -160,7 +160,7 @@ class SendEmail:
             
         return True
 
-    def send_email_manager_reminder(self, manager_user, system_link):
+    def send_email_manager_reminder(self, manager_user):
         """
         Envia um e-mail de lembrete para o gerente atualizar a grade de horários disponíveis.
         Desenvolvido para rodar fora do ciclo HTTP (crontab, celery, etc).
@@ -171,7 +171,6 @@ class SendEmail:
 
             template_context = {
                 'manager_user': manager_user,
-                'system_link': system_link,
             }
 
             # Assunto internacionalizado
@@ -182,12 +181,8 @@ class SendEmail:
                 "Hello, {username}.\n\n"
                 "This is a reminder for you to update your availability schedule for the upcoming days.\n"
                 "Keeping your schedule updated ensures clients can book your services without conflicts.\n\n"
-                "Access the platform to update your hours:\n"
-                "{system_link}\n\n"
-                "Best regards!"
             ).format(
                 username=manager_user.username,
-                system_link=system_link
             )
 
             # Renderização do HTML baseado no seu padrão DaisyUI
