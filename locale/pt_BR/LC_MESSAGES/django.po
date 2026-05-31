@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 23:01+0000\n"
-"PO-Revision-Date: 2026-05-30 19:30-0300\n"
+"POT-Creation-Date: 2026-05-31 21:36+0000\n"
+"PO-Revision-Date: 2026-05-31 18:45-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
 "Language: pt_BR\n"
@@ -170,27 +170,27 @@ msgstr "Usuários"
 msgid "Configurations"
 msgstr "Configurações"
 
-#: app/views.py:221
+#: app/views.py:223
 msgid "Add new availability"
 msgstr "Adicionar nova disponibilidade"
 
-#: app/views.py:222
+#: app/views.py:224
 msgid "Update availability"
 msgstr "Atualizar disponibilidade"
 
-#: app/views.py:257
+#: app/views.py:259
 msgid "Add new service"
 msgstr "Adicionar novo serviço"
 
-#: app/views.py:258
+#: app/views.py:260
 msgid "Update service"
 msgstr "Atualizar serviço"
 
-#: app/views.py:265
+#: app/views.py:267
 msgid "Add new user"
 msgstr "Adicionar novo usuário"
 
-#: app/views.py:266
+#: app/views.py:268
 msgid "Update user"
 msgstr "Atualizar usuário"
 
@@ -206,38 +206,26 @@ msgstr "Permissões"
 msgid "Important dates"
 msgstr "Datas importantes"
 
-#: authentication/services.py:36
-msgid "Comprovante de Agendamento - Confirmação"
-msgstr "Comprovante de Agendamento - Confirmação"
+#: authentication/services.py:38 templates/components/ticker.html:6
+#: templates/components/ticker.html:142
+msgid "Appointment Confirmation"
+msgstr "Confirmação de Agendamento"
 
-#: authentication/services.py:40
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Olá, {username}.\n"
-#| "\n"
-#| "Seu agendamento foi confirmed com sucesso!\n"
-#| "\n"
-#| "Detalhes do Agendamento:\n"
-#| " Horário: {time_range}\n"
-#| " Recurso(s): {resources}\n"
-#| "\n"
-#| "Você pode baixar o seu comprovante em PDF acessando o link abaixo:\n"
-#| "{download_link}\n"
-#| "\n"
-#| "Obrigado!"
+#: authentication/services.py:42
+#, python-brace-format
 msgid ""
-"Olá, {username}.\n"
+"Hello, {username}.\n"
 "\n"
-"Seu agendamento foi confirmado com sucesso!\n"
+"Your appointment has been successfully confirmed!\n"
 "\n"
-"Detalhes do Agendamento:\n"
-" Horário: {time_range}\n"
-" Recurso(s): {resources}\n"
+"Scheduling Details:\n"
+" Time: {time_range}\n"
+" Resource(s): {resources}\n"
 "\n"
-"Você pode baixar o seu comprovante em PDF acessando o link abaixo:\n"
+"You can download your receipt as a PDF by accessing the link below:\n"
 "{download_link}\n"
 "\n"
-"Obrigado!"
+"Thanks!"
 msgstr ""
 "Olá, {username}.\n"
 "\n"
@@ -252,7 +240,7 @@ msgstr ""
 "\n"
 "Obrigado!"
 
-#: authentication/services.py:95
+#: authentication/services.py:97
 #, python-brace-format
 msgid ""
 "Hello, {username}.\n"
@@ -265,68 +253,117 @@ msgstr ""
 "Por favor, confirme seu cadastro clicando no link abaixo:\n"
 "{link}"
 
-#: authentication/services.py:100
+#: authentication/services.py:102
 msgid "Registration Confirmation"
 msgstr "Confirmação de Cadastro"
 
-#: authentication/views.py:70
+#: authentication/services.py:128
+msgid "Reminder: Your appointment is approaching"
+msgstr "Lembrete: Seu agendamento está se aproximando"
+
+#: authentication/services.py:131
+#, python-brace-format
+msgid ""
+"Hello.\n"
+"\n"
+"This is a reminder that your appointment is approaching in {days_remaining} "
+"day(s).\n"
+"\n"
+"Scheduling Details:\n"
+" Time: {time_range}\n"
+" Resource(s): {resources}\n"
+"\n"
+"See you soon!"
+msgstr ""
+"Olá.\n"
+"\n"
+"Este é um lembrete de que o seu agendamento está se aproximando e será em {days_remaining} dia(s).\n"
+"\n"
+"Detalhes do Agendamento:\n"
+" Horário: {time_range}\n"
+" Recurso(s): {resources}\n"
+"\n"
+"Até breve!"
+
+#: authentication/services.py:177
+msgid "Action Required: Update your availability schedule"
+msgstr "Ação Necessária: Atualize sua agenda de disponibilidade"
+
+#: authentication/services.py:181
+#, python-brace-format
+msgid ""
+"Hello, {username}.\n"
+"\n"
+"This is a reminder for you to update your availability schedule for the "
+"upcoming days.\n"
+"Keeping your schedule updated ensures clients can book your services without "
+"conflicts.\n"
+"\n"
+msgstr ""
+"Olá, {username}.\n"
+"\n"
+"Este é um lembrete para você atualizar sua agenda de disponibilidade para os próximos dias.\n"
+"Manter sua agenda atualizada garante que os clientes possam reservar seus serviços sem conflitos.\n"
+"\n"
+
+#: authentication/views.py:79
 msgid "Confirmation email sent successfully."
 msgstr "E-mail de confirmação enviado com sucesso."
 
-#: authentication/views.py:75
+#: authentication/views.py:84
 msgid "We were unable to send the email at this time. Please try again later."
 msgstr ""
 "Não foi possível enviar o e-mail no momento. Por favor, tente novamente mais "
 "tarde."
 
-#: core/management/commands/schedule_setup_rules.py:72 schedule/views.py:231
+#: core/management/commands/schedule_setup_rules.py:76 schedule/views.py:231
 #: templates/components/ticker.html:148
 msgid "Client"
 msgstr "Cliente"
 
-#: schedule/models.py:39 schedule/models.py:41 schedule/models.py:43
-#: schedule/models.py:50 schedule/models.py:59
+#: schedule/models.py:42 schedule/models.py:44 schedule/models.py:46
+#: schedule/models.py:53 schedule/models.py:61
 msgid "Enter a valid value."
 msgstr "Insira um valor válido."
 
-#: schedule/models.py:121 schedule/serializers.py:350
+#: schedule/models.py:123 schedule/serializers.py:350
 msgid "There is a schedule conflict for the selected date and time range."
 msgstr "Existe um conflito de horários para a data e intervalo selecionados."
 
-#: schedule/models.py:125 schedule/serializers.py:346
+#: schedule/models.py:127 schedule/serializers.py:346
 msgid "There cannot be an availability period greater than 90 days."
 msgstr "Não pode haver um período de disponibilidade superior a 90 dias."
 
-#: schedule/models.py:252
+#: schedule/models.py:254
 msgid "Pending"
 msgstr "Pendente"
 
-#: schedule/models.py:253
+#: schedule/models.py:255
 #: templates/components/schedule/assignments.dashboard.html:13
 msgid "Confirmed"
 msgstr "Confirmado"
 
-#: schedule/models.py:254
+#: schedule/models.py:256
 #: templates/components/schedule/assignments.dashboard.html:22
 msgid "Migrated"
 msgstr "Migrado"
 
-#: schedule/models.py:255
+#: schedule/models.py:257
 #: templates/components/schedule/assignments.dashboard.html:25
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: schedule/models.py:256
+#: schedule/models.py:258
 #: templates/components/schedule/assignments.dashboard.html:28
 msgid "Absent"
 msgstr "Faltou"
 
-#: schedule/models.py:257
+#: schedule/models.py:259
 #: templates/components/schedule/assignments.dashboard.html:16
 msgid "In Progress"
 msgstr "Em andamento"
 
-#: schedule/models.py:258
+#: schedule/models.py:260
 #: templates/components/schedule/assignments.dashboard.html:19
 msgid "Completed"
 msgstr "Concluído"
@@ -396,9 +433,9 @@ msgstr "Sair da sua conta?"
 msgid "Are you sure you want to end your current session?"
 msgstr "Tem certeza que deseja encerrar sua sessão atual?"
 
-#: templates/components/logout.html:15 templates/layouts/crud/create.html:88
+#: templates/components/logout.html:15 templates/layouts/crud/create.html:92
 #: templates/layouts/crud/delete.html:20 templates/layouts/crud/update.html:17
-#: templates/pages/app/schedule/actions.html:149
+#: templates/pages/app/schedule/actions.html:151
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -412,7 +449,7 @@ msgstr "Pendente"
 
 #: templates/components/schedule/filter.calendar/index.html:25
 #: templates/components/schedule/select_date.js.html:30
-#: templates/pages/app/schedule/actions.html:240
+#: templates/pages/app/schedule/actions.html:241
 msgid "Today"
 msgstr "Hoje"
 
@@ -443,13 +480,9 @@ msgid "Search"
 msgstr "Buscar"
 
 #: templates/components/schedule/select_date.js.html:34
-#: templates/pages/app/schedule/actions.html:244
+#: templates/pages/app/schedule/actions.html:245
 msgid "Tomorrow"
 msgstr "Amanhã"
-
-#: templates/components/ticker.html:6 templates/components/ticker.html:142
-msgid "Appointment Confirmation"
-msgstr "Confirmação de Agendamento"
 
 #: templates/components/ticker.html:151
 msgid "Emission"
@@ -480,15 +513,50 @@ msgstr "Horário"
 msgid "Resources Allocated"
 msgstr "Recursos Alocados"
 
+#: templates/emails/assignment_reminder/index.html:7
+msgid "Appointment Reminder"
+msgstr "Lembrete de Agendamento"
+
+#: templates/emails/assignment_reminder/index.html:105
+#: templates/emails/assignment_ticket/index.html:122
+#: templates/emails/confirm_email/index.html:86
+#: templates/emails/manager_reminder/index.html:83
+#: templates/layouts/base.html:8 templates/pages/app/layout.html:34
+msgid "Agio"
+msgstr "Ágio"
+
+#: templates/emails/assignment_reminder/index.html:110
+msgid "Hello!"
+msgstr "Olá!"
+
+#: templates/emails/assignment_reminder/index.html:113
+#, python-format
+msgid ""
+"This is a friendly reminder that your upcoming appointment is\n"
+"                approaching in %(days)s day(s)."
+msgstr ""
+"Este é um lembrete amigável de que o seu próximo agendamento está\n"
+"                se aproximando e será em %(days)s dia(s)."
+
+#: templates/emails/assignment_reminder/index.html:120
+#: templates/emails/assignment_ticket/index.html:144
+msgid "Time:"
+msgstr "Horário:"
+
+#: templates/emails/assignment_reminder/index.html:123
+msgid "Resource(s):"
+msgstr "Recurso(s):"
+
+#: templates/emails/assignment_reminder/index.html:136
+msgid ""
+"You received this email because you have an active appointment scheduled on "
+"our system."
+msgstr ""
+"Você recebeu este e-mail porque possui um agendamento ativo em nosso sistema."
+
 #: templates/emails/assignment_ticket/index.html:7
 msgid "Confirmed Booking"
 msgstr "Reserva Confirmada"
-
-#: templates/emails/assignment_ticket/index.html:122
-#: templates/emails/confirm_email/index.html:86 templates/layouts/base.html:8
-#: templates/pages/app/layout.html:34
-msgid "Agio"
-msgstr "Ágio"
 
 #: templates/emails/assignment_ticket/index.html:127
 msgid "Hello"
@@ -505,10 +573,6 @@ msgstr "Serviço:"
 #: templates/emails/assignment_ticket/index.html:139
 msgid "Date:"
 msgstr "Data:"
-
-#: templates/emails/assignment_ticket/index.html:144
-msgid "Time:"
-msgstr "Horário:"
 
 #: templates/emails/assignment_ticket/index.html:150
 msgid "Resources/Staff:"
@@ -532,6 +596,7 @@ msgid "This is an automated email, please do not reply directly."
 msgstr "Este é um e-mail automático, por favor não responda diretamente."
 
 #: templates/emails/confirm_email/index.html:91
+#: templates/emails/manager_reminder/index.html:87
 msgid "Hello,"
 msgstr "Olá,"
 
@@ -564,22 +629,32 @@ msgid ""
 msgstr ""
 "Se você não realizou este cadastro, pode ignorar este e-mail com segurança. "
 
-#: templates/layouts/crud/create.html:3
+#: templates/emails/manager_reminder/index.html:7
+msgid "Schedule Update Reminder"
+msgstr "Lembrete de Atualização de Agenda"
+
+#: templates/emails/manager_reminder/index.html:98
+msgid ""
+"This is an automated operational message sent to administrators and managers."
+msgstr ""
+"Esta é uma mensagem operacional automatizada enviada para administradores e gestores."
+
+#: templates/layouts/crud/create.html:4
 msgid "Add"
 msgstr "Adicionar"
 
-#: templates/layouts/crud/create.html:48 templates/layouts/crud/update.html:145
-#: templates/pages/app/schedule/actions.html:43
-#: templates/pages/app/schedule/actions.html:176
+#: templates/layouts/crud/create.html:52 templates/layouts/crud/update.html:145
+#: templates/pages/app/schedule/actions.html:41
+#: templates/pages/app/schedule/actions.html:178
 #: templates/pages/app/schedule/create.html:200
 msgid "Error"
 msgstr "Erro"
 
-#: templates/layouts/crud/create.html:79
+#: templates/layouts/crud/create.html:83
 msgid "Add new item"
 msgstr "Adicionar novo item"
 
-#: templates/layouts/crud/create.html:93 templates/layouts/crud/update.html:21
+#: templates/layouts/crud/create.html:97 templates/layouts/crud/update.html:21
 msgid "Save"
 msgstr "Salvar"
 
@@ -633,56 +708,56 @@ msgstr "Editar"
 msgid "Update item"
 msgstr "Atualizar item"
 
-#: templates/pages/app/schedule/actions.html:36
-#: templates/pages/app/schedule/actions.html:170
+#: templates/pages/app/schedule/actions.html:34
+#: templates/pages/app/schedule/actions.html:172
 msgid "Success"
 msgstr "Sucesso"
 
-#: templates/pages/app/schedule/actions.html:62
+#: templates/pages/app/schedule/actions.html:59
 msgid "Available Actions"
 msgstr "Ações Disponíveis"
 
-#: templates/pages/app/schedule/actions.html:66
+#: templates/pages/app/schedule/actions.html:63
 msgid "Rescue appointment"
 msgstr "Recuperar agendamento"
 
-#: templates/pages/app/schedule/actions.html:69
+#: templates/pages/app/schedule/actions.html:66
 msgid "Confirm new appointment"
 msgstr "Confirmar novo agendamento"
 
-#: templates/pages/app/schedule/actions.html:72
+#: templates/pages/app/schedule/actions.html:69
 msgid "Start service"
 msgstr "Iniciar atendimento"
 
-#: templates/pages/app/schedule/actions.html:75
+#: templates/pages/app/schedule/actions.html:72
 msgid "Finish service"
 msgstr "Finalizar atendimento"
 
-#: templates/pages/app/schedule/actions.html:78
+#: templates/pages/app/schedule/actions.html:75
 msgid "Migrate appointment"
 msgstr "Migrar agendamento"
 
-#: templates/pages/app/schedule/actions.html:83
+#: templates/pages/app/schedule/actions.html:80
 msgid "Danger Zone"
 msgstr "Zona de Perigo"
 
-#: templates/pages/app/schedule/actions.html:87
+#: templates/pages/app/schedule/actions.html:84
 msgid "Cancel appointment"
 msgstr "Cancelar agendamento"
 
-#: templates/pages/app/schedule/actions.html:90
+#: templates/pages/app/schedule/actions.html:87
 msgid "Mark as absent"
 msgstr "Marcar como ausente"
 
-#: templates/pages/app/schedule/actions.html:95
+#: templates/pages/app/schedule/actions.html:92
 msgid "Close"
 msgstr "Fechar"
 
-#: templates/pages/app/schedule/actions.html:118
+#: templates/pages/app/schedule/actions.html:115
 msgid "Select a migration date & time"
 msgstr "Selecione uma data e horário de migração"
 
-#: templates/pages/app/schedule/actions.html:125
+#: templates/pages/app/schedule/actions.html:123
 #: templates/pages/app/self_scheduling/ticket.html:30
 msgid "Date"
 msgstr "Data"
@@ -691,11 +766,11 @@ msgstr "Data"
 msgid "Available Time"
 msgstr "Horários Disponíveis"
 
-#: templates/pages/app/schedule/actions.html:140
+#: templates/pages/app/schedule/actions.html:142
 msgid "Select a date first"
 msgstr "Selecione uma data primeiro"
 
-#: templates/pages/app/schedule/actions.html:186
+#: templates/pages/app/schedule/actions.html:188
 msgid "Reschedule"
 msgstr "Reagendar"
 
@@ -733,20 +808,19 @@ msgstr "Selecione um serviço"
 msgid "RSA Agenda"
 msgstr "Agenda RSA"
 
-#: templates/pages/app/schedule/main.html:13
-#: templates/pages/app/schedule/main.html:27
-msgid "Self-Schedule"
-msgstr "Autoagendamento"
-
-#: templates/pages/app/schedule/main.html:27
+#: templates/pages/app/schedule/main.html:26
 msgid "Copied!"
 msgstr "Copiado!"
 
-#: templates/pages/app/schedule/main.html:39
+#: templates/pages/app/schedule/main.html:26
+msgid "Self-Schedule"
+msgstr "Autoagendamento"
+
+#: templates/pages/app/schedule/main.html:38
 msgid "Falha ao copiar link"
 msgstr "Falha ao copiar link"
 
-#: templates/pages/app/schedule/main.html:40
+#: templates/pages/app/schedule/main.html:39
 msgid "Error copying link. Please copy manually."
 msgstr "Erro ao copiar o link. Por favor, copie manualmente."
 
@@ -758,31 +832,63 @@ msgstr " Buscar"
 msgid "New Availability"
 msgstr "Nova Disponibilidade"
 
-#: templates/pages/app/schedule/settings/config/index.html:9
+#: templates/pages/app/schedule/settings/config/index.html:10
+msgid "Company Settings"
+msgstr "Configurações da Empresa"
+
+#: templates/pages/app/schedule/settings/config/index.html:13
+msgid "Update your company identity profile and public images."
+msgstr "Atualize o perfil de identidade da sua empresa e imagens públicas."
+
+#: templates/pages/app/schedule/settings/config/index.html:22
 msgid "Company name"
 msgstr "Nome da empresa"
 
-#: templates/pages/app/schedule/settings/config/index.html:11
+#: templates/pages/app/schedule/settings/config/index.html:25
 msgid "Ex: My company LTDA"
 msgstr "Ex: Minha empresa LTDA"
 
-#: templates/pages/app/schedule/settings/config/index.html:19
-msgid "Comany image logo"
+#: templates/pages/app/schedule/settings/config/index.html:34
+msgid "Company logo"
 msgstr "Logotipo da empresa"
 
-#: templates/pages/app/schedule/settings/config/index.html:35
+#: templates/pages/app/schedule/settings/config/index.html:39
+msgid "Current logo:"
+msgstr "Logo atual:"
+
+#: templates/pages/app/schedule/settings/config/index.html:47
+msgid "Company Logo"
+msgstr "Logotipo da Empresa"
+
+#: templates/pages/app/schedule/settings/config/index.html:60
 msgid "Background image"
 msgstr "Imagem de fundo"
 
-#: templates/pages/app/schedule/settings/config/index.html:57
+#: templates/pages/app/schedule/settings/config/index.html:65
+msgid "Current background:"
+msgstr "Fundo atual:"
+
+#: templates/pages/app/schedule/settings/config/index.html:74
+msgid "Background Image"
+msgstr "Imagem de Fundo"
+
+#: templates/pages/app/schedule/settings/config/index.html:93
 msgid "Save configurations"
 msgstr "Salvar configurações"
 
-#: templates/pages/app/schedule/settings/config/index.html:94
+#: templates/pages/app/schedule/settings/config/index.html:138
+msgid "New logo selected:"
+msgstr "Nova logo selecionada:"
+
+#: templates/pages/app/schedule/settings/config/index.html:139
+msgid "New background selected:"
+msgstr "Novo fundo selecionado:"
+
+#: templates/pages/app/schedule/settings/config/index.html:163
 msgid "Configurations updated"
 msgstr "Configurações atualizadas"
 
-#: templates/pages/app/schedule/settings/config/index.html:97
+#: templates/pages/app/schedule/settings/config/index.html:166
 msgid "Error in save"
 msgstr "Erro ao salvar"
 
@@ -827,6 +933,7 @@ msgid "Select an option"
 msgstr "Selecione uma opção"
 
 #: templates/pages/app/self_scheduling/layouts/choice.html:29
+#: templates/pages/app/self_scheduling/resource.html:9
 msgid "Select one of the items below"
 msgstr "Selecione um dos itens abaixo"
 
@@ -835,15 +942,13 @@ msgstr "Selecione um dos itens abaixo"
 msgid "Selecione um %(parent_name)s"
 msgstr "Selecione um %(parent_name)s"
 
-#: templates/pages/app/self_scheduling/resource.html:9
-#, fuzzy
-#| msgid "Select one of the items below"
-msgid "Select one of the options below"
-msgstr "Selecione um dos itens abaixo"
-
 #: templates/pages/app/self_scheduling/resource.html:35
 msgid "Click to advance."
 msgstr "Clique para avançar."
+
+#: templates/pages/app/self_scheduling/resource.html:49
+msgid "I have no preference."
+msgstr "Não tenho preferência."
 
 #: templates/pages/app/self_scheduling/services.html:3
 msgid "Available Services"
@@ -966,10 +1071,14 @@ msgstr "Aguarde"
 msgid "s para reenviar"
 msgstr "s para reenviar"
 
-#, fuzzy
-#~| msgid "Available Times"
+#~ msgid "Comprovante de Agendamento - Confirmação"
+#~ msgstr "Comprovante de Agendamento - Confirmação"
+
+#~ msgid "Select one of the options below"
+#~ msgstr "Selecione uma das opções abaixo"
+
 #~ msgid "Show all available times"
-#~ msgstr "Horários Disponíveis"
+#~ msgstr "Mostrar todos os horários disponíveis"
 
 #~ msgid "Use as category."
 #~ msgstr "Usar como categoria."
