@@ -159,3 +159,46 @@ class SendEmail:
             )
             
         return True
+
+    def send_email_manager_reminder(self, manager_user, system_link):
+        """
+        Envia um e-mail de lembrete para o gerente atualizar a grade de horários disponíveis.
+        Desenvolvido para rodar fora do ciclo HTTP (crontab, celery, etc).
+        """
+        with translation.override(settings.LANGUAGE_CODE):
+            from_email = os.environ.get('EMAIL_HOST_USER', 'no-reply@seu-dominio.com')
+            recipient = manager_user.email
+
+            template_context = {
+                'manager_user': manager_user,
+                'system_link': system_link,
+            }
+
+            # Assunto internacionalizado
+            subject = _("Action Required: Update your availability schedule")
+
+            # Fallback em texto plano
+            message_txt = _(
+                "Hello, {username}.\n\n"
+                "This is a reminder for you to update your availability schedule for the upcoming days.\n"
+                "Keeping your schedule updated ensures clients can book your services without conflicts.\n\n"
+                "Access the platform to update your hours:\n"
+                "{system_link}\n\n"
+                "Best regards!"
+            ).format(
+                username=manager_user.username,
+                system_link=system_link
+            )
+
+            # Renderização do HTML baseado no seu padrão DaisyUI
+            html_message = render_to_string('emails/manager_reminder/index.html', template_context)
+
+            send_mail(
+                subject=subject,
+                message=message_txt,
+                from_email=from_email,
+                recipient_list=[recipient],
+                html_message=html_message
+            )
+            
+        return True
