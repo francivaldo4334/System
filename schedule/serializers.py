@@ -32,7 +32,7 @@ class ResourceSerializer(serializers.ModelSerializer):
         name = _(obj.name)
         if obj.parent:
             prefix = self.get_label(obj.parent) # type:ignore
-            return  f'{prefix} / {_(name)}'
+            return  f'{prefix} / {name}'
         return name
 
 

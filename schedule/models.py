@@ -54,15 +54,14 @@ class Resource(TimeStampedModel, ActivatorModel):
         return super().save(*args, **kwargs)
 
     def get_next_code(self):
-        last = self.__class__.objects.order_by('-id').first()
-        last_id = last.id if last else 0
+        novo_uuid = str(uuid4())
 
         if self.is_selectable:
             if not self.parent:
                 raise ValidationError({'parent': _('Enter a valid value.')})
-            return f'{self.parent.code}.{last_id + 1}'
+            return f'{self.parent.code}{novo_uuid}'
 
-        return last_id + 1;
+        return novo_uuid
 
 class ResourceNotSelectable(Resource):
     class Manager(models.Manager):
