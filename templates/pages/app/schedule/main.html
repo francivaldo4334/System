@@ -9,7 +9,7 @@
         {% url 'self_scheduling' as schedule_url %}
         <button class="btn btn-xs sm:btn-sm [&>svg]:w-4 js-copy-btn" id="id_btn_link_copy"
             data-clipboard-text="{{ request.get_host }}{{ schedule_url }}">
-            <span class="btn-text">{% trans "Schedule-link" %}</span>
+            <span class="btn-text"></span>
             {% include "icons/link.svg" %}
         </button>
 
