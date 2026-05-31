@@ -379,6 +379,7 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
     def _get_resource_step_context(self):
         """Encapsula a lógica complexa do Step 2 sem alterar o funcionamento."""
         from schedule.models import Service, ResourceSelectable
+        from django.db.models import Q
         
         service_pk = self.request.GET.get('service', 0)
         service = get_object_or_404(Service, pk=service_pk)
@@ -397,9 +398,13 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             return {}
 
         parent = required_resources[current_idx]
-        resources = ResourceSelectable.objects.filter(parent=parent).values(
+        resources = ResourceSelectable.objects.filter(
+            Q(resourceoccupation__isnull=True) |
+            Q(resourceoccupation__bitmap__icontains="0"),
+            parent=parent,
+        ).values(
             'id', 'name'
-        )
+        ).distinct()
         if parent.is_optional_choice:
             random_resource = resources.order_by('?').first()
         else:
