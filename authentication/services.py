@@ -142,9 +142,6 @@ class SendEmail:
 
             html_message = render_to_string('emails/assignment_reminder/index.html', template_context)
 
-            # O destinatário deve ser obtido de acordo com a estrutura do seu model assignment
-            # Exemplo: assignment.client.email ou assignment.user.email
-            # 
             user_resource = assignment.resources.all().filter(
                 parent__code="client"
             ).first()
