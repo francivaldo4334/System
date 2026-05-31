@@ -1,65 +1,102 @@
 {% extends "layouts/base.html" %}
 
 {% block body %}
-<div class="container mx-auto max-w-3xl p-6">
-    <div class="card-body">
-        <form id="company-settings-form" class="space-y-6">
-            <div class="form-control w-full">
-                <label class="label" for="company_name">
-                    <span class="label-text font-semibold">{%trans "Company name"%}</span>
-                </label>
-                <input type="text" id="company_name" name="company_name" placeholder="{%trans 'Ex: My company LTDA'%}"
-                    value="{{config.company_name}}" required class="input input-bordered w-full focus:input-primary" />
+<div class="container mx-auto max-w-3xl p-4 md:p-6">
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+        <div class="card-body gap-6">
+
+            <div>
+                <h2 class="card-title text-2xl font-bold text-base-content">
+                    {% trans "Company Settings" %}
+                </h2>
+                <p class="text-sm text-base-content/70">
+                    {% trans "Update your company identity profile and public images." %}
+                </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="divider my-0"></div>
 
+            <form id="company-settings-form" class="space-y-6">
                 <div class="form-control w-full">
-                    <label class="label" for="company_image">
-                        <span class="label-text font-semibold">{% trans "Comany image logo"%}</span>
+                    <label class="label font-semibold" for="company_name">
+                        <span class="label-text">{% trans "Company name" %}</span>
                     </label>
-                    {% if config.company_image %}
-                    <div class="mb-2 avatar flex flex-col">
-                        <div class="w-24 rounded ring ring-secondary ring-offset-base-100 ring-offset-2">
-                            <img src="{{ config.company_image.url }}" alt="Background Atual" />
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    <input type="file" id="company_image" name="company_image"
-                        class="file-input file-input-bordered file-input-primary w-full" accept="image/*" />
+                    <input type="text" id="company_name" name="company_name"
+                        placeholder="{% trans 'Ex: My company LTDA' %}" value="{{ config.company_name }}" required
+                        class="input input-bordered w-full focus:input-primary" />
                 </div>
 
-                <div class="form-control w-full">
-                    <label class="label" for="background_image">
-                        <span class="label-text font-semibold">{% trans "Background image"%}</span>
-                    </label>
-                    {% if config.background_image %}
-                    <div class="mb-2 avatar flex flex-col">
-                        <div class="w-24 rounded ring ring-secondary ring-offset-base-100 ring-offset-2">
-                            <img src="{{ config.background_image.url }}" alt="Background Atual" />
-                        </div>
-                    </div>
-                    {% endif %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    <input type="file" id="background_image" name="background_image"
-                        class="file-input file-input-bordered file-input-secondary w-full" accept="image/*" />
+                    <div class="form-control w-full flex flex-col justify-between">
+                        <div>
+                            <label class="label font-semibold" for="company_image">
+                                <span class="label-text">{% trans "Company logo" %}</span>
+                            </label>
+
+                            <div class="mb-3 flex flex-col items-start gap-1">
+                                <span class="text-xs text-base-content/60" id="label-company-preview">
+                                    {% if config.company_image %}{% trans "Current logo:" %}{% else %}{% trans "Preview
+                                    logo:" %}{% endif %}
+                                </span>
+                                <div class="avatar {% if not config.company_image %}hidden{% endif %}"
+                                    id="avatar-company-container">
+                                    <div
+                                        class="w-24 h-24 rounded-lg ring ring-primary ring-offset-base-100 ring-offset-2">
+                                        <img id="img-preview-company" src="{{ config.company_image.url|default:'' }}"
+                                            alt="{% trans 'Company Logo' %}" class="object-cover w-full h-full" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="file" id="company_image" name="company_image"
+                            class="file-input file-input-bordered file-input-primary w-full mt-auto" accept="image/*" />
+                    </div>
+
+                    <div class="form-control w-full flex flex-col justify-between">
+                        <div>
+                            <label class="label font-semibold" for="background_image">
+                                <span class="label-text">{% trans "Background image" %}</span>
+                            </label>
+
+                            <div class="mb-3 flex flex-col items-start gap-1">
+                                <span class="text-xs text-base-content/60" id="label-background-preview">
+                                    {% if config.background_image %}{% trans "Current background:" %}{% else %}{% trans
+                                    "Preview background:" %}{% endif %}
+                                </span>
+                                <div class="avatar w-full {% if not config.background_image %}hidden{% endif %}"
+                                    id="avatar-background-container">
+                                    <div
+                                        class="w-full h-24 rounded-lg ring ring-secondary ring-offset-base-100 ring-offset-2">
+                                        <img id="img-preview-background"
+                                            src="{{ config.background_image.url|default:'' }}"
+                                            alt="{% trans 'Background Image' %}" class="object-cover w-full h-full" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="file" id="background_image" name="background_image"
+                            class="file-input file-input-bordered file-input-secondary w-full mt-auto"
+                            accept="image/*" />
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="divider"></div>
 
-            <div class="divider"></div>
+                <div class="card-actions justify-end">
+                    <button type="submit" class="btn btn-primary min-w-[180px]" id="btn_save_config">
+                        <span id="btn-text" class="flex gap-2 items-center justify-center">
+                            {% include 'icons/check-check.svg' %}
+                            {% trans 'Save configurations' %}
+                        </span>
+                    </button>
+                </div>
 
-            <div class="card-actions justify-end">
-                <button type="submit" class="btn btn-primary" id="btn_save_config">
-                    <span id="btn-text" class="flex gap-2 items-center">
-                        {%include 'icons/check-check.svg'%}
-                        {% trans 'Save configurations'%}
-                    </span>
-                </button>
-            </div>
-
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -70,6 +107,38 @@
     $s.subscribe('isSaving', btn, null, (v) => {
         btn.classList.toggle('loading', v)
     })
+
+    // --- NOVA LÓGICA DE PREVIEW EM TEMPO REAL ---
+    const setupLivePreview = (inputId, imgId, containerId, labelId, newLabelText) => {
+        const input = document.getElementById(inputId);
+        const img = document.getElementById(imgId);
+        const container = document.getElementById(containerId);
+        const label = document.getElementById(labelId);
+
+        if (input && img && container) {
+            input._previewHandler = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    // Cria uma URL temporária local para o arquivo selecionado
+                    const blobUrl = URL.createObjectURL(file);
+                    img.src = blobUrl;
+                    
+                    // Remove a classe hidden do DaisyUI para exibir o componente caso estivesse oculto
+                    container.classList.remove('hidden');
+                    
+                    // Opcional: Atualiza o texto indicando que é uma nova imagem selecionada
+                    if (label) label.textContent = newLabelText;
+                }
+            };
+            input.addEventListener('change', input._previewHandler);
+        }
+    };
+
+    // Inicializa o listener de alteração para os dois campos de imagem
+    setupLivePreview('company_image', 'img-preview-company', 'avatar-company-container', 'label-company-preview', '{% trans "New logo selected:" %}');
+    setupLivePreview('background_image', 'img-preview-background', 'avatar-background-container', 'label-background-preview', '{% trans "New background selected:" %}');
+    // --------------------------------------------
+
     const form = document.getElementById('company-settings-form')
     if (form) {
         form._handler = (event) => {
@@ -85,16 +154,16 @@
             $q.use(
                 ['app-config'],
                 () => $r.patch(
-                    '{%url "app-config"%}',
+                    '{% url "app-config" %}',
                     data,
                     {'X-CSRFToken': '{{csrf_token}}'}
                 ),
                 {
                     onSuccess(){
-                     toastSuccess('{%trans "Configurations updated"%}')   
+                      toastSuccess('{% trans "Configurations updated" %}')   
                     },
                     onError(){
-                      toastError("{%trans 'Error in save'%}")
+                      toastError("{% trans 'Error in save' %}")
                     },
                     onFinally(){
                         $s.set('isSaving', false)
@@ -107,12 +176,26 @@
     }
 }
 </script>
+
 <script is="exec-unmount" type="pass">
 {
     const form = document.getElementById('company-settings-form')
     if (form && form._handler){
         form.removeEventListener('submit', form._handler);
         delete form._handler
+    }
+
+    // Limpeza dos eventos de preview para evitar vazamento de memória (Memory Leak)
+    const companyInput = document.getElementById('company_image');
+    if (companyInput && companyInput._previewHandler) {
+        companyInput.removeEventListener('change', companyInput._previewHandler);
+        delete companyInput._previewHandler;
+    }
+
+    const bgInput = document.getElementById('background_image');
+    if (bgInput && bgInput._previewHandler) {
+        bgInput.removeEventListener('change', bgInput._previewHandler);
+        delete bgInput._previewHandler;
     }
 }
 </script>
