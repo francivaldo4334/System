@@ -1,9 +1,11 @@
 import os
 from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.utils import translation
 
 from schedule.utils import slot_to_time
 
@@ -33,18 +35,18 @@ class SendEmail:
         }
 
         # 1. Assunto do E-mail internacionalizado
-        subject = _("Comprovante de Agendamento - Confirmação")
+        subject = _("Appointment Confirmation")
 
         # 2. Texto de Fallback (Puro) internacionalizado usando .format()
         message_txt = _(
-            "Olá, {username}.\n\n"
-            "Seu agendamento foi confirmado com sucesso!\n\n"
-            "Detalhes do Agendamento:\n"
-            " Horário: {time_range}\n"
-            " Recurso(s): {resources}\n\n"
-            "Você pode baixar o seu comprovante em PDF acessando o link abaixo:\n"
+            "Hello, {username}.\n\n"
+            "Your appointment has been successfully confirmed!\n\n"
+            "Scheduling Details:\n"
+            " Time: {time_range}\n"
+            " Resource(s): {resources}\n\n"
+            "You can download your receipt as a PDF by accessing the link below:\n"
             "{download_link}\n\n"
-            "Obrigado!"
+            "Thanks!"
         ).format(
             username=user.username,
             time_range=time_range,
@@ -105,4 +107,56 @@ class SendEmail:
             html_message=html_message
         )
         
+        return True
+    def send_email_reminder(self, assignment, days_remaining):
+        with translation.override(settings.LANGUAGE_CODE):
+            start_time = slot_to_time(assignment.start_slot)
+            end_slot = assignment.start_slot + assignment.duration_slot
+            end_time = slot_to_time(end_slot)
+
+            time_range = f"{start_time.strftime('%H:%M')} - {end_time.strftime('%H:%M')}"
+            resources = ", ".join([r.name for r in assignment.resources.all()])
+            from_email = os.environ.get('EMAIL_HOST_USER', 'no-reply@seu-dominio.com')
+
+            template_context = {
+                'assignment': assignment,
+                'dynamic_time_range': time_range,
+                'resource_names': resources,
+                'days_remaining': days_remaining,
+            }
+
+            subject = _("Reminder: Your appointment is approaching")
+
+            message_txt = _(
+                "Hello.\n\n"
+                "This is a reminder that your appointment is approaching in {days_remaining} day(s).\n\n"
+                "Scheduling Details:\n"
+                " Time: {time_range}\n"
+                " Resource(s): {resources}\n\n"
+                "See you soon!"
+            ).format(
+                days_remaining=days_remaining,
+                time_range=time_range,
+                resources=resources,
+            )
+
+            html_message = render_to_string('emails/assignment_reminder/index.html', template_context)
+
+            # O destinatário deve ser obtido de acordo com a estrutura do seu model assignment
+            # Exemplo: assignment.client.email ou assignment.user.email
+            # 
+            user_resource = assignment.resources.all().filter(
+                parent__code="client"
+            ).first()
+            user = user_resource.content_object
+            recipient = user.email 
+
+            send_mail(
+                subject=subject,
+                message=message_txt,
+                from_email=from_email,
+                recipient_list=[recipient],
+                html_message=html_message
+            )
+            
         return True
