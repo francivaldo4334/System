@@ -9,13 +9,15 @@
             form._handlerCreate = (event) => {
                 event.preventDefault();
                 const data = $u.getDataByForm(event.target);
+                let url = "";
+                {%if request.GET.key%}
+                url = "{% url create.post_url_name resource_code=request.GET.key %}",
+                {%else%}
+                url = "{% url create.post_url_name %}",
+                {%endif%}
                 $q.use("{{create.post_url_name}}",
                     () => $r.post(
-                        {%if request.GET.key%}
-                        "{% url create.post_url_name resource_code=request.GET.key %}",
-                        {%else%}
-                        "{% url create.post_url_name %}",
-                        {%endif%}
+                        url
                         data,
                         {"X-CSRFToken": "{{csrf_token}}"},
                     ),
