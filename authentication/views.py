@@ -1,7 +1,6 @@
 import os
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import default_token_generator
-from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -11,6 +10,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from authentication.services import SendEmail
 from django.utils.translation import gettext_lazy as _
@@ -108,14 +108,15 @@ class EmailViewSet(viewsets.ViewSet):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class TriggerClientRemindersView(View):
+class TriggerClientRemindersAPIView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
         # 1. Proteção por Token
         auth_token = request.headers.get('Authorization')
         expected_token = os.environ.get('CRON_SECRET_TOKEN', 'token-super-seguro-local')
         
         if auth_token != f"Bearer {expected_token}":
-            return HttpResponseForbidden("Não autorizado.")
+            return Response("Não autorizado.", status.HTTP_401_UNAUTHORIZED)
 
         notifier = SendEmail()
         today = timezone.now().date()
@@ -154,7 +155,7 @@ class TriggerClientRemindersView(View):
             for manager in managers:
                 notifier.send_email_manager_reminder(manager_user=manager)
 
-        return JsonResponse({
+        return Response({
             "status": "success", 
             "message": "Processamento de lembretes de clientes e gerentes concluído."
         })
