@@ -400,6 +400,10 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
         resources = ResourceSelectable.objects.filter(parent=parent).values(
             'id', 'name'
         )
+        if parent.is_optional_choice:
+            random_resource = resources.order_by('?').first()
+        else:
+            random_resource = None
         
         # Lógica de transição
         is_last_resource = (current_idx == total_resources - 1)
@@ -408,7 +412,8 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             'resources': list(resources),
             'parent': parent,
             'next_step': '3' if is_last_resource else '2',
-            'next_resource_step': (current_idx + 1) % total_resources
+            'next_resource_step': (current_idx + 1) % total_resources,
+            'random_resource': random_resource
         }
 
 from rest_framework.views import APIView

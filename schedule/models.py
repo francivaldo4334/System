@@ -29,6 +29,9 @@ class Resource(TimeStampedModel, ActivatorModel):
     object_id = models.PositiveBigIntegerField(blank=True, null=True)
     content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
     content_object = GenericForeignKey()
+    is_optional_choice = models.BooleanField(
+        default=False
+    )
     class Meta:
         ordering = ('parent_id','code')
         indexes = [

@@ -43,7 +43,31 @@
             li.appendChild(a)
             frag.appendChild(li)
         }
+        //{% if random_resource %}
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.innerText = "{%trans 'I have no preference.'%}";
+        const ids = [...baseIds];
+        const r_id = "{{random_resource.id}}"
+        if (!ids.includes(r_id)) {
+            ids.push(r_id);
+        }
+        const params = new URLSearchParams({
+            step: '{{ next_step|escapejs }}',
+            service: currentService,
+            required_resource_step: '{{ next_resource_step|escapejs }}',
+            resource: ids.join(',')
+        });
 
+        a.href = `{% url "self_scheduling" %}?${params.toString()}`;
+        li.appendChild(a);
+        if (typeof $s !== 'undefined' && $s.subscribe) {
+            $s.subscribe('form.service', li, null, (value) => {
+                li.classList.toggle('menu-active', value === r_id);
+            });
+        }
+        frag.appendChild(li);
+        //{% endif %}
         // 3. Loop puro em JS (Gera um HTML final muito menor e mais limpo)
         resources.forEach(it => {
             const li = document.createElement('li');
