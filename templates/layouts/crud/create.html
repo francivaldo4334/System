@@ -1,7 +1,9 @@
-<button class="btn btn-sm btn-primary" onclick="document.getElementById('id_{{key}}_btn_add_modal').showModal()">
-    {% include "icons/plus.svg" %}
-    {% trans "Add" %}
-</button>
+<div class="max-sm:fab">
+    <button class="btn btn-sm btn-primary" onclick="document.getElementById('id_{{key}}_btn_add_modal').showModal()">
+        {% include "icons/plus.svg" %}
+        {% trans "Add" %}
+    </button>
+</div>
 <script is="exec-mount" type="pass">
     {
         const form = document.getElementById("id_{{key}}_create_form");
@@ -17,7 +19,7 @@
                 {%endif%}
                 $q.use("{{create.post_url_name}}",
                     () => $r.post(
-                        url
+                        url,
                         data,
                         {"X-CSRFToken": "{{csrf_token}}"},
                     ),
