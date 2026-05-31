@@ -50,7 +50,7 @@ class AppView(PermissionRequiredMixin,
             app_template_name_options.append({
                 'url_name': 'app-schedule-settings',
                 'title': _('Settings'),
-                'icon_template_name': 'icons/calendar-cog.svg'
+                'icon_template_name': 'icons/settings.svg'
             })
             
 
