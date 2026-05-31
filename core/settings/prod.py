@@ -1,19 +1,3 @@
-# DEBUG = False
-# ALLOWED_HOSTS = ['meudominio.com.br']
-# ROOT_URLCONF = 'core.urls.dev'
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-# # Em produção (Exemplo com SMTP)
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'seu-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'sua-senha-de-aplicativo'
 from decouple import config, Csv
 from pathlib import Path
 
