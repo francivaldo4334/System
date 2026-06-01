@@ -8,18 +8,32 @@ SECRET_KEY = 'django-insecure-bnmi0)ty27mdj4@illix3%f=56i6%iyhiyfe)vu!n_-u$vy0(c
 TEMPLATE_CONTEXT_PROCESSORS = [
     "django.template.context_processors.request",
 ]
-INSTALLED_APPS = [
+SHARED_APPS = (
+    'django_tenants',
+    'django.contrib.contenttypes',
+    'customer'
+)
+
+TENANT_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    'rest_framework',
+    'django_filters',
     'authentication',
-]
+    'uri',
+    'schedule',
+    'core',
+    'app',
+)
+
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
+    # 'django_tenants.middleware.main.TenantMainMiddleware',
+    'django_tenants.middleware.TenantSubfolderMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -96,3 +110,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'authentication.CustomUser'
+
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)
+TENANT_MODEL = "customer.Client"
+
+TENANT_DOMAIN_MODEL = "customer.Domain"

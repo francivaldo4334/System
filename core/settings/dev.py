@@ -16,10 +16,10 @@ ROOT_URLCONF = 'core.urls.dev'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': config('DB_NAME','ponto_agio_prod'),
+        'USER': config('DB_USER', 'ponto_agio_admin'),
+        'PASSWORD': config('DB_PASSWORD','uma_senha_forte_aqui'),
         'HOST': config('DB_HOST', default='127.0.0.1'),
         'PORT': config('DB_PORT', default='5432', cast=int),
     }

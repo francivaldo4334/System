@@ -1,12 +1,3 @@
-from .base import INSTALLED_APPS
-INSTALLED_APPS += [
-    'rest_framework',
-    'django_filters',
-    'uri',
-    'schedule',
-    # 'sale',
-    # 'stock',
-]
 # Django Restframework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

@@ -1,3 +1,6 @@
+from .base import *
+from .ssr import *
+from .api import *
 from decouple import config, Csv
 from pathlib import Path
 
@@ -9,7 +12,8 @@ ROOT_URLCONF = config('ROOT_URLCONF', default='core.urls.dev')
 # Banco de Dados
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_tenants.postgresql_backend',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
