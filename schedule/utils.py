@@ -33,7 +33,14 @@ class AssignmentUtil:
             raise ServiceIsRequired();
 
         service: Service = self.assignment.service
-        service_requirements: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service))
+        service_requirements: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service, resource_type__is_auto_choice=False))
+        auto_choice_resources: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service, resource_type__is_auto_choice=True))
+        #seleciona os recursos de escolha automatica
+        for r in auto_choice_resources:
+            s_r = r.childrens.order_by('?').first()
+            if not s_r:
+                raise ResourceNotAllowed()
+            self.assignment.resources.add(s_r)
         resources:List[ResourceSelectable] = list(self.assignment.resources.all())
         for service_requirement in service_requirements:
             resource_count = len([it for it in resources if it.parent_id == service_requirement.resource_type_id])

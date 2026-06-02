@@ -32,6 +32,9 @@ class Resource(TimeStampedModel, ActivatorModel):
     is_optional_choice = models.BooleanField(
         default=False
     )
+    is_auto_choice = models.BooleanField(
+        default=False
+    )
     class Meta:
         ordering = ('parent_id','code')
         indexes = [
