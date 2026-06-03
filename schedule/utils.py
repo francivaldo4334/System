@@ -42,7 +42,7 @@ class AssignmentUtil:
                 resources_to_add.append(s_r)
 
             current_resources = list(self.assignment.resources.all())
-            all_resources_provisional = current_resources + resources_to_add
+            all_resources_provisional = current_resources
 
             for req in service_requirements:
                 resource_count = sum(1 for it in all_resources_provisional if it.parent_id == req.resource_type_id)
