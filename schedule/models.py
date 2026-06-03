@@ -95,6 +95,10 @@ class ResourceChoicedToClient(Resource):
         def get_queryset(self):
             return super().get_queryset().exclude(
                 choice_type=Resource.ChoiceType.INVISIBLE_FOR_CLIENT.value
+            ).filter(is_selectable=False)
+        def for_service(self, service):
+            return self.get_queryset().filter(
+                serviceresourcerelation__service=service
             )
     objects = Manager()
     class Meta:

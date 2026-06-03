@@ -378,14 +378,15 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
 
     def _get_resource_step_context(self):
         """Encapsula a lógica complexa do Step 2 sem alterar o funcionamento."""
-        from schedule.models import Service, ResourceSelectable
+        from schedule.models import Service, ResourceSelectable, ResourceChoicedToClient
         from django.db.models import Q
         
         service_pk = self.request.GET.get('service', 0)
         service = get_object_or_404(Service, pk=service_pk)
         
         # Filtro de recursos necessários
-        required_resources = list(service.required_resources.exclude(code__icontains='client'))
+        required_resources = list(ResourceChoicedToClient.objects.for_service(service).exclude(code__icontains='client'))
+        # required_resources = list(service.required_resources.exclude(code__icontains='client'))
         total_resources = len(required_resources)
         
         try:
