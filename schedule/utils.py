@@ -1,7 +1,3 @@
-# pyright: reportAssignmentType=false
-# pyright: reportAttributeAccessIssue=false
-# pyright: reportArgumentType=false
-# Exceptions
 
 import datetime
 from typing import List, cast
@@ -27,33 +23,41 @@ class AssignmentUtil:
         self.assignment = cast(Assignment,assigment);
 
     def checkServiceRequirements(self):
-        from schedule.models import Service, ServiceResourceRelation, ResourceSelectable
+            from schedule.models import Service, ServiceResourceRelation, ResourceSelectable, Resource
 
-        if not isinstance(self.assignment.service, Service):
-            raise ServiceIsRequired();
+            if not isinstance(self.assignment.service, Service):
+                raise ServiceIsRequired()
 
-        service: Service = self.assignment.service
-        service_requirements: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service, resource_type__is_auto_choice=False))
-        auto_choice_resources: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service, resource_type__is_auto_choice=True))
-        #seleciona os recursos de escolha automatica
-        for r in auto_choice_resources:
-            s_r = ResourceSelectable.objects.filter(
-                parent=r.resource_type,
-            ).order_by('?').first()
-            if not s_r:
+            service: Service = self.assignment.service
+            requirements = ServiceResourceRelation.objects.filter(service=service)
+            service_requirements = [r for r in requirements if not r.resource_type.is_auto_choice]
+            auto_choice_resources = [r for r in requirements if r.resource_type.is_auto_choice]
+
+            resources_to_add = []
+            for r in auto_choice_resources:
+                s_r = ResourceSelectable.objects.filter(parent=r.resource_type).order_by('?').first()
+                if not s_r:
+                    raise ResourceNotAllowed()
+            
+                resources_to_add.append(s_r)
+
+            current_resources = list(self.assignment.resources.all())
+            all_resources_provisional = current_resources + resources_to_add
+
+            for req in service_requirements:
+                resource_count = sum(1 for it in all_resources_provisional if it.parent_id == req.resource_type_id)
+                if resource_count != req.quantity:
+                    raise ReourceQuantityNotEguals()
+
+            total_required_resources = sum(it.quantity for it in service_requirements)
+            total_expected = total_required_resources + len(auto_choice_resources) 
+
+            if len(all_resources_provisional) != total_expected:
                 raise ResourceNotAllowed()
-            self.assignment.resources.add(s_r)
-        resources:List[ResourceSelectable] = list(self.assignment.resources.all())
-        for service_requirement in service_requirements:
-            resource_count = len([it for it in resources if it.parent_id == service_requirement.resource_type_id])
-            if resource_count != service_requirement.quantity:
-                raise ReourceQuantityNotEguals()
 
-        total_required_resources = sum([it.quantity for it in service_requirements]);
-        total_resources = len(resources)
-        if total_required_resources != total_resources:
-            raise ResourceNotAllowed()
-        
+            if resources_to_add:
+                self.assignment.resources.add(*resources_to_add)        
+
     def checkResourceOccupations(self):
         from schedule.models import ResourceSelectable, ResourceOccupation
 
