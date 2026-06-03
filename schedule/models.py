@@ -38,11 +38,21 @@ class Resource(TimeStampedModel, ActivatorModel):
     object_id = models.PositiveBigIntegerField(blank=True, null=True)
     content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
     content_object = GenericForeignKey()
-    is_optional_choice = models.BooleanField(
-        default=False
+    is_optional_choice = models.GeneratedField(
+        expression=models.ExpressionWrapper(
+            models.Q(choice_type=ChoiceType.OPTIONAL_FOR_CLIENT.value),
+            output_field=models.BooleanField()
+        ),
+        output_field=models.BooleanField(),
+        db_persist=True,
     )
-    is_auto_choice = models.BooleanField(
-        default=False
+    is_auto_choice = models.GeneratedField(
+        expression=models.ExpressionWrapper(
+            models.Q(choice_type=ChoiceType.INVISIBLE_FOR_CLIENT.value),
+            output_field=models.BooleanField()
+        ),
+        output_field=models.BooleanField(),
+        db_persist=True,
     )
     class Meta:
         ordering = ('parent_id','code')
