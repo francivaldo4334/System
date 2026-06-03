@@ -1,38 +1,55 @@
 const queryCacheFactory = () => {
-  // Armazena os dados, timestamps e os timers de expiração
+  // Armazena os dados codificados como string para evitar problemas de referência
   const cache = new Map();
-  // Armazena promessas em voo para evitar Race Conditions (Request Collapsing)
   const inFlightRequests = new Map();
-  // Armazena as funções de busca (queryFn) originais para permitir o refetch manual
+  
+  // O registry agora guarda a chave original (array) para permitir a busca por prefixo
   const registry = new Map();
 
-  const refetch = async (queryKey) => {
-    const registered = registry.get(queryKey);
-    if (!registered) {
-      console.warn(`Nenhuma query registrada para a chave: ${queryKey}`);
-      return null;
+  // Função utilitária para serializar arrays de forma consistente
+  const serializeKey = (key) => JSON.stringify(Array.isArray(key) ? key : [key]);
+
+  const refetch = async (_queryKey) => {
+    const queryKey = Array.isArray(_queryKey) ? _queryKey : [_queryKey];
+    
+    const promises = [];
+
+    // Varre o registro para encontrar todas as chaves que iniciam com o prefixo fornecido
+    for (const [serializedKey, registered] of registry.entries()) {
+      const registeredKey = registered.originalKey;
+
+      // Verifica se a chave registrada possui o prefixo da query informada
+      const isMatch = queryKey.every((part, index) => registeredKey[index] === part);
+
+      if (isMatch) {
+        promises.push(
+          executeQuery(serializedKey, registered.queryFn, registered.callbacks)
+        );
+      }
     }
 
-    // Força a execução ignorando o cache existente
-    return executeQuery(queryKey, registered.queryFn, registered.callbacks);
+    if (promises.length === 0) {
+      console.warn(`Nenhuma query encontrada para o prefixo: ${JSON.stringify(queryKey)}`);
+      return [];
+    }
+
+    // Executa todos os refetches do grupo em paralelo
+    return Promise.all(promises);
   };
 
-  // Função auxiliar centralizada para gerenciar a execução e callbacks
-  const executeQuery = async (queryKey, queryFn, callbacks = {}) => {
+  const executeQuery = async (serializedKey, queryFn, callbacks = {}) => {
     const { onSuccess, onError, onFinally } = callbacks;
 
-    // Se já existe uma requisição idêntica em andamento, reaproveita a mesma promessa
-    if (inFlightRequests.has(queryKey)) {
-      return inFlightRequests.get(queryKey);
+    if (inFlightRequests.has(serializedKey)) {
+      return inFlightRequests.get(serializedKey);
     }
 
     const promise = (async () => {
       try {
         const data = await queryFn();
         
-        // Atualiza o cache com o timestamp atual
-        const entry = cache.get(queryKey) || {};
-        cache.set(queryKey, {
+        const entry = cache.get(serializedKey) || {};
+        cache.set(serializedKey, {
           ...entry,
           data,
           updatedAt: Date.now(),
@@ -44,49 +61,42 @@ const queryCacheFactory = () => {
         if (typeof onError === 'function') onError(error);
         throw error;
       } finally {
-        // Limpa a requisição em voo assim que terminar
-        inFlightRequests.delete(queryKey);
+        inFlightRequests.delete(serializedKey);
         if (typeof onFinally === 'function') onFinally();
       }
     })();
 
-    inFlightRequests.set(queryKey, promise);
+    inFlightRequests.set(serializedKey, promise);
     return promise;
   };
 
-  async function useQueryCache(
-    queryKey,
-    queryFn,
-    callbacks = {},
-    options = {},
-  ) {
-    const { enableRefetch:enabled = true, ttl:staleTime = 0 } = options;
+  async function useQueryCache(_queryKey, queryFn, callbacks = {}, options = {}) {
+    const queryKey = Array.isArray(_queryKey) ? _queryKey : [_queryKey];
+    const { enableRefetch: enabled = true, ttl: staleTime = 0 } = options;
 
-    // Se a query estiver desativada, não busca e não retorna dados
     if (!enabled) {
       return null;
     }
 
-    // Registra/atualiza a função e callbacks para uso posterior no refetch
-    registry.set(queryKey, { queryFn, callbacks });
+    const serializedKey = serializeKey(queryKey);
 
-    const cachedEntry = cache.get(queryKey);
+    // Registra guardando a chave original em formato de array para a lógica do prefixo
+    registry.set(serializedKey, { originalKey: queryKey, queryFn, callbacks });
+
+    const cachedEntry = cache.get(serializedKey);
     const now = Date.now();
 
-    // Verifica se o cache existe e ainda é válido com base no staleTime
     if (cachedEntry && (now - cachedEntry.updatedAt < staleTime)) {
       return cachedEntry.data;
     }
 
-    // Se o cache expirou ou não existe, executa a query
-    return executeQuery(queryKey, queryFn, callbacks);
+    return executeQuery(serializedKey, queryFn, callbacks);
   }
 
   return {
     use: useQueryCache,
     refetch,
-    // Exposto apenas para fins de debug/testes se necessário
-    _internal: { cache, registry }
+    _internal: { cache, registry, inFlightRequests }
   };
 };
 
