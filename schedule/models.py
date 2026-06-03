@@ -85,6 +85,9 @@ class Resource(TimeStampedModel, ActivatorModel):
 
         return novo_uuid
 
+    def __str__(self):
+        return self.name
+
 class ResourceChoicedToClient(Resource):
     class Manager(models.Manager):
         def get_queryset(self):
