@@ -36,15 +36,21 @@
 
                             <div class="mb-3 flex flex-col items-start gap-1">
                                 <span class="text-xs text-base-content/60" id="label-company-preview">
-                                    {% if config.company_image %}{% trans "Current logo:" %}{% else %}{% trans "Preview
-                                    logo:" %}{% endif %}
+                                    {% if config.company_image %}
+                                    {% trans "Current logo:" %}
+                                    {% else %}
+                                    {% trans "Preview logo:" %}
+                                    {% endif %}
                                 </span>
                                 <div class="avatar {% if not config.company_image %}hidden{% endif %}"
                                     id="avatar-company-container">
                                     <div
                                         class="w-24 h-24 rounded-lg ring ring-primary ring-offset-base-100 ring-offset-2">
-                                        <img id="img-preview-company" src="{{ config.company_image.url|default:'' }}"
-                                            alt="{% trans 'Company Logo' %}" class="object-cover w-full h-full" />
+                                        <img id="img-preview-company"
+                                        {% if config.company_image %}
+                                        src="{{ config.company_image.url|default:'' }}"
+                                        {% endif %}
+                                        alt="{% trans 'Company Logo' %}" class="object-cover w-full h-full" />
                                     </div>
                                 </div>
                             </div>
@@ -62,15 +68,20 @@
 
                             <div class="mb-3 flex flex-col items-start gap-1">
                                 <span class="text-xs text-base-content/60" id="label-background-preview">
-                                    {% if config.background_image %}{% trans "Current background:" %}{% else %}{% trans
-                                    "Preview background:" %}{% endif %}
+                                    {% if config.background_image %}
+                                    {% trans "Current background:" %}
+                                    {% else %}
+                                    {% trans "Preview background:" %}
+                                    {% endif %}
                                 </span>
                                 <div class="avatar w-full {% if not config.background_image %}hidden{% endif %}"
                                     id="avatar-background-container">
                                     <div
                                         class="w-full h-24 rounded-lg ring ring-secondary ring-offset-base-100 ring-offset-2">
                                         <img id="img-preview-background"
+                                            {% if config.background_image %}
                                             src="{{ config.background_image.url|default:'' }}"
+                                            {% endif %}
                                             alt="{% trans 'Background Image' %}" class="object-cover w-full h-full" />
                                     </div>
                                 </div>
