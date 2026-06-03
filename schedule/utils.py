@@ -37,7 +37,9 @@ class AssignmentUtil:
         auto_choice_resources: List[ServiceResourceRelation] = list(ServiceResourceRelation.objects.filter(service=service, resource_type__is_auto_choice=True))
         #seleciona os recursos de escolha automatica
         for r in auto_choice_resources:
-            s_r = r.childrens.order_by('?').first()
+            s_r = ResourceSelectable.objects.filter(
+                parent=r.resource_type,
+            ).order_by('?').first()
             if not s_r:
                 raise ResourceNotAllowed()
             self.assignment.resources.add(s_r)
