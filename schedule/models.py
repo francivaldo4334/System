@@ -33,7 +33,7 @@ class Resource(TimeStampedModel, ActivatorModel):
     )
     name = models.CharField()
     parent = models.ForeignKey('ResourceNotSelectable',models.PROTECT,'childrens', null=True, blank=True)
-    code = models.CharField(max_length=225, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
+    code = models.CharField(max_length=225, unique=True)
     is_selectable = models.BooleanField()
     object_id = models.PositiveBigIntegerField(blank=True, null=True)
     content_type = models.ForeignKey(ContentType, models.CASCADE, blank=True, null=True)
@@ -69,6 +69,8 @@ class Resource(TimeStampedModel, ActivatorModel):
     def save(self, *args, **kwargs):
         if self._state.adding and not self.code:
             self.code = self.get_next_code();
+        if self.parent and self.parent.choice_type:
+            self.choice_type = self.parent.choice_type
         if self.parent and self.parent.content_type:
             self.content_type = self.parent.content_type
             if not self.object_id:
