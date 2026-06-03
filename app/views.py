@@ -358,7 +358,7 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             context.update(self._get_resource_step_context())
 
         elif self.step == 5:
-            from schedule.models import Service, Resource
+            from schedule.models import Service, ResourceChoicedToClient
             service = get_object_or_404(Service, pk=self.request.GET.get('service', 0))
             resources_ids = [
                 int(it or 0)
@@ -366,7 +366,7 @@ class SelfScheduleView(LoginRequiredMixin, TemplateView):
             ]
             resources = []
             if resources_ids:
-                resources = Resource.objects.filter(pk__in=resources_ids)
+                resources = ResourceChoicedToClient.objects.filter(pk__in=resources_ids)
             context.update(
                 {
                     'service': service,

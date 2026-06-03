@@ -85,6 +85,16 @@ class Resource(TimeStampedModel, ActivatorModel):
 
         return novo_uuid
 
+class ResourceChoicedToClient(Resource):
+    class Manager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().exclude(
+                choice_type=Resource.ChoiceType.INVISIBLE_FOR_CLIENT.value
+            )
+    objects = Manager()
+    class Meta:
+        proxy = True
+
 class ResourceNotSelectable(Resource):
     class Manager(models.Manager):
         def get_queryset(self):
