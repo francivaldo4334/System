@@ -22,6 +22,15 @@ from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 class Resource(TimeStampedModel, ActivatorModel):
+    class ChoiceType(models.TextChoices):
+        REQUIRED_FOR_CLIENT = "RQC", "Escolha obrigatoria pelo cliente"
+        OPTIONAL_FOR_CLIENT = "RFC", "Escolha opcional pelo cliente"
+        INVISIBLE_FOR_CLIENT = "IFC", "Não aparece para o cliente"
+
+    choice_type = models.CharField(
+        choices=ChoiceType.choices,
+        default=ChoiceType.REQUIRED_FOR_CLIENT.value,
+    )
     name = models.CharField()
     parent = models.ForeignKey('ResourceNotSelectable',models.PROTECT,'childrens', null=True, blank=True)
     code = models.CharField(max_length=20, unique=True, validators=[RegexValidator(r'^([a-z0-9]+\.)*[a-z0-9]+\.?$')])
