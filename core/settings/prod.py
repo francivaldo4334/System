@@ -7,7 +7,7 @@ from pathlib import Path
 # Configurações Principais
 DEBUG = False
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-ROOT_URLCONF = config('ROOT_URLCONF', default='core.urls.dev')
+ROOT_URLCONF = 'core.urls.dev'
 
 # Banco de Dados
 DATABASES = {

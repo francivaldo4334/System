@@ -1,5 +1,6 @@
 FROM python:3.13-slim AS base
 
+# 1. Instala as dependências do sistema operacional (incluindo o Cron)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gnupg \
@@ -9,27 +10,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cron \
     && rm -rf /var/lib/apt/lists/*
 
-
-# Instala o 'uv' diretamente do binário oficial
+# 2. Instala o 'uv' diretamente do binário oficial
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Variáveis de ambiente para o Python e uv
+# 3. Variáveis de ambiente estáveis para o Python
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    UV_LINK_MODE=copy \
-    UV_COMPILE_BYTECODE=1 \
-    PATH="/app/.venv/bin:$PATH"
+    PYTHONUNBUFFERED=1
 
-# Copia os arquivos de dependências primeiro (otimização de cache de camada)
+# 4. Copia os arquivos de travamento (Cache de Camada)
 COPY pyproject.toml uv.lock ./
 
-# Cria o ambiente virtual e instala as dependências usando o uv
-RUN uv sync --frozen --no-install-project
+# ALTERAÇÃO AQUI: Exporta o uv.lock para requirements padrão e instala direto no sistema
+RUN uv pip compile pyproject.toml -o requirements.txt && \
+    uv pip install --system -r requirements.txt
 
+# 5. Copia o script de inicialização e o código-fonte
 COPY ./entrypoint.sh /app/entrypoint.sh
 COPY . .
+
+# 6. Garante a permissão de execução
 RUN chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
