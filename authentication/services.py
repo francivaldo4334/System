@@ -11,7 +11,17 @@ from django.utils import timezone
 
 from schedule.utils import slot_to_time
 
+def safe_try(method):
+    def _method(self,*args, **kwargs):
+        try:
+            return method(*args, **kwargs)
+        except Exception:
+            return True
+    return _method
+
+
 class SendEmail:
+    @safe_try
     def send_email_ticket(self, assignment, request, user):
         start_time = slot_to_time(assignment.start_slot)
         end_slot = assignment.start_slot + assignment.duration_slot
@@ -67,6 +77,7 @@ class SendEmail:
         )
         return True
 
+    @safe_try
     def send_email_cofirmation(self, user, request):
         uid = user.uid
         # 2. Gera o token seguro baseado no estado atual do usuário
@@ -110,6 +121,7 @@ class SendEmail:
         )
         
         return True
+    @safe_try
     def send_email_reminder(self, assignment, days_remaining):
         with translation.override(settings.LANGUAGE_CODE):
             start_time = slot_to_time(assignment.start_slot)
@@ -162,6 +174,7 @@ class SendEmail:
             
         return True
 
+    @safe_try
     def send_email_manager_reminder(self, manager_user):
         """
         Envia um e-mail de lembrete para o gerente atualizar a grade de horários disponíveis.
