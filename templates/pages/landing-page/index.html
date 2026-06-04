@@ -1,219 +1,219 @@
-{% extends 'layouts/base.html' %}
-{% block body %}
-<!-- Barra de Aviso Superior -->
-<div
-    class="alert alert-error rounded-none py-2 text-sm font-semibold flex justify-center text-center gap-2 bg-error/10 text-error border-b border-error/20">
-    <span>⚠️ Alerta de Lançamento: Apenas 5 vagas disponíveis com benefício de 30 dias gratuitos hoje.</span>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" class="scroll-smooth">
 
-<!-- Seção Hero -->
-<section class="bg-base-200 py-16 lg:py-24">
-    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div class="text-center lg:text-left">
-            <span class="text-primary text-xs font-bold tracking-wider uppercase block mb-3">
-                Gestão de Agenda para Clínicas de Estética
-            </span>
-            <h1 class="text-3xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-6">
-                O sistema de agendamento que elimina o choque de horários e atrai clientes pelo seu Instagram.
-            </h1>
-            <p class="text-base-content/80 text-lg mb-8 max-w-xl mx-auto lg:mx-0">
-                Sem configurações complexas, sem perda de tempo. Um link direto para o seu perfil que permite ao
-                cliente agendar em segundos, enquanto o sistema gerencia seus profissionais e salas automaticamente.
-            </p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Inteligente para Clínicas de Estética</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
 
-            <a href="https://wa.me/5500000000000?text=Olá!%20Vi%20a%20página%20e%20quero%20ser%20uma%20das%205%20clínicas%20a%20testar%20o%20sistema%20ÁGIO%20gratuitamente%20por%201%20mês."
-                class="btn btn-primary btn-lg shadow-lg hover:scale-[0.99] transition-transform" target="_blank"
-                rel="noopener">
-                Testar Grátis por 30 Dias →
-            </a>
-            <span class="block mt-3 text-xs italic text-base-content/60">
-                Apenas para os 5 primeiros: 1 mês gratuito, sem precisar de cartão de crédito.
-            </span>
-        </div>
+<body class="bg-base-100 text-base-content antialiased">
 
-        <!-- Mockup Visual -->
-        <div class="mockup-window border border-base-300 bg-base-100 shadow-xl">
+    <!-- ALERTA DE ESCASSEZ -->
+    <div
+        class="bg-error text-error-content px-4 py-2 text-center text-xs font-bold uppercase tracking-wide animate-pulse">
+        🔥 Restam apenas 2 vagas com teste grátis sem cartão.
+    </div>
+
+    <!-- 1. HERO -->
+    <header
+        class="relative py-16 md:py-24 bg-gradient-to-br from-base-100 via-base-200 to-primary/5 text-center overflow-hidden">
+        <div class="container mx-auto px-4 max-w-4xl relative z-10">
+
             <div
-                class="flex justify-center px-4 py-16 bg-base-200 border-t border-base-300 text-sm font-medium text-base-content/50 text-center">
-                [ Demonstração Visual: Otimização de Recursos em Tempo Real ]
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Seção Dor vs Solução -->
-<section class="py-16 lg:py-24 border-b border-base-200 bg-base-100">
-    <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl lg:text-4xl font-extrabold tracking-tight text-center mb-4">
-            Enquanto você responde mensagens no Direct, suas salas continuam ociosas.
-        </h2>
-        <p class="text-center text-base-content/60 max-w-2xl mx-auto mb-12 text-lg">
-            Gerenciar uma clínica demandando esforço manual gera desgaste na equipe e vazamento de faturamento
-            bruto.
-        </p>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Cenário Atual (Problema) -->
-            <div class="p-8 rounded-xl bg-warning/5 border-l-4 border-warning shadow-sm">
-                <h3 class="text-xl font-bold mb-3 text-warning-content">O Cenário Atual</h3>
-                <p class="text-base-content/80">Você perde minutos valiosos respondendo mensagens no Direct do
-                    Instagram, negociando horários retroativos, e ainda corre o risco severo de marcar duas clientes
-                    na mesma maca ou com a mesma profissional de forma simultânea.</p>
+                class="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4">
+                Gestão de Agenda • Estética
             </div>
 
-            <!-- Solução -->
-            <div class="p-8 rounded-xl bg-success/5 border-l-4 border-success shadow-sm">
-                <h3 class="text-xl font-bold mb-3 text-success-content">A Solução com ÁGIO</h3>
-                <p class="text-base-content/80">Confiabilidade pura. Um motor de agendamento focado em alta precisão
-                    que entende em tempo real a disponibilidade dos seus recursos (salas, aparelhos e
-                    profissionais), bloqueando de forma invisível qualquer duplicidade.</p>
-            </div>
-        </div>
-    </div>
-</section>
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight max-w-3xl mx-auto leading-tight mb-4">
+                O sistema que <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">elimina o choque de
+                    horários</span> e vende pelo seu Instagram.
+            </h1>
 
-<!-- Seção Pilares Oficiais -->
-<section class="bg-base-200 py-16 lg:py-24">
-    <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl lg:text-4xl font-extrabold tracking-tight text-center mb-4">
-            Construído especificamente para a rotina da estética
-        </h2>
-        <p class="text-center text-base-content/60 max-w-2xl mx-auto mb-12 text-lg">
-            Sem excessos técnicos, focamos unicamente na eficiência operacional interna e externa.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Card 1 -->
-            <div class="card bg-base-100 border border-base-300 shadow-sm">
-                <div class="card-body p-8">
-                    <h3 class="card-title text-lg font-bold mb-2">Link de Autoagendamento</h3>
-                    <p class="text-base-content/70 text-sm">Pronto para colar na bio do Instagram ou encaminhar em
-                        disparos de WhatsApp. Seu cliente realiza o agendamento de maneira autônoma, 24 horas por
-                        dia.</p>
-                </div>
-            </div>
-            <!-- Card 2 -->
-            <div class="card bg-base-100 border border-base-300 shadow-sm">
-                <div class="card-body p-8">
-                    <h3 class="card-title text-lg font-bold mb-2">Gestão de Recursos</h3>
-                    <p class="text-base-content/70 text-sm">Chega de conflitos. Se a Sala VIP ou o aparelho de laser
-                        específico estiverem ocupados, o sistema indisponibiliza o horário automaticamente.</p>
-                </div>
-            </div>
-            <!-- Card 3 -->
-            <div class="card bg-base-100 border border-base-300 shadow-sm">
-                <div class="card-body p-8">
-                    <h3 class="card-title text-lg font-bold mb-2">Uso Intuitivo e Direto</h3>
-                    <p class="text-base-content/70 text-sm">Interface limpa, rápida e sem distrações visuais. Você e
-                        todo o seu time operacional aprendem a utilizar todas as funções em menos de 10 minutos.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Seção de Oferta e Escassez -->
-<section class="bg-base-100 py-16 lg:py-24">
-    <div class="max-w-4xl mx-auto px-6">
-        <div class="card bg-neutral text-neutral-content shadow-2xl p-8 lg:p-12 text-center">
-            <span class="text-secondary text-xs font-bold uppercase tracking-widest block mb-4">
-                Condição Especial de Lançamento
-            </span>
-            <h2 class="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4">
-                Tenha o controle absoluto da sua clínica sem pagar nada hoje
-            </h2>
-            <p class="text-neutral-content/70 mb-8 max-w-xl mx-auto text-base">
-                Estamos liberando o acesso completo e irrestrito por 30 dias para as primeiras 5 clínicas que
-                iniciarem contato hoje.
+            <p class="text-base md:text-lg text-base-content/70 max-w-2xl mx-auto mb-8">
+                Seu cliente agenda sozinho em segundos pelo link da sua bio. O sistema gerencia profissionais, macas e
+                aparelhos automaticamente.
             </p>
 
-            <div class="inline-flex flex-col text-left gap-3 max-w-md mx-auto mb-8 text-neutral-content/90">
-                <div class="flex items-center gap-3">
-                    <span class="text-success font-bold">✓</span>
-                    <span><strong>Zero Risco:</strong> Não exigimos cartão de crédito para o teste.</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="text-success font-bold">✓</span>
-                    <span><strong>Suporte Direto:</strong> Auxiliamos na vinculação do link ao Instagram.</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="text-success font-bold">✓</span>
-                    <span><strong>Sem Pegadinhas:</strong> Sem taxas caso decida não continuar após o prazo.</span>
-                </div>
-            </div>
-
-            <div class="card-actions justify-center">
-                <a href="https://wa.me/5500000000000?text=Olá!%20Desejo%20garantir%20uma%20das%205%20vagas%20do%20lote%20de%20lançamento%20do%20ÁGIO%20para%20teste%20gratuito."
-                    class="btn btn-secondary btn-lg shadow-lg hover:scale-[0.99] transition-transform" target="_blank"
-                    rel="noopener">
-                    Quero Ser Um dos 5 Primeiros →
+            <div class="flex flex-col items-center gap-3 max-w-sm mx-auto">
+                <a href="https://wa.me/5500000000000?text=Olá! Quero testar o sistema gratuitamente por 30 dias."
+                    class="btn btn-primary btn-md btn-block text-white font-bold shadow-lg shadow-primary/20">
+                    Testar Grátis por 30 Dias
                 </a>
+                <span class="text-xs text-base-content/60 flex items-center gap-1">
+                    ✓ Sem precisar de cartão de crédito.
+                </span>
             </div>
         </div>
-    </div>
-</section>
+    </header>
 
-<!-- Seção de FAQ (Acordeão DaisyUI) -->
-<section class="bg-base-200 py-16 lg:py-24">
-    <div class="max-w-3xl mx-auto px-6">
-        <h2 class="text-2xl lg:text-4xl font-extrabold tracking-tight text-center mb-4">
-            Perguntas Frequentes
-        </h2>
-        <p class="text-center text-base-content/60 max-w-2xl mx-auto mb-12 text-base">
-            Esclareça as dúvidas finais sobre a implementação do ÁGIO na sua clínica.
-        </p>
+    <!-- 2. O PROBLEMA VS. A SOLUÇÃO -->
+    <section class="py-16 bg-base-100 border-t border-base-200">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 
-        <div class="join join-vertical w-full bg-base-100 shadow-sm border border-base-300 mb-12">
-            <!-- Item 1 -->
-            <div class="collapse collapse-arrow join-item border-b border-base-300">
-                <input type="radio" name="faq-accordion" checked="checked" />
-                <div class="collapse-title text-base font-bold text-base-content">
-                    Como funciona o teste gratuito?
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-6">Chega de perder tempo no Direct ou
+                        duplicar clientes</h2>
+
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-error pl-4 py-0.5">
+                            <h4 class="text-xs font-bold text-error uppercase">Como é hoje</h4>
+                            <p class="text-sm text-base-content/85 mt-1">Você perde horas negociando horários por
+                                mensagem e corre o risco de marcar duas clientes na mesma maca ou com a mesma
+                                profissional.</p>
+                        </div>
+
+                        <div class="border-l-4 border-success pl-4 py-0.5">
+                            <h4 class="text-xs font-bold text-success uppercase">Com o sistema</h4>
+                            <p class="text-sm text-base-content/85 mt-1">Agendamento de alta precisão que entende a
+                                disponibilidade real de suas salas e equipamentos, bloqueando conflitos invisivelmente.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="collapse-content text-sm text-base-content/80">
-                    <p>Ao acionar nossa equipe através dos botões da página, ativamos suas credenciais exclusivas de
-                        acesso em poucos minutos. Você terá permissão para testar a ferramenta por 30 dias.</p>
+
+                <!-- MOCKUP VISUAL REFEITO -->
+                <div class="bg-base-200 p-6 rounded-2xl border border-base-300 shadow-inner space-y-3">
+                    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider block">Bloqueio
+                        Automático Ativo</span>
+
+                    <!-- Card 1 -->
+                    <div
+                        class="bg-base-100 p-3 rounded-xl border border-base-300 flex justify-between items-center text-xs relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+                        <div>
+                            <p class="font-bold">Limpeza de Pele</p>
+                            <p class="text-base-content/60">Dra. Mariana | <span class="underline">Maca 01</span></p>
+                        </div>
+                        <span class="badge badge-primary text-white text-[10px] font-bold">14:00 - 15:00</span>
+                    </div>
+
+                    <!-- Alerta -->
+                    <div
+                        class="text-center text-[11px] font-bold text-warning bg-warning/10 py-1.5 rounded-lg border border-warning/20">
+                        ⚡ Concorrência de Recurso Detectada
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div
+                        class="bg-base-300/40 p-3 rounded-xl border border-base-300 flex justify-between items-center text-xs opacity-60">
+                        <div>
+                            <p class="font-bold text-base-content/50 line-through">Peeling Químico</p>
+                            <p class="text-base-content/40">Dra. Carla | Maca 01 (Ocupada)</p>
+                        </div>
+                        <span class="badge badge-error text-white text-[10px] font-bold">Horário Bloqueado</span>
+                    </div>
                 </div>
+
             </div>
-            <!-- Item 2 -->
-            <div class="collapse collapse-arrow join-item border-b border-base-300">
-                <input type="radio" name="faq-accordion" />
-                <div class="collapse-title text-base font-bold text-base-content">
-                    O que ocorre após o preenchimento dos 5 primeiros acessos?
+        </div>
+    </section>
+
+    <!-- 3. PILARES -->
+    <section class="py-16 bg-base-200">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pilar 1 -->
+                <div class="card bg-base-100 border border-base-300 shadow-sm">
+                    <div class="card-body p-6">
+                        <div
+                            class="bg-primary/10 text-primary w-10 h-10 rounded-xl flex items-center justify-center mb-4 font-bold">
+                            01</div>
+                        <h3 class="font-bold text-base mb-1">Link de Autoagendamento</h3>
+                        <p class="text-xs text-base-content/70 leading-relaxed">Cole na bio do Instagram. Seu cliente
+                            agenda sozinho 24h por dia.</p>
+                    </div>
                 </div>
-                <div class="collapse-content text-sm text-base-content/80">
-                    <p>O ecossistema do ÁGIO continuará aceitando novos cadastros, contudo, a política de isenção
-                        sem compromisso por 30 dias destina-se estritamente a este lote de introdução no mercado.
-                    </p>
+                <!-- Pilar 2 -->
+                <div class="card bg-base-100 border border-base-300 shadow-sm">
+                    <div class="card-body p-6">
+                        <div
+                            class="bg-secondary/10 text-secondary w-10 h-10 rounded-xl flex items-center justify-center mb-4 font-bold">
+                            02</div>
+                        <h3 class="font-bold text-base mb-1">Gestão de Recursos</h3>
+                        <p class="text-xs text-base-content/70 leading-relaxed">Se a sala ou aparelho de laser estiverem
+                            ocupados, o sistema trava novas reservas.</p>
+                    </div>
                 </div>
-            </div>
-            <!-- Item 3 -->
-            <div class="collapse collapse-arrow join-item">
-                <input type="radio" name="faq-accordion" />
-                <div class="collapse-title text-base font-bold text-base-content">
-                    Eu já utilizo outro sistema, a migração é complexa?
-                </div>
-                <div class="collapse-content text-sm text-base-content/80">
-                    <p>Não. A interface foi planejada para mitigar curvas complexas de aprendizado. Nossa equipe
-                        fornece o apoio necessário para mitigar impactos na sua transição de ferramentas.</p>
+                <!-- Pilar 3 -->
+                <div class="card bg-base-100 border border-base-300 shadow-sm">
+                    <div class="card-body p-6">
+                        <div
+                            class="bg-accent/10 text-accent w-10 h-10 rounded-xl flex items-center justify-center mb-4 font-bold">
+                            03</div>
+                        <h3 class="font-bold text-base mb-1">Uso Direto</h3>
+                        <p class="text-xs text-base-content/70 leading-relaxed">Interface limpa e focada. Sua equipe
+                            aprende a usar em menos de 10 minutos.</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="text-center">
-            <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20tirar%20dúvidas%20e%20ativar%20meu%20link%20de%20agendamento%20no%20ÁGIO."
-                class="btn btn-primary btn-md shadow-md" target="_blank" rel="noopener">
-                Ativar Meu Link de Agendamento Grátis
+    <!-- 4. OFERTA -->
+    <section class="py-16 bg-neutral text-neutral-content text-center">
+        <div class="container mx-auto px-4 max-w-xl">
+            <span
+                class="badge badge-primary text-white text-xs font-bold uppercase tracking-wider mb-3">Lançamento</span>
+            <h2 class="text-2xl md:text-4xl font-black text-white mb-2">Acesso Grátis por 30 Dias</h2>
+            <p class="text-neutral-content/80 text-sm mb-6">Liberado sem travas apenas para as 5 primeiras clínicas que
+                entrarem em contato hoje.</p>
+
+            <!-- Preço -->
+            <div class="bg-base-100 text-base-content p-4 rounded-xl max-w-xs mx-auto mb-6 border border-base-300">
+                <span class="text-[11px] font-bold text-base-content/50 uppercase block mb-0.5">Após os 30 dias de
+                    teste:</span>
+                <p class="text-2xl font-black text-neutral">R$ 199,99<span
+                        class="text-xs font-normal text-base-content/60">/mês</span></p>
+                <span class="text-[10px] text-base-content/40 block mt-0.5">Cancele quando quiser, sem
+                    fidelidade.</span>
+            </div>
+
+            <a href="https://wa.me/5500000000000?text=Quero ser um dos 5 primeiros a testar o sistema por 30 dias grátis."
+                class="btn btn-primary btn-md btn-wide text-white font-bold">
+                Quero Ser Um dos 5 Primeiros
             </a>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Rodapé -->
-<footer class="footer footer-center p-10 bg-neutral text-neutral-content border-t border-neutral-focus">
-    <div class="max-w-6xl mx-auto px-6 text-xs text-neutral-content/60">
-        <p>&copy; 2026 ÁGIO Agendamentos Inteligentes. Todos os direitos reservados.</p>
-    </div>
-</footer>
+    <!-- 5. FAQ / RODAPÉ -->
+    <footer class="py-12 bg-base-300 text-base-content/80 text-xs">
+        <div class="container mx-auto px-4 max-w-2xl">
+            <div class="space-y-3">
+                <div class="collapse collapse-plus bg-base-100 rounded-lg border border-base-200">
+                    <input type="radio" name="faq" checked />
+                    <div class="collapse-title font-bold text-sm">Como funciona o teste?</div>
+                    <div class="collapse-content text-base-content/70">
+                        <p>Ativamos sua conta pelo WhatsApp em minutos e você usa o sistema completo por um mês, sem
+                            compromisso.</p>
+                    </div>
+                </div>
+                <div class="collapse collapse-plus bg-base-100 rounded-lg border border-base-200">
+                    <input type="radio" name="faq" />
+                    <div class="collapse-title font-bold text-sm">E se o lote de 5 vagas acabar?</div>
+                    <div class="collapse-content text-base-content/70">
+                        <p>O sistema continua disponível para contratação, mas o benefício de testar 30 dias grátis sem
+                            cartão é exclusivo do lote inicial.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-[11px] text-base-content/40 mt-12">&copy; 2026 Sistema de Agendamento
+                Inteligente.</p>
+        </div>
+    </footer>
 
-{%endblock%}
+</body>
+
+</html>
