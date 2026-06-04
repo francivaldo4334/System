@@ -40,7 +40,8 @@ services:
       - DB_NAME=ponto_agio_prod
       - DB_USER=ponto_agio_admin
       - DB_PASSWORD=uma_senha_forte_aqui
-      - DB_HOST=db  # Aponta para o serviço do banco de dados na rede do Docker
+      - DB_HOST=localhost
+      # - DB_HOST=db  # Aponta para o serviço do banco de dados na rede do Docker
       - DB_PORT=5432
     depends_on:
       db:

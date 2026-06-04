@@ -1,53 +1,95 @@
 {% extends 'pages/app/layout.html' %}
 {% partialdef main %}
-<div class="h-screen overflow-y-auto grid grid-rows-[auto_1fr]">
+
+<div class="h-screen grid grid-rows-[auto_1fr] bg-base-100 overflow-hidden">
     {% include 'components/appbar.html' with title=_('RSA Agenda') %}
-    <section class="w-full flex overflow-y-auto">
-        <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr]">
-            <div class="tabs tabs-border px-2" id="id_schedule_settings_tabs">
-                {%for opt in setting_tabs%}
-                    {% if opt.is_dynamic %}
-                    <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
-                        data-url="{%url opt.url_name key=opt.url_kwargs.key %}?key={{opt.url_kwargs.key}}" data-url-name="{{opt.url_name}}_{{opt.url_kwargs.key}}" />
-                    {% else %}
-                    <input name="schedule_settings_tab" type="radio" class="tab" aria-label="{{opt.label}}"
-                        data-url="{%url opt.url_name%}" data-url-name="{{opt.url_name}}" />
-                    {% endif %}
-                {%endfor%}
+
+    <section class="w-full flex justify-center overflow-hidden">
+        <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr] px-4 md:px-6 py-4">
+
+            <div class="tabs tabs-box tabs-sm w-full flex-nowrap overflow-x-auto scrollbar-none px-4"
+                id="id_schedule_settings_tabs">
+                {% for opt in setting_tabs %}
+                {% if opt.is_dynamic %}
+                <input type="radio" name="schedule_settings_tab" class="tab whitespace-nowrap min-w-[120px] flex-1"
+                    aria-label="{{ opt.label }}" data-url="{% url opt.url_name key=opt.url_kwargs.key %}"
+                    data-url-name="{{ opt.url_name }}_{{ opt.url_kwargs.key }}" />
+                {% else %}
+                <input type="radio" name="schedule_settings_tab" class="tab whitespace-nowrap min-w-[120px] flex-1"
+                    aria-label="{{ opt.label }}" data-url="{% url opt.url_name %}" data-url-name="{{ opt.url_name }}" />
+                {% endif %}
+                {% endfor %}
             </div>
-            <div id="id_schedule_settings_content" class="overflow-y-auto">
+
+            <div class="relative bg-base-100 rounded-b-box overflow-hidden grid grid-rows-1">
+
+                <div id="tab_loader"
+                    class="absolute inset-0 bg-base-100/60 backdrop-blur-[1px] z-10 flex items-center justify-center hidden">
+                    <span class="loading loading-spinner loading-md text-primary"></span>
+                </div>
+
+                <div id="id_schedule_settings_content" class="overflow-y-auto p-4 md:p-6 progress-loading">
+                </div>
             </div>
+
         </main>
     </section>
 </div>
+
 <script is="exec-umount" type="pass">
 $s.remove("settings.tab")
 </script>
+
 <script is="exec-mount" type="pass">
-$s.create("settings.tab", "{{request.GET.tab|default:setting_tag_selected}}")
-id_schedule_settings_tabs.querySelectorAll("input").forEach(item => {
+$s.create("settings.tab", "{{ request.GET.tab|default:setting_tag_selected }}")
+
+const loader = document.getElementById('tab_loader');
+const contentContainer = document.getElementById('id_schedule_settings_content');
+
+id_schedule_settings_tabs.querySelectorAll("input[type='radio']").forEach(item => {
+    // Altera o estado global ao clicar
     item.onclick = (event) => {
-        $s.set('settings.tab',event.target.dataset.urlName)
+        $s.set('settings.tab', event.target.dataset.urlName)
     }
+
+    // Subscreve às mudanças do estado global
     $s.subscribe("settings.tab", item, "checked", (v, el) => {
         const isSelected = v === el.dataset.urlName
-        el.disabled = isSelected
+        
         if (isSelected) {
+            // Exibe o loader antes de disparar a requisição
+            loader.classList.remove('hidden');
+            
             $q.use([el.dataset.urlName], () => {
                 return $r.get(item.dataset.url)
             }, {
-                onSuccess(html){
-                    id_schedule_settings_content.innerHTML = html;
-                    history.pushState({}, "", location.pathname + `?tab=${el.dataset.urlName}`)
+                onSuccess(html) {
+                    contentContainer.innerHTML = html;
+                    loader.classList.add('hidden');
+                    
+                    // Atualiza a URL de forma limpa sem quebrar o histórico com duplicatas
+                    const targetSearch = `?tab=${el.dataset.urlName}`;
+                    if (location.search !== targetSearch) {
+                        history.pushState({}, "", location.pathname + targetSearch);
+                    }
+                },
+                onError(err) {
+                    loader.classList.add('hidden');
+                    contentContainer.innerHTML = `
+                        <div class="alert alert-error max-w-md mx-auto mt-4 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>Erro ao carregar as configurações. Por favor, tente novamente.</span>
+                        </div>
+                    `;
                 }
             })
         }
         return isSelected
     })
-
 })
 </script>
 {% endpartialdef %}
+
 {% block section %}
 {% partial main %}
 {% endblock %}
