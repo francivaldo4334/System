@@ -216,10 +216,10 @@ class CreateAssigmentSerializer(AssignmentSerializer):
         many=True
     )
     default_error_messages = {
-        'resourcenotallowed': _('One or more selected resources are not allowed for this service type.'),
-        'reourcequantitynoteguals': _('The provided resource quantity does not match the requirement for this service.'),
-        'resourceocuppied': _('One or more selected resources are already occupied at the requested time.'),
-        'serviceisrequired': _('Service is required for creating this assignment.'),
+        'resourcenotallowed': _('One or more selected resources are not allowed for this service type.') + "{msg}",
+        'reourcequantitynoteguals': _('The provided resource quantity does not match the requirement for this service.') + "{msg}",
+        'resourceocuppied': _('One or more selected resources are already occupied at the requested time.') + "{msg}",
+        'serviceisrequired': _('Service is required for creating this assignment.') + "{msg}",
     }
     @transaction.atomic()
     def create(self, validated_data):
@@ -236,14 +236,14 @@ class CreateAssigmentSerializer(AssignmentSerializer):
                 user,
             )
             return instance
-        except ReourceQuantityNotEguals:
-            raise self.fail('reourcequantitynoteguals')
-        except ResourceNotAllowed:
-            raise self.fail('resourcenotallowed')
-        except ResourceOcuppied:
-            raise self.fail('resourceocuppied')
-        except ServiceIsRequired:
-            raise self.fail('serviceisrequired')
+        except ReourceQuantityNotEguals as e:
+            raise self.fail('reourcequantitynoteguals', msg=e.args)
+        except ResourceNotAllowed as e:
+            raise self.fail('resourcenotallowed', msg=e.args)
+        except ResourceOcuppied as e:
+            raise self.fail('resourceocuppied', msg=e.args)
+        except ServiceIsRequired as e:
+            raise self.fail('serviceisrequired', msg=e.args)
         
 
 class AvailabilitySerializer(serializers.ModelSerializer):
