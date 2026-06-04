@@ -273,6 +273,8 @@ class AvailabilityPresentationAPIView(ListAPIView):
         dt_before = self.request.query_params.get('date_before', None)
         dt_after = self.request.query_params.get('date_after', None)
         date = self.request.query_params.get('day', None)
+        current_time = self.request.query_params.get("current_time", None)
+
         assignment_filterset = AvailabilityPresentationAssignmentFilterSet(
             {
                 **self.request.query_params.dict(),
@@ -293,6 +295,7 @@ class AvailabilityPresentationAPIView(ListAPIView):
             'assignments': assignment_filterset.qs,
             'dt_before': dt_before,
             'dt_after': dt_after,
+            'current_time': current_time,
         })
         return context;
 

@@ -25,6 +25,7 @@ class AvailabilityPresentationFilterSet(filters.FilterSet):
     resource = filters.BaseInFilter('resources__id', method='filter_pass')
     resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
     service = filters.NumberFilter(method="filter_pass")
+    current_time = filters.TimeFilter(method="filter_pass")
 
     def filter_pass(self, queryset, name, value):
         return queryset

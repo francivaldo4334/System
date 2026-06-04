@@ -2,7 +2,7 @@ const queryCacheFactory = () => {
   // Armazena os dados codificados como string para evitar problemas de referência
   const cache = new Map();
   const inFlightRequests = new Map();
-  
+
   // O registry agora guarda a chave original (array) para permitir a busca por prefixo
   const registry = new Map();
 
@@ -11,7 +11,7 @@ const queryCacheFactory = () => {
 
   const refetch = async (_queryKey) => {
     const queryKey = Array.isArray(_queryKey) ? _queryKey : [_queryKey];
-    
+
     const promises = [];
 
     // Varre o registro para encontrar todas as chaves que iniciam com o prefixo fornecido
@@ -47,7 +47,7 @@ const queryCacheFactory = () => {
     const promise = (async () => {
       try {
         const data = await queryFn();
-        
+
         const entry = cache.get(serializedKey) || {};
         cache.set(serializedKey, {
           ...entry,
