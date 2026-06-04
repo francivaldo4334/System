@@ -16,6 +16,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
   web:
     build:
       context: .
@@ -26,13 +27,26 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - static_volume:/app/staticfiles
-      - media_volume:/app/mediafiles
+      - static_volume:/usr/share/nginx/html/static/  # Alinhado com o caminho do seu Nginx
+      - media_volume:/usr/share/nginx/html/media/    # Alinhado com o caminho do seu Nginx
     env_file:
       - .env
     environment:
       - DB_HOST=db
       - DJANGO_SETTINGS_MODULE=core.settings.prod
+
+  nginx:  # <--- ADICIONADO AQUI
+    image: nginx:alpine
+    container_name: prod_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro  # Garanta que o nome do arquivo mapeado está correto
+      - static_volume:/usr/share/nginx/html/static/
+      - media_volume:/usr/share/nginx/html/media/
+    depends_on:
+      - web
+    restart: always
 
 volumes:
   postgres_data:

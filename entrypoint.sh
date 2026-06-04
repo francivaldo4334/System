@@ -1,16 +1,19 @@
 #!/bin/sh
 
-# 1. Executa as migrações do Django Tenants (Public e Tenants)
-python manage.py migrate_schemas --shared
-python manage.py migrate_schemas --tenant
+set -e
 
-# 3. Configura o Cron de Produção para as 5h da manhã
+# Força o uso do binário do ambiente virtual do UV explicitamente
+echo "Executando migrações do Django Tenants..."
+/app/.venv/bin/python manage.py migrate_schemas --shared
+/app/.venv/bin/python manage.py migrate_schemas --tenant
+
+# Configura o Cron de Produção para as 5h da manhã (Sintaxe Debian)
 echo "Configurando Tarefas Cron..."
-echo "0 5 * * * /app/.venv/bin/python /app/manage.py all_tenants_command --command='trigger_reminders' >> /app/cron_notificacoes.log 2>&1" > /etc/crontabs/root
+echo "0 5 * * * cd /app && /app/.venv/bin/python manage.py all_tenants_command --command='trigger_reminders' >> /app/cron_notificacoes.log 2>&1" | crontab -
 
-# 4. Inicia o daemon do Cron em background
-crond -b -l 2
+echo "Iniciando daemon do Cron..."
+service cron start
 
-# 5. Inicia o servidor de produção (Gunicorn)
+# Inicia o servidor de produção (Gunicorn)
 echo "Iniciando Gunicorn..."
-exec gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3
+exec /app/.venv/bin/gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3
