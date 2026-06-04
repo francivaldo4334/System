@@ -7,7 +7,7 @@
         {% include 'components/schedule/filter.resources.html' %}
         {% include 'components/schedule/filter.clean.html' %}
         {% url 'self_scheduling' as schedule_url %}
-        <button class="btn btn-xs sm:btn-sm [&>svg]:w-4 js-copy-btn" id="id_btn_link_copy"
+        <button class="btn btn-xs btn-info sm:btn-sm [&>svg]:w-4 js-copy-btn" id="id_btn_link_copy"
             data-clipboard-text="{{ request.get_host }}{{ schedule_url }}">
             <span class="btn-text"></span>
             {% include "icons/link.svg" %}
@@ -23,7 +23,7 @@
                     btn.classList.toggle('btn-success', v)
                 })
                 $s.subscribe('link_is_copied', btnText, 'innerText', (v) => {
-                    return v ? "{% trans 'Copied!' %}": '{% trans "Self-Schedule" %}'
+                    return v ? "{% trans 'Copied!' %}": '{% trans "Schedule Link" %}'
                 })
                 btn.onclick = async () => {
                     $s.set("link_is_copied", true)
