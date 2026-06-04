@@ -29,6 +29,10 @@ class NumberField(Field):
     type:str = 'number'
 
 @dataclass
+class CurrencyField(Field):
+    type:str = 'currency'
+
+@dataclass
 class DateField(Field):
     type:str = "date"
 
@@ -187,6 +191,11 @@ class ServiceForm(BaseForm):
             name="label",
             label=_('Name'),
             attrs="required",
+        ),
+        CurrencyField(
+            name="price",
+            label=_('Price'),
+            attrs="",
         ),
         TextareaField(
             name="description",

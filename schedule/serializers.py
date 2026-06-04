@@ -140,6 +140,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'label',
+            'price',
             'description',
             'required_resources',
             'required_resources_label',

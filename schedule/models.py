@@ -148,6 +148,12 @@ class ResourceObject(Resource):
 
 class Service(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
     required_resources = models.ManyToManyField(ResourceNotSelectable, through='ServiceResourceRelation')
+    price = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
 
 class ServiceResourceRelation(models.Model):
     service = models.ForeignKey(Service, models.CASCADE)

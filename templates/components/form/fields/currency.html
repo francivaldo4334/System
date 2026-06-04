@@ -1,0 +1,5 @@
+{%extends "components/form/fields/base.html"%}
+{%block field%}
+<input class="input input-sm" id="{{field.id}}" name="{{field.name}}" {{field.attrs}} is="money-input" type="number"
+    step="0.01" placeholder="0,00" />
+{%endblock%}
