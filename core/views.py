@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from rest_framework import viewsets
 
 from core.permissions import IsOwner
@@ -12,3 +13,6 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsOwner]
     serializer_class = UserSerializer
     queryset = UserModel.objects.all().filter(is_superuser=False)
+
+class LandingPageView(TemplateView):
+    template_name = "pages/landing-page/index.html"
