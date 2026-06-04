@@ -1,5 +1,5 @@
 {%extends "components/form/fields/base.html"%}
 {%block field%}
-<input type="date" class="input input-sm" id="{{field.id}}" name="{{field.name}}" value="{{field.value}}"
+<input type="date" class="input input-sm" id="{{key}}_{{field.id}}" name="{{field.name}}" value="{{field.value}}"
     {{field.attrs}} />
 {%endblock%}
