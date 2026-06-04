@@ -3,23 +3,18 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.views import default_token_generator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views import View
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from authentication.services import SendEmail
+from authentication.services import SendEmail, TriggerReminders
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from datetime import timedelta
-
-from schedule.models import Assignment, Availability
 
 User = get_user_model()
 
@@ -118,42 +113,8 @@ class TriggerClientRemindersAPIView(APIView):
         if auth_token != f"Bearer {expected_token}":
             return Response("Não autorizado.", status.HTTP_401_UNAUTHORIZED)
 
-        notifier = SendEmail()
-        today = timezone.now().date()
-        tomorow = today + timedelta(days=1)
+        TriggerReminders().trigger()
         
-        # =========================================================================
-        # PARTE 1: PROCESSAR AGENDAMENTOS DOS CLIENTES (1 e 3 dias de antecedência)
-        # =========================================================================
-        prazos_agendamentos = [1, 3]
-        
-        for dias in prazos_agendamentos:
-            data_alvo = today + timedelta(days=dias)
-            
-            # Filtra agendamentos ativos na data alvo usando seu manager customizado.
-            # Adicionalmente, limitamos a estados que fazem sentido receber lembrete.
-            assignments = Assignment.objects.visibles().filter(
-                date=data_alvo,
-                status__in=[Assignment.Status.PENDING.value, Assignment.Status.CONFIRMED.value]
-            ).prefetch_related('resources__parent')
-            
-            for assignment in assignments:
-                notifier.send_email_reminder(assignment=assignment, days_remaining=dias)
-
-        # =========================================================================
-        # PARTE 2: PROCESSAR GERENTES COM DISPONIBILIDADE EXPIRANDO (Falta 1 dia)
-        # =========================================================================
-        # Busca grades de horários que vencem exatamente amanhã
-        availabilities_expirando = Availability.objects.filter(valid_until=tomorow)
-        
-        if availabilities_expirando.exists():
-            # Para evitar enviar múltiplos e-mails para o mesmo gerente caso ele tenha 
-            # mais de uma grade expirando amanhã, buscamos os gerentes do sistema.
-            # (Ajuste o filtro de grupos/permissões conforme seu banco)
-            managers = User.objects.filter(is_active=True, groups__name="OWNER")
-            
-            for manager in managers:
-                notifier.send_email_manager_reminder(manager_user=manager)
 
         return Response({
             "status": "success", 
