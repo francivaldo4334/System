@@ -191,10 +191,10 @@ class ServiceForm(BaseForm):
         TextareaField(
             name="description",
             label=_('Description'),
-            attrs="required",
+            attrs="",
         ),
         SelectField(
-            label=_('Resource Types'),
+            label=_('Resources'),
             name="required_resources",
             url_name="resources",
             url_query_params='?use_as_category=true',
