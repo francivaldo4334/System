@@ -3,9 +3,14 @@
         ['times'],
         () => {
             const date = '{{default_dt_value}}'
-            const time = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
             if (date === null) throw Error('date is null')
-            return $r.get(`{% url 'availabilities_presentation' %}?day=${date}&current_time=${time}`)
+            let url = `{% url 'availabilities_presentation' %}?day=${date}`
+            const today = new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-');
+            if (date === today) {
+                const time = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+                url += `&current_time=${time}`;
+            }
+            return $r.get(url)
         },
         {
             onSuccess(data) {
