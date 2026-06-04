@@ -11,60 +11,64 @@
 </label>
 
 <script is="exect-mount">
-    $q.use(
-        ['resources-list', 'set'],
-        () => $r.get("{%url 'resources-list'%}?use_as_category=true"),
-        {
-            onSuccess(data) {
-                const items = data.results
-                const frag = document.createDocumentFragment();
-                const option = document.createElement('option');
-                option.value = '';
-                option.innerText = '{%trans "Show All"%}'
-                frag.appendChild(option)
-                for (const item of items) {
+    {
+        const id_select_resource = document.getElementById('id_select_resource')
+        $q.use(
+            ['resources-list', 'set'],
+            () => $r.get("{%url 'resources-list'%}?use_as_category=true"),
+            {
+                onSuccess(data) {
+                    const items = data.results
+                    const frag = document.createDocumentFragment();
                     const option = document.createElement('option');
-                    option.value = item.id
-                    option.innerText = item.label
+                    option.value = '';
+                    option.innerText = '{%trans "Show All"%}'
                     frag.appendChild(option)
-                }
-                id_select_resource_category.replaceChildren(frag)
-            },
-            onFinally() {
-                setTimeout(() => {
-                    $s.subscribe('filter.resource_type', id_select_resource_category, 'value')
-                    $s.subscribe('filter.resource_type', id_select_resource, 'disabled', it => !it)
-                    $s.subscribe('filter.resource_type', null, null, (r_type) => {
-                        $s.set('filter.resource', '')
-                        $q.use(
-                            ['resources-list', 'selectable', r_type],
-                            () => $r.get(`{%url 'resources-list'%}?use_as_category=false&parent=${r_type}`),
-                            {
-                                onSuccess(data) {
-                                    const items = data.results
-                                    const frag = document.createDocumentFragment();
-                                    const option = document.createElement('option');
-                                    option.value = '';
-                                    option.innerText = '{%trans "Sholl All"%}'
-                                    frag.appendChild(option)
-                                    for (const item of items) {
+                    for (const item of items) {
+                        const option = document.createElement('option');
+                        option.value = item.id
+                        option.innerText = item.label
+                        frag.appendChild(option)
+                    }
+                    id_select_resource_category.replaceChildren(frag)
+                },
+                onFinally() {
+                    setTimeout(() => {
+                        $s.subscribe('filter.resource_type', id_select_resource_category, 'value')
+                        $s.subscribe('filter.resource_type', id_select_resource, 'disabled', it => !it)
+                        $s.subscribe('filter.resource_type', null, null, (r_type) => {
+                            $s.set('filter.resource', '')
+                            $q.use(
+                                ['resources-list', 'selectable', r_type],
+                                () => $r.get(`{%url 'resources-list'%}?use_as_category=false&parent=${r_type}`),
+                                {
+                                    onSuccess(data) {
+                                        const items = data.results
+                                        const frag = document.createDocumentFragment();
                                         const option = document.createElement('option');
-                                        option.value = item.id
-                                        option.innerText = item.label
+                                        option.value = '';
+                                        option.innerText = '{%trans "Sholl All"%}'
                                         frag.appendChild(option)
+                                        for (const item of items) {
+                                            const option = document.createElement('option');
+                                            option.value = item.id
+                                            option.innerText = item.label
+                                            frag.appendChild(option)
+                                        }
+                                        id_select_resource.replaceChildren(frag)
+                                    },
+                                    onFinally() {
+                                        setTimeout(() => {
+                                            $s.subscribe('filter.resource', id_select_resource, 'value')
+                                        }, 300)
                                     }
-                                    id_select_resource.replaceChildren(frag)
-                                },
-                                onFinally() {
-                                    setTimeout(() => {
-                                        $s.subscribe('filter.resource', id_select_resource, 'value')
-                                    }, 300)
                                 }
-                            }
-                        )
-                    })
-                }, 300)
+                            )
+                        })
+                    }, 300)
+                }
             }
-        }
-    )
+        )
+
+    }
 </script>
