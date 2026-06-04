@@ -42,52 +42,55 @@ $s.remove("settings.tab")
 </script>
 
 <script is="exec-mount" type="pass">
-$s.create("settings.tab", "{{ request.GET.tab|default:setting_tag_selected }}")
+{
+    $s.create("settings.tab", "{{ request.GET.tab|default:setting_tag_selected }}")
 
-const loader = document.getElementById('tab_loader');
-const contentContainer = document.getElementById('id_schedule_settings_content');
+    const loader = document.getElementById('tab_loader');
+    const contentContainer = document.getElementById('id_schedule_settings_content');
 
-id_schedule_settings_tabs.querySelectorAll("input[type='radio']").forEach(item => {
-    // Altera o estado global ao clicar
-    item.onclick = (event) => {
-        $s.set('settings.tab', event.target.dataset.urlName)
-    }
-
-    // Subscreve às mudanças do estado global
-    $s.subscribe("settings.tab", item, "checked", (v, el) => {
-        const isSelected = v === el.dataset.urlName
-        
-        if (isSelected) {
-            // Exibe o loader antes de disparar a requisição
-            loader.classList.remove('hidden');
-            
-            $q.use([el.dataset.urlName], () => {
-                return $r.get(item.dataset.url)
-            }, {
-                onSuccess(html) {
-                    contentContainer.innerHTML = html;
-                    loader.classList.add('hidden');
-                    
-                    // Atualiza a URL de forma limpa sem quebrar o histórico com duplicatas
-                    const targetSearch = `?tab=${el.dataset.urlName}`;
-                    if (location.search !== targetSearch) {
-                        history.pushState({}, "", location.pathname + targetSearch);
-                    }
-                },
-                onError(err) {
-                    loader.classList.add('hidden');
-                    contentContainer.innerHTML = `
-                        <div class="alert alert-error max-w-md mx-auto mt-4 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <span>{%trans 'Error loading settings. Please try again.'%}</span>
-                        </div>
-                    `;
-                }
-            })
+    id_schedule_settings_tabs.querySelectorAll("input[type='radio']").forEach(item => {
+        // Altera o estado global ao clicar
+        item.onclick = (event) => {
+            $s.set('settings.tab', event.target.dataset.urlName)
         }
-        return isSelected
+
+        // Subscreve às mudanças do estado global
+        $s.subscribe("settings.tab", item, "checked", (v, el) => {
+            const isSelected = v === el.dataset.urlName
+        
+            if (isSelected) {
+                // Exibe o loader antes de disparar a requisição
+                loader.classList.remove('hidden');
+            
+                $q.use([el.dataset.urlName], () => {
+                    return $r.get(item.dataset.url)
+                }, {
+                    onSuccess(html) {
+                        contentContainer.innerHTML = html;
+                        loader.classList.add('hidden');
+                    
+                        // Atualiza a URL de forma limpa sem quebrar o histórico com duplicatas
+                        const targetSearch = `?tab=${el.dataset.urlName}`;
+                        if (location.search !== targetSearch) {
+                            history.pushState({}, "", location.pathname + targetSearch);
+                        }
+                    },
+                    onError(err) {
+                        loader.classList.add('hidden');
+                        contentContainer.innerHTML = `
+                            <div class="alert alert-error max-w-md mx-auto mt-4 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span>{%trans 'Error loading settings. Please try again.'%}</span>
+                            </div>
+                        `;
+                    }
+                })
+            }
+            return isSelected
+        })
     })
-})
+    
+}
 </script>
 {% endpartialdef %}
 
