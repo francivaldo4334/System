@@ -1,4 +1,3 @@
-
 version: '3.8'
 
 services:
@@ -31,7 +30,7 @@ services:
       - media_volume:/app/mediafiles
     env_file:
       - .env
-    nvironment:
+    environment:
       - DB_HOST=db
       - DJANGO_SETTINGS_MODULE=core.settings.prod
 
