@@ -1,6 +1,6 @@
 {%extends "components/form/fields/base.html"%}
 {%block field%}
-<select class="select" id="{{key}}_{{field.id}}" name="{{field.name}}" data-url-name="{{field.url_name}}"
+<select class="select select-sm" id="{{key}}_{{field.id}}" name="{{field.name}}" data-url-name="{{field.url_name}}"
     {{field.attrs}}></select>
 {%if field.url_name%}
 <script is="exec-mount" type="pass">
