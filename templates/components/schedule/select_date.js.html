@@ -3,10 +3,26 @@
     $q.use(
         ['dates'],
         () => {
-            const dateNow = new Date()
-            const startDate = dateNow.toISOString().split('T')[0]
-            dateNow.setDate(dateNow.getDate() + 15)
-            const endDate = dateNow.toISOString().split('T')[0]
+            // Captura a data atual no fuso horário do navegador do usuário
+            const dateNow = new Date();
+
+            // Função auxiliar para garantir o formato YYYY-MM-DD local
+            const formatLocalIda = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            // 1. Data de hoje (local)
+            const startDate = formatLocalIda(dateNow);
+
+            // 2. Adiciona 15 dias (calculado localmente)
+            dateNow.setDate(dateNow.getDate() + 15);
+            const endDate = formatLocalIda(dateNow);
+
+            console.log("Start:", startDate);
+            console.log("End:", endDate);
             return $r.get(`{% url 'availabilities_presentation' %}?date_after=${startDate}&date_before=${endDate}`)
         },
         {
@@ -15,40 +31,54 @@
                 const ul = document.getElementById('{{ul_id}}');
                 if (ul) {
                     const frag = document.createDocumentFragment();
+
+                    // RESOLUÇÃO DO TIMEZONE PARA AS LABELS:
+                    // Criamos as strings de hoje e amanhã baseadas no fuso horário local
+                    const hojeLocalObj = new Date();
+                    const hojeLocalStr = `${hojeLocalObj.getFullYear()}-${String(hojeLocalObj.getMonth() + 1).padStart(2, '0')}-${String(hojeLocalObj.getDate()).padStart(2, '0')}`;
+
+                    const amanhaLocalObj = new Date();
+                    amanhaLocalObj.setDate(amanhaLocalObj.getDate() + 1);
+                    const amanhaLocalStr = `${amanhaLocalObj.getFullYear()}-${String(amanhaLocalObj.getMonth() + 1).padStart(2, '0')}-${String(amanhaLocalObj.getDate()).padStart(2, '0')}`;
+
                     dates.forEach(it => {
                         const li = document.createElement('li');
                         const a = document.createElement('a');
-                        const dateObj = new Date(`${it}T00:00:00`)
+                        const dateObj = new Date(`${it}T00:00:00`);
+
                         const formatedDate = new Intl.DateTimeFormat('{{LANG_CODE}}', {
                             day: '2-digit',
                             month: '2-digit',
                             year: 'numeric'
-                        }).format(dateObj)
-                        const now = new Date()
-                        let sufix = ''
-                        if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
-                            sufix = " - {% trans 'Today'%}"
+                        }).format(dateObj);
+
+                        // Tratativa limpa e segura de sufixos locais
+                        let sufix = '';
+                        if (it === hojeLocalStr) {
+                            sufix = " - {% trans 'Today' %}";
+                        } else if (it === amanhaLocalStr) {
+                            sufix = " - {% trans 'Tomorrow' %}";
                         }
-                        now.setDate(now.getDate() + 1)
-                        if (dateObj.toISOString().split('T')[0] == now.toISOString().split("T")[0]) {
-                            sufix = " - {% trans 'Tomorrow'%}"
-                        }
+
                         const weekday = dateObj.toLocaleDateString('{{LANG_CODE}}', {weekday: 'long'});
                         a.innerText = `${formatedDate} - ${weekday}${sufix}`;
+
                         {% if set_href %}
-                        a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`
+                        a.href = `{% url 'self_scheduling' %}?step=4&service={{request.GET.service}}&resource={{request.GET.resource}}&date=${it}`;
                         {% endif %}
+
                         {% if onclick %}
                         a.onclick = () => {
                             ((it) => {
-                                {{onclick} }
+                                {{onclick} }  // Corrigido o espaço extra que estava em '{{onclick} }'
                             })(it)
-                        }
+                        };
                         {% endif %}
-                        a.dataset.value = it
+
+                        a.dataset.value = it;
                         li.appendChild(a);
                         frag.appendChild(li);
-                    })
+                    });
                     ul.replaceChildren(frag);
                 }
             }

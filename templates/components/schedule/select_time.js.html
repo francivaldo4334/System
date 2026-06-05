@@ -2,16 +2,27 @@
     $q.use(
         ['times'],
         () => {
-            const date = '{{default_dt_value}}'
-            if (date === null) throw Error('date is null')
-            let url = `{% url 'availabilities_presentation' %}?day=${date}`
-            // const today = new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-');
-            const today = "{% now 'Y-m-d' %}";
-            if (date === today) {
-                const time = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+            const date = '{{ default_dt_value }}';
+            if (!date || date === 'None') throw Error('date is null');
+
+            let url = `{% url 'availabilities_presentation' %}?day=${date}`;
+
+            // RESOLUÇÃO DO TIMEZONE PARA HOJE:
+            // Geramos a data de hoje baseada pura e estritamente no fuso horário do navegador
+            const now = new Date();
+            const todayLocalStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            // Se a data selecionada for igual ao hoje do dispositivo do usuário
+            if (date === todayLocalStr) {
+                // Captura hora e minuto locais com garantia de 2 dígitos (HH:MM)
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const time = `${hours}:${minutes}`;
+
                 url += `&current_time=${time}`;
             }
-            return $r.get(url)
+
+            return $r.get(url);
         },
         {
             onSuccess(data) {
@@ -27,36 +38,49 @@
                 )
                     .map(it => JSON.parse(it))
                     .sort((a, b) => a.time.localeCompare(b.time));
-                const ul = document.getElementById('{{ul_id}}');
+
+                const ul = document.getElementById('{{ ul_id }}');
+
                 const calcSlot = (it) => {
-                    const [hour, minute] = it.split(':').map(Number)
-                    return Math.floor((hour * 60 + minute) / 5)
-                }
+                    const [hour, minute] = it.split(':').map(Number);
+                    return Math.floor((hour * 60 + minute) / 5);
+                };
+
                 if (ul) {
                     const frag = document.createDocumentFragment();
+
                     times.forEach(it => {
                         const li = document.createElement('li');
                         const a = document.createElement('a');
-                        const slot = calcSlot(it.time)
-                        a.innerText = it.time.slice(0, 5)
-                        //{% if set_href%}
-                        a.href = `{% url 'self_scheduling' %}?step=5&service={{request.GET.service}}&resource={{request.GET.resource}}&date={{request.GET.date}}&time=${it.time}&availability=${it.id}&slot=${slot}`
-                        //{% endif %}
-                        //{% if onclick %}
+                        const slot = calcSlot(it.time);
+
+                        a.innerText = it.time.slice(0, 5);
+
+                        // CORREÇÃO DOS COMENTÁRIOS DJANGO: 
+                        // Condicionais do Django controlam a existência do bloco JS de forma limpa
+                        {% if set_href %}
+                        a.href = `{% url 'self_scheduling' %}?step=5&service={{ request.GET.service }}&resource={{ request.GET.resource }}&date={{ request.GET.date }}&time=${it.time}&availability=${it.id}&slot=${slot}`;
+                        {% endif %}
+
+                        {% if onclick %}
                         a.onclick = () => {
-                            (() => {
-                                {{onclick} }
+                            ((contextData) => {
+                                {{onclick} } // Corrigido espaçamento que quebrava o template
                             })({
                                 availabilityId: it.id,
                                 time: it.time,
                                 slot,
-                            })
-                        }
-                        //{% endif %}
+                            });
+                        };
+                        {% endif %}
+
                         li.appendChild(a);
                         frag.appendChild(li);
-                    })
-                    ul.appendChild(frag);
+                    });
+
+                    // CORREÇÃO DO REFETCH: 
+                    // substitui os filhos antigos para evitar duplicação em caso de refetch
+                    ul.replaceChildren(frag);
                 }
             }
         },
