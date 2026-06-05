@@ -1,3 +1,4 @@
+from django.shortcuts import redirect, reverse
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 
@@ -16,3 +17,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class LandingPageView(TemplateView):
     template_name = "pages/landing-page/index.html"
+
+def is_not_tenant_master(view):
+    def _view(request, *args, **kwargs):
+        if not request.tenant.is_master:
+            return view(request, *args, **kwargs)
+        return redirect(reverse('home'))
+    return _view
