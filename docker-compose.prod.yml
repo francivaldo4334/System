@@ -52,7 +52,10 @@ services:
       # - static_volume:/usr/share/nginx/html/static/
       # - media_volume:/usr/share/nginx/html/media/
     depends_on:
-      - web
+      web:
+        condition: service_started
+    # depends_on:
+    #   - web
     restart: always
 
 volumes:
