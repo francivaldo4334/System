@@ -12,6 +12,7 @@ from django.utils import timezone
 from schedule.utils import slot_to_time
 
 def safe_try(method):
+    return method
     def _method(self,*args, **kwargs):
         try:
             return method(*args, **kwargs)
