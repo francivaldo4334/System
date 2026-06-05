@@ -1,31 +1,42 @@
 {% extends 'pages/app/self_scheduling/index.html' %}
 {% block content %}
 {% with key='services' title=_('Available Services') list_title=_('Select a service below') %}
-  {% include 'pages/app/self_scheduling/layouts/choice.html' %}
+{% include 'pages/app/self_scheduling/layouts/choice.html' %}
 {% endwith %}
+{% get_current_language as LANG %}
 <script>
-$q.use(
-  ['services'],
-  () => $r.get('{% url "services-list"%}?required_resources__code=client'),
-  {
-    onSuccess(data){
-      const ul = document.getElementById('id_services')
-      if (!ul) { return }
-      const frag = document.createDocumentFragment()
-      data.results.forEach(item => {
-        const li = document.createElement('li')
-        const a = document.createElement('a')
-        a.innerText = item.label
-        a.href = '/app/self-scheduling?step=2&service='+item.id
-        li.appendChild(a)
-        $s.subscribe('form.service', li, null, (value) => {
-          li.classList.toggle('menu-active', value === item.id)
-        })
-        frag.appendChild(li)
-      })
-      ul.appendChild(frag)
-    }
-  }
-)
+    $q.use(
+        ['services'],
+        () => $r.get('{% url "services-list"%}?required_resources__code=client'),
+        {
+            onSuccess(data) {
+                const ul = document.getElementById('id_services')
+                if (!ul) {return }
+                const frag = document.createDocumentFragment()
+                data.results.forEach(item => {
+                    const li = document.createElement('li')
+                    const a = document.createElement('a')
+                    const span1 = document.createElement('span')
+                    const span2 = document.createElement('span')
+                    span1.innerText = item.label
+                    if (item.price) {
+                        span2.innerText = Number(item.price).toLocaleString('{{LANG}}', {
+                            style: 'currency',
+                            currency: 'BRL',
+                        })
+                    }
+                    a.appendChild(span1)
+                    a.appendChild(span2)
+                    a.href = '/app/self-scheduling?step=2&service=' + item.id
+                    li.appendChild(a)
+                    $s.subscribe('form.service', li, null, (value) => {
+                        li.classList.toggle('menu-active', value === item.id)
+                    })
+                    frag.appendChild(li)
+                })
+                ul.appendChild(frag)
+            }
+        }
+    )
 </script>
 {% endblock %}
