@@ -8,9 +8,9 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       # O Postgres original usa estas variáveis para criar o banco e o usuário iniciais
-      - POSTGRES_DB=ponto_agio_prod
-      - POSTGRES_USER=ponto_agio_admin
-      - POSTGRES_PASSWORD=uma_senha_forte_aqui
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     healthcheck:
@@ -34,14 +34,13 @@ services:
       - uv_cache:/root/.cache/uv
     ports:
       - "8000:8000"
+
+    env_file:
+      - .env
     environment:
       - DEBUG=1
-      # Variáveis exatas que a sua função config('...') está buscando:
-      - DB_NAME=ponto_agio_prod
-      - DB_USER=ponto_agio_admin
-      - DB_PASSWORD=uma_senha_forte_aqui
-      - DB_HOST=localhost
-      # - DB_HOST=db  # Aponta para o serviço do banco de dados na rede do Docker
+      - DB_HOST=db
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
       - DB_PORT=5432
     depends_on:
       db:
