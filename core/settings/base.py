@@ -11,7 +11,10 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 SHARED_APPS = (
     'django_tenants',
     'django.contrib.contenttypes',
-    'customer'
+    'django.contrib.auth',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'customer',
 )
 
 TENANT_APPS = (
