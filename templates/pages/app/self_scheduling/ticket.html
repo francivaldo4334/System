@@ -38,9 +38,34 @@
         </div>
 
         <div class="card-actions w-full mt-8 flex flex-col gap-2">
-            <a class="btn btn-primary w-full" id="id_btn_google_calendar_link" target="_blank"
-                rel="noopener noreferrer">
-                {% trans 'Add to Calendar' %}
+            <style>
+                .btn-google-calendar {
+                    background-color: #ffffff;
+                    color: #1f1f1f;
+                    border: 1px solid #747775;
+                    transition: background-color 0.2s, box-shadow 0.2s;
+                }
+
+                .btn-google-calendar:hover {
+                    background-color: #f8f9fa;
+                    border-color: #747775;
+                    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+                }
+            </style>
+
+            <a class="btn btn-google-calendar w-full d-inline-flex align-items-center justify-content-center gap-2"
+                id="id_btn_google_calendar_link" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
+                    <path fill="#EA4335"
+                        d="M24 9.3c3.3 0 6.3 1.2 8.7 3.2l6.5-6.5C35.3 2.6 30 0 24 0 14.6 0 6.7 5.4 3 13.3l7.8 6c1.8-5.7 7.1-10 13.2-10z" />
+                    <path fill="#4285F4"
+                        d="M46.5 24c0-1.6-.1-3.2-.4-4.8H24v9.1h12.7c-.5 2.9-2.2 5.3-4.7 7l7.3 5.7c4.3-4 7.2-9.8 7.2-17z" />
+                    <path fill="#FBBC05"
+                        d="M10.8 28.7c-.5-1.4-.7-2.9-.7-4.7 0-1.7.3-3.3.7-4.7l-7.8-6C1.1 16.1 0 19.9 0 24s1.1 7.9 3 10.7l7.8-6z" />
+                    <path fill="#34A853"
+                        d="M24 48c6.5 0 12-2.1 16-5.8l-7.3-5.7c-2.4 1.6-5.5 2.6-8.7 2.6-6.1 0-11.4-4.3-13.2-10l-7.8 6C6.7 42.6 14.6 48 24 48z" />
+                </svg>
+                <span>{% trans 'Google Calendar' %}</span>
             </a>
             <a class="btn btn-ghost btn-sm w-full" id="id_a_download_ticker" target="_blank" rel="noopener noreferrer">
                 {% trans 'Download Receipt' %}
