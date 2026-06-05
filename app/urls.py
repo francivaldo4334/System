@@ -7,6 +7,8 @@ from app.views import (
 )
 from django.contrib.auth import views as auth_views
 
+from core.views import is_not_tenant_master
+
 urlpatterns = [
     path('', HomeView.as_view(), name="app"),
     path('schedule', AppScheduleView.as_view(), name='app-schedule'),
@@ -22,8 +24,14 @@ urlpatterns = [
     path("schedule/settings/config", AppConfitView.as_view(), name="app-schedule-settings-config"),
     # path('schedule/settings/service_requirements', ScheduleSettingsServiceRequirementsView.as_view(), name="app-schedule-settings-service-requirements"),
     path('self-scheduling', SelfScheduleView.as_view(), name="self_scheduling"),
-    path('login/', auth_views.LoginView.as_view(template_name="pages/login/index.html"), name="login"),
+    path('login/',
+         is_not_tenant_master(
+             auth_views.LoginView.as_view(template_name="pages/login/index.html")
+         ),
+          name="login"),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
-    path('register/', RegisterView.as_view(), name="register"),
+    path('register/',
+          is_not_tenant_master(RegisterView.as_view()),
+          name="register"),
     path('api/config', AppConfigView.as_view(), name="app-config")
 ]
