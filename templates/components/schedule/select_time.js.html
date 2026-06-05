@@ -5,7 +5,8 @@
             const date = '{{default_dt_value}}'
             if (date === null) throw Error('date is null')
             let url = `{% url 'availabilities_presentation' %}?day=${date}`
-            const today = new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-');
+            // const today = new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-');
+            const today = "{% now 'Y-m-d' %}";
             if (date === today) {
                 const time = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
                 url += `&current_time=${time}`;
