@@ -94,7 +94,9 @@ $s.compute("{{list.table.list_url_name}}.data", [
           const tr = document.createElement("tr")
           Object.entries(type_map).forEach(([key, value]) => {
             const td = document.createElement("td")
-            td.innerText = map[value](item[key])
+            td.innerText = (
+                map[value] || (v => v)
+            )(item[key])
             tr.appendChild(td)
           })
           const th = document.createElement("th")

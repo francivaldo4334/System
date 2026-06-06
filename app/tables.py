@@ -81,11 +81,13 @@ class ServicesTable(BaseTable):
     thead = [
         _('Name'),
         _('Description'),
+        _('Price'),
         _('Resources'),
     ]
     tr = [
         ('label', 'text'),
         ('description', 'text'),
+        ('price', 'currency'),
         ('resources_label', 'text'),
     ]
 
