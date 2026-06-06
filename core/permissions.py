@@ -12,6 +12,10 @@ class IsFrontDesk(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name='FRONT_DESK').exists()
 
+class IsClient(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name='CLIENT').exists()
+
 class IsProfessional(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name='PROFESSIONAL').exists()

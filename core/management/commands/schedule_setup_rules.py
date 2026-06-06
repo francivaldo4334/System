@@ -46,7 +46,16 @@ PERMISSION_GROUPS = {
     ],
     'PROFESSIONAL': [],
     'CLIENT': [
+        'view_resource',
+        'view_availability',
+        'view_assignment',
+        'view_service',
+        'view_serviceresourcerelation',
         'view_appconfig',
+        'view_customuser',
+
+        'add_assignment',
+        'change_assignment',
     ],
 }
 

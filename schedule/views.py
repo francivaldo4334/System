@@ -11,8 +11,9 @@ from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_404
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from core.permissions import IsFrontDesk, IsOwner
+from core.permissions import IsClient, IsFrontDesk, IsOwner
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation
 from schedule.serializers import (
@@ -134,7 +135,11 @@ class BaseAssignmentViewSet(
     
 class AssignmentViewSet(viewsets.mixins.ListModelMixin,
                         BaseAssignmentViewSet):
-    permission_classes = [IsOwner | IsFrontDesk]
+    permission_classes = [
+        IsOwner | IsFrontDesk | (
+            IsClient & IsAuthenticatedOrReadOnly
+        )
+    ]
 
     @action(['POST'], True)
     def rescue(self, request, pk):
