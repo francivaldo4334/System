@@ -1,3 +1,4 @@
+{% get_current_language as LANG_CODE %}
 <div class="p-6 border-t border-base-200 bg-base-100 shadow-[0_-8px_24px_rgba(0,0,0,0.04)]">
     <h4 class="text-sm font-bold mb-3 flex items-center gap-1.5 [&>svg]:w-4">
         {%include "icons/plus.svg"%}
@@ -49,16 +50,36 @@
                         const fragment = document.createDocumentFragment();
 
                         data?.results?.forEach(it => {
-                            // ✅ CORRETO: Passando estritamente o nome que você definiu no createComponent
                             const feedbackMessage = document.createElement('app-fb');
+                            const fmt = (dateStr)=> {
+                                if (!dateStr) return ""
+                                const dateObj = new Date(dateStr)
+                                return new Intl.DateTimeFormat('{{LANG_CODE}}', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: "2-digit"
+                                }).format(dateObj);
+                            }
 
                             // Define os atributos mapeados nas 'props' do seu componente
                             feedbackMessage.setAttribute('update_label', labelUpdate);
                             feedbackMessage.setAttribute('create_label', labelCreate);
-                            feedbackMessage.setAttribute('create_at', it.created || '');
-                            feedbackMessage.setAttribute('update_at', it.modified || '');
-                            feedbackMessage.setAttribute('category', it.category || '');
-                            feedbackMessage.setAttribute('status', it.status || '');
+                            feedbackMessage.setAttribute('create_at', fmt(it.created || ''));
+                            feedbackMessage.setAttribute('update_at', fmt(it.modified || ''));
+                            feedbackMessage.setAttribute('category', {
+                                'BG': "{%trans 'Problem'%}",
+                                'FT': "{%trans 'New feature'%}",
+                                'OT': "{%trans 'Other'%}",
+                                '': "",
+                            }[it.category || '']);
+                            feedbackMessage.setAttribute('status', {
+                                'NW': "{%trans 'Sent'%}",
+                                'RV': "{%trans 'Under analysis'%}",
+                                'CP': "{%trans 'Answered'%}",
+                                '': "",
+                            }[it.status || '']);
                             feedbackMessage.setAttribute('text', it.text || '');
 
                             // Se houverem respostas aninhadas vindas da API, você chama a sua função interna:
