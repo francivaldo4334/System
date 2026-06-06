@@ -44,8 +44,8 @@
                         // Limpa o container
                         feedbackScrollContent.textContent = '';
 
-                        const labelUpdate = "{% trans 'Update At' %}";
-                        const labelCreate = "{% trans 'Created At' %}";
+                        const labelUpdate = "{% trans 'Last update' %}";
+                        const labelCreate = "{% trans 'Created at' %}";
 
                         const fragment = document.createDocumentFragment();
 
@@ -113,6 +113,7 @@
                         {
                             onSuccess(data) {
                                 toastSuccess("{%trans 'Sended feedback.'%}")
+                                $q.refetch(["get-feedback-meessage"])
                             },
                             onError(e) {
                                 if (e.status >= 400 && e.status < 500) {
