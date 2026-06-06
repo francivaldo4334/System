@@ -15,7 +15,7 @@ python manage.py compilemessages
 
 # Configura o Cron de Produção para as 5h da manhã (Sintaxe Debian)
 echo "Configurando Tarefas Cron..."
-echo "0 5 * * * cd /app && python manage.py all_tenants_command --command='trigger_reminders' >> /app/cron_notificacoes.log 2>&1" | crontab -
+echo "0 * * * * cd /app && python manage.py all_tenants_command --command='trigger_reminders' >> /app/cron_notificacoes.log 2>&1" | crontab -
 
 echo "Iniciando daemon do Cron..."
 service cron start
