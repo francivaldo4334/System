@@ -3,14 +3,7 @@
     class="w-full max-w-md sm:w-[450px] min-h-full bg-base-100 text-base-content flex flex-col shadow-2xl border-l border-base-200">
 
     <!-- 1. CABEÇALHO -->
-    <div class="p-6 pb-4 border-b border-base-200 flex items-center justify-between bg-base-50">
-        <div>
-            <h3 class="text-xl font-bold tracking-tight">Central de Feedback</h3>
-            <p class="text-xs text-base-content/60">Sua opinião constrói nossa plataforma</p>
-        </div>
-        <label for="feedback-drawer" class="btn btn-sm btn-circle btn-ghost">✕</label>
-    </div>
-
+    {%include 'components/schedule/feeback_modal.content.header.html'%}
     <!-- 2. HISTÓRICO DE FEEDBACKS (Área de Scroll) -->
     <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-base-50/50">
 
