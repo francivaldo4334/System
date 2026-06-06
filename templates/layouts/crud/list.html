@@ -88,7 +88,8 @@ $s.compute("{{list.table.list_url_name}}.data", [
             },
             "checked": (v) => v ? '\u2714' : '',
             "currency": (v) => {            
-                 return Number(v).toLocaleString('{{LANG}}', {
+                if (!v) return v
+                return Number(v).toLocaleString('{{LANG}}', {
                     style: 'currency',
                     currency: 'BRL',
                 })
