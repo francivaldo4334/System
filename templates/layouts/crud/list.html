@@ -62,7 +62,8 @@ $s.compute("{{list.table.list_url_name}}.data", [
   $q.use(
     [
     {%if request.GET.key%}
-    "{{list.table.list_url_name|add:request.GET.key}}",
+    "{{list.table.list_url_name}}",
+    "{{request.GET.key}}",
     {%else%}
     "{{list.table.list_url_name}}",
     {%endif%}
