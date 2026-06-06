@@ -1,0 +1,20 @@
+<div class="drawer drawer-end font-sans">
+    <input id="feedback-drawer" type="checkbox" class="drawer-toggle" />
+
+    <div class="drawer-content">
+
+        <label for="feedback-drawer"
+            class="btn btn-md sm:btn-lg btn-primary btn-circle fixed bottom-14 !sm:bottom-4 right-4 transition-all duration-300 hover:scale-105 hover:rotate-12 active:scale-95 group">
+
+            <span
+                class="absolute inline-flex h-full w-full rounded-full bg-primary opacity-20 animate-ping group-hover:hidden">
+            </span>
+            {%include 'icons/message-square-quote.svg'%}
+        </label>
+
+    </div>
+
+    <div class="drawer-side z-50">
+        {%include 'components/schedule/feeback_modal.content.html'%}
+    </div>
+</div>

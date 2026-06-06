@@ -1,0 +1,148 @@
+<label for="feedback-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+<div
+    class="w-full max-w-md sm:w-[450px] min-h-full bg-base-100 text-base-content flex flex-col shadow-2xl border-l border-base-200">
+
+    <!-- 1. CABEÇALHO -->
+    <div class="p-6 pb-4 border-b border-base-200 flex items-center justify-between bg-base-50">
+        <div>
+            <h3 class="text-xl font-bold tracking-tight">Central de Feedback</h3>
+            <p class="text-xs text-base-content/60">Sua opinião constrói nossa plataforma</p>
+        </div>
+        <label for="feedback-drawer" class="btn btn-sm btn-circle btn-ghost">✕</label>
+    </div>
+
+    <!-- 2. HISTÓRICO DE FEEDBACKS (Área de Scroll) -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-base-50/50">
+
+        <!-- Alerta de Comunicação de Prazo -->
+        <div class="alert alert-info alert-soft items-start text-xs border border-info/20 rounded-xl p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                class="stroke-info shrink-0 w-4 h-4 mt-0.5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+                <span class="font-bold block text-info-content mb-0.5">Prazo de Resposta</span>
+                <p class="text-info-content/80 leading-relaxed">Analisamos todas as interações cuidadosamente. O
+                    prazo médio para uma resposta ou posicionamento técnico é de **até 15 dias**.</p>
+            </div>
+        </div>
+
+        <div class="text-xs font-bold uppercase tracking-wider text-base-content/40 mt-6 mb-2">Meus Envios
+            Recentes</div>
+
+        <!-- Card Feedback 1: Em Análise com Resposta -->
+        <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
+            <input type="radio" name="feedback-accordion" checked="checked" />
+            <div class="collapse-title p-4 pr-10">
+                <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                    <span class="badge badge-sm badge-neutral font-medium">💡 Sugestão</span>
+                    <span class="badge badge-sm badge-warning font-semibold">Em Análise</span>
+                </div>
+                <h4 class="font-bold text-sm text-base-content/90 line-clamp-1">Filtro avançado no relatório de
+                    conversões</h4>
+                <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
+                    <span>Criado: 14 Mai 2026</span>
+                    <span>•</span>
+                    <span class="text-warning-content/80 font-medium">Atualizado: Hoje às 10:30</span>
+                </div>
+            </div>
+            <div class="collapse-content px-4 pb-4 text-sm space-y-3">
+                <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic">
+                    "Seria excelente se pudéssemos filtrar os relatórios por tags customizadas que criamos nos
+                    clientes."
+                </div>
+                <!-- Linha do tempo interna da resposta -->
+                <div class="bg-primary/5 border-l-4 border-primary p-3 rounded-r-lg space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-primary">Resposta da Equipe</span>
+                        <span class="text-[10px] text-base-content/40">Ontem às 16:45</span>
+                    </div>
+                    <p class="text-xs text-base-content/90 leading-relaxed">
+                        Olá! Ótima ideia. Já colocamos no nosso radar de melhorias para o próximo trimestre.
+                        Obrigado pelo feedback!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Feedback 2: Bug Resolvido -->
+        <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
+            <input type="radio" name="feedback-accordion" />
+            <div class="collapse-title p-4 pr-10">
+                <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                    <span class="badge badge-sm badge-neutral font-medium">🐛 Bug</span>
+                    <span class="badge badge-sm badge-success text-white font-semibold">Resolvido</span>
+                </div>
+                <h4 class="font-bold text-sm text-base-content/90 line-clamp-1">Erro 500 ao exportar PDF</h4>
+                <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
+                    <span>Criado: 10 Mai 2026</span>
+                    <span>•</span>
+                    <span>Atualizado: 12 Mai 2026</span>
+                </div>
+            </div>
+            <div class="collapse-content px-4 pb-4 text-sm space-y-3">
+                <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic">
+                    "Sempre que tento exportar o relatório do mês passado em PDF, a tela fica branca e dá erro
+                    500."
+                </div>
+                <div class="bg-primary/5 border-l-4 border-primary p-3 rounded-r-lg space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-primary">Resposta da Equipe</span>
+                        <span class="text-[10px] text-base-content/40">12 Mai 2026</span>
+                    </div>
+                    <p class="text-xs text-base-content/90 leading-relaxed">
+                        Identificamos um problema no processamento de caracteres especiais. A correção já foi
+                        publicada e o comportamento normalizado!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3. FORMULÁRIO RÁPIDO (Fixo na parte inferior) -->
+    <div class="p-6 border-t border-base-200 bg-base-100 shadow-[0_-8px_24px_rgba(0,0,0,0.04)]">
+        <h4 class="text-sm font-bold mb-3 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-4 h-4 text-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Enviar novo feedback
+        </h4>
+
+        <form class="space-y-3" onsubmit="event.preventDefault();">
+            <!-- Campo Categoria -->
+            <div>
+                <label class="label p-1">
+                    <span class="label-text text-xs font-medium text-base-content/70">Sobre o que é seu
+                        feedback?</span>
+                </label>
+                <select
+                    class="select select-bordered select-sm w-full rounded-lg text-sm bg-base-50 focus:outline-none focus:border-primary">
+                    <option disabled selected>Selecione a categoria...</option>
+                    <option value="sugestao">💡 Sugestão de Melhoria / Recurso</option>
+                    <option value="bug">🐛 Relatar um Problema / Bug</option>
+                    <option value="elogio">✨ Elogio ou Outros</option>
+                </select>
+            </div>
+
+            <!-- Campo Mensagem -->
+            <div>
+                <label class="label p-1">
+                    <span class="label-text text-xs font-medium text-base-content/70">Sua mensagem</span>
+                </label>
+                <textarea
+                    class="textarea textarea-bordered textarea-sm w-full h-24 rounded-lg text-sm bg-base-50 focus:outline-none focus:border-primary placeholder:text-base-content/30"
+                    placeholder="Descreva o problema ou sugestão com o máximo de detalhes possível..."></textarea>
+            </div>
+
+            <!-- Botão de Envio -->
+            <button type="submit"
+                class="btn btn-primary btn-sm btn-block h-10 rounded-lg font-semibold text-xs tracking-wide uppercase">
+                Enviar Feedback
+            </button>
+        </form>
+    </div>
+
+</div>
