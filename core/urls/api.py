@@ -7,5 +7,6 @@ router.register('users', UserViewSet, basename='users')
 
 urlpatterns = [
     path('', include('schedule.api')),
+    path('', include('feedback.api')),
     path('', include(router.urls)),
 ]
