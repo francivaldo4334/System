@@ -75,7 +75,7 @@ class Resource(TimeStampedModel, ActivatorModel):
             self.content_type = self.parent.content_type
             if not self.object_id:
                 raise ValidationError({'object_id': _("Enter a valid value.")})
-        if self.__class__.objects.filter(
+        if self._state.adding and self.__class__.objects.filter(
             name=self.name,
             parent=self.parent,
         ).exists():
