@@ -12,3 +12,8 @@ class MessageViewSet(
 ):
     serializer_class = MessageSerializer
     queryset = Message.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            created_by=self.request.user
+        )
