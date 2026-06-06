@@ -40,6 +40,13 @@ class ResourceViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
     filterset_class = ResourceFilterSet
 
+    def handle_exception(self, exc):
+        from django.core.exceptions import ValidationError
+        try:
+            return super().handle_exception(exc)
+        except ValidationError as e:
+            return Response(e.message_dict, 400)
+
     def perform_create(self, serializer):
         try:
             return super().perform_create(serializer)
