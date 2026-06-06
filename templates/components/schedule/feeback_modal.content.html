@@ -1,13 +1,17 @@
 <label for="feedback-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 <div
-    class="w-full max-w-md sm:w-[450px] min-h-full bg-base-100 text-base-content flex flex-col shadow-2xl border-l border-base-200">
+    class="w-full max-h-full max-w-md sm:w-[450px] min-h-full bg-base-100 flex flex-col shadow-2xl border-l border-base-200 grid grid-rows-[auto_1fr]">
 
     <!-- 1. CABEÇALHO -->
-    {%include 'components/schedule/feeback_modal.content.header.html'%}
-    <!-- 2. HISTÓRICO DE FEEDBACKS (Área de Scroll) -->
-    {%include 'components/schedule/feeback_modal.content.scroll.html'%}
+    <div>
+        {%include 'components/schedule/feeback_modal.content.header.html'%}
+    </div>
+    <div class="overflow-y-auto flex-col-reverse flex flex-col">
+        <!-- 3. FORMULÁRIO RÁPIDO (Fixo na parte inferior) -->
+        {%include 'components/schedule/feeback_modal.content.form.html'%}
+        <!-- 2. HISTÓRICO DE FEEDBACKS (Área de Scroll) -->
+        {%include 'components/schedule/feeback_modal.content.scroll.html'%}
 
-    <!-- 3. FORMULÁRIO RÁPIDO (Fixo na parte inferior) -->
-    {%include 'components/schedule/feeback_modal.content.form.html'%}
+    </div>
 
 </div>

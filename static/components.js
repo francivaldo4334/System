@@ -166,24 +166,28 @@ createComponent('feedback-message', {
       <input type="radio" name="feedback-accordion" checked="checked" />
       <div class="collapse-title p-4 pr-10">
           <div class="flex flex-wrap items-center gap-1.5 mb-2">
-              <span class="badge badge-sm badge-info font-medium" id="id_feedback_category></span>
+              <span class="badge badge-sm badge-info font-medium" id="id_feedback_category"></span>
               <span class=" badge badge-sm badge-outline font-semibold" id="id_feedback_status"></span>
           </div>
           <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
               <span>
-                  {%trans "Created At"%}:
+                  <span id="id_feedback_create_label">
+                  </span>
                   <span id="id_feedback_created_at"></span>
               </span>
               <span>•</span>
               <span class="text-warning-content/80 font-medium">
-                  {%trans "Updated at"%}:
+                  <span id="id_feedback_update_label">
+                  </span>
                   <span id="id_feedback_updated_at"></span>
               </span>
           </div>
       </div>
       <div class="collapse-content px-4 pb-4 text-sm space-y-3">
-          <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic" id="id_feedback_text">
-              ""
+          <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic">
+              "
+                <span id="id_feedback_text"></span>
+              "
           </div>
           <!-- Linha do tempo interna da resposta -->
           <div id="id_response_content">
@@ -191,6 +195,34 @@ createComponent('feedback-message', {
       </div>
   </div>
 `,
+  props: [
+    "create_label",
+    "update_label",
+    "create_at",
+    "update_at",
+    "category",
+    "status",
+    "text",
+  ],
+  onUpdate(name, value) {
+    let el = null;
+    if (name === "create_label")
+      el = this.$("#id_feedback_create_label")
+    if (name === "update_label")
+      el = this.$("#id_feedback_update_label")
+    if (name === "category")
+      el = this.$("#id_feedback_category")
+    if (name === "status")
+      el = this.$("#id_feedback_status")
+    if (name === "text")
+      el = this.$("#id_feedback_text")
+    if (name === "create_at")
+      el = this.$("#id_feedback_created_at")
+    if (name === "update_at")
+      el = this.$("#id_feedback_updated_at")
+    if (el) el.innerText = value
+
+  },
   addResponse(response) {
     const {
       text,
