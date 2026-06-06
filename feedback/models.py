@@ -30,3 +30,6 @@ class Message(Notification):
 
 class Response(Notification):
     feedback = models.ForeignKey(Message, models.CASCADE)
+    is_viewed = models.BooleanField(
+        default=False,
+    )
