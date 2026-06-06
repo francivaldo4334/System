@@ -99,6 +99,19 @@
                     {% endif %}
                 </div>
 
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="last_name">
+                        <span class="label-text font-medium text-base-content/80">{% trans "Whatsapp" %}</span>
+                    </label>
+                    <input type="text" id="whatsapp_phone" name="whatsapp_phone" autofocus autocomplete="name" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.whatsapp_phone.errors %}input-error{% endif %}"
+                        inputmode="tel" autocomplete="tel" value="{{ form.whatsapp_phone.value|default:'' }}" />
+                    {% if form.whatsapp_phone.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.whatsapp_phone.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+
                 <!-- Botão de Submissão -->
                 <div class="form-control pt-4">
                     <button type="submit" class="btn btn-primary w-full shadow-md tracking-wide">
