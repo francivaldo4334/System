@@ -87,6 +87,12 @@ $s.compute("{{list.table.list_url_name}}.data", [
                 return date.toLocaleDateString("{{LANG}}")
             },
             "checked": (v) => v ? '\u2714' : '',
+            "currency": (v) => {            
+                 return Number(v).toLocaleString('{{LANG}}', {
+                    style: 'currency',
+                    currency: 'BRL',
+                })
+            }
         }
         id_table.innerHTML = ''
         const frag = document.createDocumentFragment();
