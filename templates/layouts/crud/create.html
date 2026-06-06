@@ -26,7 +26,13 @@
                     {
                         onSuccess() {
                             {% if list %}
-                            $q.refetch(["{{list.table.list_url_name}}"]);
+                            $q.refetch([
+                                {%if request.GET.key%}
+                                "{{list.table.list_url_name|add:request.GET.key}}",
+                                {%else%}
+                                "{{list.table.list_url_name}}",
+                                {%endif%}
+                            ]);
                             {% endif %}
                             document.getElementById("id_{{key}}_btn_add_modal")?.close();
                             form.reset();
