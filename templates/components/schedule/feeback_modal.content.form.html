@@ -4,14 +4,14 @@
         {%trans "Send new feedback"%}
     </h4>
 
-    <form class="space-y-3" onsubmit="event.preventDefault();">
+    <form class="space-y-3" id="id_feedback_form">
         <!-- Campo Categoria -->
         <label class="floating-label">
             <span>
                 {%trans "What is your feedback about?"%}
             </span>
-            <select class="select select-sm w-full">
-                <option disabled selected>{%trans "Select a category"%}...</option>
+            <select class="select select-sm w-full" name="category" required>
+                <option disabled selected value="">{%trans "Select a category"%}...</option>
                 <option value="FT">{%trans "Suggestion for Improvement / Resource"%}</option>
                 <option value="BG">{%trans "Report a Problem / Bug"%}</option>
                 <option value="OT">{%trans "Praise or Others"%}</option>
@@ -21,7 +21,7 @@
         <!-- Campo Mensagem -->
         <label class="floating-label w-full">
             <span> {%trans "Your message"%} </span>
-            <textarea class="textarea textarea-sm w-full"
+            <textarea class="textarea textarea-sm w-full" name="text" required minlength="3"
                 placeholder="{%trans 'Describe the problem or suggestion in as much detail as possible'%}..."></textarea>
         </label>
 
@@ -30,4 +30,80 @@
             {%trans "Send Feedback"%}
         </button>
     </form>
+    <script is="exec-mount" type="pass">
+        {
+            $q.use(
+                ["get-feedback-meessage"],
+                () => $r.get("{%url 'feedback-messages-list'%}"),
+                {
+                    onSuccess(data) {
+                        const feedbackScrollContent = document.getElementById('id_feedback_scroll_content');
+                        if (!feedbackScrollContent) return;
+
+                        // Limpa o container
+                        feedbackScrollContent.textContent = '';
+
+                        const labelUpdate = "{% trans 'Update At' %}";
+                        const labelCreate = "{% trans 'Created At' %}";
+
+                        const fragment = document.createDocumentFragment();
+
+                        data?.results?.forEach(it => {
+                            // ✅ CORRETO: Passando estritamente o nome que você definiu no createComponent
+                            const feedbackMessage = document.createElement('app-fb');
+
+                            // Define os atributos mapeados nas 'props' do seu componente
+                            feedbackMessage.setAttribute('update_label', labelUpdate);
+                            feedbackMessage.setAttribute('create_label', labelCreate);
+                            feedbackMessage.setAttribute('create_at', it.created || '');
+                            feedbackMessage.setAttribute('update_at', it.modified || '');
+                            feedbackMessage.setAttribute('category', it.category || '');
+                            feedbackMessage.setAttribute('status', it.status || '');
+                            feedbackMessage.setAttribute('text', it.text || '');
+
+                            // Se houverem respostas aninhadas vindas da API, você chama a sua função interna:
+                            // if (it.responses) {
+                            //     it.responses.forEach(res => feedbackMessage.addResponse(res));
+                            // }
+
+                            fragment.appendChild(feedbackMessage);
+                        });
+
+                        feedbackScrollContent.appendChild(fragment);
+                    }
+                }
+            )
+            const form = document.getElementById("id_feedback_form");
+            if (form) {
+                form.onsubmit = (event) => {
+                    event.preventDefault();
+                    const data = new FormData(event.target)
+                    const body = {
+                        category: data.get("category"),
+                        text: data.get("text"),
+                    }
+                    $q.use(
+                        ["post-feedback-meessage"],
+                        () => $r.post(
+                            "{%url 'feedback-messages-list'%}",
+                            body,
+                            {"X-CSRFToken": "{{csrf_token}}"},
+                        ),
+                        {
+                            onSuccess(data) {
+                                toastSuccess("{%trans 'Sended feedback.'%}")
+                            },
+                            onError(e) {
+                                if (e.status >= 400 && e.status < 500) {
+                                    toastError(e.data)
+                                    return
+                                }
+                                toastError("{%trans 'Erro to send feedback'%}")
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    </script>
 </div>

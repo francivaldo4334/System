@@ -159,7 +159,7 @@ createComponent('feedback-response', {
     }
   }
 })
-createComponent('feedback-message', {
+createComponent('app-fb', {
   scoped: false,
   html: `
 <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
@@ -224,15 +224,17 @@ createComponent('feedback-message', {
 
   },
   addResponse(response) {
-    const {
-      text,
-      date,
-    } = response
+    const { text, date } = response;
     const content = this.$('#id_response_content');
-    const resp = document.createElement('feedback-response')
-    response.setAttribute('text', text)
-    response.setAttribute('date', date)
-    content.appendChild(resp)
+
+    // Cria o elemento corretamente
+    const resp = document.createElement('feedback-response');
+
+    // ✅ Define os atributos na variável CORRETA (resp)
+    resp.setAttribute('text', text || '');
+    resp.setAttribute('date', date || '');
+
+    content.appendChild(resp);
   }
 })
 createComponent('app-assignment', {
