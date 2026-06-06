@@ -7,16 +7,16 @@
     <section class="w-full flex justify-center overflow-hidden">
         <main class="max-w-[1080px] w-full mx-auto grid grid-rows-[auto_1fr] px-4 md:px-6 py-4">
 
-            <div class="tabs tabs-box tabs-sm w-full flex-nowrap overflow-x-auto scrollbar-none px-4"
+            <div class="tabs tabs-lift tabs-sm flex-nowrap overflow-x-auto scrollbar-none"
                 id="id_schedule_settings_tabs">
                 {% for opt in setting_tabs %}
                 {% if opt.is_dynamic %}
-                <input type="radio" name="schedule_settings_tab" class="tab whitespace-nowrap min-w-[120px] flex-1"
+                <input type="radio" name="schedule_settings_tab" class="tab whitespace-nowrap"
                     aria-label="{{ opt.label }}"
                     data-url="{% url opt.url_name key=opt.url_kwargs.key %}?key={{opt.url_kwargs.key}}"
                     data-url-name="{{ opt.url_name }}_{{ opt.url_kwargs.key }}" />
                 {% else %}
-                <input type="radio" name="schedule_settings_tab" class="tab whitespace-nowrap min-w-[120px] flex-1"
+                <input type="radio" name="schedule_settings_tab" class="tab whitespace-nowrap"
                     aria-label="{{ opt.label }}" data-url="{% url opt.url_name %}" data-url-name="{{ opt.url_name }}" />
                 {% endif %}
                 {% endfor %}
