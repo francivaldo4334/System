@@ -130,6 +130,79 @@ createComponent('exec-umount', {
     document.head.removeChild(runner);
   }
 })
+createComponent('feedback-response', {
+  scoped: false,
+  props: [
+    'text',
+    'date',
+  ],
+  html: `
+    <div class="bg-primary/5 border-l-4 border-primary p-3 rounded-r-lg space-y-1">
+        <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-primary">
+                {%trans "Response"%}
+            </span>
+            <span class="text-[10px] text-base-content/40" id="id_feedback_response_created_at">
+            </span>
+        </div>
+        <p class="text-xs text-base-content/90 leading-relaxed" id="id_feedback_response_text"></p>
+    </div>
+  `,
+  onUpdate(name, value) {
+    if (name === 'text') {
+      const content = this.$('#id_feedback_response_text');
+      content.innerText = value
+    }
+    if (name === 'date') {
+      const content = this.$('#id_feedback_response_created_at');
+      content.innerText = value
+    }
+  }
+})
+createComponent('feedback-message', {
+  scoped: false,
+  html: `
+<div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
+      <input type="radio" name="feedback-accordion" checked="checked" />
+      <div class="collapse-title p-4 pr-10">
+          <div class="flex flex-wrap items-center gap-1.5 mb-2">
+              <span class="badge badge-sm badge-info font-medium" id="id_feedback_category></span>
+              <span class=" badge badge-sm badge-outline font-semibold" id="id_feedback_status"></span>
+          </div>
+          <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
+              <span>
+                  {%trans "Created At"%}:
+                  <span id="id_feedback_created_at"></span>
+              </span>
+              <span>•</span>
+              <span class="text-warning-content/80 font-medium">
+                  {%trans "Updated at"%}:
+                  <span id="id_feedback_updated_at"></span>
+              </span>
+          </div>
+      </div>
+      <div class="collapse-content px-4 pb-4 text-sm space-y-3">
+          <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic" id="id_feedback_text">
+              ""
+          </div>
+          <!-- Linha do tempo interna da resposta -->
+          <div id="id_response_content">
+          </div>
+      </div>
+  </div>
+`,
+  addResponse(response) {
+    const {
+      text,
+      date,
+    } = response
+    const content = this.$('#id_response_content');
+    const resp = document.createElement('feedback-response')
+    response.setAttribute('text', text)
+    response.setAttribute('date', date)
+    content.appendChild(resp)
+  }
+})
 createComponent('app-assignment', {
   props: [
     'date',
@@ -184,7 +257,7 @@ createComponent('app-assignment', {
     this.$('#resource_names').innerText = resourcenames;
     //this.$('#status-target').innerHTML = status;
   },
-  setStatusCentent(){
-    
+  setStatusCentent() {
+
   }
 })

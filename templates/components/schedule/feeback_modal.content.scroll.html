@@ -1,88 +1,11 @@
-<div class="flex-1 overflow-y-auto p-6 space-y-4 bg-base-50/50">
+<div class="flex-1 overflow-y-auto px-6 space-y-4 bg-base-50/50">
 
     <!-- Alerta de Comunicação de Prazo -->
-    <div class="alert alert-info alert-soft items-start text-xs border border-info/20 rounded-xl p-3">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            class="stroke-info shrink-0 w-4 h-4 mt-0.5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <div>
-            <span class="font-bold block text-info-content mb-0.5">Prazo de Resposta</span>
-            <p class="text-info-content/80 leading-relaxed">Analisamos todas as interações cuidadosamente. O
-                prazo médio para uma resposta ou posicionamento técnico é de **até 15 dias**.</p>
-        </div>
+    <div class="text-xs font-bold uppercase tracking-wider mt-2">
+        {%trans "My Recent Submissions"%}
     </div>
-
-    <div class="text-xs font-bold uppercase tracking-wider text-base-content/40 mt-6 mb-2">Meus Envios
-        Recentes</div>
 
     <!-- Card Feedback 1: Em Análise com Resposta -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
-        <input type="radio" name="feedback-accordion" checked="checked" />
-        <div class="collapse-title p-4 pr-10">
-            <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                <span class="badge badge-sm badge-neutral font-medium">💡 Sugestão</span>
-                <span class="badge badge-sm badge-warning font-semibold">Em Análise</span>
-            </div>
-            <h4 class="font-bold text-sm text-base-content/90 line-clamp-1">Filtro avançado no relatório de
-                conversões</h4>
-            <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
-                <span>Criado: 14 Mai 2026</span>
-                <span>•</span>
-                <span class="text-warning-content/80 font-medium">Atualizado: Hoje às 10:30</span>
-            </div>
-        </div>
-        <div class="collapse-content px-4 pb-4 text-sm space-y-3">
-            <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic">
-                "Seria excelente se pudéssemos filtrar os relatórios por tags customizadas que criamos nos
-                clientes."
-            </div>
-            <!-- Linha do tempo interna da resposta -->
-            <div class="bg-primary/5 border-l-4 border-primary p-3 rounded-r-lg space-y-1">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-primary">Resposta da Equipe</span>
-                    <span class="text-[10px] text-base-content/40">Ontem às 16:45</span>
-                </div>
-                <p class="text-xs text-base-content/90 leading-relaxed">
-                    Olá! Ótima ideia. Já colocamos no nosso radar de melhorias para o próximo trimestre.
-                    Obrigado pelo feedback!
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card Feedback 2: Bug Resolvido -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
-        <input type="radio" name="feedback-accordion" />
-        <div class="collapse-title p-4 pr-10">
-            <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                <span class="badge badge-sm badge-neutral font-medium">🐛 Bug</span>
-                <span class="badge badge-sm badge-success text-white font-semibold">Resolvido</span>
-            </div>
-            <h4 class="font-bold text-sm text-base-content/90 line-clamp-1">Erro 500 ao exportar PDF</h4>
-            <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
-                <span>Criado: 10 Mai 2026</span>
-                <span>•</span>
-                <span>Atualizado: 12 Mai 2026</span>
-            </div>
-        </div>
-        <div class="collapse-content px-4 pb-4 text-sm space-y-3">
-            <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic">
-                "Sempre que tento exportar o relatório do mês passado em PDF, a tela fica branca e dá erro
-                500."
-            </div>
-            <div class="bg-primary/5 border-l-4 border-primary p-3 rounded-r-lg space-y-1">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-primary">Resposta da Equipe</span>
-                    <span class="text-[10px] text-base-content/40">12 Mai 2026</span>
-                </div>
-                <p class="text-xs text-base-content/90 leading-relaxed">
-                    Identificamos um problema no processamento de caracteres especiais. A correção já foi
-                    publicada e o comportamento normalizado!
-                </p>
-            </div>
-        </div>
-    </div>
-
+    <feedback-message>
+    </feedback-message>
 </div>

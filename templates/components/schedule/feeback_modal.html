@@ -1,5 +1,5 @@
-<div class="drawer drawer-end font-sans">
-    <input id="feedback-drawer" type="checkbox" class="drawer-toggle" />
+<div class="drawer drawer drawer-end font-sans">
+    <input id="feedback-drawer" type="checkbox" class="drawer-toggle" checked />
 
     <div class="drawer-content">
 
@@ -15,6 +15,8 @@
     </div>
 
     <div class="drawer-side z-50">
-        {%include 'components/schedule/feeback_modal.content.html'%}
+        <div class="h-full grid grid-rows-[auto_1fr]">
+            {%include 'components/schedule/feeback_modal.content.html'%}
+        </div>
     </div>
 </div>

@@ -1,0 +1,33 @@
+<div class="p-6 border-t border-base-200 bg-base-100 shadow-[0_-8px_24px_rgba(0,0,0,0.04)]">
+    <h4 class="text-sm font-bold mb-3 flex items-center gap-1.5 [&>svg]:w-4">
+        {%include "icons/plus.svg"%}
+        {%trans "Send new feedback"%}
+    </h4>
+
+    <form class="space-y-3" onsubmit="event.preventDefault();">
+        <!-- Campo Categoria -->
+        <label class="floating-label">
+            <span>
+                {%trans "What is your feedback about?"%}
+            </span>
+            <select class="select select-sm w-full">
+                <option disabled selected>Selecione a categoria...</option>
+                <option value="sugestao">💡 Sugestão de Melhoria / Recurso</option>
+                <option value="bug">🐛 Relatar um Problema / Bug</option>
+                <option value="elogio">✨ Elogio ou Outros</option>
+            </select>
+        </label>
+
+        <!-- Campo Mensagem -->
+        <label class="floating-label w-full">
+            <span> {%trans "Your message"%} </span>
+            <textarea class="textarea textarea-sm w-full"
+                placeholder="{%trans 'Describe the problem or suggestion in as much detail as possible'%}..."></textarea>
+        </label>
+
+        <!-- Botão de Envio -->
+        <button type="submit" class="btn btn-primary btn-sm btn-block uppercase">
+            {%trans "Send Feedback"%}
+        </button>
+    </form>
+</div>

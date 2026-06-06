@@ -8,47 +8,6 @@
     {%include 'components/schedule/feeback_modal.content.scroll.html'%}
 
     <!-- 3. FORMULÁRIO RÁPIDO (Fixo na parte inferior) -->
-    <div class="p-6 border-t border-base-200 bg-base-100 shadow-[0_-8px_24px_rgba(0,0,0,0.04)]">
-        <h4 class="text-sm font-bold mb-3 flex items-center gap-1.5">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                stroke="currentColor" class="w-4 h-4 text-primary">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            Enviar novo feedback
-        </h4>
-
-        <form class="space-y-3" onsubmit="event.preventDefault();">
-            <!-- Campo Categoria -->
-            <div>
-                <label class="label p-1">
-                    <span class="label-text text-xs font-medium text-base-content/70">Sobre o que é seu
-                        feedback?</span>
-                </label>
-                <select
-                    class="select select-bordered select-sm w-full rounded-lg text-sm bg-base-50 focus:outline-none focus:border-primary">
-                    <option disabled selected>Selecione a categoria...</option>
-                    <option value="sugestao">💡 Sugestão de Melhoria / Recurso</option>
-                    <option value="bug">🐛 Relatar um Problema / Bug</option>
-                    <option value="elogio">✨ Elogio ou Outros</option>
-                </select>
-            </div>
-
-            <!-- Campo Mensagem -->
-            <div>
-                <label class="label p-1">
-                    <span class="label-text text-xs font-medium text-base-content/70">Sua mensagem</span>
-                </label>
-                <textarea
-                    class="textarea textarea-bordered textarea-sm w-full h-24 rounded-lg text-sm bg-base-50 focus:outline-none focus:border-primary placeholder:text-base-content/30"
-                    placeholder="Descreva o problema ou sugestão com o máximo de detalhes possível..."></textarea>
-            </div>
-
-            <!-- Botão de Envio -->
-            <button type="submit"
-                class="btn btn-primary btn-sm btn-block h-10 rounded-lg font-semibold text-xs tracking-wide uppercase">
-                Enviar Feedback
-            </button>
-        </form>
-    </div>
+    {%include 'components/schedule/feeback_modal.content.form.html'%}
 
 </div>
