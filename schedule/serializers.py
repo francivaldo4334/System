@@ -398,11 +398,9 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
             for occ in occurrences:
                 occ_date = occ.date()
                 slot = time_to_slots(occ.time())
-            
                 # Se o slot não estiver ocupado naquela data, já adicionamos o datetime final à lista
                 if slot not in occupation_map.get(occ_date, set()):
                     results.append(datetime.combine(occ_date, slot_to_time(slot)))
-
             return results
 class ActionMigrateSerializer(serializers.Serializer):
     availability = serializers.PrimaryKeyRelatedField(
