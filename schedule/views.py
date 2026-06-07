@@ -14,7 +14,7 @@ from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_4
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from core.permissions import IsClient, IsFrontDesk, IsOwner
-from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet, TimeBlockFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from schedule.serializers import (
         ActionMigrateSerializer,
@@ -333,4 +333,4 @@ class DashboardAPIView(GenericAPIView):
 class TimeBlockViewSet(viewsets.ModelViewSet):
     queryset = TimeBlock.objects.all()
     serializer_class = TimeBlockSerializer
-    filterset_class = 
+    filterset_class = TimeBlockFilterSet
