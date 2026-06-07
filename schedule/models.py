@@ -301,8 +301,7 @@ class ResourceOccupation(models.Model):
             )
         def vacate(self, start_slot, duration_slot):
             with transaction.atomic():
-                qs = self.all() 
-                qs.update(
+                self.update(
                     bitmap=Concat(
                         Substr('bitmap',1,start_slot),
                         models.Value('0' * duration_slot),
