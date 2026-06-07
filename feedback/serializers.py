@@ -9,6 +9,7 @@ class ResponseSerializer(serializers.ModelSerializer):
         fields = [
             'text',
             'is_viewed',
+            'created',
         ]
 
 
