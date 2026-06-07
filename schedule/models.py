@@ -274,6 +274,7 @@ class ResourceOccupation(models.Model):
         return f'{self.resource}{self.date}'
     class QuerySet(models.QuerySet):
         def available(self,start_slot, duration_slot):
+            print("HREE", start_slot, duration_slot, type(start_slot), type(duration_slot))
             # try:
             #         start_slot = int(start_slot)
             #         duration_slot = int(duration_slot)
