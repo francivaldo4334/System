@@ -294,7 +294,7 @@ class AvailabilityPresentationAPIView(ListAPIView):
                 'date_before': dt_after,
                 'day': date,
             },
-            ResourceOccupation.objects.all(),
+            ResourceOccupation.objects.exclude(resource__timeblock__isnull=False),
         )
         if not occupation_filterset.is_valid():
             raise self.AssignmentFilterSetError(occupation_filterset.errors)
