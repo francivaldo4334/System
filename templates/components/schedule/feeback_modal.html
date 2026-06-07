@@ -21,4 +21,15 @@
     <div class="drawer-side z-50">
         {%include 'components/schedule/feeback_modal.content.html'%}
     </div>
+    <script is="exec-mount" type="pass">
+    document.querySelectorAll(".btn-feedback").forEach(it => {
+        it.onclick = () => {
+            $r.post(
+                "{%url 'feedback-messages-mark-viewed'%}",
+                {},
+                {"X-CSRFToken": "{{csrf_token}}"},
+            )
+        }
+    })
+    </script>
 </div>
