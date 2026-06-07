@@ -82,8 +82,11 @@
 
                             if (it.response_set){
                                 it.response_set?.forEach(it => {
-                                    if (it.is_viewed){
-                                      document.querySelector(".btn-feedback")?.dataset.veiw = true  
+                                    if (!it.is_viewed){
+                                        const d = document.querySelector(".btn-feedback")
+                                        if (d){
+                                            d.dataset.view = true  
+                                        }
                                     }
                                     feedbackMessage.setAttribute("new_response",JSON.stringify({
                                         text: it.text,
