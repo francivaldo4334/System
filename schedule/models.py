@@ -274,17 +274,22 @@ class ResourceOccupation(models.Model):
         return f'{self.resource}{self.date}'
     class QuerySet(models.QuerySet):
         def available(self,start_slot, duration_slot):
-            try:
-                start_slot = int(start_slot)
-                duration_slot = int(duration_slot)
-            except (ValueError, TypeError):
-                return self.none()
+            target_zeros = "0" * duration_slot;
+            db_start_position = start_slot + 1
+            return self.annotate(
+                slot_bitmap=Substr('bitmap',db_start_position, duration_slot)
+            ).filter(slot_bitmap=target_zeros)
+            # try:
+            #     start_slot = int(start_slot)=target_zeros
+            #     duration_slot = int(duration_slot)
+            # except (ValueError, TypeError):
+            #     return self.none()
 
-            if start_slot < 0 or duration_slot <= 0:
-                return self.none()
-            return self.filter(
-                bitmap__regex=f'^.{{{start_slot}}}0{{{duration_slot}}}'
-            )
+            # if start_slot < 0 or duration_slot <= 0:
+            #     return self.none()
+            # return self.filter(
+            #     bitmap__regex=f'^.{{{start_slot}}}0{{{duration_slot}}}'
+            # )
         def occupy(self, start_slot, duration_slot):
             return self.update(
                 bitmap=Concat(
@@ -330,7 +335,9 @@ class TimeBlock(models.Model):
             resource=self.resource,
             date=self.date,
         )
-        if not occupation_qs.available(self.start_slot, self.duration_slot).exists():
+        if not occupation_qs.available(
+            self.start_slot, self.duration_slot
+        ).exists():
             raise self.SlotsFilledError()
         occupation_qs.occupy(self.start_slot, self.duration_slot)
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
