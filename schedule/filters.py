@@ -1,6 +1,6 @@
 import django_filters as filters
 
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from django.db.models import Q
 
 
@@ -93,8 +93,8 @@ class AvailabilityPresentationOccupationFilterSet(filters.FilterSet):
         queryset=Service.objects.all()
     )
 
-    resource = filters.BaseInFilter('resources__id', method='filter_pass')
-    resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
+    resource = filters.BaseInFilter('resource_id', method='filter_pass')
+    resource_category = filters.BaseInFilter('resource__parent_id', method='filter_pass')
 
     def filter_by_range(self, queryset, name, value):
         date_after = self.data.get('date_after')
@@ -115,7 +115,7 @@ class AvailabilityPresentationOccupationFilterSet(filters.FilterSet):
         return queryset
 
     class Meta:
-        model = Assignment
+        model = ResourceOccupation
         fields = []
 
 class ResourceFilterSet(filters.FilterSet):

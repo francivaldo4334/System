@@ -271,13 +271,13 @@ class AvailabilityPresentationAPIView(ListAPIView):
     filterset_class = AvailabilityPresentationFilterSet
     pagination_class = None
 
-    class AssignmentFilterSetError(Exception):
+    class FilterSetError(Exception):
         pass
 
     def handle_exception(self, exc):
         try:
             return super().handle_exception(exc)
-        except self.AssignmentFilterSetError as e:
+        except self.FilterSetError as e:
             return Response(e.args[0], 400)
 
     def get_serializer_context(self):
@@ -286,18 +286,13 @@ class AvailabilityPresentationAPIView(ListAPIView):
         dt_after = self.request.query_params.get('date_after', None)
         date = self.request.query_params.get('day', None)
         current_time = self.request.query_params.get("current_time", None)
-
         occupation_filterset = AvailabilityPresentationOccupationFilterSet(
-            {
-                **self.request.query_params.dict(),
-                'date_after': dt_after,
-                'date_before': dt_after,
-                'day': date,
-            },
-            ResourceOccupation.objects.exclude(resource__timeblock__isnull=False),
+            self.request.query_params.dict(),
+            ResourceOccupation.objects.all()
         )
+
         if not occupation_filterset.is_valid():
-            raise self.AssignmentFilterSetError(occupation_filterset.errors)
+            raise self.FilterSetError(occupation_filterset.errors)
 
         if date:
             dt_before = date
@@ -305,6 +300,7 @@ class AvailabilityPresentationAPIView(ListAPIView):
 
         context.update({
             'occupations': list(occupation_filterset.qs),
+            'occupation_qs': occupation_filterset.qs,
             'dt_before': dt_before,
             'dt_after': dt_after,
             'current_time': current_time,

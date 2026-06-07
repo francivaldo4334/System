@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import Any
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -365,43 +366,67 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
             "duration_slot",
             "description",
         ]
+    def _get_all_occurrences_by_availability(self, av: Availability):
+        from datetime import datetime
+        dt_after_str = self.context.get('dt_after')
+        dt_before_str = self.context.get('dt_before')
+        if not dt_before_str or not dt_after_str:
+            return []
+        dt_before = datetime.strptime(dt_before_str, '%Y-%m-%d').date()
+        dt_after = datetime.strptime(dt_after_str, '%Y-%m-%d').date()
+        current_time = self.context.get('current_time')
+        tm_current_time = datetime.strptime(current_time, '%H:%M').time() if current_time else None
+        occurrences = av.get_occurrences(dt_after, dt_before, tm_current_time)
+        return occurrences
 
     def get_occurrences(self, obj: Availability):
-            from datetime import datetime
-            from collections import defaultdict
-            def map_bitmap_to_index(bit_string: str) -> list[int]:
-                return [i for i, it in enumerate(bit_string) if it == '1']
+        from collections import defaultdict
+        from datetime import datetime
+        occupation_qs: Any = self.context.get('occupation_qs')
+        occurrences = self._get_all_occurrences_by_availability(obj)
+        occurrences_map_slots = defaultdict(list)
+        for occ in occurrences:
+            occurrences_map_slots[occ.date()].append(occ.time())
+        results = []
+        for dt, times in occurrences_map_slots.items():
+            for time in times:
+                if occupation_qs.available(time_to_slots(time), obj.duration_slot).exists():
+                    results.append(datetime.combine(dt, time))
+        return results
 
-            dt_after_str = self.context.get('dt_after')
-            dt_before_str = self.context.get('dt_before')
-        
-            if not dt_before_str or not dt_after_str:
-                return []
+        def map_bitmap_to_index(bit_string: str) -> list[int]:
+            return [i for i, it in enumerate(bit_string) if it == '1']
 
-            # Parsing de datas
-            dt_before = datetime.strptime(dt_before_str, '%Y-%m-%d').date()
-            dt_after = datetime.strptime(dt_after_str, '%Y-%m-%d').date()
+        dt_after_str = self.context.get('dt_after')
+        dt_before_str = self.context.get('dt_before')
+    
+        if not dt_before_str or not dt_after_str:
+            return []
 
-            current_time = self.context.get('current_time')
-            tm_current_time = datetime.strptime(current_time, '%H:%M').time() if current_time else None
+        # Parsing de datas
+        # dt_before = datetime.strptime(dt_before_str, '%Y-%m-%d').date()
+        # dt_after = datetime.strptime(dt_after_str, '%Y-%m-%d').date()
 
-            # 2. Pré-processar o mapa de ocupações (O(M))
-            # Criamos um set() para cada data, pois a busca 'in' no set é O(1), muito mais rápida que em listas
-            occupations = self.context.get('occupations', [])
-            occupation_map = defaultdict(list)
-            for occ in occupations:
-                occupation_map[occ.date].extend(map_bitmap_to_index(occ.bitmap))
+        current_time = self.context.get('current_time')
+        # tm_current_time = datetime.strptime(current_time, '%H:%M').time() if current_time else None
 
-            results = []
-            occurrences = obj.get_occurrences(dt_after, dt_before, tm_current_time)
-            # 3. Loop Único para Filtragem e Construção do Resultado
-            for occ in occurrences:
-                occ_date = occ.date()
-                slot = time_to_slots(occ.time())
-                # Se o slot não estiver ocupado naquela data, já adicionamos o datetime final à lista
-                if slot not in occupation_map.get(occ_date, set()):
-                    results.append(datetime.combine(occ_date, slot_to_time(slot)))
-            return results
+        # 2. Pré-processar o mapa de ocupações (O(M))
+        # Criamos um set() para cada data, pois a busca 'in' no set é O(1), muito mais rápida que em listas
+        occupations = self.context.get('occupations', [])
+        occupation_map = defaultdict(list)
+        for occ in occupations:
+            occupation_map[occ.date].extend(map_bitmap_to_index(occ.bitmap))
+
+        results = []
+        # occurrences = obj.get_occurrences(dt_after, dt_before, tm_current_time)
+        # 3. Loop Único para Filtragem e Construção do Resultado
+        for occ in occurrences:
+            occ_date = occ.date()
+            slot = time_to_slots(occ.time())
+            # Se o slot não estiver ocupado naquela data, já adicionamos o datetime final à lista
+            if slot not in occupation_map.get(occ_date, set()):
+                results.append(datetime.combine(occ_date, slot_to_time(slot)))
+        return results
 class ActionMigrateSerializer(serializers.Serializer):
     availability = serializers.PrimaryKeyRelatedField(
         queryset=Availability.objects.all()

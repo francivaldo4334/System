@@ -78,7 +78,7 @@ const queryCacheFactory = () => {
     const {
       enableRefetch: enabled = true,
       ttl: staleTime = 0,
-      disableCache = False,
+      disableCache = false,
     } = options;
 
     if (!enabled) {
