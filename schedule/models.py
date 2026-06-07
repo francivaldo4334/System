@@ -310,7 +310,7 @@ class ResourceOccupation(models.Model):
                         output_field=models.CharField()
                     )
                 )
-            return qs.filter(bitmap='0' * 288).delete()
+            return qs.exclude(bitmap__icontains='1').delete()
 
     objects = QuerySet.as_manager()
 

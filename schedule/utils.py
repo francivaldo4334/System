@@ -172,10 +172,11 @@ class AssignmentUtil:
 
     def vacateTimeSlot(self):
         from schedule.models import ResourceOccupation, Resource
-        for resource in self.assignment.resources.all():
+        for resource in list(self.assignment.resources.all()):
             resource = cast(Resource, resource)
-            occupation_queryset:ResourceOccupation.QuerySet = resource.resourceoccupation_set.filter(
-                date=self.assignment.date
+            occupation_queryset = ResourceOccupation.objects.filter(
+                date=self.assignment.date,
+                resource=resource,
             )
             occupation_queryset.vacate(
                 start_slot=self.assignment.start_slot,

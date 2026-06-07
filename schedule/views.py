@@ -182,7 +182,7 @@ class AssignmentViewSet(viewsets.mixins.ListModelMixin,
 
     @action(['POST'], True)
     def cancel(self, request, pk):
-        obj = self.get_object()
+        obj = cast(Assignment,self.get_object())
         obj.state.cancel()
         return Response(self.get_serializer(obj).data)
 
