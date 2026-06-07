@@ -31,4 +31,6 @@ admin.site.register(Resource)
 admin.site.register(Availability)
 admin.site.register(Service)
 admin.site.register(ServiceResourceRelation)
-admin.site.register(ResourceOccupation)
+@admin.register(ResourceOccupation)
+class ResourceOccupationAdmin(admin.ModelAdmin):
+    list_filter = ['resource', 'date']
