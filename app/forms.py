@@ -133,6 +133,32 @@ class AvailabilityForm(BaseForm):
         )
     ]
 
+class TimeBlockForm(BaseForm):
+    key = 'time_block'
+    form_fields = [
+        SelectField(
+            name="resource",
+            label=_("Resource"),
+            attrs="required",
+            url_name="resources",
+        ),
+        DateField(
+            name="date",
+            label=_("Date"),
+            attrs="required",
+        ),
+        TimeField(
+            name="time_start",
+            label=_("Start Time"),
+            attrs="required",
+        ),
+        TimeField(
+            name="time_duration",
+            label=_("Duration"),
+            attrs="required",
+        ),
+    ]
+
 class ResourceForm(BaseForm):
     key = 'resources'
     form_fields = [

@@ -1,6 +1,6 @@
 import django_filters as filters
 
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from django.db.models import Q
 
 
@@ -162,3 +162,16 @@ class AssignmentFilterSet(filters.FilterSet):
             ) |
             Q(resources__name__icontains=value)
         ).distinct()
+
+class TimeBlockFilterSet(filters.FilterSet):
+    search = filters.CharFilter(method="filter_search")
+    class Meta:
+        model = TimeBlock
+        fields = []
+
+    def filter_search(self, queryset, name, value):
+        if not value:
+            return queryset
+        return queryset.filter(
+            Q(resource__name=value)
+        )

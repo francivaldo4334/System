@@ -3,11 +3,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from authentication.services import SendEmail
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceSelectable, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from django.utils.translation import gettext_lazy as _
 
 from schedule.services import LinkGenerator
-from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, ResourceOcuppied, ServiceIsRequired
+from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, ResourceOcuppied, ServiceIsRequired, slot_to_time, time_to_slots
 
 
 class ResourceSerializer(serializers.ModelSerializer):
@@ -416,3 +416,41 @@ class ActionMigrateSerializer(serializers.Serializer):
 class DashboardSerializer(serializers.Serializer):
     status = serializers.ChoiceField(choices=Assignment.Status.choices)
     total = serializers.IntegerField()
+
+
+class TimeBlockSerializer(serializers.ModelSerializer):
+    time_start = serializers.TimeField(write_only=True)
+    time_duration = serializers.TimeField(write_only=True)
+    resource_name = serializers.ReadOnlyField(source="resource.name")
+    class Meta:
+        model = TimeBlock
+        fields = [
+            'id',
+            'resource',
+            'resource_name',
+            'date',
+            'time_start',
+            'time_duration',
+            'start_slot',
+            'duration_slot',
+        ]
+        read_only_fields = [
+            'start_slot',
+            'duration_slot',
+        ]
+    def validate(self, attrs):
+        time_start = attrs.pop('time_start', None)
+        time_duration = attrs.pop('time_duration', None)
+        attrs['start_slot'] = time_to_slots(time_start)
+        attrs['duration_slot'] = time_to_slots(time_duration)
+
+        return attrs
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data.update(
+            {
+                'time_start': slot_to_time(instance.start_slot),
+                'time_duration': slot_to_time(instance.duration_slot),
+            }
+        )
+        return data

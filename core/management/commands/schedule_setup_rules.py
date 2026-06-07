@@ -14,6 +14,7 @@ PERMISSION_GROUPS = {
         'view_serviceresourcerelation',
         'view_appconfig',
         'view_customuser',
+        'view_timeblock',
 
         'change_resource',
         'change_availability',
@@ -22,6 +23,7 @@ PERMISSION_GROUPS = {
         'change_serviceresourcerelation',
         'change_appconfig',
         'change_customuser',
+        'change_timeblock',
 
         'add_resource',
         'add_availability',
@@ -30,6 +32,7 @@ PERMISSION_GROUPS = {
         'add_serviceresourcerelation',
         'add_appconfig',
         'add_customuser',
+        'add_timeblock',
 
         'delete_resource',
         'delete_availability',
@@ -37,6 +40,7 @@ PERMISSION_GROUPS = {
         'delete_service',
         'delete_serviceresourcerelation',
         'delete_customuser',
+        'delete_timeblock',
 
         'view_message',
         'add_message',

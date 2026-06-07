@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm, UserForm
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm, TimeBlockForm, UserForm
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
-from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table, UserTable
+from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table, TimeBlockTable, UserTable
 from authentication.permissions import IsEmailCheckedPermission
 from core.permissions import IsFrontDesk, IsOnlyClient, IsOwner, IsProfessional
 
@@ -88,6 +88,12 @@ class AppScheduleSettingsView(AppView):
             })
             context.update({
                 'setting_tag_selected': 'app-schedule-settings-availabilities',
+            })
+        if user.has_perm('schedule.view_timeblock'):
+            setting_tabs.append({
+                'label': _("Time Block"),
+                'url_name': 'app-schedule-settings-time-block',
+                'is_dynamic': False,  # Flag útil para o template diferenciar as URLs
             })
 
         if user.has_perm('schedule.view_resource'):
@@ -222,6 +228,14 @@ class ScheduleSettingsAvailabilitiesView(CrudView):
     table = AvailabilityTable
     modal_create_title = _("Add new availability")
     modal_update_title = _("Update availability")
+
+class ScheduleSettingsTimeBlockView(CrudView):
+    key = 'time_block'
+    model_name="timeblock"
+    form = TimeBlockForm
+    table = TimeBlockTable
+    modal_create_title = _("Add new time block")
+    modal_update_title = _("Update time block")
 
 class ScheduleSettingsResourceView(CrudView):
     key = 'resources'

@@ -120,3 +120,6 @@ def slot_to_time(slot: int) -> datetime.time:
     hours = total_minutes // 60
     minutes = total_minutes % 60
     return datetime.time(hours, minutes)
+def time_to_slots(t: datetime.time) -> int:
+    total_minutes = t.hour * 60 + t.minute
+    return total_minutes // 5

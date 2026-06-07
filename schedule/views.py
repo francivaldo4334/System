@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from core.permissions import IsClient, IsFrontDesk, IsOwner
 from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from schedule.serializers import (
         ActionMigrateSerializer,
         AssignmentSerializer,
@@ -27,7 +27,8 @@ from schedule.serializers import (
         ResourcePersonSerializer,
         ResourceSerializer,
         ServiceResourceRelationSerializer,
-        ServiceSerializer
+        ServiceSerializer,
+        TimeBlockSerializer
     )
 from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
@@ -327,3 +328,9 @@ class DashboardAPIView(GenericAPIView):
         ).annotate(total=Count('status'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class TimeBlockViewSet(viewsets.ModelViewSet):
+    queryset = TimeBlock.objects.all()
+    serializer_class = TimeBlockSerializer
+    filterset_class = 

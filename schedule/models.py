@@ -261,6 +261,12 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
                 date += timedelta(days=1)
         return super().save(*args, **kwargs)
 
+class TimeBlock(models.Model):
+    resource = models.ForeignKey(Resource,models.CASCADE)
+    date = models.DateField()
+    start_slot = models.PositiveSmallIntegerField()
+    duration_slot = models.PositiveSmallIntegerField()
+
 
 class ResourceOccupation(models.Model):
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)

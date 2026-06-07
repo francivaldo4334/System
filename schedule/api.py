@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from schedule.models import ResourceNotSelectable
-from schedule.views import AssignmentViewSet, AvailabilityPresentationAPIView, AvailabilityViewSet, ClientAssignmentViewSet, DashboardAPIView, DynamicResourceViewSet, ResourceViewSet, ServiceRequirementsViewSet, ServiceViewSet
+from schedule.views import AssignmentViewSet, AvailabilityPresentationAPIView, AvailabilityViewSet, ClientAssignmentViewSet, DashboardAPIView, DynamicResourceViewSet, ResourceViewSet, ServiceRequirementsViewSet, ServiceViewSet, TimeBlockViewSet
 
 router = routers.SimpleRouter()
 
@@ -12,6 +12,7 @@ router.register('service_requirements', ServiceRequirementsViewSet, 'service_req
 router.register('assignment', AssignmentViewSet, 'assignment')
 router.register('client/assignment', ClientAssignmentViewSet, 'client_assignment')
 router.register('availabilities', AvailabilityViewSet, 'availabilities')
+router.register('time_block', TimeBlockViewSet, basename='time_block')
 
 dynamic_resource_list = DynamicResourceViewSet.as_view({'get': 'list', 'post': 'create'})
 dynamic_resource_detail = DynamicResourceViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})

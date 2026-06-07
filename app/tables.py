@@ -68,6 +68,20 @@ class AvailabilityTable(BaseTable):
         ('valid_until', 'date'),
         ('description', 'text'),
     ]
+class TimeBlockTable(BaseTable):
+    key="time_block"
+    thead = [
+        _("Resource"),
+        _("Date"),
+        _("Start Time"),
+        _("Duration"),
+    ]
+    tr = [
+        ('resource_name', 'text'),
+        ('date', 'date'),
+        ('time_start', 'time'),
+        ('time_duration', 'time'),
+    ]
 class ResourcesTable(BaseTable):
     key = 'resources'
     thead = [
