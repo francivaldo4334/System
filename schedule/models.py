@@ -274,36 +274,6 @@ class ResourceOccupation(models.Model):
         return f'{self.resource}{self.date}'
     class QuerySet(models.QuerySet):
         def available(self,start_slot, duration_slot):
-            print("HREE", start_slot, duration_slot, type(start_slot), type(duration_slot))
-            # try:
-            #         start_slot = int(start_slot)
-            #         duration_slot = int(duration_slot)
-            # except (TypeError, ValueError):
-            #     return self.none()
-
-            # if start_slot < 0 or duration_slot <= 0:
-            #     return self.none()
-
-            # # 1. Cria o valor numérico da máscara no Python
-            # search_mask_int = ((1 << duration_slot) - 1) << start_slot
-
-            # # 2. Convertemos para string binária (ex: '11100')
-            # raw_bin_str = bin(search_mask_int)[2:]
-
-            # # 3. No RawSQL, usamos a função 'lpad' do Postgres para alinhar o tamanho da máscara.
-            # # O 'lpad' vai preencher a nossa string com zeros à esquerda até ela ter o MESMO
-            # # comprimento (length) da coluna 'bitmap'.
-            # return self.annotate(
-            #     is_conflict=RawSQL(
-            #         """
-            #         (bitmap::bit varying & 
-            #          lpad(%s, length(bitmap), '0')::bit varying) 
-            #         != lpad('0', length(bitmap), '0')::bit varying
-            #         """, 
-            #         (raw_bin_str,)
-            #     )
-            # ).filter(is_conflict=False)
-
             try:
                 start_slot = int(start_slot)
                 duration_slot = int(duration_slot)
