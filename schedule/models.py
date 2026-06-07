@@ -270,6 +270,8 @@ class ResourceOccupation(models.Model):
     bitmap = models.CharField(max_length=288,
                               validators=[RegexValidator(r'^[0-1]+\Z'), MinLengthValidator(288)],
                               default='0'*288)
+    def __str__(self):
+        return f'{self.resource}{self.date}'
     class QuerySet(models.QuerySet):
         def available(self,start_slot, duration_slot):
             try:
