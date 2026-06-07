@@ -1,9 +1,10 @@
+from datetime import timedelta
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from authentication.services import SendEmail
-from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
+from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from django.utils.translation import gettext_lazy as _
 
 from schedule.services import LinkGenerator
@@ -366,31 +367,43 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
         ]
 
     def get_occurrences(self, obj: Availability):
-        from datetime import datetime
-        assignments = self.context.get('assignments', [])
-        current_time = self.context.get('current_time', None)
-        exclude_times = set()
-        for assignment in assignments:
-            hours, minutes = divmod(assignment.start_slot * 5, 60)
-            exclude_times.add(f'{hours:02d}:{minutes:02d}')
+            from datetime import datetime
+            from collections import defaultdict
+            def map_bitmap_to_index(bit_string: str) -> list[int]:
+                return [i for i, it in enumerate(bit_string) if it == '1']
 
-        dt_before_str = self.context.get('dt_before', None)
-        dt_after_str = self.context.get('dt_after', None)
-        if not dt_before_str or not dt_after_str:
-            return []
-        dt_before = datetime.strptime(dt_before_str, '%Y-%m-%d').date()
-        dt_after = datetime.strptime(dt_after_str, '%Y-%m-%d').date()
-        if current_time:
-            tm_curremt_time = datetime.strptime(current_time, '%H:%M').time()
-            print(current_time, tm_curremt_time)
-        else:
-            tm_curremt_time = None
-        occurences = obj.get_occurrences(dt_after, dt_before, tm_curremt_time)
-        return [
-            it for it in occurences
-            if it.strftime('%H:%M') not in exclude_times
-        ]
+            dt_after_str = self.context.get('dt_after')
+            dt_before_str = self.context.get('dt_before')
+        
+            if not dt_before_str or not dt_after_str:
+                return []
 
+            # Parsing de datas
+            dt_before = datetime.strptime(dt_before_str, '%Y-%m-%d').date()
+            dt_after = datetime.strptime(dt_after_str, '%Y-%m-%d').date()
+
+            current_time = self.context.get('current_time')
+            tm_current_time = datetime.strptime(current_time, '%H:%M').time() if current_time else None
+
+            # 2. Pré-processar o mapa de ocupações (O(M))
+            # Criamos um set() para cada data, pois a busca 'in' no set é O(1), muito mais rápida que em listas
+            occupations = self.context.get('occupations', [])
+            occupation_map = defaultdict(list)
+            for occ in occupations:
+                occupation_map[occ.date].extend(map_bitmap_to_index(occ.bitmap))
+
+            results = []
+            occurrences = obj.get_occurrences(dt_after, dt_before, tm_current_time)
+            # 3. Loop Único para Filtragem e Construção do Resultado
+            for occ in occurrences:
+                occ_date = occ.date()
+                slot = time_to_slots(occ.time())
+            
+                # Se o slot não estiver ocupado naquela data, já adicionamos o datetime final à lista
+                if slot not in occupation_map.get(occ_date, set()):
+                    results.append(datetime.combine(occ_date, slot_to_time(slot)))
+
+            return results
 class ActionMigrateSerializer(serializers.Serializer):
     availability = serializers.PrimaryKeyRelatedField(
         queryset=Availability.objects.all()

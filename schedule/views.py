@@ -13,7 +13,7 @@ from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_4
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from core.permissions import IsClient, IsFrontDesk, IsOwner
-from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet, TimeBlockFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, AvailabilityPresentationOccupationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet, TimeBlockFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from schedule.serializers import (
         ActionMigrateSerializer,
@@ -287,24 +287,24 @@ class AvailabilityPresentationAPIView(ListAPIView):
         date = self.request.query_params.get('day', None)
         current_time = self.request.query_params.get("current_time", None)
 
-        assignment_filterset = AvailabilityPresentationAssignmentFilterSet(
+        occupation_filterset = AvailabilityPresentationOccupationFilterSet(
             {
                 **self.request.query_params.dict(),
                 'date_after': dt_after,
                 'date_before': dt_after,
                 'day': date,
             },
-            Assignment.objects.filter(date=date).visibles()
+            ResourceOccupation.objects.all(),
         )
-        if not assignment_filterset.is_valid():
-            raise self.AssignmentFilterSetError(assignment_filterset.errors)
+        if not occupation_filterset.is_valid():
+            raise self.AssignmentFilterSetError(occupation_filterset.errors)
 
         if date:
             dt_before = date
             dt_after = date
 
         context.update({
-            'assignments': assignment_filterset.qs,
+            'occupations': list(occupation_filterset.qs),
             'dt_before': dt_before,
             'dt_after': dt_after,
             'current_time': current_time,

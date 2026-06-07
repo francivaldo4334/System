@@ -84,6 +84,40 @@ class AvailabilityPresentationAssignmentFilterSet(filters.FilterSet):
         model = Assignment
         fields = []
 
+class AvailabilityPresentationOccupationFilterSet(filters.FilterSet):
+    date_after = filters.DateFilter(field_name='date_after', method='filter_by_range')
+    date_before = filters.DateFilter(field_name='date_before', method='filter_by_range')
+    day = filters.DateFilter(field_name='date')
+    service = filters.ModelChoiceFilter(
+        'resource__serviceresourcerelation__service',
+        queryset=Service.objects.all()
+    )
+
+    resource = filters.BaseInFilter('resources__id', method='filter_pass')
+    resource_category = filters.BaseInFilter('resources__parent_id', method='filter_pass')
+
+    def filter_by_range(self, queryset, name, value):
+        date_after = self.data.get('date_after')
+        date_before = self.data.get('date_before')
+
+        if not date_after or not date_before:
+            return queryset
+
+        if name == 'date_before':
+            return queryset.filter(
+                date__gte=date_after,
+                date__lte=date_before,
+            )
+        
+        return queryset
+
+    def filter_pass(self, queryset, name, value):
+        return queryset
+
+    class Meta:
+        model = Assignment
+        fields = []
+
 class ResourceFilterSet(filters.FilterSet):
     use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
     is_selectable = filters.BooleanFilter('is_selectable')
