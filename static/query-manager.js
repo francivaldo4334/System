@@ -5,6 +5,8 @@ const queryCacheFactory = () => {
 
   // O registry agora guarda a chave original (array) para permitir a busca por prefixo
   const registry = new Map();
+  // Cache  Desabilitado
+  const hoCache = new Map();
 
   // Função utilitária para serializar arrays de forma consistente
   const serializeKey = (key) => JSON.stringify(Array.isArray(key) ? key : [key]);
@@ -47,13 +49,14 @@ const queryCacheFactory = () => {
     const promise = (async () => {
       try {
         const data = await queryFn();
-
-        const entry = cache.get(serializedKey) || {};
-        cache.set(serializedKey, {
-          ...entry,
-          data,
-          updatedAt: Date.now(),
-        });
+        if (!hoCache.get(serializedKey)) {
+          const entry = cache.get(serializedKey) || {};
+          cache.set(serializedKey, {
+            ...entry,
+            data,
+            updatedAt: Date.now(),
+          });
+        }
 
         if (typeof onSuccess === 'function') onSuccess(data);
         return data;
@@ -72,16 +75,25 @@ const queryCacheFactory = () => {
 
   async function useQueryCache(_queryKey, queryFn, callbacks = {}, options = {}) {
     const queryKey = Array.isArray(_queryKey) ? _queryKey : [_queryKey];
-    const { enableRefetch: enabled = true, ttl: staleTime = 0 } = options;
+    const {
+      enableRefetch: enabled = true,
+      ttl: staleTime = 0,
+      disableCache = False,
+    } = options;
 
     if (!enabled) {
       return null;
     }
-
     const serializedKey = serializeKey(queryKey);
 
     // Registra guardando a chave original em formato de array para a lógica do prefixo
     registry.set(serializedKey, { originalKey: queryKey, queryFn, callbacks });
+    // Deabilita o cache
+    hoCache.set(serializedKey, false)
+    if (disableCache) {
+      hoCache.set(serializedKey, true)
+    }
+
 
     const cachedEntry = cache.get(serializedKey);
     const now = Date.now();
