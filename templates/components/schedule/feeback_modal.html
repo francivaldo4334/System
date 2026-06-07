@@ -2,15 +2,18 @@
     <input id="feedback-drawer" type="checkbox" class="drawer-toggle" />
 
     <div class="drawer-content">
-
         <label for="feedback-drawer"
-            class="btn btn-md sm:btn-lg btn-primary btn-circle fixed bottom-14 !sm:bottom-4 right-4 transition-all duration-300 hover:scale-105 hover:rotate-12 active:scale-95 group tooltip tooltip-left"
+            class="btn-feedback btn btn-md sm:btn-lg btn-primary btn-circle fixed bottom-14 !sm:bottom-4 right-4 transition-all duration-300 hover:scale-105 hover:rotate-12 active:scale-95 group tooltip tooltip-left"
             data-tip="{%trans 'Your opinion matters.'%}">
 
             <span
-                class="absolute inline-flex h-full w-full rounded-full bg-primary opacity-20 animate-ping group-hover:hidden">
-            </span>
+                class="absolute inline-flex h-full w-full rounded-full bg-primary opacity-20 animate-ping group-hover:hidden"></span>
+
             {%include 'icons/message-square-quote.svg'%}
+
+            <span class="feedback-indicator">
+                <span class="indicator-dot"></span>
+            </span>
         </label>
 
     </div>

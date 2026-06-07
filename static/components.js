@@ -135,66 +135,66 @@ createComponent('feedback-response', {
   props: [
     'text',
     'date',
+    'response_label',
   ],
   html: `
     <div class="bg-primary/5 border-l-4 border-primary p-3 rounded-r-lg space-y-1">
         <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-primary">
-                {%trans "Response"%}
+            <span class="text-xs font-bold text-primary js-response-label">
             </span>
-            <span class="text-[10px] text-base-content/40" id="id_feedback_response_created_at">
+            <span class="text-[10px] text-base-content/40 js-response-date">
             </span>
         </div>
-        <p class="text-xs text-base-content/90 leading-relaxed" id="id_feedback_response_text"></p>
+        <p class="text-xs text-base-content/90 leading-relaxed js-response-text"></p>
     </div>
   `,
   onUpdate(name, value) {
     if (name === 'text') {
-      const content = this.$('#id_feedback_response_text');
-      content.innerText = value
+      // Busca pela classe dentro do escopo do próprio elemento
+      const content = this.$('.js-response-text');
+      if (content) content.innerText = value;
     }
     if (name === 'date') {
-      const content = this.$('#id_feedback_response_created_at');
-      content.innerText = value
+      const content = this.$('.js-response-date');
+      if (content) content.innerText = value;
+    }
+    if (name === 'response_label') {
+      const content = this.$('.js-response-label');
+      if (content) content.innerText = value;
     }
   }
-})
+});
 createComponent('app-fb', {
   scoped: false,
   html: `
-<div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
+  <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-xl shadow-sm">
       <input type="radio" name="feedback-accordion" checked="checked" />
       <div class="collapse-title p-4 pr-10">
           <div class="flex flex-wrap items-center gap-1.5 mb-2">
-              <span class="badge badge-sm badge-info font-medium" id="id_feedback_category"></span>
-              <span class=" badge badge-sm badge-outline font-semibold" id="id_feedback_status"></span>
+              <span class="badge badge-sm badge-info font-medium js-feedback-category"></span>
+              <span class="badge badge-sm badge-outline font-semibold js-feedback-status"></span>
           </div>
           <div class="text-[10px] text-base-content/50 mt-1 flex gap-2">
               <span>
-                  <span id="id_feedback_create_label">
-                  </span>
-                  <span id="id_feedback_created_at"></span>
+                  <span class="js-feedback-create-label"></span>
+                  <span class="js-feedback-created-at"></span>
               </span>
               <span>•</span>
               <span class="text-warning-content/80 font-medium">
-                  <span id="id_feedback_update_label">
-                  </span>
-                  <span id="id_feedback_updated_at"></span>
+                  <span class="js-feedback-update-label"></span>
+                  <span class="js-feedback-updated-at"></span>
               </span>
           </div>
       </div>
       <div class="collapse-content px-4 pb-4 text-sm space-y-3">
           <div class="p-3 bg-base-200/60 rounded-lg text-xs text-base-content/80 italic">
-              "
-                <span id="id_feedback_text"></span>
-              "
+              " <span class="js-feedback-text"></span> "
           </div>
-          <!-- Linha do tempo interna da resposta -->
-          <div id="id_response_content">
+          <div class="js-response-content">
           </div>
       </div>
   </div>
-`,
+  `,
   props: [
     "create_label",
     "update_label",
@@ -203,40 +203,38 @@ createComponent('app-fb', {
     "category",
     "status",
     "text",
+    "new_response",
   ],
   onUpdate(name, value) {
     let el = null;
-    if (name === "create_label")
-      el = this.$("#id_feedback_create_label")
-    if (name === "update_label")
-      el = this.$("#id_feedback_update_label")
-    if (name === "category")
-      el = this.$("#id_feedback_category")
-    if (name === "status")
-      el = this.$("#id_feedback_status")
-    if (name === "text")
-      el = this.$("#id_feedback_text")
-    if (name === "create_at")
-      el = this.$("#id_feedback_created_at")
-    if (name === "update_at")
-      el = this.$("#id_feedback_updated_at")
-    if (el) el.innerText = value
+    if (name === "create_label") el = this.$(".js-feedback-create-label");
+    if (name === "update_label") el = this.$(".js-feedback-update-label");
+    if (name === "category") el = this.$(".js-feedback-category");
+    if (name === "status") el = this.$(".js-feedback-status");
+    if (name === "text") el = this.$(".js-feedback-text");
+    if (name === "create_at") el = this.$(".js-feedback-created-at");
+    if (name === "update_at") el = this.$(".js-feedback-updated-at");
 
+    if (name === 'new_response') {
+      this.addResponse(JSON.parse(value))
+    }
+
+    if (el) el.innerText = value;
   },
   addResponse(response) {
-    const { text, date } = response;
-    const content = this.$('#id_response_content');
+    const { text, date, response_label } = response;
+    const content = this.$('.js-response-content');
 
-    // Cria o elemento corretamente
+    if (!content) return; // Proteção extra caso o DOM ainda não esteja pronto
+
     const resp = document.createElement('feedback-response');
-
-    // ✅ Define os atributos na variável CORRETA (resp)
     resp.setAttribute('text', text || '');
     resp.setAttribute('date', date || '');
+    resp.setAttribute('response_label', response_label || '');
 
     content.appendChild(resp);
   }
-})
+});
 createComponent('app-assignment', {
   props: [
     'date',

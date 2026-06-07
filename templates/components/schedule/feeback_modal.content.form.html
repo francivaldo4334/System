@@ -41,7 +41,6 @@
                         const feedbackScrollContent = document.getElementById('id_feedback_scroll_content');
                         if (!feedbackScrollContent) return;
 
-                        // Limpa o container
                         feedbackScrollContent.textContent = '';
 
                         const labelUpdate = "{% trans 'Last update' %}";
@@ -63,7 +62,6 @@
                                 }).format(dateObj);
                             }
 
-                            // Define os atributos mapeados nas 'props' do seu componente
                             feedbackMessage.setAttribute('update_label', labelUpdate);
                             feedbackMessage.setAttribute('create_label', labelCreate);
                             feedbackMessage.setAttribute('create_at', fmt(it.created || ''));
@@ -82,11 +80,18 @@
                             }[it.status || '']);
                             feedbackMessage.setAttribute('text', it.text || '');
 
-                            // Se houverem respostas aninhadas vindas da API, você chama a sua função interna:
-                            // if (it.responses) {
-                            //     it.responses.forEach(res => feedbackMessage.addResponse(res));
-                            // }
-
+                            if (it.response_set){
+                                it.response_set?.forEach(it => {
+                                    if (it.is_viewed){
+                                      document.querySelector(".btn-feedback")?.dataset.veiw = true  
+                                    }
+                                    feedbackMessage.setAttribute("new_response",JSON.stringify({
+                                        text: it.text,
+                                        date: fmt(it.created),
+                                        response_label:"{% trans "Response" %}"
+                                    }))
+                                })
+                            }
                             fragment.appendChild(feedbackMessage);
                         });
 
