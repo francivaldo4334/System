@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models, transaction
+from django.db.models.expressions import RawSQL
 from django.db.models.functions import Concat, Substr
 from rest_framework.fields import MinValueValidator
 from core.models import ActivatorModel, CreatedByModel, DescriptionModel, TimeStampedModel, TitleDescriptionModel
@@ -261,12 +262,6 @@ class Availability(TimeStampedModel, ActivatorModel, DescriptionModel):
                 date += timedelta(days=1)
         return super().save(*args, **kwargs)
 
-class TimeBlock(models.Model):
-    resource = models.ForeignKey(Resource,models.CASCADE)
-    date = models.DateField()
-    start_slot = models.PositiveSmallIntegerField()
-    duration_slot = models.PositiveSmallIntegerField()
-
 
 class ResourceOccupation(models.Model):
     resource = models.ForeignKey(ResourceSelectable, models.CASCADE)
@@ -277,9 +272,46 @@ class ResourceOccupation(models.Model):
                               default='0'*288)
     class QuerySet(models.QuerySet):
         def available(self,start_slot, duration_slot):
-            return self.filter(
-                bitmap__regex=f'^.{{{start_slot}}}0{{{duration_slot}}}'
-            )
+            try:
+                    start_slot = int(start_slot)
+                    duration_slot = int(duration_slot)
+            except (TypeError, ValueError):
+                return self.none()
+
+            if start_slot < 0 or duration_slot <= 0:
+                return self.none()
+
+            # 1. Cria o valor numérico da máscara no Python
+            search_mask_int = ((1 << duration_slot) - 1) << start_slot
+
+            # 2. Convertemos para string binária (ex: '11100')
+            raw_bin_str = bin(search_mask_int)[2:]
+
+            # 3. No RawSQL, usamos a função 'lpad' do Postgres para alinhar o tamanho da máscara.
+            # O 'lpad' vai preencher a nossa string com zeros à esquerda até ela ter o MESMO
+            # comprimento (length) da coluna 'bitmap'.
+            return self.annotate(
+                is_conflict=RawSQL(
+                    """
+                    (bitmap::bit varying & 
+                     lpad(%s, length(bitmap), '0')::bit varying) 
+                    != lpad('0', length(bitmap), '0')::bit varying
+                    """, 
+                    (raw_bin_str,)
+                )
+            ).filter(is_conflict=False)
+
+            # try:
+            #     start_slot = int(start_slot)
+            #     duration_slot = int(duration_slot)
+            # except (ValueError, TypeError):
+            #     return self.none()
+
+            # if start_slot < 0 or duration_slot <= 0:
+            #     return self.none()
+            # return self.filter(
+            #     bitmap__regex=f'^.{{{start_slot}}}0{{{duration_slot}}}'
+            # )
         def occupy(self, start_slot, duration_slot):
             return self.update(
                 bitmap=Concat(
@@ -306,6 +338,37 @@ class ResourceOccupation(models.Model):
 
     class Meta:
         unique_together = ['resource', 'date']
+
+class TimeBlock(models.Model):
+    resource = models.ForeignKey(Resource,models.CASCADE)
+    date = models.DateField()
+    start_slot = models.PositiveSmallIntegerField()
+    duration_slot = models.PositiveSmallIntegerField()
+
+    class SlotsFilledError(Exception):
+        pass
+
+    def save(self, *, force_insert=False, force_update=False, using=None, update_fields=None):
+        occupation, _ = ResourceOccupation.objects.get_or_create(
+            resource=self.resource,
+            date=self.date,
+        )
+        occupation_qs = ResourceOccupation.objects.filter(
+            resource=self.resource,
+            date=self.date,
+        )
+        if not occupation_qs.available(self.start_slot, self.duration_slot).exists():
+            raise self.SlotsFilledError()
+        occupation_qs.occupy(self.start_slot, self.duration_slot)
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+    def delete(self, using=None, keep_parents=False):
+        ResourceOccupation.objects.filter(
+            resource=self.resource,
+            date=self.date,
+        ).vacate(self.start_slot, self.duration_slot)
+        return super().delete(using, keep_parents)
+
 
 class Assignment(TimeStampedModel, CreatedByModel):
     class QuerySet(models.QuerySet):

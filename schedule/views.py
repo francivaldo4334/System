@@ -1,13 +1,12 @@
 # pyright: reportAttributeAccessIssue=false
-from datetime import timedelta
-from typing import Self, Type, cast
+from typing import cast
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from django.db.models import Count
 from django.db.models.deletion import ProtectedError
 from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.utils.timezone import datetime
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_404
@@ -334,3 +333,15 @@ class TimeBlockViewSet(viewsets.ModelViewSet):
     queryset = TimeBlock.objects.all()
     serializer_class = TimeBlockSerializer
     filterset_class = TimeBlockFilterSet
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
