@@ -14,7 +14,7 @@ class ResponseSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    response_set = ResponseSerializer(many=True)
+    response_set = ResponseSerializer(many=True, read_only=True)
     class Meta:
         model = Message
         fields = [
