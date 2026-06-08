@@ -8,6 +8,7 @@ from schedule.models import ResourceNotSelectable
 PERMISSION_GROUPS = {
     'OWNER': [
         'view_resource',
+        'view_resourcenotselectable',
         'view_availability',
         'view_assignment',
         'view_service',
@@ -17,6 +18,7 @@ PERMISSION_GROUPS = {
         'view_timeblock',
 
         'change_resource',
+        'change_resourcenotselectable',
         'change_availability',
         'change_assignment',
         'change_service',
@@ -26,6 +28,7 @@ PERMISSION_GROUPS = {
         'change_timeblock',
 
         'add_resource',
+        'add_resourcenotselectable',
         'add_availability',
         'add_assignment',
         'add_service',
@@ -35,6 +38,7 @@ PERMISSION_GROUPS = {
         'add_timeblock',
 
         'delete_resource',
+        'delete_resourcenotselectable',
         'delete_availability',
         'delete_assignment',
         'delete_service',

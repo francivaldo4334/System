@@ -1,7 +1,7 @@
 from django.urls import path
 from app.views import (
     AppConfigView, AppConfitView, AppScheduleSettingsView, AppScheduleView, HomeView,
-    ScheduleSettingsAvailabilitiesView, ScheduleSettingsResourcePersonView,
+    ScheduleSettingsAvailabilitiesView, ScheduleSettingsResourceCategoryView, ScheduleSettingsResourcePersonView,
     ScheduleSettingsResourceView, ScheduleSettingsServiceRequirementsView,
     ScheduleSettingsServiceView, ScheduleSettingsTimeBlockView, SelfScheduleView, RegisterView, SettingsUserView,
 )
@@ -15,6 +15,7 @@ urlpatterns = [
     path('schedule/settings', AppScheduleSettingsView.as_view(), name='app-schedule-settings'),
     path('schedule/settings/availabilities', ScheduleSettingsAvailabilitiesView.as_view(), name="app-schedule-settings-availabilities"),
     path('schedule/settings/time_block', ScheduleSettingsTimeBlockView.as_view(),name="app-schedule-settings-time-block"),
+    path('schedule/settings/resources_category', ScheduleSettingsResourceCategoryView.as_view(), name='app-schedule-settings-resources_category'),
     
     # NOVAS ROTAS DINÂMICAS: Sem queries no startup, capturando a key direto da URL
     path('schedule/settings/resource/object/<str:key>/', ScheduleSettingsResourceView.as_view(), name='app-schedule-settings-resource-object'),

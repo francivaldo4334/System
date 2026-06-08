@@ -1,0 +1,12 @@
+{%extends "components/form/fields/base.html"%}
+{%block field%}
+<select class="select select-sm" id="{{key}}_{{field.id}}" name="{{field.name}}" {{field.attrs}}>
+    {%for c in field.choices%}
+    <option value="{{c.value}}">
+        {{c.label}}
+    </option>
+    {%endfor%}
+</select>
+{%if field.url_name%}
+{%endif%}
+{%endblock%}

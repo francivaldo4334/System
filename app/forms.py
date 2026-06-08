@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import timedelta
-from typing import Any, List
+from typing import Any, List, Optional
 
 from django import forms
 from authentication.models import CustomUser
@@ -23,6 +23,16 @@ class SelectField(Field):
     url_name: str = "";
     url_query_params: str = "";
     type:str = "select"
+
+@dataclass
+class ChoiceItem():
+    value: str
+    label: Any
+
+@dataclass
+class ChoiceField(Field):
+    choices: Optional[List[ChoiceItem]] = None
+    type:str = "choice"
 
 @dataclass
 class NumberField(Field):
@@ -131,6 +141,50 @@ class AvailabilityForm(BaseForm):
             label=_("Description"),
             attrs='required'
         )
+    ]
+
+class ResourceCategory(BaseForm):
+    key = "resources_category"
+    form_fields = [
+        ChoiceField(
+            label=_("Nature of the resource"),
+            name="resource_type",
+            attrs="required",
+            choices=[
+                ChoiceItem(
+                    value="OBJECT",
+                    label=_("Object")
+                ),
+                ChoiceItem(
+                    value="PERSON",
+                    label=_("System user")
+                ),
+            ]
+        ),
+        Field(
+            label=_("Name"),
+            name="name",
+            attrs="required",
+        ),
+        ChoiceField(
+            label=_("Selection method"),
+            name="choice_type",
+            attrs="required",
+            choices=[
+                ChoiceItem(
+                    value="RFC",
+                    label=_("The customer has a choice")
+                ),
+                ChoiceItem(
+                    value="RQC",
+                    label=_("The customer can choose")
+                ),
+                ChoiceItem(
+                    value="IFC",
+                    label=_("The customer does not choose")
+                ),
+            ]
+        ),
     ]
 
 class TimeBlockForm(BaseForm):

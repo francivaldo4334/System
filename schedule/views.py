@@ -13,7 +13,7 @@ from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_4
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from core.permissions import IsClient, IsFrontDesk, IsOwner
-from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, AvailabilityPresentationOccupationFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet, TimeBlockFilterSet
+from schedule.filters import AssignmentFilterSet, AvailabilityFilterSet, AvailabilityPresentationAssignmentFilterSet, AvailabilityPresentationFilterSet, AvailabilityPresentationOccupationFilterSet, ResourceCategoryFilterSet, ResourceFilterSet, ServiceFilterSet, ServiceRequirementsFilterSet, TimeBlockFilterSet
 from schedule.models import Assignment, Availability, Resource, ResourceNotSelectable, ResourceObject, ResourceOccupation, ResourceSelectable, Service, ServiceResourceRelation, TimeBlock
 from schedule.serializers import (
         ActionMigrateSerializer,
@@ -22,6 +22,7 @@ from schedule.serializers import (
         AvailabilitySerializer,
         CreateAssigmentSerializer,
         DashboardSerializer,
+        ResourceCategorySerializer,
         ResourceObjectSerializer,
         ResourcePersonSerializer,
         ResourceSerializer,
@@ -62,6 +63,26 @@ class ResourceViewSet(viewsets.ModelViewSet):
             error = APIException(_("Deletion of %(name)s failed") % {'name': instance._meta.verbose_name})
             error.status_code = 409
             raise error
+
+class ResourceCategoryViewSet(ResourceViewSet):
+    queryset = ResourceNotSelectable.objects.exclude(code='client')
+    serializer_class = ResourceCategorySerializer
+    filterset_class = ResourceCategoryFilterSet
+
+    def get_serializer_context(self):
+        from django.apps import apps
+        from django.conf import settings
+
+        context = super().get_serializer_context()
+        user_model = apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+        content_type = ContentType.objects.get_for_model(user_model)
+        context.update(
+            {
+                'user_content_type': content_type
+            }
+        )
+        return context
+
 class DynamicResourceViewSet(ResourceViewSet):
     serializer_class = ResourceObjectSerializer
 

@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm, TimeBlockForm, UserForm
+from app.forms import AssignmentForm, AvailabilityForm, BaseForm, CustomUserCreationForm, ResourceCategory, ResourceForm, ResourcePersonForm, ServiceForm, ServiceRequirementsForm, TimeBlockForm, UserForm
 from app.models import AppConfig
 from app.serializers import AppConfigSerializer
-from app.tables import AvailabilityTable, BaseTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table, TimeBlockTable, UserTable
+from app.tables import AvailabilityTable, BaseTable, ResourceCategoryTable, ResourcesTable, ServiceRequirementsTable, ServicesTable, Table, TimeBlockTable, UserTable
 from authentication.permissions import IsEmailCheckedPermission
 from core.permissions import IsFrontDesk, IsOnlyClient, IsOwner, IsProfessional
 
@@ -95,6 +95,13 @@ class AppScheduleSettingsView(AppView):
                 'url_name': 'app-schedule-settings-time-block',
                 'is_dynamic': False,  # Flag útil para o template diferenciar as URLs
             })
+        if user.has_perm('schedule.view_resource'):
+            setting_tabs.append({
+                'label': _('Resource Category'),
+                'url_name':'app-schedule-settings-resources_category',
+                'is_dynamic': False,
+            })
+            
 
         if user.has_perm('schedule.view_resource'):
             from schedule.models import ResourceObject, ResourcePerson
@@ -236,6 +243,14 @@ class ScheduleSettingsTimeBlockView(CrudView):
     table = TimeBlockTable
     modal_create_title = _("Add new time block")
     modal_update_title = _("Update time block")
+
+class ScheduleSettingsResourceCategoryView(CrudView):
+    key = "resources_category"
+    model_name = "resource"
+    form = ResourceCategory
+    table = ResourceCategoryTable
+    modal_create_title = _("Add new resource category")
+    modal_update_title = _("Update resource category")
 
 class ScheduleSettingsResourceView(CrudView):
     key = 'resources'

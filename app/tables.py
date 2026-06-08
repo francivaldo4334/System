@@ -56,6 +56,16 @@ class BaseTable:
     def row_data(self):
         return self._table.row_data;
 # tables
+class ResourceCategoryTable(BaseTable):
+    key="resources_category"
+    thead = [
+      _("Nature"),
+      _("Name"),
+    ]
+    tr = [
+        ('resource_type_label', 'text'),
+        ('name', 'text'),
+    ]
 class AvailabilityTable(BaseTable):
     key = 'availabilities'
     thead = [

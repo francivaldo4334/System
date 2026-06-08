@@ -1,5 +1,6 @@
 from datetime import timedelta
 from typing import Any
+from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -12,6 +13,39 @@ from schedule.services import LinkGenerator
 from schedule.utils import ReourceQuantityNotEguals, ResourceNotAllowed, ResourceOcuppied, ServiceIsRequired, slot_to_time, time_to_slots
 
 
+class ResourceCategorySerializer(serializers.ModelSerializer):
+    resource_type = serializers.ChoiceField(
+        choices=[
+            ("PERSON", "Pessoa"),
+            ("OBJECT", "Objeto"),
+        ],
+        write_only=True
+    )
+    resource_type_label = serializers.SerializerMethodField()
+    class Meta:
+        model = ResourceNotSelectable
+        fields = [
+            "id",
+            "name",
+            "choice_type",
+            "resource_type",
+            'resource_type_label',
+        ]
+
+    def get_resource_type_label(self, obj):
+        content_type = self.context.get("user_content_type")
+        return _("System user") if obj.content_type == content_type else _("Object")
+
+    def save(self, **kwargs):
+        if not self.validated_data: raise
+        resource_type = self.validated_data.pop("resource_type")
+
+        if resource_type == "PERSON":
+            content_type = self.context.get("user_content_type")
+            kwargs['content_type'] = content_type
+        if resource_type == "OBJECT":
+            kwargs['content_type'] = None
+        return super().save(**kwargs)
 class ResourceSerializer(serializers.ModelSerializer):
     label = serializers.SerializerMethodField()
     parent_label = serializers.CharField(source='parent.name',
@@ -21,11 +55,11 @@ class ResourceSerializer(serializers.ModelSerializer):
         model = Resource
         fields = [
             'id',
-            'label',
             'name',
             'code',
-            'parent_label',
             'object_id',
+            'label',
+            'parent_label',
         ]
         read_only_fields = [
             'code',
