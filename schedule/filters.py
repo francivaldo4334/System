@@ -93,8 +93,7 @@ class AvailabilityPresentationOccupationFilterSet(filters.FilterSet):
         queryset=Service.objects.all()
     )
 
-    resource = filters.BaseInFilter('resource_id', method='filter_pass')
-    resource_category = filters.BaseInFilter('resource__parent_id', method='filter_pass')
+    resource_category = filters.NumberFilter('resource__parent')
 
     def filter_by_range(self, queryset, name, value):
         date_after = self.data.get('date_after')
@@ -116,7 +115,9 @@ class AvailabilityPresentationOccupationFilterSet(filters.FilterSet):
 
     class Meta:
         model = ResourceOccupation
-        fields = []
+        fields = [
+            'resource',
+        ]
 
 class ResourceFilterSet(filters.FilterSet):
     use_as_category = filters.BooleanFilter('is_selectable', exclude=True)
