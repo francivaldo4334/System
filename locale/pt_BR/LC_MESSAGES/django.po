@@ -88,10 +88,8 @@ msgid "Object"
 msgstr "Objeto"
 
 #: app/forms.py:160 schedule/serializers.py:37
-#, fuzzy
-#| msgid "Update user"
 msgid "System user"
-msgstr "Atualizar usuário"
+msgstr "Usuário do sistema"
 
 #: app/forms.py:165 app/forms.py:221 app/forms.py:272 app/tables.py:63
 #: app/tables.py:106
@@ -99,10 +97,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: app/forms.py:170
-#, fuzzy
-#| msgid "Select an option"
 msgid "Selection method"
-msgstr "Selecione uma opção"
+msgstr "Método de seleção"
 
 #: app/forms.py:176
 msgid "The customer has a choice"
@@ -179,10 +175,8 @@ msgid "Resource Type"
 msgstr "Tipo de recurso"
 
 #: app/tables.py:62
-#, fuzzy
-#| msgid "New feature"
 msgid "Nature"
-msgstr "Novo recurso"
+msgstr "Natureza"
 
 #: app/tables.py:98
 msgid "Resource Name"
@@ -249,16 +243,12 @@ msgid "Update time block"
 msgstr "Atualizar bloqueio de horário"
 
 #: app/views.py:252
-#, fuzzy
-#| msgid "Resource Category"
 msgid "Add new resource category"
-msgstr "Categoria de Recurso"
+msgstr "Adicionar nova categoria de recurso"
 
 #: app/views.py:253
-#, fuzzy
-#| msgid "Resource Category"
 msgid "Update resource category"
-msgstr "Categoria de Recurso"
+msgstr "Atualizar categoria de recurso"
 
 #: app/views.py:288
 msgid "Add new service"
