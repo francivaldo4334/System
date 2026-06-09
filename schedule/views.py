@@ -355,7 +355,9 @@ class TimeBlockViewSet(viewsets.ModelViewSet):
         try:
             return super().handle_exception(exc)
         except TimeBlock.SlotsFilledError:
-            return Response(_("There are time slots being used."), 409)
+            return Response({
+                'detail': _("There are time slots being used.") 
+            }, 409)
 
     @transaction.atomic
     def perform_create(self, serializer):
