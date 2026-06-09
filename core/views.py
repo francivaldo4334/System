@@ -37,7 +37,7 @@ class LandingPageView(TemplateView):
 
 def is_not_tenant_master(view):
     def _view(request, *args, **kwargs):
-        if not request.tenant.is_master:
-            return view(request, *args, **kwargs)
-        return redirect(reverse('home'))
+        # if not request.tenant.is_master:
+        return view(request, *args, **kwargs)
+        # return redirect(reverse('home'))
     return _view
