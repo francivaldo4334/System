@@ -173,11 +173,11 @@ class ResourceCategory(BaseForm):
             choices=[
                 ChoiceItem(
                     value="RFC",
-                    label=_("The customer has a choice")
+                    label=_("The customer can choose")
                 ),
                 ChoiceItem(
                     value="RQC",
-                    label=_("The customer can choose")
+                    label=_("The customer has a choice")
                 ),
                 ChoiceItem(
                     value="IFC",
