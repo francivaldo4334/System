@@ -40,39 +40,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Campo: Senha (Alterado para password1) -->
-                <div class="form-control w-full">
-                    <label class="label pb-1.5" for="password1">
-                        <span class="label-text font-medium text-base-content/80">{% trans 'Password' %}</span>
-                    </label>
-                    <input type="password" id="password1" name="password1" autocomplete="new-password" required
-                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password1.errors %}input-error{% endif %}" />
-                    {% if form.password1.errors %}
-                    <span class="text-xs text-error mt-1 px-1">{{ form.password1.errors.0 }}</span>
-                    {% endif %}
-                </div>
-
-                <!-- Campo: Confirmar Senha (Alterado para password2) -->
-                <div class="form-control w-full">
-                    <label class="label pb-1.5" for="password2">
-                        <span class="label-text font-medium text-base-content/80">{% trans "Confirm password" %}</span>
-                    </label>
-                    <input type="password" id="password2" name="password2" autocomplete="new-password" required
-                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password2.errors %}input-error{% endif %}" />
-                    {% if form.password2.errors %}
-                    <span class="text-xs text-error mt-1 px-1">{{ form.password2.errors.0 }}</span>
-                    {% endif %}
-                </div>
-                <!-- Mostrar senha -->
-                <fieldset class="form-control w-full">
-                    <label class="label">
-                        <input type="checkbox" class="toggle"
-                            onchange="$s.set('show_password',!$s.get('show_password'))" />
-                        {% trans 'Show password' %}
-                    </label>
-                </fieldset>
-                <div class="divider">
-                </div>
 
                 <!-- Campo: Primeiro Nome -->
                 <div class="form-control w-full">
@@ -111,6 +78,40 @@
                     {% endif %}
                 </div>
 
+
+                <div class="divider">
+                </div>
+                <!-- Campo: Senha (Alterado para password1) -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="password1">
+                        <span class="label-text font-medium text-base-content/80">{% trans 'Password' %}</span>
+                    </label>
+                    <input type="password" id="password1" name="password1" autocomplete="new-password" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password1.errors %}input-error{% endif %}" />
+                    {% if form.password1.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.password1.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo: Confirmar Senha (Alterado para password2) -->
+                <div class="form-control w-full">
+                    <label class="label pb-1.5" for="password2">
+                        <span class="label-text font-medium text-base-content/80">{% trans "Confirm password" %}</span>
+                    </label>
+                    <input type="password" id="password2" name="password2" autocomplete="new-password" required
+                        class="input input-bordered w-full transition-all duration-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary {% if form.password2.errors %}input-error{% endif %}" />
+                    {% if form.password2.errors %}
+                    <span class="text-xs text-error mt-1 px-1">{{ form.password2.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <!-- Mostrar senha -->
+                <fieldset class="form-control w-full">
+                    <label class="label">
+                        <input type="checkbox" class="toggle"
+                            onchange="$s.set('show_password',!$s.get('show_password'))" />
+                        {% trans 'Show password' %}
+                    </label>
+                </fieldset>
 
                 <!-- Botão de Submissão -->
                 <div class="form-control pt-4">

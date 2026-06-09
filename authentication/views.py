@@ -148,13 +148,17 @@ class ConfirmEmailView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        uuid_val = self.kwargs.get('uuid')
+        token_val = self.kwargs.get('token')
+
         context.update(
             {
                 'active_url': reverse(
                     'send_email-active-account',
                     kwargs={
-                      'uuid': self.request.GET.get('u'),
-                      'token': self.request.GET.get('t')
+                        'uuid': uuid_val,
+                        'token': token_val
                     }
                 )
             }

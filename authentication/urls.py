@@ -9,7 +9,7 @@ router.register('email', EmailViewSet, 'send_email')
 
 urlpatterns = [
     path('waiting_confirmation', waiting_email_confirmation, name="waiting_email_confirmation"),
-    path('confirm_email',ConfirmEmailView.as_view(),name="confirm_email"),
+    path('confirm_email/<uuid:uuid>/<str:token>/',ConfirmEmailView.as_view(),name="confirm_email"),
     path('api/cron/send-reminders/', TriggerClientRemindersAPIView.as_view(), name='cron-client-reminders'),
     path('', include(router.urls))
 ]
