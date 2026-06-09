@@ -22,7 +22,7 @@ urlpatterns = i18n_patterns(
     path('',redirec_to_app(LandingPageView.as_view()), name='home'),
     path('admin/', admin.site.urls),
     # path('', to_app_page),
-    path('app/', include('app.urls')),
+    path('', include('app.urls')),
     path('', include('authentication.urls')),
-    path('app/schedule/', include('schedule.urls')),
+    path('schedule/', include('schedule.urls')),
 )
