@@ -18,8 +18,20 @@
                 <th colspan="{{list.table.header.options|length|add:1}}">
                     <div class="flex justify-between">
                         <span>
-                            {%trans 'Showing'%} <strong id="id_page_range"></strong> {%trans 'of'%} <strong
-                                id="id_page_count"></strong> {%trans 'items'%}
+                            <span class="hidden sm:inline">
+                            {%trans 'Showing'%}
+                            </span>
+                            <strong id="id_page_range"></strong>
+                            <span class="hidden sm:inline">
+                            {%trans 'of'%}
+                            </span>
+                            <span class="sm:hidden">
+                            /
+                            </span>
+                            <strong id="id_page_count"></strong>
+                            <span class="hidden sm:inline">
+                            {%trans 'items'%}
+                            </span>
                         </span>
                         <div class="flex gap-3">
                             <button class="btn btn-sm" title="Previous Page" id="id_page_prev">
