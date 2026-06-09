@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 14:04+0000\n"
+"POT-Creation-Date: 2026-06-09 23:30+0000\n"
 "PO-Revision-Date: 2026-06-08 21:50-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -139,7 +139,7 @@ msgstr "Nome de usuário"
 msgid "Service"
 msgstr "Serviço"
 
-#: app/forms.py:244 app/forms.py:286 app/tables.py:109
+#: app/forms.py:244 app/forms.py:286 app/tables.py:109 schedule/services.py:55
 #: templates/pages/app/schedule/settings/availabilities/index.html:11
 #: templates/pages/app/self_scheduling/ticket.html:21
 msgid "Resources"
@@ -166,7 +166,7 @@ msgid "Email"
 msgstr "E-mail"
 
 #: app/forms.py:320 templates/pages/login/index.html:45
-#: templates/pages/register/index.html:46
+#: templates/pages/register/index.html:87
 msgid "Password"
 msgstr "Senha"
 
@@ -481,6 +481,14 @@ msgstr ""
 msgid "Service is required for creating this assignment."
 msgstr "O serviço é obrigatório para criar esta atribuição."
 
+#: schedule/services.py:47
+msgid "Assignment"
+msgstr "Atribuição"
+
+#: schedule/services.py:53 templates/components/schedule/filter.status.html:17
+msgid "Status"
+msgstr "Status"
+
 #: schedule/views.py:56
 msgid "This item already exists."
 msgstr "Este item já existe."
@@ -494,7 +502,7 @@ msgstr "Falha ao excluir %(name)s"
 msgid "Slot occupied"
 msgstr "Horário ocupado"
 
-#: schedule/views.py:358
+#: schedule/views.py:359
 msgid "There are time slots being used."
 msgstr "Existem horários em uso."
 
@@ -660,10 +668,6 @@ msgstr "Mostrar Todos"
 msgid "Search"
 msgstr "Buscar"
 
-#: templates/components/schedule/filter.status.html:17
-msgid "Status"
-msgstr "Status"
-
 #: templates/components/schedule/select_date.js.html:60
 #: templates/pages/app/schedule/actions.html:245
 msgid "Tomorrow"
@@ -767,6 +771,14 @@ msgstr "Recursos/Equipe:"
 #: templates/pages/app/self_scheduling/ticket.html:71
 msgid "Download Receipt"
 msgstr "Baixar comprovante"
+
+#: templates/emails/assignment_ticket/index.html:164
+msgid ""
+"If the button above does not work, copy and paste the following link into "
+"your browser:"
+msgstr ""
+"Se o botão acima não funcionar, copie e cole o seguinte link no seu "
+"navegador:"
 
 #: templates/emails/assignment_ticket/index.html:173
 msgid ""
@@ -1216,7 +1228,7 @@ msgstr "Bem-vindo de volta"
 msgid "Incorrect username or password"
 msgstr "Usuário ou senha incorretos"
 
-#: templates/pages/login/index.html:58 templates/pages/register/index.html:71
+#: templates/pages/login/index.html:58 templates/pages/register/index.html:112
 msgid "Show password"
 msgstr "Mostrar senha"
 
@@ -1224,7 +1236,7 @@ msgstr "Mostrar senha"
 msgid "Access your account"
 msgstr "Acesse sua conta"
 
-#: templates/pages/login/index.html:69 templates/pages/register/index.html:123
+#: templates/pages/login/index.html:69 templates/pages/register/index.html:124
 msgid "Or"
 msgstr "Ou"
 
@@ -1248,31 +1260,31 @@ msgstr "Comece a gerenciar suas atividades agora mesmo."
 msgid "E-mail"
 msgstr "E-mail"
 
-#: templates/pages/register/index.html:58
-msgid "Confirm password"
-msgstr "Confirmar senha"
-
-#: templates/pages/register/index.html:80
+#: templates/pages/register/index.html:47
 msgid "Your name"
 msgstr "Seu nome"
 
-#: templates/pages/register/index.html:92
+#: templates/pages/register/index.html:59
 msgid "Last name"
 msgstr "Sobrenome"
 
-#: templates/pages/register/index.html:104
+#: templates/pages/register/index.html:71
 msgid "Whatsapp"
 msgstr "WhatsApp"
 
-#: templates/pages/register/index.html:118
+#: templates/pages/register/index.html:99
+msgid "Confirm password"
+msgstr "Confirmar senha"
+
+#: templates/pages/register/index.html:119
 msgid "Create your account"
 msgstr "Criar sua conta"
 
-#: templates/pages/register/index.html:128
+#: templates/pages/register/index.html:129
 msgid "Do you already have an account?"
 msgstr "Você já tem uma conta?"
 
-#: templates/pages/register/index.html:131
+#: templates/pages/register/index.html:132
 msgid "Log in"
 msgstr "Entrar"
 
@@ -1303,9 +1315,6 @@ msgstr "s para reenviar"
 
 #~ msgid "Back to top"
 #~ msgstr "Voltar ao topo"
-
-#~ msgid "Assignment"
-#~ msgstr "Atribuição"
 
 #~ msgid "Resource Types"
 #~ msgstr "Tipos de recurso"
