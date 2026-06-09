@@ -4,6 +4,7 @@ from django.contrib.auth.views import default_token_generator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -81,9 +82,10 @@ class EmailViewSet(viewsets.ViewSet):
             )
 
     @action(
-        methods=["GET"], 
+        methods=["POST"], 
         detail=False, 
-        url_path=r'active_account/(?P<uuid>[^/.]+)/(?P<token>[^/.]+)', 
+        # url_path=r'active_account/(?P<uuid>[^/.]+)/(?P<token>[^/.]+)', 
+        url_path=r'active_account/(?P<uuid>[^/.]*)/(?P<token>[^/.]*)',
         url_name='active-account',
         permission_classes=[AllowAny]
     )
@@ -139,3 +141,6 @@ class TriggerClientRemindersAPIView(APIView):
 #     except Exception as e:
 #         print(f"Error triggering Django API: {e}")
 #         raise e
+# 
+class ConfirmEmailView(TemplateView):
+    template_name = "pages/confirm_email/index.html"

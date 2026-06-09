@@ -1,0 +1,94 @@
+{%extends "layouts/base.html"%}
+{% load static %}
+{%block header%}
+<script src="{% static 'query-manager.js' %}"></script>
+<script src="{% static 'request-manager.js' %}"></script>
+{%endblock%}
+{%block body%}
+<div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl border border-base-300">
+        <div class="card-body items-center text-center py-12">
+
+            <div id="state-loading" class="flex flex-col items-center space-y-4">
+                <span class="loading loading-spinner loading-lg text-primary"></span>
+                <h2 class="card-title text-xl font-bold">Verificando seu e-mail</h2>
+                <p class="text-base-content/70 text-sm">Por favor, aguarde um momento enquanto validamos suas
+                    credenciais.</p>
+            </div>
+
+            <div id="state-success" class="hidden flex flex-col items-center space-y-4">
+                <div class="avatar placeholder">
+                    <div
+                        class="bg-success text-success-content rounded-full w-16 h-16 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="card-title text-xl font-bold text-success">E-mail Confirmado!</h2>
+                <p class="text-base-content/70 text-sm">Sua conta foi ativada com sucesso. Agora você já pode acessar
+                    todos os recursos.</p>
+                <div class="card-actions w-full pt-4">
+                    <a href="/login/" class="btn btn-primary btn-block">Ir para o Login</a>
+                </div>
+            </div>
+
+            <div id="state-error" class="hidden flex flex-col items-center space-y-4">
+                <div class="avatar placeholder">
+                    <div class="bg-error text-error-content rounded-full w-16 h-16 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="card-title text-xl font-bold text-error">Falha na Verificação</h2>
+                <p class="text-base-content/70 text-sm">O link de confirmação parece ser inválido, expirou ou já foi
+                    utilizado.</p>
+                <div class="card-actions w-full pt-4 flex flex-col gap-2">
+                    <a href="/resend-email/" class="btn btn-outline btn-error btn-block">Solicitar Novo Link</a>
+                    <a href="/" class="btn btn-ghost btn-sm text-base-content/50">Voltar ao início</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    // Elementos da DOM para controle de estado
+    const elLoading = document.getElementById('state-loading');
+    const elSuccess = document.getElementById('state-success');
+    const elError = document.getElementById('state-error');
+
+    $q.use(
+        ['confirm'],
+        () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const uuid = urlParams.get('u') || '';
+            const token = urlParams.get('t') || '';
+            const urlBase = "{% url 'send_email-active-account' uuid='PLACEHOLDER_UUID' token='PLACEHOLDER_TOKEN' %}";
+            const finalUrl = urlBase.replace('PLACEHOLDER_UUID', uuid).replace('PLACEHOLDER_TOKEN', token);
+
+            return $q.post(finalUrl);
+        },
+        {
+            onSuccess(response) {
+                // Esconde o loading e mostra a tela de sucesso
+                elLoading.classList.add('hidden');
+                elSuccess.classList.remove('hidden');
+            },
+            onError(error) {
+                // Esconde o loading e mostra a tela de erro
+                elLoading.classList.add('hidden');
+                elError.classList.remove('hidden');
+            },
+            onFinally() {
+                // Caso precise desligar algum esqueleto de carregamento global
+                // Geralmente o tratamento individual acima já resolve o fluxo visual
+            }
+        }
+    );
+</script>
+{%endblock%}
