@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 13:36+0000\n"
+"POT-Creation-Date: 2026-06-09 14:04+0000\n"
 "PO-Revision-Date: 2026-06-08 21:50-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -101,12 +101,12 @@ msgid "Selection method"
 msgstr "Método de seleção"
 
 #: app/forms.py:176
-msgid "The customer has a choice"
-msgstr "O cliente tem que escolher"
-
-#: app/forms.py:180
 msgid "The customer can choose"
 msgstr "O cliente pode escolher"
+
+#: app/forms.py:180
+msgid "The customer has a choice"
+msgstr "O cliente tem que escolher"
 
 #: app/forms.py:184
 msgid "The customer does not choose"
@@ -494,6 +494,10 @@ msgstr "Falha ao excluir %(name)s"
 msgid "Slot occupied"
 msgstr "Horário ocupado"
 
+#: schedule/views.py:358
+msgid "There are time slots being used."
+msgstr "Existem horários em uso."
+
 #: stock/models.py:172
 msgid "This specific stock move already exists."
 msgstr "Esta movimentação de estoque específica já existe."
@@ -858,27 +862,27 @@ msgstr ""
 msgid "Actions"
 msgstr "Ações"
 
-#: templates/layouts/crud/list.html:21
+#: templates/layouts/crud/list.html:22
 msgid "Showing"
 msgstr "Mostrando"
 
-#: templates/layouts/crud/list.html:21
+#: templates/layouts/crud/list.html:26
 msgid "of"
 msgstr "de"
 
-#: templates/layouts/crud/list.html:22
+#: templates/layouts/crud/list.html:33
 msgid "items"
 msgstr "itens"
 
-#: templates/layouts/crud/list.html:26
+#: templates/layouts/crud/list.html:38
 msgid "Before"
 msgstr "Anterior"
 
-#: templates/layouts/crud/list.html:29
+#: templates/layouts/crud/list.html:41
 msgid "After"
 msgstr "Próximo"
 
-#: templates/layouts/crud/list.html:86
+#: templates/layouts/crud/list.html:98
 msgid "Undefined"
 msgstr "Indefinido"
 
@@ -1187,6 +1191,7 @@ msgstr ""
 "Sua conta foi ativada com sucesso. Agora você pode acessar todos os recursos."
 
 #: templates/pages/confirm_email/index.html:40
+#: templates/pages/confirm_email/index.html:63
 msgid "Go to Login"
 msgstr "Ir para o Login"
 
@@ -1196,11 +1201,8 @@ msgstr "Falha na verificação"
 
 #: templates/pages/confirm_email/index.html:59
 msgid "The confirmation link appears to be invalid, expired, or already used."
-msgstr "O link de confirmação parece ser inválido, expirou ou já foi utilizado."
-
-#: templates/pages/confirm_email/index.html:63
-msgid "Back to top"
-msgstr "Voltar ao topo"
+msgstr ""
+"O link de confirmação parece ser inválido, expirou ou já foi utilizado."
 
 #: templates/pages/login/index.html:13
 msgid "Access you account"
@@ -1298,6 +1300,9 @@ msgstr "Aguarde"
 #: templates/pages/waiting_email_confirmation/index.html:117
 msgid "s para reenviar"
 msgstr "s para reenviar"
+
+#~ msgid "Back to top"
+#~ msgstr "Voltar ao topo"
 
 #~ msgid "Assignment"
 #~ msgstr "Atribuição"
