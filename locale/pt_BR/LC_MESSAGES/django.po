@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 23:19+0000\n"
+"POT-Creation-Date: 2026-06-09 13:36+0000\n"
 "PO-Revision-Date: 2026-06-08 21:50-0300\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: pt_BR\n"
@@ -139,7 +139,7 @@ msgstr "Nome de usuário"
 msgid "Service"
 msgstr "Serviço"
 
-#: app/forms.py:244 app/forms.py:286 app/tables.py:109 schedule/services.py:55
+#: app/forms.py:244 app/forms.py:286 app/tables.py:109
 #: templates/pages/app/schedule/settings/availabilities/index.html:11
 #: templates/pages/app/self_scheduling/ticket.html:21
 msgid "Resources"
@@ -312,7 +312,7 @@ msgstr ""
 "\n"
 "Obrigado!"
 
-#: authentication/services.py:111
+#: authentication/services.py:112
 #, python-brace-format
 msgid ""
 "Hello, {username}.\n"
@@ -325,15 +325,15 @@ msgstr ""
 "Por favor, confirme seu cadastro clicando no link abaixo:\n"
 "{link}"
 
-#: authentication/services.py:116
+#: authentication/services.py:117
 msgid "Registration Confirmation"
 msgstr "Confirmação de Cadastro"
 
-#: authentication/services.py:143
+#: authentication/services.py:144
 msgid "Reminder: Your appointment is approaching"
 msgstr "Lembrete: Seu agendamento está se aproximando"
 
-#: authentication/services.py:146
+#: authentication/services.py:147
 #, python-brace-format
 msgid ""
 "Hello.\n"
@@ -358,11 +358,11 @@ msgstr ""
 "\n"
 "Até breve!"
 
-#: authentication/services.py:193
+#: authentication/services.py:194
 msgid "Action Required: Update your availability schedule"
 msgstr "Ação Necessária: Atualize sua agenda de disponibilidade"
 
-#: authentication/services.py:197
+#: authentication/services.py:198
 #, python-brace-format
 msgid ""
 "Hello, {username}.\n"
@@ -381,11 +381,11 @@ msgstr ""
 "serviços sem conflitos.\n"
 "\n"
 
-#: authentication/views.py:74
+#: authentication/views.py:75
 msgid "Confirmation email sent successfully."
 msgstr "E-mail de confirmação enviado com sucesso."
 
-#: authentication/views.py:79
+#: authentication/views.py:80
 msgid "We were unable to send the email at this time. Please try again later."
 msgstr ""
 "Não foi possível enviar o e-mail no momento. Por favor, tente novamente mais "
@@ -411,11 +411,11 @@ msgid ""
 msgstr ""
 "Um item com este nome já existe. Por favor, considere atualizar a página."
 
-#: schedule/models.py:178 schedule/serializers.py:387
+#: schedule/models.py:178 schedule/serializers.py:388
 msgid "There is a schedule conflict for the selected date and time range."
 msgstr "Existe um conflito de horários para a data e intervalo selecionados."
 
-#: schedule/models.py:182 schedule/serializers.py:383
+#: schedule/models.py:182 schedule/serializers.py:384
 msgid "There cannot be an availability period greater than 90 days."
 msgstr "Não pode haver um período de disponibilidade superior a 90 dias."
 
@@ -453,17 +453,17 @@ msgstr "Em andamento"
 msgid "Completed"
 msgstr "Concluído"
 
-#: schedule/serializers.py:157
+#: schedule/serializers.py:158
 msgid "A rule already exists between this Service and this Resource."
 msgstr "Já existe uma regra entre este Serviço e este Recurso."
 
-#: schedule/serializers.py:256
+#: schedule/serializers.py:257
 msgid "One or more selected resources are not allowed for this service type."
 msgstr ""
 "Um ou mais recursos selecionados não são permitidos para este tipo de "
 "serviço."
 
-#: schedule/serializers.py:257
+#: schedule/serializers.py:258
 msgid ""
 "The provided resource quantity does not match the requirement for this "
 "service."
@@ -471,23 +471,15 @@ msgstr ""
 "A quantidade de recurso fornecida não corresponde ao requisito para este "
 "serviço."
 
-#: schedule/serializers.py:258
+#: schedule/serializers.py:259
 msgid ""
 "One or more selected resources are already occupied at the requested time."
 msgstr ""
 "Um ou mais recursos selecionados já estão ocupados no horário solicitado."
 
-#: schedule/serializers.py:259
+#: schedule/serializers.py:260
 msgid "Service is required for creating this assignment."
 msgstr "O serviço é obrigatório para criar esta atribuição."
-
-#: schedule/services.py:47
-msgid "Assignment"
-msgstr "Atribuição"
-
-#: schedule/services.py:53 templates/components/schedule/filter.status.html:17
-msgid "Status"
-msgstr "Status"
 
 #: schedule/views.py:56
 msgid "This item already exists."
@@ -518,7 +510,7 @@ msgstr "Sair da sua conta?"
 msgid "Are you sure you want to end your current session?"
 msgstr "Tem certeza que deseja encerrar sua sessão atual?"
 
-#: templates/components/logout.html:15 templates/layouts/crud/create.html:98
+#: templates/components/logout.html:15 templates/layouts/crud/create.html:101
 #: templates/layouts/crud/delete.html:20 templates/layouts/crud/update.html:17
 #: templates/pages/app/schedule/actions.html:151
 msgid "Cancel"
@@ -663,6 +655,10 @@ msgstr "Mostrar Todos"
 #: templates/layouts/crud/filters.html:3
 msgid "Search"
 msgstr "Buscar"
+
+#: templates/components/schedule/filter.status.html:17
+msgid "Status"
+msgstr "Status"
 
 #: templates/components/schedule/select_date.js.html:60
 #: templates/pages/app/schedule/actions.html:245
@@ -836,11 +832,11 @@ msgstr "Adicionar"
 msgid "Error"
 msgstr "Erro"
 
-#: templates/layouts/crud/create.html:89
+#: templates/layouts/crud/create.html:92
 msgid "Add new item"
 msgstr "Adicionar novo item"
 
-#: templates/layouts/crud/create.html:103 templates/layouts/crud/update.html:21
+#: templates/layouts/crud/create.html:106 templates/layouts/crud/update.html:21
 msgid "Save"
 msgstr "Salvar"
 
@@ -1171,6 +1167,41 @@ msgstr "Horários Disponíveis"
 msgid "Select a time on the calendar to proceed."
 msgstr "Selecione um horário disponível."
 
+#: templates/pages/confirm_email/index.html:15
+msgid "Checking your email"
+msgstr "Verificando seu e-mail"
+
+#: templates/pages/confirm_email/index.html:18
+msgid "Please wait a moment while we validate your credentials."
+msgstr "Por favor, aguarde um momento enquanto validamos suas credenciais."
+
+#: templates/pages/confirm_email/index.html:33
+msgid "Email Confirmed!"
+msgstr "E-mail confirmado!"
+
+#: templates/pages/confirm_email/index.html:36
+msgid ""
+"Your account has been successfully activated. Now you can access all the "
+"features."
+msgstr ""
+"Sua conta foi ativada com sucesso. Agora você pode acessar todos os recursos."
+
+#: templates/pages/confirm_email/index.html:40
+msgid "Go to Login"
+msgstr "Ir para o Login"
+
+#: templates/pages/confirm_email/index.html:56
+msgid "Verification Failure"
+msgstr "Falha na verificação"
+
+#: templates/pages/confirm_email/index.html:59
+msgid "The confirmation link appears to be invalid, expired, or already used."
+msgstr "O link de confirmação parece ser inválido, expirou ou já foi utilizado."
+
+#: templates/pages/confirm_email/index.html:63
+msgid "Back to top"
+msgstr "Voltar ao topo"
+
 #: templates/pages/login/index.html:13
 msgid "Access you account"
 msgstr "Acesse sua conta"
@@ -1267,6 +1298,9 @@ msgstr "Aguarde"
 #: templates/pages/waiting_email_confirmation/index.html:117
 msgid "s para reenviar"
 msgstr "s para reenviar"
+
+#~ msgid "Assignment"
+#~ msgstr "Atribuição"
 
 #~ msgid "Resource Types"
 #~ msgstr "Tipos de recurso"
