@@ -1,7 +1,7 @@
 import os
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import default_token_generator
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -82,10 +82,11 @@ class EmailViewSet(viewsets.ViewSet):
             )
 
     @action(
-        methods=["POST"], 
+        methods=["GET"], 
         detail=False, 
-        # url_path=r'active_account/(?P<uuid>[^/.]+)/(?P<token>[^/.]+)', 
-        url_path=r'active_account/(?P<uuid>[^/.]*)/(?P<token>[^/.]*)',
+        url_path=r'active_account/(?P<uuid>[^/.]+)/(?P<token>[^/.]+)',
+        # url_path=r'active_account/<uuid:uuid>/<str:token>', 
+        # url_path=r'active_account/(?P<uuid>[^/.]*)/(?P<token>[^/.]*)',
         url_name='active-account',
         permission_classes=[AllowAny]
     )
@@ -144,3 +145,18 @@ class TriggerClientRemindersAPIView(APIView):
 # 
 class ConfirmEmailView(TemplateView):
     template_name = "pages/confirm_email/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                'active_url': reverse(
+                    'send_email-active-account',
+                    kwargs={
+                      'uuid': self.request.GET.get('u'),
+                      'token': self.request.GET.get('t')
+                    }
+                )
+            }
+        )
+        return context

@@ -89,7 +89,8 @@ class SendEmail:
         
         # 4. Resolve a URL dinamicamente pelo nome da rota usando reverse
         # Substitua 'ativar_conta' pelo nome exato (name=...) definido no seu urls.py
-        path = reverse('send_email-active-account', kwargs={'uuid': str(uid), 'token': token})
+        # path = reverse('send_email-active-account', kwargs={'uuid': str(uid), 'token': token})
+        path = f"{reverse('confirm_email')}&u={str(uid)}&t={token}"
         
         # 5. Monta o link absoluto (identifica automaticamente se é http ou https)
         protocol = 'https' if request.is_secure() else 'http'

@@ -11,9 +11,12 @@
 
             <div id="state-loading" class="flex flex-col items-center space-y-4">
                 <span class="loading loading-spinner loading-lg text-primary"></span>
-                <h2 class="card-title text-xl font-bold">Verificando seu e-mail</h2>
-                <p class="text-base-content/70 text-sm">Por favor, aguarde um momento enquanto validamos suas
-                    credenciais.</p>
+                <h2 class="card-title text-xl font-bold">
+                {%trans 'Checking your email'%}
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                {%trans "Please wait a moment while we validate your credentials."%}
+                </p>
             </div>
 
             <div id="state-success" class="hidden flex flex-col items-center space-y-4">
@@ -26,11 +29,16 @@
                         </svg>
                     </div>
                 </div>
-                <h2 class="card-title text-xl font-bold text-success">E-mail Confirmado!</h2>
-                <p class="text-base-content/70 text-sm">Sua conta foi ativada com sucesso. Agora você já pode acessar
-                    todos os recursos.</p>
+                <h2 class="card-title text-xl font-bold text-success">
+                {%trans 'Email Confirmed!'%}
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                {%trans "Your account has been successfully activated. Now you can access all the features."%}
+                </p>
                 <div class="card-actions w-full pt-4">
-                    <a href="/login/" class="btn btn-primary btn-block">Ir para o Login</a>
+                    <a href="/login/" class="btn btn-primary btn-block">
+                    {%trans "Go to Login"%}
+                    </a>
                 </div>
             </div>
 
@@ -44,12 +52,16 @@
                         </svg>
                     </div>
                 </div>
-                <h2 class="card-title text-xl font-bold text-error">Falha na Verificação</h2>
-                <p class="text-base-content/70 text-sm">O link de confirmação parece ser inválido, expirou ou já foi
-                    utilizado.</p>
+                <h2 class="card-title text-xl font-bold text-error">
+                {%trans "Verification Failure"%}
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                {%trans "The confirmation link appears to be invalid, expired, or already used."%}
+                </p>
                 <div class="card-actions w-full pt-4 flex flex-col gap-2">
-                    <a href="/resend-email/" class="btn btn-outline btn-error btn-block">Solicitar Novo Link</a>
-                    <a href="/" class="btn btn-ghost btn-sm text-base-content/50">Voltar ao início</a>
+                    <a href="/" class="btn btn-ghost btn-sm text-base-content/50">
+                    {%trans 'Back to top'%}
+                    </a>
                 </div>
             </div>
 
@@ -65,13 +77,7 @@
     $q.use(
         ['confirm'],
         () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const uuid = urlParams.get('u') || '';
-            const token = urlParams.get('t') || '';
-            const urlBase = "{% url 'send_email-active-account' uuid='PLACEHOLDER_UUID' token='PLACEHOLDER_TOKEN' %}";
-            const finalUrl = urlBase.replace('PLACEHOLDER_UUID', uuid).replace('PLACEHOLDER_TOKEN', token);
-
-            return $q.post(finalUrl);
+            return $r.get("{{active_url}}");
         },
         {
             onSuccess(response) {
