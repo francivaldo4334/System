@@ -425,7 +425,9 @@ class AvailabilityPresentationSerializer(serializers.ModelSerializer):
         results = []
         for dt, times in occurrences_map_slots.items():
             for time in times:
-                if occupation_qs.available(time_to_slots(time), obj.duration_slot).exists():
+                if not occupation_qs.exists() or\
+                occupation_qs.available(time_to_slots(time), obj.duration_slot).exists():
+                # if occupation_qs.available(time_to_slots(time), obj.duration_slot).exists():
                     results.append(datetime.combine(dt, time))
         return results
 
