@@ -43,8 +43,10 @@ function utilsManager() {
       else if (field.tagName === 'SELECT') {
         if (field.multiple)
           value = value.map(Number)
-        else
+        else if (/^\d+$/.test(value))
           value = parseInt(value)
+        else
+          value = value[0]
       }
       return [key, value || undefined];
     }));

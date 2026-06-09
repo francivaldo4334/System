@@ -45,6 +45,7 @@ class ResourceCategorySerializer(serializers.ModelSerializer):
             kwargs['content_type'] = content_type
         if resource_type == "OBJECT":
             kwargs['content_type'] = None
+        kwargs['is_selectable'] = False
         return super().save(**kwargs)
 class ResourceSerializer(serializers.ModelSerializer):
     label = serializers.SerializerMethodField()
