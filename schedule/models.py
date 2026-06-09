@@ -334,7 +334,7 @@ class TimeBlock(models.Model):
             resource=self.resource,
             date=self.date,
         )
-        if not occupation_qs.available(
+        if occupation_qs.exists() and not occupation_qs.available(
             self.start_slot, self.duration_slot
         ).exists():
             raise self.SlotsFilledError()
