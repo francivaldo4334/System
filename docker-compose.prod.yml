@@ -52,8 +52,9 @@ services:
   # Adicione o worker aqui para processar as tarefas
   celery_worker:
     build: .
-    command: celery -A core worker -l info
+    command: python -m celery -A core worker -l info
     volumes:
+      - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
     env_file:
@@ -61,11 +62,16 @@ services:
     depends_on:
       - db
       - redis
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
 
   # Adicione o beat aqui para o agendamento
   celery_beat:
     build: .
-    command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: python -m celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
@@ -74,6 +80,11 @@ services:
     depends_on:
       - db
       - redis
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
 
   nginx:  # <--- ADICIONADO AQUI
     image: nginx:alpine
