@@ -19,6 +19,16 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: prod_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    restart: always
+    networks:
+      - default
+
   web:
     build:
       context: .
@@ -38,6 +48,32 @@ services:
     environment:
       - DB_HOST=db
       - DJANGO_SETTINGS_MODULE=core.settings.prod
+
+  # Adicione o worker aqui para processar as tarefas
+  celery_worker:
+    build: .
+    command: celery -A core worker -l info
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  # Adicione o beat aqui para o agendamento
+  celery_beat:
+    build: .
+    command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
 
   nginx:  # <--- ADICIONADO AQUI
     image: nginx:alpine
@@ -60,5 +96,6 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
   static_volume:
   media_volume:

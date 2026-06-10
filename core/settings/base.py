@@ -125,3 +125,18 @@ DATABASE_ROUTERS = (
 TENANT_MODEL = "customer.Client"
 
 TENANT_DOMAIN_MODEL = "customer.Domain"
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'lembrete-agendamentos-diario-20h': {
+        'task': 'schedule.tasks.send_appointment_reminder',
+        'schedule': crontab(hour=20, minute=0),
+    },
+    'lembrete-disponibilidades-diario-20h': {
+        'task': 'schedule.tasks.send_availability_reminder',
+        'schedule': crontab(hour=20, minute=0),
+    },
+}

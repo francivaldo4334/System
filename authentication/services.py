@@ -217,17 +217,15 @@ class SendEmail:
 
 
 class TriggerReminders:
-    def trigger(self):
-        from schedule.models import Assignment, Availability
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
+    def appointments(self):
+        from schedule.models import Assignment
         notifier = SendEmail()
         today = timezone.now().date()
-        tomorow = today + timedelta(days=1)
         # =========================================================================
         # PARTE 1: PROCESSAR AGENDAMENTOS DOS CLIENTES (1 e 3 dias de antecedência)
         # =========================================================================
         prazos_agendamentos = [1, 3]
+        count = 0
         for dias in prazos_agendamentos:
             data_alvo = today + timedelta(days=dias)
             
@@ -240,8 +238,17 @@ class TriggerReminders:
 
             
             for assignment in assignments:
+                count +=1
                 notifier.send_email_reminder(assignment=assignment, days_remaining=dias)
-        
+        return count
+    def availabilities(self):
+        from django.contrib.auth import get_user_model
+        from schedule.models import Availability
+        today = timezone.now().date()
+        tomorow = today + timedelta(days=1)
+        User = get_user_model()
+        notifier = SendEmail()
+        count = 0
         # =========================================================================
         # PARTE 2: PROCESSAR GERENTES COM DISPONIBILIDADE EXPIRANDO (Falta 1 dia)
         # =========================================================================
@@ -257,4 +264,6 @@ class TriggerReminders:
             )
             
             for manager in managers:
+                count += 1
                 notifier.send_email_manager_reminder(manager_user=manager)
+        return count
