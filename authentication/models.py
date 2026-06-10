@@ -1,6 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, ContentType
 from django.utils.translation import gettext_lazy as _
 import uuid
 
@@ -23,3 +23,12 @@ class CustomUser(AbstractUser):
             )
         ]
     )
+
+class EmailLog(models.Model):
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    reminder_type = models.CharField(max_length=50) # ex: 'assignment_1_day'
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('content_type', 'object_id', 'reminder_type')

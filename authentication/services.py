@@ -220,6 +220,8 @@ class TriggerReminders:
     def trigger(self):
         from schedule.models import Assignment, Availability
         from django.contrib.auth import get_user_model
+        from django.contrib.auth.models import ContentType
+        from authentication.models import EmailLog
         User = get_user_model()
         notifier = SendEmail()
         today = timezone.now().date()
@@ -237,9 +239,22 @@ class TriggerReminders:
                 date=data_alvo,
                 status__in=[Assignment.Status.PENDING.value, Assignment.Status.CONFIRMED.value]
             ).prefetch_related('resources__parent')
+
             
             for assignment in assignments:
-                notifier.send_email_reminder(assignment=assignment, days_remaining=dias)
+                assignment_type = ContentType.objects.get_for_model(assignment)
+                if not EmailLog.objects.filter(
+                    content_type=assignment_type, 
+                    object_id=assignment.id, 
+                    reminder_type=f'day_{dias}'
+                ).exists():
+                    notifier.send_email_reminder(assignment=assignment, days_remaining=dias)
+                    # Cria o log após o sucesso do envio
+                    EmailLog.objects.create(
+                        content_type=assignment_type,
+                        object_id=assignment,
+                        reminder_type=f'day_{dias}'
+                    )
         
         # =========================================================================
         # PARTE 2: PROCESSAR GERENTES COM DISPONIBILIDADE EXPIRANDO (Falta 1 dia)
@@ -250,7 +265,16 @@ class TriggerReminders:
             # Para evitar enviar múltiplos e-mails para o mesmo gerente caso ele tenha 
             # mais de uma grade expirando amanhã, buscamos os gerentes do sistema.
             # (Ajuste o filtro de grupos/permissões conforme seu banco)
-            managers = User.objects.filter(is_active=True, groups__name="OWNER")
+            managers = User.objects.filter(
+                is_active=True,
+                groups__name="OWNER"
+            )
             
             for manager in managers:
-                notifier.send_email_manager_reminder(manager_user=manager)
+                manager_type = ContentType.objects.get_for_model(manager)
+                if not EmailLog.objects.filter(
+                    content_type=manager_type, 
+                    object_id=manager.id, 
+                    reminder_type=f'day_{tomorow}'
+                ).exists():
+                    notifier.send_email_manager_reminder(manager_user=manager)
