@@ -6,10 +6,11 @@ from django.conf.urls.i18n import i18n_patterns
 from core.views import LandingPageView
 
 def redirec_to_app(request):
-    return redirect(reverse('app'))
+    if not request.tenant.is_master:
+        return redirect(reverse('app'))
+    return redirect('admin:index')
     # def _view(request,*args, **kwargs):
         # return redirect(reverse('app'))
-    #     if request.tenant.is_master:
     #         return view(request,*args, **kwargs)
     # return _view
 
