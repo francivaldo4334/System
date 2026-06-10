@@ -5,12 +5,12 @@ from django.conf.urls.i18n import i18n_patterns
 
 from core.views import LandingPageView
 
-# def redirec_to_app(view):
+def redirec_to_app(request):
+    return redirect(reverse('app'))
     # def _view(request,*args, **kwargs):
         # return redirect(reverse('app'))
     #     if request.tenant.is_master:
     #         return view(request,*args, **kwargs)
-    #     return redirect(reverse('app'))
     # return _view
 
 # def to_app_page(request):
@@ -20,7 +20,7 @@ from core.views import LandingPageView
 
 
 urlpatterns = i18n_patterns(
-    # path('',redirec_to_app(LandingPageView.as_view()), name='home'),
+    path('',redirec_to_app),
     path('admin/', admin.site.urls),
     # path('', to_app_page),
     path('app/', include('app.urls')),
