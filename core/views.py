@@ -17,6 +17,11 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all().filter(is_superuser=False, is_active=True)
 
+    def get_queryset(self):
+        return super().get_queryset().exclude(
+            pk=self.request.user.pk
+        )
+
     class NoExcludeSelfUser(Exception):
         pass
 
