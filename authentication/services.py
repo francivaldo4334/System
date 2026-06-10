@@ -220,8 +220,6 @@ class TriggerReminders:
     def trigger(self):
         from schedule.models import Assignment, Availability
         from django.contrib.auth import get_user_model
-        from django.contrib.auth.models import ContentType
-        from authentication.models import EmailLog
         User = get_user_model()
         notifier = SendEmail()
         today = timezone.now().date()
@@ -242,19 +240,7 @@ class TriggerReminders:
 
             
             for assignment in assignments:
-                assignment_type = ContentType.objects.get_for_model(assignment)
-                if not EmailLog.objects.filter(
-                    content_type=assignment_type, 
-                    object_id=assignment.id, 
-                    reminder_type=f'day_{dias}'
-                ).exists():
-                    notifier.send_email_reminder(assignment=assignment, days_remaining=dias)
-                    # Cria o log após o sucesso do envio
-                    EmailLog.objects.create(
-                        content_type=assignment_type,
-                        object_id=assignment,
-                        reminder_type=f'day_{dias}'
-                    )
+                notifier.send_email_reminder(assignment=assignment, days_remaining=dias)
         
         # =========================================================================
         # PARTE 2: PROCESSAR GERENTES COM DISPONIBILIDADE EXPIRANDO (Falta 1 dia)
@@ -271,10 +257,4 @@ class TriggerReminders:
             )
             
             for manager in managers:
-                manager_type = ContentType.objects.get_for_model(manager)
-                if not EmailLog.objects.filter(
-                    content_type=manager_type, 
-                    object_id=manager.id, 
-                    reminder_type=f'day_{tomorow}'
-                ).exists():
-                    notifier.send_email_manager_reminder(manager_user=manager)
+                notifier.send_email_manager_reminder(manager_user=manager)
