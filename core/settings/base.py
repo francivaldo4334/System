@@ -17,6 +17,7 @@ SHARED_APPS = (
     'django.contrib.messages',
     'authentication',
     'customer',
+    'django_celery_beat',
 )
 
 TENANT_APPS = (
