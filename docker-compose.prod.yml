@@ -30,38 +30,44 @@ services:
       - default
 
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
+    extends:
+      file: docker-compose.prod.base.yml
+      service: app-base
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.prod
     container_name: prod_app
     restart: always
-    depends_on:
-      db:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     volumes:
       - static_volume:/app/staticfiles  
       - media_volume:/app/mediafiles
       # - static_volume:/usr/share/nginx/html/static/  # Alinhado com o caminho do seu Nginx
       # - media_volume:/usr/share/nginx/html/media/    # Alinhado com o caminho do seu Nginx
-    env_file:
-      - .env
-    environment:
-      - DB_HOST=db
-      - DJANGO_SETTINGS_MODULE=core.settings.prod
+    # env_file:
+    #   - .env
+    # environment:
+    #   - DB_HOST=db
+    #   - DJANGO_SETTINGS_MODULE=core.settings.prod
 
   # Adicione o worker aqui para processar as tarefas
   celery_worker:
-    build: .
+    extends:
+      file: docker-compose.prod.base.yml
+      service: app-base
+    # build: .
     command: python -m celery -A core worker -l info
     volumes:
-      - .:/app
+      # - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
-    env_file:
-      - .env
-    depends_on:
-      - db
-      - redis
+    # env_file:
+    #   - .env
+    # depends_on:
+    #   - db
+    #   - redis
     environment:
       - DB_HOST=db
       - REDIS_HOST=redis
@@ -70,13 +76,16 @@ services:
 
   # Adicione o beat aqui para o agendamento
   celery_beat:
-    build: .
+    extends:
+      file: docker-compose.prod.base.yml
+      service: app-base
+    # build: .
     command: python -m celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     depends_on:
       - db
       - redis

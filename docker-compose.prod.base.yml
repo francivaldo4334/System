@@ -1,0 +1,12 @@
+services:
+  app-base:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file: .env
+    environment:
+      - DB_HOST=db
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_started }

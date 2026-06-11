@@ -285,6 +285,14 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     serializer_class = AvailabilitySerializer
     filterset_class = AvailabilityFilterSet
 
+    @transaction.atomic
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
 
 class AvailabilityPresentationAPIView(ListAPIView):
     queryset = Availability.objects.all()

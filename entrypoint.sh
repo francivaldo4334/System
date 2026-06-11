@@ -13,12 +13,12 @@ python manage.py collectstatic --noinput
 echo "Compilando mensagens..."
 python manage.py compilemessages
 
-# Configura o Cron de Produção para as 5h da manhã (Sintaxe Debian)
-echo "Configurando Tarefas Cron..."
-echo "0 * * * * cd /app && python manage.py all_tenants_command --command='execute_every_hour' >> /app/cron_notificacoes.log 2>&1" | crontab -
+# # Configura o Cron de Produção para as 5h da manhã (Sintaxe Debian)
+# echo "Configurando Tarefas Cron..."
+# echo "0 * * * * cd /app && python manage.py all_tenants_command --command='execute_every_hour' >> /app/cron_notificacoes.log 2>&1" | crontab -
 
-echo "Iniciando daemon do Cron..."
-service cron start
+# echo "Iniciando daemon do Cron..."
+# service cron start
 
 # Inicia o servidor de produção (Gunicorn)
 echo "Iniciando Gunicorn..."
