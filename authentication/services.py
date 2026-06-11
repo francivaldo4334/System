@@ -35,7 +35,7 @@ class SendEmail:
         path = reverse('assignment-ticker-download', kwargs={'pk': assignment.pk})
         protocol = 'https' if request.is_secure() else 'http'
         download_link = f"{protocol}://{domain}{path}"
-        from_email = os.environ.get('EMAIL_HOST_USER', 'no-reply@seu-dominio.com')
+        from_email = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@pontoagio.com.br')
 
         # Contexto enviado para o HTML (passamos apenas as variáveis puras,
         # a tradução dos rótulos/textos fixos deve ocorrer dentro do próprio template)
@@ -74,7 +74,8 @@ class SendEmail:
             message=message_txt,
             from_email=from_email,
             recipient_list=[user.email],
-            html_message=html_message
+            html_message=html_message,
+            fail_silently=False,
         )
         return True
 
@@ -97,7 +98,7 @@ class SendEmail:
         confirmation_link = f"{protocol}://{domain}{path}"
         
         # 6. Captura o e-mail do remetente das variáveis de ambiente (com fallback de segurança)
-        from_email = os.environ.get('EMAIL_HOST_USER', 'no-reply@seu-dominio.com')
+        from_email = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@pontoagio.com.br')
         
         # 7. Renderiza um template HTML opcional (Altamente recomendável para e-mails profissionais)
         context = {
@@ -118,8 +119,8 @@ class SendEmail:
             message=message_txt,
             from_email=from_email,
             recipient_list=[user.email],
-            # fail_silently=False,  # Altere para True em produção se não quiser que a app trave caso o servidor de e-mail caia
-            html_message=html_message
+            html_message=html_message,
+            fail_silently=False,
         )
         
         return True
@@ -132,7 +133,7 @@ class SendEmail:
 
             time_range = f"{start_time.strftime('%H:%M')} - {end_time.strftime('%H:%M')}"
             resources = ", ".join([r.name for r in assignment.resources.all()])
-            from_email = os.environ.get('EMAIL_HOST_USER', 'no-reply@seu-dominio.com')
+            from_email = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@pontoagio.com.br')
 
             template_context = {
                 'assignment': assignment,
@@ -171,7 +172,8 @@ class SendEmail:
                 message=message_txt,
                 from_email=from_email,
                 recipient_list=[recipient],
-                html_message=html_message
+                html_message=html_message,
+                fail_silently=False,
             )
             
         return True
@@ -183,7 +185,7 @@ class SendEmail:
         Desenvolvido para rodar fora do ciclo HTTP (crontab, celery, etc).
         """
         with translation.override(settings.LANGUAGE_CODE):
-            from_email = os.environ.get('EMAIL_HOST_USER', 'no-reply@seu-dominio.com')
+            from_email = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@pontoagio.com.br')
             recipient = manager_user.email
 
             template_context = {
@@ -210,7 +212,8 @@ class SendEmail:
                 message=message_txt,
                 from_email=from_email,
                 recipient_list=[recipient],
-                html_message=html_message
+                html_message=html_message,
+                fail_silently=False,
             )
             
         return True

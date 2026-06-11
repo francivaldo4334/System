@@ -52,6 +52,14 @@ services:
     #   - DB_HOST=db
     #   - DJANGO_SETTINGS_MODULE=core.settings.prod
 
+    environment:
+      - DB_HOST=db
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SES_REGION_NAME=${AWS_SES_REGION_NAME}
+      - AWS_SES_REGION_NAME=${AWS_SES_REGION_NAME}
+
   # Adicione o worker aqui para processar as tarefas
   celery_worker:
     extends:
